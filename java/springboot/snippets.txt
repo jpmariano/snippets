@@ -79,6 +79,7 @@ https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology
 Running a Springboot application
 - java -jar
 - java -jar app.jar  --file.upload-dir=<folderpath>
+- java -jar app.jar --spring.profiles.active=mac
 - Shell scripts
 - *nic sstemd or init.d
 - Cloud ecosystem (Pivotal Cloud Foundry)

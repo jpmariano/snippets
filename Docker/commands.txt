@@ -950,3 +950,8 @@ $
 ----------------------------
 
 $ docker version
+
+$ docker container logs <containername> - lets you see the log
+$ docker container top <containername> - shows what's running inside the container
+$ docker container ls -a 
+$ docker container rm -f <contiainerhash> - shortcut for docker stop <containername> and docker rm <containername>
