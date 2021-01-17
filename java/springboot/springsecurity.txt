@@ -12,9 +12,14 @@ Filter Chain proxy
     - Filter Chains: Authentication, Authorization,
     - Filter Chaings: 
 
-Principal - objects that represent user, device, or application
+
+Principal - objects that represent user, device, or application (Where autorization happens)
     - Authorities - One Pricipal can have multiple authorities called roles
     - Authentication - populated by princial and authorities 
+        - Http basic, digest, x509, and form based authentication
+        - LDAP and Active Directory
+        - OpenID, Jasig CAS (Central Authentication Service), and JAAS
+        - Kerberos, and SAML
     - security context - populated by Authentication
     - http session - populated by security context
 

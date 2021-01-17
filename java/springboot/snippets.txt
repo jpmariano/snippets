@@ -40,7 +40,7 @@ Configuring Embeded Tomcat
         - Property based
             - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#web-properties
             - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#server-properties
-        - keytool -genkey -keyalg RSA alias <youralia> -keystore keystore.jsk -storepass <yourpassword> -validity 4000 -keysize <2048|4096>
+        - keytool -genkey -keyalg RSA -alias <youralia> -keystore keystore.jsk -storepass <yourpassword> -validity 4000 -keysize <2048|4096>
             - you can add this to your application.properties
                 server:
                 port: 8080
@@ -138,7 +138,9 @@ $ java org.apache.derby.tools.ij
 ij > connect 'jdbc:derby:/Users/mariano/Downloads/springboilerplate/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
 ij > connect 'jdbc:derby:/Users/family/Documents/maven/springscorm/app/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
 ij > connect 'jdbc:derby:/Users/family/Downloads/springbootboilerplate/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
-
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/p3nextscan/p3scandesktop/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/pfp/p3scandesktop/database' create 'true' user 'adminuser' password 'yourpass' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/pfpp3desktopbackend/pfp-p3desktop-backend/database' create 'true' user 'app' password 'yourpass' driver 'org.apache.derby.jdbc.EmbeddedDriver';
 ij > run 'pathto.sql';
 ij> select * from tablename;
 
@@ -1397,3 +1399,27 @@ Spring Cloud Netflix (OSS)
 2. Hystrix (Latency and Fault Tolerance)
 3. Ribbon(Load Balancing)
 4. Zuul (Edge Service and Routing)
+
+
+******************************************************************************
+Spring Common Projects
+******************************************************************************
+spring-security-core
+spring-security-config
+spring-security-web
+spring-security-test
+spring-security-ldap
+spring-security-oauth2-core
+spring-security-oauth2-client
+spring-security-openid
+spring-security-oauth2-jose 
+spring-security-remoting
+spring-security-cas 
+spring-security-acl
+
+******************************************************************************
+Grant Types
+******************************************************************************
+Authorization code grant most Common
+Implicit is common in web apps and mobile apps
+Client grant credentials is useful in system-to-system comms
