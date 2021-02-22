@@ -1,2 +1,3 @@
 stripe/vendor
-Docker/phpmysql/data/*
+Docker/drupal/drupal/*
+Docker/drupal/data/*
