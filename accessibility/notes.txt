@@ -1,0 +1,5 @@
+Voice Over -
+Open Voice Over - Command + F5 
+Turn off Voice Over - Command + F5 (2x)
+Open Router - Ctrl + Option + U 
+    - You can use the arrows to navigate

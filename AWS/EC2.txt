@@ -1,0 +1,53 @@
+https://aws.amazon.com/ec2/instance-types/
+D - Density
+R - Ram
+
+M - General Purpose
+C - Compute
+
+G - Graphics
+I - IOPS
+F - FPGA
+T - Cheap General Purpose (Think T2 Micro)
+
+P - Graphics (think Pics)
+X - Extrem Memory
+
+
+EBS attact to EC2 Instances
+
+EBS - http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html
+- Solid-State Drives (SSD) 
+    - General Purpose SSD (gp2)*
+    - Provisioned IOPS SSD (io1)
+- Hard disk Drives (HDD)
+    - Throughput Optimized HDD (st1)
+    - Cold HDD (sc1)
+
+
+- Get the private key
+$ mv myEC2KeyPair.pem <SSH Folder>
+<SSH Folder>$ CHMOD 400 myEC2KeyPair.pem
+<SSH Folder>$ ssh ec2-user@34.202.231.212 -i myEC2KeyPair.pem
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-LAMP.html
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-lamp-amazon-linux-2.html
+
+https://www.drupal.org/documentation/install/developers
+
+//In Amazon 
+$ sudo su 
+$ yum update -y   - to update the webserver
+$ yum install httpd - y  - to install apache
+$ cd /var/www/html/
+
+- html$ sudo wget https://www.drupal.org/files/projects/drupal-8.5.4.tar.gz
+- html$ sudo tar -xvzf drupal-8.5.4.tar.gz
+- html$ sudo mv drupal-8.5.4.tar.gz drupal 
+
+connect using filezilla https://www.youtube.com/watch?v=Qxs7CYguo70 
+- Default user for ec2 is ec2-user 
+
+
+
+Create Elastic IP to have a static IP - Allocate the Elastic IP right away with EC2 instance so there will be no charge
+

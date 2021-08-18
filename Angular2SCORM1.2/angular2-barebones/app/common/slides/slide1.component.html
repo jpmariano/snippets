@@ -1,0 +1,25 @@
+<h3>Radio Buttonsss</h3>
+<p class="card card-block card-header"><span style="color: red">{{radioButtonModel || 'No Value Selected !'}}</span></p>
+<div class="btn-group">
+	<p>Which of the following is the main difference between METARs and SPECIs?</p>
+	<form #f="ngForm" (ng-submit)="submit(f.value)">
+	<ul>
+	  <li>
+	  	<label class="btn btn-primary" [(ngModel)]="radioButtonModel" btnRadio="Porsche">Porsche</label>
+	  	<span> Lorem Ipsum 1</span>
+	  </li>
+	  <li>
+	  	<label class="btn btn-primary" [(ngModel)]="radioButtonModel" btnRadio="Maserati">Maserati</label>
+	  	<span> Lorem Ipsum 2</span>
+	  </li>
+	  <li>
+	  	<label class="btn btn-primary" [(ngModel)]="radioButtonModel" btnRadio="Opel">Opel</label>
+	  	<span> Lorem Ipsum 3</span>
+	  </li>
+	  <li>
+		<button type="button" (click)="submit(radioButtonModel)">Submit</button>
+	  </li>
+	</ul>
+	</form>
+
+</div>

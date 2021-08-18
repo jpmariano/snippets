@@ -1,0 +1,33 @@
+app.container {
+    padding: 0;
+}
+
+footer {
+    background: red;
+    height: 75px;
+    padding: 0 25px;
+}
+
+container.row {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    height: 575px;
+}
+
+menu#menu {
+    position: absolute;
+    height: 575px;
+    width: 200px;
+    background: #ffffff;
+    left: -1200px;
+    top: 0;
+    z-index: 4;
+    overflow: auto;
+    border-right: 1px solid #eeeeee;
+}
+
+menu#menu.open {
+    left: 0;
+}
+

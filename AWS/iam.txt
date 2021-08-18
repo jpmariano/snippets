@@ -1,0 +1,25 @@
+Users - End Users 
+Groups - A collection of users under one set of permissions
+Roles - you create roles and can then assign them to AWS resources
+Policies - A document that defines one (or more permissions); you can add policy to user, groups, and roles
+
+IAM is Global
+
+https://console.aws.amazon.com/iam/home?region=us-east-1#/home
+Sign-in Link which is customizable: https://000000000000.signin.aws.amazon.com/console 
+
+Customize Security:
+    - MFA
+    - 
+
+Create A User
+- Programmatic Access
+- AWS management Console Access
+
+Create a Group 
+
+Tokens To access AWS Cloud Programmatic:
+    SAK
+    AKIs
+
+

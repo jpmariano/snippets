@@ -1,0 +1,135 @@
+Amazon Echo 
+    - connected to alexas cloud based voice service
+    - You can ask questions
+    - IFTTT (Ex. Trigger find my phone)
+    - Alarm
+    - News
+    - Restaurant
+    - Smart home
+
+First skill - Greetings Skill using AWS Lambda function 
+Step 1:
+
+Goal: Wishing our guest
+App Name: Greeter
+Invocation:
+    Name: "greeter"
+    Open/launch/talk to/begin greeter
+    tell/ask greeter to/for/about <some request>
+
+Request/Sample Utterances: Alexa, ask "greeter" to "say hello to <guest>"
+    - ex. Alexa ask greeter to say hello John
+    - ex. Alexa ask greeter to wish our guest  John
+    - ex. Alexa ask greeter to wish John
+Response: Hello <guest>, Good Morning/Afternoon/evening 
+    - Ex: Hello John, Good Morning
+
+
+Step 2
+https://developer.amazon.com/home.html
+https://developer.amazon.com/edw/home.html#/
+https://developer.amazon.com/edw/home.html#/skills
+https://developer.amazon.com/edw/home.html#/skill/create/
+
+Skills Information:
+    Name: <Enter Appname>
+    Invocation Name /Trigger: <Enter Envocation name>
+
+Interaction Model:
+    Intent Schema
+    {
+    "intents": [
+        {
+        "intent": "HelloIntent",
+        "slots": [
+            {
+            "name": "FIrstName",
+            "type": "GUEST_NAMES" //https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference
+            }
+        ]
+        }
+    ]
+    }
+
+    Sample Utterances: */https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interaction-model-reference#h3_intentref_rules */
+    HelloIntent say hello to {FIrstName}
+    HelloIntent wish our guest {FIrstName}
+    HelloIntent wish {FIrstName}
+
+    Custom Slot Type (Optional)
+    Enter Type:  GUEST_NAMES
+    Enter Values:
+        John Paul
+        Gretchen
+
+  /*Slot Value(hard coded value)	Spoken Form(Request)	Slot Value Output (Response) */
+
+Configuration:
+    Endpoint: <select AWS Lambda ARN (Amazon Resource Name) >
+        <select North America>
+
+
+
+------------------------------
+Amazon Echo Communication
+1. User invoke by calling Alexa
+2. User send a command to Echo
+3. Echo sends the command to Amazon alexa service
+4. Amazon Alexa decode the command 
+    4.1 Reads the command and looks for invocation Name/app_id that  match with the enable skills
+    4.2 Pulling this Information from  developer portal
+        4.2.1 Invocation Name/app_id
+        4.2.2 Intents
+        4.2.3 Sample Utterances
+        4.2.4 Endpoint
+    4.3 Alexa try to match the user command to Sample Utterances
+    4.4 In Utterances, it tries to match the Intent and the Slot Name 
+    4.5 In Intent Schema, It looks for intent and slot name and pulls the slot type and reads the slot value 
+    4.6. Alexa forms a request to Endpoint (https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#request-format)
+    4.7 Endpoint Lambda Function receives request json
+    4.8.Endpoint Lambda Function sends response json to Alexa Service
+5. Alexa receives the response json and converts to text to speech
+6. Alexa Service sends the response to Echo
+
+
+AWS Lambda 
+- AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources for you 
+- AWS Free Tier
+    - 1 Million free request per month
+    - Up to 3.2 million seconds of compute time per month
+- No need to maintain own servers or compute resources
+- No need of SSL certificate or verifying the incoming requests are coming from Alexa service itself
+- AWS Lambda runs your code only when you need it and scales your usage
+- For most developers, the lambda free tier is sufficient for the function supporting an Alexa skill
+- AWS Lambda supports Java, Node.js, C#, and Pytohon code, with support for other languages coming in the future
+
+
+In AWS
+Creating a Lambda Function: https://console.aws.amazon.com/lambda
+- search for Lambda
+    - Select blueprint: This a Template
+    - Configure Triggers (If you did not see the Alexa Skill, change the location)
+    - Configure Function 
+        Name: GreeetingSkill
+        Description:
+        Runtime: <computer language>
+        Lambda function handler and role:
+            - index.handler - leave default
+            - Custom Role 
+            - Existing role - lambda_basic_execution
+        * Accept the rest deault for now
+        - hit save 
+
+
+Creating the Lambda code
+create index.js
+- tutorial_begin/Greetings/lambdaFun/event.json - receives incoming request from alexa service
+    - create a handler to manage the event
+        - tutorial_final/README - notes for making the Lmabda 
+        - tutorial_final/Greetings/lambdaFun/index.js
+
+
+
+
+$ cd tutorial_begin
+tutorial_begin $ 

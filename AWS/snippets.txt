@@ -1,0 +1,24 @@
+Step 1: Create a new IAM user - never login as a root user
+Step 2: In permission - is where to attach a user policy - see policy generator
+Step 3: URL logins is located at Dashboard
+Step 4: For MFA, right click on the username and add a virtual MFA device
+Step 5: for better management add a user to a group
+
+
+
+Connecting S3 and EC2 with Roles
+Step 1: Create An S3 and EC2 Instance
+Step 2: Create a Group add the users in it
+Step 3: Create a Role with a policy that has access to EC2 to S3
+Step 4: Assign that role to the Group
+Step 5: Connect to EC2 with SSH 
+Step 6: $ aws s3 ls - to check if you can view the s3
+
+aws configure - to login from cli
+enter access key of the user
+aws s3 ls s3://<bucketname> - to list inside the bucket
+
+aws s3 mb s3://<bucketname> - to make a bucket
+aws s3 cp <filename> s3://<bucketname> - to copy and move files to another bucker
+web@infina.net
+ i2webte@m

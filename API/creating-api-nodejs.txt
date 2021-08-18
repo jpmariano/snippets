@@ -1,0 +1,11 @@
+Steps:
+- Create the database in https://mlab.com -  acmetravel
+    - setup a collection - vacations 
+        - Define the index on name and choose unique 
+- Create a database username and password: jm****** secret
+
+- Setup the node application
+    - Define the mongooose schema for vacation package
+- Create the API endpoints & test
+    - Get all active vacation packages
+    - Post a new vacation packages

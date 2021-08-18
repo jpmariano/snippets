@@ -1,0 +1,251 @@
+VPC (Virtual Private Cloud)
+- Logically Isolated Network
+- Exist within a single AWS region
+- User Defined IP address range
+- Can Contain Public or private subnets
+- Can be securely connected to on premises data centers 
+-----------------------------------------------------------
+VPC Components
+- Default Components - Name them as DONOTUSE
+    - 2 Subnets
+        - Public Subnet
+            - Enter this in the router table
+        - Private Subnet 
+            - VPC - /16: 65,356 Privte IPs
+            - Per Availability Zone 
+                - /20: 4,092 IPs 
+    - Router (Router Table) - router connects the public subnet to the gateway
+    - Network ACL 
+        - All inbound and outbound are Allowed (Default Only)
+            - newly create NACL have denied
+                - Stateless
+    - Gateway - goes to the internet 
+    - Security Group 
+- Other Components
+    - NAT Gateway - needed by the private subnet 
+    - VPC Peering Connections
+    - Running Instances
+    - VPC Gateways
+    - Elastic IPs
+    - Endpoints
+    - VPN Connections 
+    - Customer Gateways 
+-----------------------------------------------------------
+Establishing Private Connections
+- Local Network (Custumer Gateway) <- IPSec/VPN Tunnel ->(Virtual Private Gateway) AWS 
+- Local Network <- Direct Connect -> AWS 
+    - Physical Hardware Connection
+    - Limited Geographic Availability 
+    - Improved Network experience
+    - Reduced Bandwidth Costs
+    - Mitigate Potential Single Point of Failure
+        - Two Direct Connect Links 
+        - VPN Backup Link 
+- VPC Peering
+    - Private Peering Connection
+    - Highly Available 
+    - Only works in Per Region 
+
+-----------------------------------------------------------
+
+VPC Templates (VPC Wizard Templates)
+- VPC with a Single Public Subnet
+- VPC with Public and Private Subnets
+- VPC with Public and Private Subnets and Hardware VPN Access
+- VPC with a Private Subnet Only a Hardware VPN Access 
+-----------------------------------------------------------
+Security Group 
+- Controls Instance Inbound and Outbound (Firewall)
+- Applied to Individual AWS Components
+- Assigned at Instance Lvel 
+- 5/50/500 rule 
+    - 5 Security Group per Network Interface
+    - 50 Rules per Security Group
+    - 500 Security Groups per VPC 
+- All Inbound traffic are not Allowed by Default
+    - create a rule to allow traffic
+- All Outbound traffic are Allowed 
+    - Stateful 
+- Adding Inbound Outbound rule
+    - You can use Any Protocol to Source (IP, CDIR, Security Group)
+-----------------------------------------------------------
+NACLs 
+- Apply within the context of a VPC
+- Apply to one to many subnets
+    - each subnet can only have one NACL
+- Stateless 
+- Can Specify to allow or deny traffic
+- Have Implicit Deny 
+- Process in Numerical Order
+- Default NACLs
+    - Permit All Traffic in Both Directions
+    - Encourage use of Security Groups
+- Provides a second level of protection 
+- Creating A NACL
+    - Create a NACL 
+        - select the what VPC NACL needs to be in 
+        - All Inbound and Outbound have deny (Stateless)
+            - Edit Inbound Rule 
+                - Enter Rule Number
+                - Select Protocol
+                - Enter Source IP Subnet: 10.0.0.0/24 
+             - Edit Outbound Rule 
+                - Enter Rule Number
+                - Select Protocol
+                - Enter Port Number Range 
+                - Enter Source IP Subnet: 10.0.0.0/24 
+        - Associate NACL to Subnet  NACL needs to be applied 
+-----------------------------------------------------------
+VPC Flow Logs
+- Log network traffic of VPC
+- Created per VPC
+- Capture All VPC Network Interfaces - 15 minute invertal 
+    - creates log per network interfaces in cloudwatch 
+- Stored in Cloudwatch
+- Require IAM role 
+- Configureable by traffic type 
+- VPC Flow log Contents
+    - IP address
+    - Ports
+    - Protocol
+    - Packet information
+    - Traffic Actions 
+    - Logging status 
+- Limitations
+    - Cannot be Applied to Peered VPC unless they are on the same Account
+    - Immutable Configuration
+        - To alter the configuration, create a new flow log and deleted the old one 
+    - Always display Primary IP Address 
+    - AWS Internals
+- Configure a Flow Log 
+    - Go to Cloudwatch
+        - Logs
+            - Create a log group
+    - Go to VPC
+        - Select the VPC
+        - Click Flow log Tab
+        - Select Filter 
+            - allow all traffic
+            - Accepted Traffic 
+            - rejected Traffic 
+        - Select or Create IAM role
+        - Specifyle Log Group (This associate your VPC to the Flow log you create in your cloudwatch)
+
+-----------------------------------------------------------
+Steps: 
+1. Create VPC : https://console.aws.amazon.com/vpc/home?region=us-east-1#vpcs:
+VPC ID: myvpc
+IPv4 CIDR: 10.0.0.0/16
+2. Create Subnets: https://console.aws.amazon.com/vpc/home?region=us-east-1#Subnets:
+//Still Private - but will connect this later to router to make it public
+Subnet ID: <10.0.1.0-us-east-1a>
+IPv4 CIDR: 10.0.1.0/24
+//Private No Internet Connection
+Subnet ID: <10.0.2.0-us-east-1b>
+IPv4 CIDR: 10.0.2.0/24
+3. Add Internet Gateway to VPC(myvpc): https://console.aws.amazon.com/vpc/home?region=us-east-1#igws:
+4. Associate Internet Gateway to Router (Create Router): https://console.aws.amazon.com/vpc/home?region=us-east-1#routetables:
+Name: mypublicrout
+Destination:0.0.0.0/0
+Target: <internet gateway id>
+5. Associate Subnet(10.0.1.0-us-east-1a) to router which is connected to internet gateway: https://console.aws.amazon.com/vpc/home?region=us-east-1#subnets:
+- Select Subnet: 10.0.1.0-us-east-1a
+- Route Table (edit): mypublicrout
+- Subnet Actions: Modify Auto Assign IP Settings (Enable): Enable auto-assign public IPv4 address
+
+Add Instance to VPC 
+//Public Instace Web Server
+Step 1: Choose an Amazon Machine Image (AMI): Amazon Linux AMI 2017.09.0 (HVM), SSD Volume Type 
+Step 2: Choose an Instance Type: t2.micro
+Step 3: Configure Instance Details: 
+Network: myvpc
+Subnet: 10.0.1.0-us-east-1a
+
+//Public Instace Web Server
+Step 1: Choose an Amazon Machine Image (AMI): Amazon Linux AMI 2017.09.0 (HVM), SSD Volume Type 
+Step 2: Choose an Instance Type: t2.micro
+Step 3: Configure Instance Details: 
+Network: myvpc
+Subnet: 10.0.2.0-us-east-1b
+-----------------------------------------------------------
+
+VPC PEERING
+Development Account (Sydney)
+VPC 10.0.0.0/22
+Public Subnet
+10.0.0.0/24
+Private Subnet
+10.0.2.0/24
+
+Research Account (Sydney)
+VPC 192.168.0.0/22
+Public Subnet 
+192.168.0.0/24
+Private Subnet
+192.168.2.0/24
+
+Implement Peering 
+Development Account
+- Go to VPC 
+    - Create a peering Connection
+    - Select the Local VPC 
+    - Associate Local VPC to Another AWS Account
+        - Account ID of another AWS Account
+        - VPC ID of another AWS Host Account
+
+    Research Account 
+        - Go to VPC 
+        - Go to Peering Connnections and Accept Peering Request
+
+Configure VPC Peer Routing
+Research Account
+    - Go to VPC 
+    - Go to Peering Connnections
+    - Click Description - See Peered VPC
+        - Copy Public IP of the Devlopment - 10.0.0.0/22
+    
+    - Go to Route Table and select the Name of the Private Subnet 
+        - See Subnet Associations to make sure thats the right Private IP 192.168.2.0/24
+        - Routes Tab
+            - Add a route 
+                - Add VPC IP of Development in Destination- 10.0.0.0/22
+                - Target: Choose pcx-XXXXXX (Reasearch Account)
+    -In terminal
+        
+        ############################################################
+        # This script makes four changes using the AWS CLI.
+        # N.B. This script is using the snijim.dev.admin named
+        #      profile for credential information.  Route table ID,
+        #      CIDR range, VPC peering connection id, security
+        #      group id, port, and CIDR range are all hard-coded.
+        #      Parameterize as appropriate.
+        ############################################################
+        # Add route to from dev private subnet to research private subnet
+        aws ec2 create-route --route-table-id rtb-d83ecabc --destination-cidr-block 192.168.2.0/24 --vpc-peering-connection-id pcx-3adb7053 --profile snijim.dev.admin
+
+        # Add route to from dev public subnet to research private subnet
+        aws ec2 create-route --route-table-id rtb-7f31c51b --destination-cidr-block 192.168.2.0/24 --vpc-peering-connection-id pcx-3adb7053 --profile snijim.dev.admin
+
+        # Allow SSH and ICMP traffic from research private
+        aws ec2 authorize-security-group-ingress --group-id sg-5d037c39 --protocol tcp --port 22 --cidr 192.168.2.0/24 --profile snijim.dev.admin
+        aws ec2 authorize-security-group-ingress --group-id sg-5d037c39 --protocol icmp --port -1 --cidr 192.168.2.0/24 --profile snijim.dev.admin
+
+    - Ping one of the computer ins Private Subnet of Development Account within 10.0.2.0/24 - For example: ping 10.0.2.15
+
+    ############################################################
+    # This script undoes the four changes made by add192
+    # N.B. This script is using the snijim.dev.admin named
+    #      profile for credential information.  Route table ID,
+    #      CIDR range, VPC peering connection id, security
+    #      group id, port, and CIDR range are all hard-coded.
+    #      Parameterize as appropriate.
+    ############################################################
+    # Drop SSH and ICMP traffic from research private
+    aws ec2 revoke-security-group-ingress --group-id sg-5d037c39 --protocol tcp --port 22 --cidr 192.168.2.0/24 --profile snijim.dev.admin
+    aws ec2 revoke-security-group-ingress --group-id sg-5d037c39 --protocol icmp --port -1 --cidr 192.168.2.0/24 --profile snijim.dev.admin
+
+    # Add route to from dev private subnet to research private subnet
+    aws ec2 delete-route --route-table-id rtb-d83ecabc --destination-cidr-block 192.168.2.0/24 --profile snijim.dev.admin
+
+    # Add route to from dev public subnet to research private subnet
+    aws ec2 delete-route --route-table-id rtb-7f31c51b --destination-cidr-block 192.168.2.0/24 --profile snijim.dev.admin

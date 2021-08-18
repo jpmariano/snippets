@@ -1,0 +1,24 @@
+https://www.lynda.com/Amazon-Web-Services-tutorials/Use-Lambda-website-hosting/471661/504626-4.html
+1. Create a Function in Node.js
+2. Select the file handler
+3. Select the role that can execute the function 
+
+1. Installing Serverless
+$npm install -g serverless
+
+2. Create A Role With Policy attach to it, Create a Group and attach the role, then add user to that role 
+    - Create Secret  and Key 
+3. $ serverless config credentials --provider aws --key XXX --secret YYY --profile <iam username>
+4. Create a Folder and run 
+$ serverless or sls 
+$ sls create --template aws-python --path hello-world-python
+
+5. Navigate to hello-world-python
+in serverless.yml 
+provider:
+  name: aws
+  runtime: python2.7
+  profile: lambda-user1
+  region: us-east-1
+
+$ sls deploy -v //This will deploy your serless app to aws lambda 

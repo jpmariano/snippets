@@ -1,0 +1,144 @@
+Route53 
+- DNS Management
+    - hosted Zones 
+        - Click Record Set 
+            - Creates 2 Record by Default
+                - NS (name Server) - ns-110.awsdns-10.org 
+                - SOA (Start of Authority) - ns-110.awsdns-19.net 
+            - Other Record Set
+                - A -IPv4 Address
+                - CNAME - Canonical name
+                - MX - Mail Exchange
+                - AAAA - IPv6 Address
+                - TxT - Text
+                - PTR - Pointer
+                - SRV - Service Locator 
+                - SPF - Sender Policy Framework
+        
+- Traffic Management
+    - Global Traffic Management 
+- Availability Monitoring 
+    - DNS Failover
+
+- Domain Registration
+    - Supports transfering and registrering domain 
+
+-------------
+Routing Policy 
+- Simple Routing policy - Default routing policy | User request -> route53 ->ELB  region 
+    - create a record set
+        - Alias record 
+            - Select ELB
+            - Select Simple routing 
+- Failover Routing - active/passive set up. For disaster recovery | User request -> route53 -> ELB  (region active and region passive)
+    - In EC2, create health checks 
+        - Go to ELB, copy the DNS name.
+    - In route 53, health checks 
+        - monitor: ip or domain name 
+        - check request interval time 
+        - you can create alarm (optional)
+    - After creating 2 health checks, 
+        - create a record set
+        - Alias record 
+            - Select ELB
+            - Select failover 
+            - Assign primary 
+                - health check to associate: select the Healthcheck the checks the ELB 
+- Weighted Round Robin Routing 
+    - Allocating 3-2 routing depending on the weight of the request on your VPC | User request -> route53 ->ELB  (region1 20%, region2 80%)
+    - create a record set
+        - Alias record 
+            - Select ELB
+            - Select weighted routing 
+            - assign weight in number
+- Latency Based Routing 
+    - Route 53 Compared Latency of the originating request and direct that request to the lowest VPC Latency | User request -> route53 (region1 54ms, region2 300ms) -> ELB (region1, region2)
+    - create a record set
+        - Alias record 
+            - Select ELB
+            - Select latency 
+            - Select region 
+            - Assign weight in number
+- Geolocation Routing 
+    - Route 53 check IP's Geographic location and forward request based on the Geographic Location of your VPC | User request region1  -> route53 ->ELB  (region1)
+        - create a record set
+        - Alias record 
+            - Select ELB
+            - Select Geolocation 
+            - Select Location 
+
+Route 53 AWS-Specific Capabilities 
+- Private DNS for AWS VPC
+- CloudFront Zone Apex (www.example.com)
+- S3 Zone Apex (host static website)
+- ELB Zone Apex (Map Zone Apex to ELB - Route 53 check the health check of the ELB)
+
+Route 53
+Creates by default:
+- NS 
+- SOA 
+
+
+AWS Direct Connect - 802.1q VLANs
+- Beneifits 
+    - bandwidth and more consistent network 
+    - IPsec encrypted connection 
+    - VPN can be configured quickly 
+    - It uses prive connect and not internet 
+-----------------------------------
+Alias Resource Record Set can point to:
+- S3 Website Endpoint 
+    - In S3
+        - Click the Bucket 
+        - Click the contents of the bucket and make it public
+        - Edit the bucket properties and make the Grantee Everyone for view only
+        - In static web hosting - Enable web hosting 
+            - Enter: the index.html
+            - Enter 404 File 
+    - Go to Route53 
+        - DNS Management
+        - Select the Domain in inside the hosted zones
+            - Create Record Set 
+                - Select Alias: Yes
+                - Select Alias Target: Point to your bucket
+                - Click Create
+- Elastic Load Balancer 
+- CloudFront Distribution
+- Elastic Beanstalk Environment 
+
+
+Understanding Private DNS Zone 
+    - Create 2  Instance ( 1 Development Instance and 1 Production Instance ) - and Place them inside the same VPC
+    - Create a Hoste Zone
+        - Enter Domain name
+        - Type Private hosted Zone for Amazon VPC 
+        - Enter the VPC ID of the Development Instance 
+            - EnableDNSHostname
+            - EnableDnsSupport 
+    - Create a record set 
+        - Alias No 
+        - Value: 10.0.1.19 (IP of the Development )
+        - go back to the list of the hosted zones, you see the A record 
+    - RDP to the Production Instance and open the browser and enter the domain name in the URL of the development intance 
+        - nslookup domainname.com 
+---------------------
+Elastic IP 
+    - Static IP that can be associated with an EC2 Instance
+    - Can be moved from one EC2 instance to another 
+    - Replace existing public IP of an EC2 Instance, the IP will be release back to aws
+    - Scope limited to an individual aws reqion 
+ 
+ Using EC2,  EIP, Route 53 
+ Allocate Elastic IP
+    - Click the instance, and select Elastic IP
+        - Allocate a new Elastic IP (make sure to save the IP address )
+
+ Associate Elastic IP with EC2 Instance
+    - Click Actions and Associated Instance with the Elastic IP
+        - Select the Intance 
+        - The Wordpress site should now be available from URL
+ Update Route 53 
+    - In Route 53, select hosted zones
+    - Click go to the Record Set, Create  A Record set 
+        - Alias: No
+        - Value: Enter the IP of the wordpress site that has Elastic IP 

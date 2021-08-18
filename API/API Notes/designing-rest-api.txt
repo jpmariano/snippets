@@ -1,0 +1,546 @@
+API Value Chain - The most important link so people will use your api are the Developers
+
+Best Practices:
+    https://api.website.com/v1/resourcename 
+1. avoid using www.websitename.com
+2. Keep your base url simple
+3. Use subdomain or a Separate subdomain
+
+Resource Name 
+1. Should be noun and plural - https://api.website.com/v1/items/{id}
+2. Verbs is ok. (API Operation != Crud)
+    - https://api.website.com/v1/estimates/price/{}
+    - https://api.website.com/v1/search?query
+3. Actions
+    Post /vacation/{id}/book
+    Post /book/vacation
+    Get  /vacations/search?
+4. Associations - try to avoid deep nesting, use the query if not avoiadable
+    facebook /me/phptos
+    walmart  items/{id}/reviews
+    twitter musts/users/list
+    get - /vacation/{id}/reviews
+    Get pud delete - /vacation/{id}/reviews/{review-id}
+
+
+Rest API CRUD 
+    - Mapping CRUD to HTTP Methods
+        - Post = Create
+        - Get = Read or Retrive
+        - Put, Patch = Update
+        - Delete = Delete
+    - Use of HTTP status code 3 digit
+        - 1** = informational = continue
+        - 2** = success = (200 = ok, 201 = created)
+        - 3** = redirect = Temporary redirect
+        - 4** = client error = (400 = Bad Request, 404 = Not Found, 401 = Unauthorized, 403 = Forbidden, 415 = Unsupported Media)
+        - 5** = server error = (500 = Server Error)
+        - Limit your api to 8 status code
+        - Error Response Content-Type - Common is json
+            - Content-Type:"Application/json"
+        - Application Specific Errors
+            - 7002 = Error code - Required field missing
+        - Use a standard Error Template for the response
+            - {
+                text: 'Custom Message',
+                timestamp: new Date(),
+                method: 'Post', //Post, Get, Put, Patch, Delete
+                endpoint: 'http://api.acme.com/v1/vacations',
+                errors:  {
+                    code: Application-Specific-Error-Code,
+                    text: "Message Describing the Error",
+                    hints: ["Hints to the developer on the potential issues"],
+                    info: "link to more information"
+                },
+                payload: receivedPayload (Debug Use only)
+            }
+            - Alternate Approach (from Facebook)
+                - Always sends back HTTP status = 200 ok
+                - Response 
+                    {
+                        status: {..},
+                        payload: {..}
+                    }
+    - Support Multiple resource formats
+
+Uniform Interface Constraint
+    - contract for communicationm between client and server
+    - HTTP Methods
+    - HTTP status codes
+    - Representation formats
+
+Post Request Handling 
+    - Post = Create = /vacations or /vacations/{id}/reviews
+        - when sucess, return code=201 
+            - May return a link to a new resource in location header
+                - http://api.example.com/vacations/121/reviews/2
+            - May return the new object
+    - Failure 404 - Bad Request - 400 missing required field
+    - Failure 500 - server error
+    - Get = Read or Retrive /vacations or /vacations/{id}
+        -  when sucess, return code 200 ok 
+            - server sends back in requested formats
+            - http://api.acme.com/vacations/121
+        - Failure 4** Bad request - ex resource not Found
+        - Failure 5** Server Error - ex 500 internal server error
+    - Put, Patch = Update - (Put Use when updating all the attributes, Patch when updating specific attribute)
+        - PUt can create if client provide an ID. (Not suggested)
+        - Patch http://api.acme.com/vacations/121/?fieldname=value 
+        - success: return 200, 204 (no content), and 201 (created)
+            - resource in body of response - Optional
+            - No need to send the link - optional
+    - Delete = Delete
+        - URL: /vacation  - deletes all vacation
+            - /vacation/{id} - deletes specific vacation
+        - Success: 200, or 204(No returned content) - May return deleted resource in the response body
+        - Failure 4** -  Bad Request - ex 404 resouce not Found
+        - Failure 5** - Issue in processing - ex 503 database unreachable
+
+Resource Representation (Support: json, xml, csv)
+    - Query Parameters
+        - search?key=value&format=xml, search?key=value&format=json, search?key=value&format=csv
+    - HTTP header Accepts - Accepts: application/json, Accepts: application/xml
+    - Resource Format Suffix - /programmes/schedules/fm/today.json, /programmes/schedules/fm/today.xml
+    - Whats Common:
+        - HTTP Accept header is not so Common
+        - Most Providers set the default fomat = json 
+    - Respose:
+        - Must include a Content-Type in the header
+        - Return HTTP status code
+        - Documentation:
+            - list supported formats
+            - How requestor specifies
+
+API Changes
+    - Non Breaking Changes
+        - adding a resource 
+            - Get /hotels
+        - adding optional Parameters or properties
+            - Get /vacations?limit=3
+    - Breaking Change
+        - Change the HTTP verb or Methods
+            - Put /vacations to Post /vacations
+        - Delete an Operation
+            - Get /vacationsByDestination
+    - Backend Change
+        - Minor Change - change attribute length
+        - Major Change - Discount calculator requires more Parameters
+    - Avoid Changes
+        - Is the change realy adding value?
+        - Eliminate or minimize impact on app Developers
+        - Provide planning opportunity to the add Developers
+        - Support Backward compatibility (if possible)
+        - Provice support to app Developers with the Changes
+        - Minimize change frequency e.g., once per 6 months
+
+Rest API Versioning
+    - Creation and Management of multiple releases of a software
+        - Not the same as verison control
+    - How to specify version?
+        - Uses the date of release 
+            - version="10/1/2015" - twillo
+        - Major.Minor
+            - version="12.61" or version="v12.61" - Facebook
+        - Single Digie i.e, No Minor Version 
+            - version="12" or version="v12" - Uber
+    - What will be the format for information?
+        - HTTP Header - "x-myapi-version:1.2"
+        - Query Parameter - /post?version=1.2 facebook 
+        - URL - /v1/charges - uber 
+        - Hybrid 
+            - https://api.stripe.com/v1/charges -  Major change
+            - HTTP Header - "2016-07-06"  - Minor change
+
+API Change Strategy
+                    Q1/2017     Q2/2017     Q2/2017     Q2/2017 
+    - Version-1    Avaialable   Deprecate   Retire
+    - Version-2                 Avaialable  Deprecate
+    - Version-3                             Avaialable   
+
+    - Support at least 1 previous version for a period of time
+        - E.g, 3 months
+    - Markt the previous version a deprecated
+        - For new apps developers can access only the latest version
+    - Publish a roll out plan in advance
+    - Mange changelog that clearly shows the reason for new version
+
+- Example Code: 
+    - Git https://github.com/acloudfan/REST-API-Course
+    - npm install
+    - Enter your credentials from mlab
+        - https://github.com/acloudfan/REST-API-Course/blob/master/tests/TestDbOps.js
+    - $ node tests/TestDbOps.js
+    - $ node index
+    - http://localhost:3000/v1/vacations (postman)
+    
+
+Rest API Caching
+    - Benefits of Caching 
+        - improves performaance
+        - Higher scalability/throughput
+            - how many calls per second
+                - to increase calls, midtier cahcing 
+    - Design decision
+    - who caches?
+        - client, ISP, Gateway, midtier caching (API), dbcaching 
+    - What to cahce
+        - Speed of change
+            - If speed of change is fast, 
+        - Time sensivity
+            - Do not cahce Time sensity - Vacation package experition
+        - Security 
+            - customer profile should not be cache in the intermdiaries
+    Design Decisions
+        - Which Compotnents should control caching? Should be the API
+        - What to cache? who can cache? (Http Cache control directives)
+        - For how long is the cahced data valid? (Http Cache control directives)
+    - Cache Control directives - https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9
+        -  To control the cache control directives
+            - The Cache-Control general-header field is used to specify directives that MUST be obeyed by all caching mechanisms along the request/response chain.
+        - Cache control: "directive-1, directive-2"
+        - Cache control: "private, max-age=60"
+        - Server API Response HTTP Header: ( who can cache the response?, For how long?, Under what conditions? )
+            - "Cache-Control" ":" 1#cache-directive
+        - Client Request HTTP Header:
+            - Ovveride the caching behavior
+        - Private vs Public
+            - Sensitive data should not be cached on intermediaries
+                - Private data is meant for a single user 
+                - Cache-Control: "private, max-age=60"
+                - default is public
+        - No-Store
+            - Sensitive data should not be stored anywhere (bank data, medical records"
+            - Cache-Control: "no-store, max-age=60"
+        - No-Cache Etag
+            - Always get the data from the server
+            - Subsequent request to the same URL will return different data
+            - Etag header can be used to chec if the data has changed
+            -Etag 
+                - server sends an Etag from the server
+                - client gets the original Etag
+                - client  sends Etag, server check if etag change 
+                - if etag change, server will send response http header of 200 and status ok,. Else, server http response cdoe: 304, Message: Not modified
+                    - Cache-Control: "no-store, max-age=60" 
+                      Etag: "xxxxx"
+                    - Use for stocks
+            - Social Security - use No-Store and No-Cache
+        - Max-age 
+            - Lifetime of the cahce data or its validity
+            - Cache-Control: "max-age=60"
+            - Cache-Control: "private, max-age=60"
+                - Cache valid for 60 sec and intermediaries instructed not to cache
+            - Cache-Control: "no-cache"
+                - requestor can validate by sending the Etag
+    - Example Code: http://localhost:3000/ (URL)
+            - Git https://github.com/acloudfan/REST-API-Caching
+            - npm install
+            - $ node index
+            - http://localhost:3000/ (url)
+
+Partial Response
+    - Api Consumer in control of response
+    - Why send a Partial Response? For mobile
+    - Benifits 
+        - Performance and optimize resource usage
+            - CPU, Memory, and bandwidth
+        - Api consumer contrrols the granularity
+        - Common API version for all consumers
+            - To support multiple devices, use cases - form factors
+    - Specification
+        - /people:(id, first-name, last-name) - Linkedin
+        - /friends?fields=id,name,picture - Facebook 
+        - /pins?fields=id,link,creator(firstname) - pinterest
+    - Example Code: 
+            - Git https://github.com/acloudfan/REST-API-Course/branches
+            - npm install
+            - Enter your credentials from mlab
+                - https://github.com/acloudfan/REST-API-Course/blob/partialresponse/tests/TestHotelsDbOps.js
+                - https://github.com/acloudfan/REST-API-Course/blob/partialresponse/index.js
+            - $ node tests/TestDbOps insert 
+            - $ node index
+            - http://localhost:3000/v1/hotels?fields=name,city (Postman)
+Pagination
+    - API consumer in control of response
+        - Asks for "Number of Rows" needed
+    - Pagination controls how many rows the app developer is requesting
+    - Benifits 
+        - Performance and optimize resource usage
+            - CPU, Memory, and bandwidth
+    - Design Options
+        - Cursor based - Facebook - https://developers.facebook.com/docs/graph-api/using-graph-api/#paging
+            - Cursor -  control structure that enables traversal of records 
+            - considered most efficient 
+            - Cursor: "random string"
+            {
+                "data": [
+                    ... Endpoint data is here
+                ],
+                "paging": {
+                    "cursors": {
+                    "after": "MTAxNTExOTQ1MjAwNzI5NDE=", //Begining of the response 
+                    "before": "NDMyNzQyODI3OTQw" //End of the response 
+                    },
+                    "previous": "https://graph.facebook.com/me/albums?limit=25&before=NDMyNzQyODI3OTQw" //Points to the previous page
+                    "next": "https://graph.facebook.com/me/albums?limit=25&after=MTAxNTExOTQ1MjAwNzI5NDE=" //Points to the next page
+                }
+            }
+        - Offset based - Linkedin (most popular approach)
+            - This uses the query parameter 
+                - Get /hotels?Offset=6&limit=5 
+            - /people?start=50&count=25 - Linkedin
+            - /friends?offset=50&limit=25 - Facebook 
+            - /search?page=3&rpp=25 - twitter 
+        - Use of HTTP header - Github
+            - https://tools.ietf.org/html/rfc5988
+            - To create relationship between resources
+                - /search/code?q=addclass - Github 
+                    - response a data and http header
+                    - header 
+                        - Link: <https://api.github.com/user/repos?page=3&pager_page=100>; rel="next",  //Links to the Next page 
+                                <https://api.github.com/user/repos?page=50&pager_page=100>; rel="last" //links to the last page
+        - Example Code: 
+            - Git https://github.com/acloudfan/REST-API-Course/branches
+            - npm install
+            - Enter your credentials from mlab
+                - https://github.com/acloudfan/REST-API-Course/blob/partialresponse/tests/TestHotelsDbOps.js
+                - https://github.com/acloudfan/REST-API-Course/blob/partialresponse/index.js
+            - $ node tests/TestDbOps insert 
+            - $ node index
+            - http://localhost:3000/v1/hotels?fields=name&limit=5&offsest=1 (Postman)
+Security
+    - Application -> Gateway -> API -> database
+    - API - Provides an attack surface to hackers
+        - Data Theft
+        - Data Manipulation
+        - Identity Theft
+        - DOS attack
+    - Who is the caller of API?
+        - Authentication 
+            - Basic Authentication - consumer sends the AUthorization in HTTP hedader
+                - AUthorization: Encoded-Creds 
+                    - Based64 Encoded
+                    - User: Password
+                - Weakness
+                    - Man in the middle attack 
+                    - Caller must always send the credentials in every request 
+                    - Rest api doesn't support session
+                - Must be use with TLS/HTTPs 
+    - Is Transaction Authorized?
+    - Security of Data 
+        - Protect the data from theft and integrity of data
+        - Data at rest is outside the scope of Rest API
+        - Data in motion is inside the scope of Rest API 
+        - Always use TLS/HTTPs for Rest API 
+            - Do not use self signed certificates
+    - Authentication middleware for Node.js http://passportjs.org/ 
+        - Non intrusive - keeps the code maintainable
+        - Supports multiple forms of Authentication
+        - Built in Support for social Authentication 
+        - Over 300 strategy 
+    - Example Code: 
+            - Git https://github.com/acloudfan/REST-API-Course-Security
+            - npm install
+            - $ node app
+            - http://localhost:3000/private (url and postman)
+                - enter username and password from here https://github.com/acloudfan/REST-API-Course-Security/blob/master/userdata/users.js
+                - Postman 
+                    - Basic Auth 
+                    - Enter username and password
+                - In Postman, Header request header 
+                    - Basic c2FtOnNhbTEyMw== - if  c2FtOnNhbTEyMw== is decoded  = sam:sam123 
+Token Based API Security
+    - Understanding of Tokens
+        - Token is an Encoded string 
+            - hashing or private key for encryption
+        - Eliminates the need for session on API
+            - http header
+            - query Parameters
+            - request body
+        - Issuer can control the validity
+            - expiry
+            - revocation 
+        - Dreams invoke /token{credentials} -> Acme validates credetials and issue credentials to dreams and Acme save the token in its database
+            - Dreams can now request a resource: /resource{token} 
+            - Acme validates the token and check the storage for its token 
+            - If token is expired, it will issue 401
+    - JSON Web Tokens  (JWT) - https://tools.ietf.org/html/rfc7519
+        - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.   //Header based 64 Encoded
+            eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwO. //Payload(Registered/public/private claims) based 64 Encoded
+            yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw //Signature - combination of hashing of header and payload  along with the secret
+                - secret needs to be confidential 
+        - Self contained
+        - json based
+        - Header 
+            - Type
+                - "JWT"
+            - Hashing Algorithm
+                - "HS256"
+                - "HMAC"
+            - Example
+                {
+                    “alg”: “HS256”,
+                    “typ”: “JWT”
+                }
+        - Payload (Claims) https://www.iana.org/assignments/jwt/jwt.xhtml
+            - Registered Claims 
+                - iss (Issuer e.g. "acloudfan.com)
+                - exp Expirty timestamp
+                - nbf Not before timestamp 
+                - If the change controller is IESG in https://www.iana.org/assignments/jwt/jwt.xhtml, it means its a registered claims. Else, its a public claims
+            - Public Claim 
+                - name
+                - Email
+                - Phone numer 
+                - There's a registry for public claims
+            - Private Claim 
+                - consumer and provider decide what to use 
+                - risk: private claim can collide with public claims
+        - Node Module
+            - jwt-simple 
+                - consumer invokes /token body:{credentials}  (Express)
+                - credentials is then hashed by jwtauth.js and then stored to the tokenstorage.js in database at the same time issue a token to the consumer 
+                - consumer invokes /private header:{token}
+                - validator.js in server will validate the token
+        - Code Example: 
+            - jwtauth.js creates the token and app.js issues the token to the requestor 
+        - Example Code: 
+            - Git https://github.com/acloudfan/REST-API-Course-Security/branches
+            - npm install
+            - $ node app
+            - http://localhost:3000/token (Postman) -  post json request 
+            - Consumer do a Post request in Postman body: select raw application json 
+                - {"name":"sam", "password":"sam123"}
+                - Press send - you get a token in json format 
+                    - {
+                        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDU2ODQzMDUwMDIsImlzcyI6IkFDTUUgVHJhdmVscyIsIm5hbWUiOiJzYW0iLCJlbWFpbCI6InNhbUBtYWlsLmNvbSJ9.-troSrlhiYrhir4SLruAJA3uGac3_QvBiuzqPmmEFEg"
+                    }
+                    - Base 64 Decoded format of the token
+                    - {"typ":"JWT","alg":"HS256"} - header 
+                        {"exp":1505684305002,"iss":"ACME Travels","name":"sam","email":"sam@mail.com"} - payload
+                        Xbbb	{iмΣAD - signature 
+            - Consumer does another request and this time the get request 
+                - http://localhost:3000/private Get method 
+                    - In the header, add a key value 
+                        - key: x-acme-token 
+                        - valeu: yourgeneratedtokenfrompostrequest
+                    - Hit send
+                    - validator.js - reads and validates the token send by the requestor 
+API Key and Secret 
+    - What is API key and secret?
+        - If you use facebook or twitter, register your application to the provider 
+            - in return, the provider will issue use and password for app almost like a username and password 
+            - API key identifies an API consumer 
+                - Client Key,
+                - Client ID 
+            - API Secret used by the client to prove its Identity
+                - password
+                - digital signature 
+        - Steps
+            - Consumer register to the Provider
+            - Provider Issues an API key and Digital Signature
+            - consumer sends A get request with  API key + Digital signature to the Provider 
+            - Provider validates the API Key and Digital Signature 
+        - Amazon allows anonymous access to s3
+            - Developer creates a signature
+            import base64
+            import hmac 
+            import sha 
+            h = hmac.new("randomstringofsignature", HTTTP-HEADER)
+            base64.encodedstring(h.digest()).strip()
+        - How Keys Used?
+            - API Key in combination with Secret used for Authentication
+            - Usage Analytics 
+            - Gettting Tokens from API provider 
+            - Rate limiting 
+                - External Application is limited to request of 180 calls/15 minutes like Twitter 
+        - Design Decisions
+            - Sending the API key and Secret/signature
+                - HTTP header
+                - Query Parameter
+                - Request Body 
+            - API Management Platform
+                - API key & secret Management 
+                - Security Scheme
+                - API Key/secret provisioning 
+                - Rate limiting and Analytics
+                - Example of Ready Made API Management Platform
+                    - apigee
+                    - API mange IBM
+                    - MAshery
+                    - Mulesoft 
+Oauth 2.0 - https://tools.ietf.org/html/rfc6749
+    - Flexible Authorization framework 
+    - Uses different types of tokens 
+    - Describes 5 methods (grants) for acquiring access tokens
+    - End user in control of their data (Scope)
+    - Application/client needs a API key and Secret 
+    - Authorization scope grant 
+        - Social login Scheme
+            - Application or client (consumer)
+                - 1. Application ask permission from the user for authorization 
+                - 3. Application sends the Authorization grant to the provider 
+                - 6. Application recieves the Access Token from the provider and it can continously use this token 
+                    - 7 If Access Token is Expired, Consumer can request Refresh Token from the Provider 
+            - User (Owner of Data)
+                - 2. User gives the Authorization grant - generates the Authorization Token 
+            - Provider 
+                - Authorization server
+                    - 4. Autorization server reads the Authorization grants 
+                    - 5. Authorization server issues an Access Token to the consumer  
+                    - Provideer may define multiple types of Access Token, Expiry set by the Provider  
+                        - Facebook: https://developers.facebook.com/docs/facebook-login/access-tokens/
+                    - 8. Refresh Token issued to the consumer  
+                - Resource or API server 
+    - Spotify Example
+        - https://developer.spotify.com/web-api/authorization-guide/#authorization-code-flow
+        - Grants 
+            - Authorization Scope Grant 
+                - see spotify
+            - Client Credentials grant 
+                - No Authorization code involved
+                - No use data access
+            - Implicit Grant
+                - Use Implicit grant, when you cannot protect client secret 
+                - No Authorization flow involved
+                - Access to user data 
+            - Refresh Token Grant
+            - Resource Owner Credentials Grant - Not available in spotify
+        - Scope - https://developer.spotify.com/web-api/authorization-guide/#scopes 
+        - Design Decisons
+            - Scopes of the user data (API)
+            - Type of Oauth grants to be supported
+                - Authorization Scope grants or implicit grants  - Private data 
+                - Client Credentials - Public Data 
+        - Implementating the Oauth 
+            - Build your own or 
+            - API managemnt platform 
+Functional Attacks
+    - https://www.owasp.org/index.php/Main_Page
+        - Owasp provides a good notes for protecting a rest api
+    - Exploits functional Attacks
+        - Attack through app
+        - Attack API directly
+        - Cross site forgery 
+    - Common Functional Attack 
+        - SQL Injection - data driven application
+            - A form that has an API behind the scene
+                - the user can inject sql in one of the fields 
+        - Fuzzing - Random input to understand vulnerabilities 
+        - Cross Site Forgery - Attack script on user's browser
+        - Session/Token Hijacking - Theft of access token from the user's browser 
+
+            
+            
+
+        
+
+
+
+
+
+        
+
+
+
+
+

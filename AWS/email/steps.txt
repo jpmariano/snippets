@@ -1,0 +1,114 @@
+Preriquisite:
+Domain name
+Online Server
+SSH
+
+Install Machine
+    30GB 
+    In Security Group: 
+    Add Ports: 
+        SMTP 25 from anywhere
+        DNS(UDP) 53 Anywhere 
+        DNS(TCP) 53 Anywhere 
+        HTTP 80 Anywhere
+        POP3 110 Anywhere
+        IMAP TCP 143 Anywhere 
+        HTTPS(TCP) 443 Anywhere
+        SMTPS 995 Anywhere 
+        IMAPS TCP 993 
+        CUSTOM TCP 587 Anywhere
+        CUSTOM TCP 4190 Anywhere
+    
+    Assign Elastic IP 
+        - associate to the machine 
+Configure Hostnames
+    Change Hostname
+        $ sudo -i 
+        $ nano /etc/hostname  
+            - change the name to: mail.<sitename>.com 
+    Edit Host File 
+        $ nano /etc/hosts 
+            - add: 127.0.0.1  mail.<sitename>.com  localhost 
+        $ hostname mail.<sitename>.com 
+        $ hostname -f - it should output the hostname 
+Install Mail Software
+    - go to https://mailinabox.email/ 
+        - Setting Up The Box
+            - $ url -s https://mailinabox.email/setup.sh | sudo bash
+            - Follow installation instruction 
+                - Email(note this will be your username when you login): <enter your email>
+                - Enter: <hostname> 
+                - Enter password 
+    - https://<siteipaddress>/admin 
+        - login:
+            - Enter Email
+            - Enter password
+            - Look for name servers (copy it to your clipboard)
+                - ns2.mail.<yoursite>.com 
+Configure DNS records in route 53
+        - paste the name server where you register your domain name (like go daddy)
+            - ns2.mail.<yoursite>.com 
+        - go to aws create a hosted zone 
+            - Domain Name: <yoursite>.com 
+            - Type: Public Hosted Zone 
+        - Copy the name servers from aws hosted zone to your domain registrar (godaddy)
+        -  https://<siteipaddress>/admin  
+            - login
+            - Mail -> External DNS 
+                - Copy data from this page and create records in your aws 
+                    - Create A record
+                        - paste the data in the value
+                    - Create MX record
+                        - paste the data in the value
+                    - Create A record mail.<sitename>.com 
+                        - paste the data in the value
+                    - Create MX record for 10 mail.<domainname>.com 
+                        - 10 mail.<domainname>.com 
+                    - see record set  recordset.png
+                - When finished, check the status 
+Installing SSL
+    -  https://<siteipaddress>/admin  
+        - login
+        - System > TLS(SSL)
+            - click provision 
+        - https://<sitename>.com/mail
+
+Testing Server 
+    - https://<sitename>.com/mail - to open mail client 
+    - create an email and send it to your yahoo email 
+
+Request to remove email sending limitations - in aws https://aws.amazon.com/forms/ec2-email-limit-rdns-request
+    Spam Folder Problem
+    Reverse DNS
+    Open sending emails limit 
+    - provide elastic ip 
+    - provide reverse DNS record: box.<domainname>.com 
+
+Connect using outlook
+    - see outlook-manual-settings.png 
+
+Creating User Accounts and Aliases 
+    - https://<siteipaddress>/admin  
+    - add user 
+    - add aliases 
+    - go to contacts 
+
+DNS Security 
+    - Go to your domain provider (godaddy)
+        - Manage DNS
+        - DNS Security
+    - Open a new tab and visit  -  https://<siteipaddress>/admin  
+        - login > status 
+        - see DNSSec.png 
+            - paste the information in your domain provider DNS Security 
+
+SPF record - prevent spammers 
+    - Create a new record set 
+    - name: blank
+    - type: text
+    - value: v=spf1 a mx ip4:<ipaddress> -all 
+
+--------------------------- 
+Debian/Ubuntu 
+apt-get install bind9 bind9utils bind9-doc 
+

@@ -1,0 +1,54 @@
+http://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html
+https://www.lynda.com/Amazon-Web-Services-tutorials/Installing-AWS-CLI/569343/618779-4.html
+https://www.lynda.com/Amazon-Web-Services-tutorials/Install-configure-AWS-CLI/502654/566959-4.html
+https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
+Local Computer
+    1. Installing Phyton in CLI
+    - sudo apt-get install install phyton-pip
+    $ python --version 
+
+    2. Installing the CLI
+    $ pip install awscli  - https://github.com/aws/aws-cli
+    3. /usr/local/bin/aws --version 
+    4. which aws 
+
+AWS Console 
+    1. Create A Role
+        - Attach a Policy to this Role as to what it can do
+    2. Add a Group to the Role
+    3. Add IAM User to the Group
+    4. Click on User - Security Credentials create access key 
+        - Make sure to secure your access key 
+
+Local Computer
+How to create aws profile 
+1. Run - $ AWS Configure
+    - AWS Access Key ID: None
+    - Secret Access Key: None
+    - Default Region: us-east-1
+    - Output Format: json
+
+To Edit configuration 
+vi ~/.aws/config 
+    [default]
+    region=us-west-2
+    output=json
+
+    [profile <user.dev.admin>]
+    region=us-east-1
+    output=text
+
+    [profile <user.dev.admin>]
+    region=us-east-2
+    output=text
+
+vi ~/.aws/cedentials
+        - [ <profilename>]
+        - aws_access_key_id = <yourrandomaccesskeyid>
+        - aws_secret_access_key = <yoursecretaccesskeyid> 
+
+$ aws ec2 describe-instances --profile <user.dev.admin>
+
+For More Advance CLI Install https://github.com/awslabs/aws-shell
+1. sudo pip install aws-shell
+2. $ aws-shell - f10 to exit 

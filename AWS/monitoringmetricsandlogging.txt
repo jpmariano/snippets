@@ -1,0 +1,201 @@
+Monitoring Approach
+- How much monitoring is right?
+    - Is driven off by business needs
+        - Availabily of Application
+        - Security of Applications
+    - Costs Money
+    - Needs Someone to Read, interpret, and Act 
+- Monitoring Approach 
+    - Why and how to Monitor 
+        - Which activities to monitor
+        - Priority
+            - Performance or security 
+        - Which Activities and which tools (services)
+    - How to select metrics for monitoring 
+        - How and when (how often) to monitor 
+    - How to use data 
+        - selecting, aggregating, and visualizing data for monitor 
+
+Outocome Based Monitoring
+- Availability: Is it working?
+- Performance: Is it fast? 
+- Security/Compliance: Is it secured?
+- Service Cost: Are cost predictable? 
+- Accuracy: Are correct results returned?
+
+Service Level Agreement
+- Formalize Expectations
+- What gets measured matters 
+- Clarify "Fast" Performance 
+    - fast interval of information?
+    - fast user experience?
+
+What to Monitor: Services 
+- By an individual AWS services
+- By a set of compnents (your code plus one or more AWS services)
+- By entire application - utilization patterns
+- By Blue/green Deployments (Past and current versions of an entire application) - Application life cyle 
+    - Read MatrinFowler.com 
+
+What to Monitor: metrics
+- Evaluate key services
+    - Your code an be a service 
+- Review Suggested AWS service metrics
+    - AWS exposes key metrice per service 
+- Create Custom metrics as demand 
+    - you can use AWS APIs and tools to create custom metrics 
+
+Tools for Monitoring and Logging 
+- AWS tools for patricular AWS Services
+    - AWS Console
+    - AWS CLI Tools 
+    - AWS Cloudwatch or CloudTrail Logs
+- AWS Application level tools
+- Third Party Service or Application Tools 
+
+Application Monitoring 
+- Internet Layer (more in security than performace)
+- User Interface Layer (Lambda, Code in EC2)
+- Service Layers (S3, RDS, EC2)
+
+Dashboards
+- New Relic
+- AWS X-Ray 
+- Datadog 
+- Stackdriver 
+- Others 
+
+Monitoring Core AWS Services
+- Foundational AWS services
+    - Amazon S3 and EC2 
+- Commonly used AWS services
+    - Compute - Elastic Beanstlak, EC2 Container Service, EC2 Container service, Lambda 
+    - Database - Amazon Relational Database Serive (RDS) and redshift 
+- Specialty AWS Serives
+    - kinesis and Elastic MapReduce 
+
+Setup for Monitoring AWS Services 
+    - Create a test AWS Account
+        - Can use free tier for a new account with some services
+    - Create Nonroot user
+    - Create an AWS billing alert
+    - Turn services off when done testing 
+
+Using Cloud Formation Stacks 
+- A CloudFormation Template 
+    - Is a JSON Template file
+    - Is a run as an AWS Stack 
+    - Use for:
+        - Spin up service Instance
+        - Include data(Files) in your instances
+
+Sample Template for Cloud Formation
+- http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates.html
+    - Location: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates-us-east-1.html
+    - Services: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html
+        - Amazon Simple Storage Service: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html#w2ab2c23c42c13c33
+            - JSON Template: https://s3.amazonaws.com/cloudformation-templates-us-east-1/S3_Website_Bucket_With_Retain_On_Delete.template
+            - AWS Designer: https://s3.amazonaws.com/cloudformation-templates-us-east-1/S3_Website_Bucket_With_Retain_On_Delete.template
+
+Monitoring S3 
+- Create a Bucket in S3 using cloudformation (use a Template)
+- Upload Files to Objects 
+    - Stroage Class: Standard, Stadard IA, Reduced Redundancy
+    - Encryption: none, Amazon S3 Master-key, AWS KMS master key 
+- Properties 
+    - Versioning
+    - Logging
+    - Static Website Hosting
+    - Tags
+        - key value pair 
+            - monitor by tags 
+    - Cross region Replication
+    - Transfer Accelerration
+- Permissions 
+- Management 
+    - Lifecyle 
+        - Lifecyle rule for Archiving to glacier 
+    - Analytics
+        - Automatically analyze storage usage and present it in chart to which data is not being accesed 
+        - Sophiscated log reader to save money
+    - Metrics 
+        - Storage Metrics - Compliance - Logs the CRUD, and transfer of  of files inside s3 
+        - Request Metrics 
+        - Data Transfer Metrics 
+    - Invetory Report 
+        - CSV of object of daily or weekly  report of the bucket 
+
+Monitor EC2 
+Sample Template for Cloud Formation
+- http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates.html
+    - Location: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates-us-east-1.html
+    - Services: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html
+    - Create EC2 - http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html#w2ab2c23c42c13c15
+
+- Create Key Pairs in EC2
+- Continue to Cloud Formation
+    - In stacks, see events for deployment status 
+- In EC2
+    - Review Instance Information 
+    - Review EC2 Metadata 
+        - System and Instance Status Checks - create alarm  
+    - Monitoring 
+        - Basic Monitoring - monitors CPU, Disk, Network, Status Check 
+        - Detailed Monitoring - must be enabled in actions cloudwatch (Paid and not free)
+    - Tags 
+
+
+Lambda Monitoring 
+- Code
+- Configuration 
+- Triggers 
+    - when someone delete create a trigger 
+- Monitoring 
+    - Associated with cloudwatch 
+    - Invocations
+    - Durations
+    - Errors
+    - Throttles
+    - Iterator age 
+    - DLQ Errors 
+    - Test - using sample template 
+    - Action - Publish new Version
+- Advanced Settings
+    - Memory timeout 
+
+Monitor RDS 
+Sample Template for Cloud Formation
+- http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates.html
+    - Location: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-sample-templates-us-east-1.html
+    - Services: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html
+    - RDS: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-east-1.html#w2ab2c23c42c13c27
+- Show Monitoring
+    - Show Multi Graph View
+    - Show Single Graph View
+    - Show Latest Metrics View
+    - Enhanced Monitoring - Paid verision 
+- select RDS Instance 
+    - Alarms and Recent Events
+    - Monitoring - CPU, Memory, and Storage 
+    - Configuration Details 
+    - Security and Network 
+    - Replication Details 
+- Resources 
+    - Link: Click here to increase DB Intance Limit 
+- Service Health 
+    - Status of Amazon Services of each region outages 
+
+Kinesis - Stream Capablity to to pull data into one or more service (pipe for data)
+- Firehose - stream data to S3 Redshift, and Elastic Search
+    - Create a Stream - monitor shards usage 
+        - see actions and details 
+            - See shards and retention period
+            - Shard level metrics - in cloudwatch (paid services)
+    - Monitoring - Get records latency, Get records per secodns, latency, througput, succeded etc 
+
+
+- Amazon Kinesis Analytics - Analyze streming data from kinesis firhose, and kinesis stream in reql time using sql
+- Amazon Kinesis Streams - Collect and stream data for ordered replayable, and real time processing 
+
+Cloudwatch has free and paid 
+https://aws.amazon.com/cloudwatch/pricing/

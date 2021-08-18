@@ -1,0 +1,3 @@
+https://docs.aws.amazon.com/AmazonS3/latest/dev/HostingWebsiteOnS3Setup.html
+Lynda: https://www.lynda.com/Amazon-Web-Services-tutorials/Use-S3-website-hosting/471661/504622-4.html
+Associate your s3 endpoint with the DNS name you registered in route 53
