@@ -8,3 +8,7 @@ Docker/drupal912/*
 Docker/drupaldockfile/files/*
 Docker/drupaldrush/*
 Docker/drupal9.zip
+*/*/.metadata
+*/node_modules
+*/*/node_modules
+*/*/*/.settings
