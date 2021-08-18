@@ -1,0 +1,103 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Adds an AJAX based "quick view" link to content.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function quickview_menu() {
+  $items = array();
+  // %node = node id = for example: node/2/quickview
+  $items['node/%node/quickview'] = array(
+    'page callback' => 'quickview_node',
+    //Takes 1 argument 
+    'page arguments' => array(1),
+    //Check if they have access to the node
+    'access callback' => 'node_access',
+    //If they have access to %node
+    'access arguments' => array('view', 1),
+    //How it data is delivered - ajax_deliver
+    //https://api.drupal.org/api/drupal/modules%21system%21system.module/function/system_menu/7
+    'delivery callback' => 'ajax_deliver',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_node_view_alter().
+ */
+function quickview_node_view_alter(&$build) {
+	//dsm($build);
+	
+  // Only add the quickview link if the readmore link is there.
+  if (isset($build['links']['node']['#links']['node-readmore'])) {
+    $nid = $build['#node']->nid;
+
+    // Add the AJAX JavaScript library to our link gets processed.
+    drupal_add_library('system', 'drupal.ajax');
+
+    // Add the quickview link.
+    $build['links']['quickview']['#theme'] = 'links__quicklinks';
+		//adds a javascript to the link; Weight - tells where to load the javascript JS_LIBRARY, JS_MODULE, JS_THEME ; The number 2 means load this last inside JS_LIBRARY
+    $build['links']['quickview']['#attached']['js']['misc/ajax.js'] = array('weight' => JS_LIBRARY + 2);
+    //add id element
+    $build['links']['quickview']['#attributes']['id'] = 'quickview' . $nid;
+		//add class styling
+    $build['links']['quickview']['#attributes']['class'] = array('links', 'inline');
+		//Add the actual link
+    $build['links']['quickview']['#links']['quickview'] = array(
+      'title' => '↓ Quick view',
+      //from line 15: node/%node/quickview ; nojs - use this link if ajax is not enabled; nojs - ajax.js search for anylink  - if found replaces node.js with ajax
+      'href' => 'node/' . $nid . '/quickview/nojs',
+      //use-ajax triggers the ajax framework; Note: use-ajax will work only if ajax.js is loaded and enabled; Actual URL node/%node/quickview/ajax
+      'attributes' => array('class' => array('use-ajax', 'quickview-' . $nid)),
+    );
+  }
+}
+
+/**
+ * Menu callback; Show the content of a node for quickview.
+ */
+function quickview_node($node, $mode = NULL) {
+  // If the mode is not AJAX, redirect to the normal view of the page.
+  if ($mode != 'ajax') {
+  	//re-direct to the normal view request
+    drupal_goto('node/' . $node->nid);
+  }
+
+  // Create the node "renderable" array ; node_view builds the rendarable array  of quickview_node_view_alter;  Check node.tpl.php inside your theme
+  $content = node_view($node);
+
+  // Remove the wrapper theming from around the node display and hide comments/links; unset prevents it from running through node.tpl.php inside the theme
+  unset($content['#theme']); 
+	//hide - You can copy this code from node.tpl.php; hide comments
+  hide($content['comments']);
+	//hide the links
+  hide($content['links']);
+
+  // Render the HTML of the node.
+  $html = render($content);
+
+  // Send the AJAX commands to the calling page.
+  $commands = array();
+	//ajax_command_html replace the content with the new rendered html
+  $commands[] = ajax_command_html('#node-' . $node->nid . ' .content', $html);
+	//ajax_command_remove - remove the link with the id that relates to the quickview link
+  $commands[] = ajax_command_remove('#quickview-' . $node->nid );
+  
+  // NOTE: this API changed after the recording of the video
+  // "ajax_commands" is now "ajax" for the #type property
+  // and the "#ajax_commands"" property should now be "#commands"
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+

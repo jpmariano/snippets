@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function menu_magic_menu() {
+  $items = array();
+
+  // points to yoururl.com/magic
+  $items['magic'] = array(
+    //title automatically translated t(); it gets added to Navigation Block by default
+    'title' => 'A little magic',
+    //page callback - calls what function to run
+    'page callback' => 'menu_magic_basic',
+    //access callback - returns true or false if user has access (note: you can delete this because drupal treat this automatically)
+    'access callback' => 'user_access',
+    //access arguments - arguments passed to access callback; user_access ('access content')
+    'access arguments' => array('access content'),
+  );
+
+   // points to yoururl.com/magic/whatever-url-you-like (% - wildcard)
+  $items['magic/%'] = array(
+    'title' => 'Even more magical',
+    'page callback' => 'menu_magic_extra',
+    //page arguments passed to page callback; points to yoururl.com/magic (0)/% (1); In short, % is passed as an argument to page callback
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    //File allows page callback to be in a separate file (It's like a native PHP include)
+    'file' => 'menu_magic.extra.inc',
+  );
+  
+  //User admin
+  $items['user/%/magic'] = array(
+    'title' => 'Magic',
+    'description' => 'Magical magic for users',
+    'page callback' => 'menu_magic_user_tab',
+    'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer users'),
+    'file' => 'menu_magic.user.inc',
+     
+    /* Documentation: https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7
+    MENU_NORMAL_ITEM: Default; Normal menu items show up in the menu tree and can be moved/hidden by the administrator.
+    MENU_CALLBACK: Callbacks simply register a path so that the correct information is generated when the path is accessed; doesn't add a link.
+    MENU_SUGGESTED_ITEM: Modules may "suggest" menu items that the administrator may enable.
+    MENU_LOCAL_ACTION: Local actions are menu items that describe actions on the parent item such as adding a new user or block, and are rendered in the action-links list in your theme.
+    MENU_LOCAL_TASK: Local tasks are menu items that describe different displays of data, and are generally rendered as tabs.
+    MENU_DEFAULT_LOCAL_TASK: Every set of local tasks should provide one "default" task, which should display the same page as the parent item.
+    */
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  // node_load(%) - uses function node_load(%); You can also use %user, %term; This function is use inside the page callback, %user
+  $items['node/%node/magic'] = array(
+    'title' => 'Magic',
+    'description' => 'Do amazing and magical things',
+    'page callback' => 'menu_magic_node_context',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'menu_magic.context.inc',
+    //MENU_LOCAL_TASK - rendered as tabs; 
+    'type' => MENU_LOCAL_TASK,
+    //context - defines the tab as a contextual link; MENU_CONTEXT_PAGE -- Default which is a tab; MENU_CONTEXT_INLINE - shows as a contextual link; Note: it uses the title as a link or tab
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  return $items;
+}
+
+function menu_magic_basic() {
+  $content = array();
+
+  // This is a very, very simple page element. It will appear on the page,
+  // but other modules can't customize it and themes can't override its markup.
+  $content['raw_markup'] = array(
+    '#type' => 'markup',
+    '#markup' => 'Truly, this is magical!',
+    '#prefix' => '<p>',
+    '#suffix' => '</p>',
+  );
+
+  $variables = array(
+    'path' => 'http://placekitten.com/440/400',
+    'alt' => t('This is a magical kitten'),
+    'title' => t('This is the title'),
+  );
+  $content['themed_data'] = array(
+    '#type' => 'markup',
+    '#markup' => theme('image', $variables),
+    '#prefix' => '<div class="menu-magic-image">',
+    '#suffix' => '</div>',
+    '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'menu_magic') . '/menu_magic.css',
+      ),
+    ),
+  );
+
+  $content['renderable_element'] = array(
+    '#theme' => 'item_list',
+    '#title' => t('How do we know it\'s magic?'),
+    '#items' => array(
+      t("Is it made of wood?"),
+      t("Does it sink in water?"),
+      t("Does it weigh the same as a duck?"),
+      t('The current time is %time.', array('%time' => date('r'))),
+    ),
+    '#cache' => array(
+      'keys' => array('menu_magic', 'renderable_element'), // menu_magic:renderable_element
+      'bin' => 'cache',
+      'expire' => time() + 30,
+      'granularity' => DRUPAL_CACHE_PER_PAGE,
+    ),
+  );
+
+  return $content;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

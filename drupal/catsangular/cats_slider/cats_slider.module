@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ *   My cool cats Angular App module
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function cats_slider_menu() {
+  $items['cats-slider'] = array(
+    'title' => 'Cats Slider	',
+    'page callback' => 'cats_slider_page',
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cats_slider_theme() {
+  return array(
+    'all_cats' => array(
+      'template' => 'all-cats',
+    ),
+  );
+}
+
+/**
+ * Cats page callback
+ */
+function cats_slider_page() {
+  // Set the path
+  $path = drupal_get_path('module', 'cats_slider');
+
+  // Load angular
+  drupal_add_library('angularjs', 'angularjs');
+
+  // Load the app
+  drupal_add_js($path . '/js/cats.gen.js');
+  
+  // Load the bootstrap
+  drupal_add_js($path . '/js/bootstrap/bootstrap.min.js');
+  
+
+  drupal_add_css($path . '/css/bootstrap.css');
+
+  // Return the HTML template
+  return theme('all_cats');
+}

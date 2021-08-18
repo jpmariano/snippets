@@ -1,0 +1,39 @@
+drupal container:debug
+drupal container:debug | grep enter_service_name
+ To create a Plugin Service:
+1. Create an Interface - geoip/src/Plugin/GeoLocator/GeoLocatorInterface.php 
+2. Create a Class - Drupal\geoip\Annotation\GeoLocator
+3. Create a Plugin Class Manager inside the src directory of your module geoip/src/GeoLocatorManager.php
+    - In the constructor pass the ,
+      'Drupal\geoip\Plugin\GeoLocator\GeoLocatorInterface', 
+      'Drupal\geoip\Annotation\GeoLocator'
+4. Create modulename.services.yml
+5. Create your Plugin Class that can be use in anywhere : implements GeoLocatorInterface
+
+// Load the manager service.
+$geolocator_manager = \Drupal::service('plugin.manager.geolocator'); // geoip.services.yml 
+// Create a class instance through the manager.
+$yourinstancename_instance = $geolocator_manager->createInstance('<yourinstancename>');
+// Using the Instance 
+$yourvariable = $yourinstancename_instance->methodname(arg..);
+
+Creating alter hooks for your plugin
+1. GeoLocatorManager.php 
+    - $this->alterInfo('geolocator_info'); //hook_geolocator_info_alter inside .module
+
+Accessing plugins through the manager
+// Load the manager service.
+$unit_manager = \Drupal::service('plugin.manager.unit');
+// Create a class instance through the manager.
+$feet_instance = $unit_manager->createInstance('feet');
+// Convert 12ft into meters.
+$meters_value = $feet_instance->toBase(12);
+ - getDefinitions: This method will return an array of plugin definitions. It first
+    makes an attempt to retrieve cached definitions, if any, and sets the cache of
+    discovered definitions before returning them.
+- getDefinition: This takes an expected plugin ID and returns its definition.
+- createInstance: This takes an expected plugin ID and returns an initiated class for
+    the plugin.
+- getInstance: This takes an array that acts as a plugin definition and returns an
+initiated class from the definition.
+https://www.drupal.org/node/2133171

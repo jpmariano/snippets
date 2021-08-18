@@ -1,0 +1,57 @@
+Get Composer:
+Follow Instruction to Install in your root Drupal 8 Directory: https://getcomposer.org/download/
+
+php composer.phar - to see list of composer commands
+php composer.phar init - init command will ask you several questions about your project
+    When ask, Would you like to define your dependencies (require) interactively [yes]? - yes 
+        go to - https://packagist.org/ and search for package you want to install 
+            - most packages have documentation here https://symfony.com/doc/current/index.html
+        In this example, look for finder in https://packagist.org
+        - This will generate composer.json
+            - {
+                "name": "family/drupal-8.5.0",
+                "type": "project",
+                "require": {
+                    "symfony/finder": "v4.0.8"
+                },
+                "authors": [
+                    {
+                        "name": "John Paul Mariano",
+                        "email": "jppm8387@yahoo.com"
+                    }
+                ]
+            }
+
+php composer.phar install - this will install your dependencies inside the vendor folder
+
+To use the finder: 
+    Read the docs
+    https://symfony.com/doc/current/components/finder.html
+
+    - to install globally in drupal. 
+    - add the require __DIR__.'/../../../../vendor/autoload.php';
+
+To add another vendor package: edit the composer.json
+    {
+        "name": "family/drupal-8.5.0",
+        "type": "project",
+        "require": {
+            "symfony/finder": "v4.0.8"
+            "symfony/filesystem": "v4.0.8"
+        },
+        "authors": [
+            {
+                "name": "John Paul Mariano",
+                "email": "jppm8387@yahoo.com"
+            }
+        ]
+    }
+    - run: php composer.phar update  - this will read the package.json 
+    - another way to add a package: php composer.phar require 
+        - then search for package to install
+To update a single vendor package -  run: php composer.phar update symfony/filesystem
+
+- For more information: https://getcomposer.org/doc/
+
+
+

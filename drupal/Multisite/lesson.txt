@@ -1,0 +1,14 @@
+What is a multisite?
+One Copy of Codebase
+Only 1 codebase to upgrade
+Only 1 Set of files to debug
+Still have flexibility for specific modules
+
+symlink etc/host
+
+domainaccess
+domain content
+
+
+
+eagir

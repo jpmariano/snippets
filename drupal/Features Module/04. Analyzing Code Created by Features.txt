@@ -1,0 +1,17 @@
+Features produces common drupal files
+- title.info
+- title.module
+- title.features.inc
+- title.features.field.inc
+- title.views_default.inc
+
+- title.info - code just like making a regular module, It also tells what components are included
+- title.module - it just points to title.features.inc, still customizable
+- title.features.inc - Default functions: title_views_api() - tells what version of views it is using; 
+title_node_info() - drupal core hook to define a node type like blog content type; 
+title.features.field.inc - is being included by the features module (original), title_field_default_fields() is functions native to 
+featured module to add the fields (should be inside mange fields tab in GUI) and all its settings;
+title.views_default.inc - it has title_views_default_views() is read by views module, all the settings are automatically setup.
+
+
+grep -rn field_default_fields ../../.. 

@@ -1,0 +1,23 @@
+Install and enable Simpletest
+Testing using GUI: configuration -> Testing 
+
+Testing using drush: 
+$ drush | grep test 
+$ drush help test-run //to see avialable command options
+$ drush test-run //show all the test case that you can run 
+$ drush st //to see the drush site 
+$ drush - l <url> test-run <test-case> 
+
+----------------------
+Selenium
+Firefox 3 (profile manager to maker firefox 4 run) : 
+    - Selenium IDE 
+    - Selenium IDE buttons 
+    - XPath Checker
+    - Firebug 
+
+Open Selenium IDE
+    - Turn off Default - firefox option uncheck start recording  
+    - Turn on Selenium IDE start recording 
+    - Right Click the area where you want to test - and do a verification 
+    

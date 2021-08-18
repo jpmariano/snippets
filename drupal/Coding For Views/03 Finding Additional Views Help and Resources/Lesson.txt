@@ -1,0 +1,6 @@
+Where you can get help:
+
+- http://drupal.org/project/views
+ Read Documention link on the right sidebar
+
+- Advanced Help - you can see view

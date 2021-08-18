@@ -1,0 +1,151 @@
+Drupal 8
+    - Modules that are part of core 
+        - views
+        - module_filter 
+        - services and restws
+        - Entities
+            - bean
+            - entity_view_mode
+            - fieldable_panels_panes
+            - webform
+            - file_entity 
+        - Fields 
+            - date
+            - email
+            - entityreference 
+            - link
+            - telephone
+            - user_picture_field 
+        - Fields Extra
+            - ds
+            - caption_filter
+            - hidden_field
+            - placeholder
+        - Authoring
+            - ckeditor
+            - float_filter
+            - insert
+            - edit 
+        - Mutlilingual
+            - stringoverrides
+            - transliteration
+            - l10n_update
+            - admin_language
+            - l10n_update/l10n_install
+            - fallback_language_negotation
+        - Configuration Management
+            - features
+            - strongarm
+        - Responsive web
+            - picture
+            - breakpoints
+            - magic 
+----------------------------------------
+Tags
+featured
+alerts and announcements
+
+
+Quick Facts
+Most Popular
+Weight Loss
+Enhance Performance
+Ingredients
+General Supplement Information 
+
+Supplement Articles
+All 
+Most Popular
+Weight Loss
+Fitness
+Enhance Performance
+Ingredients
+General Health 
+
+
+Outreach
+All
+Marketing Materials
+Training Materials
+Education Materials
+
+
+Content type
+Prohibited list 
+Resources 
+
+A To Z 
+
+Resources
+Our Partners
+Government Resources
+
+----------------------------------------
+
+Articles - Have the same fiedls as FAQ, and resources 
+- Primary Topic
+- Secondary Topic
+- Tertiary Topic
+- Tags 
+
+
+
+FAQ 
+ - Primary Topic
+ - Secondary Topic 
+
+Primary Page - all their fields are in Articles
+- Primary Topic
+
+Secondary Page - all their fields are in Articles
+ - Primary Topic
+ - Secondary Topic 
+
+
+Tertiary Pages - all their fields are in Articles
+- Primary Topic
+- Secondary Topic
+- Tertiary Topic
+
+
+Basic Page - only 1 page Iframe 
+- Primary Topic
+- Secondary Topic
+- Tertiary Topic
+
+
+Resources ? The Page just have a banner and a grouping? 
+- Primary Topic
+- Secondary Topic
+- Tertiary Topic
+- Tags 
+
+
+Document has the PDF 
+- Primary Topic
+- Secondary Topic
+
+
+External Links
+ - Primary Topic
+ - Secondary Topic 
+
+
+
+Infographic - Infographic 
+ - Primary Topic
+ - Secondary Topic 
+
+Infosheet - references
+ - Primary Topic
+ - Secondary Topic 
+
+Video
+ - Primary Topic
+ - Secondary Topic 
+
+
+Widgets - supposed to be blocks 
+
+
+New Feature - needs to be just a tag 

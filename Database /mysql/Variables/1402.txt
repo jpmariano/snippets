@@ -1,0 +1,36 @@
+1402
+
+Create some prepared statements for special purposes:
+
+1. Add 8.25% sales tax to a given numeric amount, returning a value rounded to 2 decimal places. For extra points, also supply the sales tax rate as a percentage amount - and make it look nice.
+
+Simple solution:
+PREPARE AddTax FROM "SELECT ROUND(? * 1.0825, 2)";
+SET @amount = 10;
+EXECUTE AddTax USING @amount;
+
+Extra points solution:
+PREPARE AddTax FROM "SELECT ROUND(? * (1 + ? / 100), 2) 'Amount + Tax'";
+SET @amount = 10, @taxrate = 8.25;
+EXECUTE AddTax USING @amount, @taxrate;
+
+2. Determine how many cities are in the country whose code is provided, as well as the total urban population.
+
+Possible solution:
+PREPARE CityCount FROM "SELECT COUNT(*) CityCount, FORMAT(SUM(Population), 0) 'Urban Population' FROM City WHERE CountryCode = ?";
+SET @ccode = 'chn';
+EXECUTE CityCount USING @ccode;
+
+3. Determine the population density (people per sq km) of the country whose code is provided. (Hint: SurfaceArea is given in sq km. Second hint: People are normally counted as integers.)
+
+Possible solution:
+PREPARE PopDensity FROM "SELECT ROUND(Population / SurfaceArea) 'People/Sq Km' FROM Country WHERE Code = ?";
+SET @ccode = 'lux';
+EXECUTE PopDensity USING @ccode;
+
+4. Given a country code value, return the number of languages spoken in that country and a comma separated list of those languages, including the percentage of the population that speaks each one. For extra points, sort the languages in descending order by percentage and in ascending alphabetical order for languages with the same percentage. (Hint: Explore the GROUP_CONCAT aggregation function syntax.)
+
+Possible solution to extra points version:
+PREPARE LanguageStats FROM "SELECT COUNT(*) LanguageCount, GROUP_CONCAT(CONCAT(Language, ' (',Percentage, ')') ORDER BY Percentage DESC, Language) LanguageNames FROM CountryLanguage WHERE CountryCode = ?";
+SET @ccode = 'che';
+EXECUTE LanguageStats USING @ccode\G

@@ -1,0 +1,13 @@
+Overrides Example
+Make changes (like manage display) - now it shows overriden 
+To undo changes - click overriden, click the fields checkbox and pressed revert
+Make sure to clear the cache
+
+Make Changes (like the title of the blog)
+drush fl - list all the features in your site and it shows the status and state; If the features shows overriden, then someone made changes.
+drush features.update title - this update the features code
+drush features-revert title or drush fra -y  - to revert update changes
+
+git push origin master - to push origin to the master repositories 
+
+

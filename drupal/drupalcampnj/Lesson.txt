@@ -1,0 +1,66 @@
+State of Code Constantly in Flux
+Public Side of The API should be coded well
+
+Don't return an error - it returns false or 0
+When to use exception? Always insted of return false
+
+
+Cheack arguments first before using
+Should have few arguments
+If too many arguments, split it inot multiple function
+
+Add method to class
+
+npm browserify and 6tofify 
+
+----------------------------------
+
+Drupal 8 Theming
+
+Drupal 8 Twig
+
+-- Keeps Backend and front separated
+-- More Secure Autoscaping
+-- 149 templates
+-- 21 functions
+
+Drupal 7
+
+-- Conflict between backend and front end
+-- Potential security issues
+-- 55 Templates
+-- 154 functions
+
+PHP Template
+<?php
+//comments
+Printe $variable
+
+Twig
+{#cooments#}
+{{variable}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+Go to Configuration
+check drupal database for variable table- Variable name and the value of that variable 
+
+Strongarm
+provides a component to export the variables table to your new site
+
+home/structure/features/ - click recreate
+go to edit components
+-select strongarm from dropdown
+- check the checkbox to variables to add
+- automatically adds other variables that relate to your blog feature
+
+download your new feature module
+
+check the files inside the feature module
+title.strongarm.inc - title_strongarm() define default values of your variables; it also shows what version of strongarm your features is depending on
+
+

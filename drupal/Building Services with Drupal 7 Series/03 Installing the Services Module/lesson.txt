@@ -1,0 +1,32 @@
+https://www.drupal.org/project/services
+
+Services: An API for remote applications
+https://www.drupal.org/node/109782
+
+
+Services Installation and Setup
+https://www.drupal.org/node/783236
+Drupal 7 dependencies:
+
+Inside Contrib:
+Services
+CTools
+Libraries (if using Rest Server)
+
+
+Enable Services
+Enable Rest Server	
+
+mustangostang - install if you want to use ymal(output for mat for your services) insted of json(output for mat for your services)
+
+See Readme.txt
+Inside docs (folder):
+- services.alter.api.php - Provides Hooks to interact with services
+- services.servers.api.php - Provide how your data is going to be output; Points to servers folder
+
+
+Resouces (folder) - exposes drupal data  in behalf of drupal core
+
+
+
+

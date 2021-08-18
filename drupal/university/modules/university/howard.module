@@ -1,0 +1,981 @@
+<?php
+function howard_init() {
+	//drupal_add_js(drupal_get_path('module','howard').'/js/jquery.carousel.js');
+	//drupal_add_js(drupal_get_path('module','howard').'/js/howard.js');
+	//drupal_add_css(drupal_get_path('module','howard').'/css/howard.css');
+	global $user;
+	if($user->uid != 0 && (sizeof($user->roles) == 1 && $user->roles[2] == 'authenticated user')){
+		unset($_SESSION['messages']);
+		$logoutLink = l('Logout', 'user/logout');
+		drupal_set_message('You are now logged in. Contact the site administrator to provide you domain access and necessary permissions. '.$logoutLink);
+	}
+}
+
+function howard_menu(){
+	$items = array();
+	$items['admin/config/people/configure/ldap'] = array(
+	    'title' => 'LDAP Server Config',
+	    'description' => 'Configure LDAP Authentication',
+	    'page callback' => 'drupal_get_form',
+	    'page arguments' => array('howard_ldap_config_form'),
+	    'access arguments' => array('administer site configuration'),
+	    'type' => MENU_LOCAL_TASK,
+  	);
+	$items['login/%/%'] = array(
+	    'title' => 'Login Test',
+	    'description' => 'Login Test',
+	    'page callback' => 'logintestpage',
+	    'page arguments' => array(1,2),
+	    'access callback' => TRUE,
+	    'type' => MENU_CALLBACK,
+  	);
+
+  	return $items;
+}
+
+function logintestpage($username, $password){
+	echo "Hello World <br/>";
+
+	$status = FALSE;
+	$server = variable_get('howard_ldap_server','');
+	$port = variable_get('howard_ldap_port','');
+	$basedn = variable_get('howard_ldap_basedn','');
+
+	$ldaprdn = "howardu\\".$username;
+	//$ldaprdn = 'CN='.$username.','.$basedn;
+	$ldappass = $password;
+	echo "<pre>";
+	echo "<br/>UName: ".$ldaprdn;
+	echo "<br/>Password: ".$ldappass;
+	echo "<br/><br/><br/>";
+	$ldapconn = ldap_connect($server,$port);
+	echo "1";
+	if ($ldapconn) {
+		echo "2";
+		var_dump(@ldap_bind($ldapconn, $ldaprdn, $ldappass));
+	    $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+		print_r($ldapbind);
+	    if ($ldapbind) {
+	    	echo "3";
+			print_r($ldapbind);
+	        $status = TRUE;
+	    }
+	}
+	/*if($status == TRUE){
+		user_external_login_register($form_state['values']['name'], 'howard');
+		if(empty($userObj->uid)){
+			unset($_SESSION['messages']);
+			drupal_set_message('You have successfully logged in. Please contact site administrator to provide you domain access and necessary permissions.');
+		}
+		global $user;
+		$account = user_load($user->uid);
+		global $_domain;
+		$domainId = $_domain['domain_id'];
+		if(empty($account->mail)){
+			$edit['mail'] = $form_state['values']['name'].'@howard.edu';
+			$edit['init'] = $form_state['values']['name'].'@howard.edu';
+			$edit['domain_user'][$domainId] = $domainId;
+			user_save($account,$edit);
+		}
+		drupal_goto('user');
+	}else{
+		//unset($_SESSION['messages']);
+		//form_set_error('', 'Login Failed');
+		//drupal_set_message('Invalid LDAP Credentials.', 'error');
+	}*/
+}
+
+function howard_ldap_config_form($form, $form_state){
+	$form = array();
+	$server = variable_get('howard_ldap_server','');
+	$port = variable_get('howard_ldap_port','');
+	$basedn = variable_get('howard_ldap_basedn','');
+
+	$form['intro'] = array(
+        '#type' => 'item',
+        '#markup' => t('<h1>LDAP Server Settings</h1>'),
+    );
+	$form['config'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Server Options'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+	$form['config']['server'] = array(
+      '#type' => 'textfield',
+      '#title' => t('LDAP server'),
+      '#required' => 1,
+      '#default_value' => $server,
+    );
+	$form['config']['port'] = array(
+      '#type' => 'textfield',
+      '#title' => t('LDAP port'),
+      '#required' => 1,
+      '#default_value' => $port,
+    );
+	$form['config']['basedn'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Base DN for LDAP users'),
+      '#required' => 1,
+      '#default_value' => $basedn,
+    );
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Save',
+    );
+	return $form;
+}
+
+function howard_ldap_config_form_submit($form, &$form_state){
+	variable_set('howard_ldap_server', $form_state['values']['server']);
+	variable_set('howard_ldap_port', $form_state['values']['port']);
+	variable_set('howard_ldap_basedn', $form_state['values']['basedn']);
+}
+
+function howard_block_info() {
+	$blocks = array();
+	$blocks['rotator_news_events'] = array(
+		'info' => t('Howard Rotator - News & Events'),
+		'cache' => DRUPAL_NO_CACHE,
+	);
+	$blocks['rotator_announcements'] = array(
+		'info' => t('Howard Rotator - Announcements'),
+		'cache' => DRUPAL_NO_CACHE,
+	);
+	$blocks['rotator_events'] = array(
+		'info' => t('Howard Rotator - Events'),
+		'cache' => DRUPAL_NO_CACHE,
+	);
+	$blocks['rotator_news'] = array(
+		'info' => t('Howard Rotator - News'),
+		'cache' => DRUPAL_NO_CACHE,
+	);
+  $blocks['facebook_pull'] = array(
+    'info' => t('Facebook Pull'),
+  );
+	return $blocks;
+}
+
+function howard_block_view($delta = '') {
+
+	$block = array();
+	switch($delta) {
+		case 'rotator_news_events' :
+			$block['subject'] = t('Howard Rotator - News & Events');
+			$block['content'] = howard_rotator_news_events();
+			break;
+		case 'rotator_announcements' :
+			$block['subject'] = t('Howard Rotator - Announcements');
+			$block['content'] = howard_rotator_announcements();
+			break;
+		case 'rotator_events' :
+			$block['subject'] = t('Howard Rotator - Events');
+			$block['content'] = howard_rotator_events();
+			break;
+		case 'rotator_news' :
+			$block['subject'] = t('Howard Rotator - News');
+			$block['content'] = howard_rotator_news();
+			break;
+		case 'facebook_pull':
+	      $block['subject'] = t('Facebook Feed');
+	      $block['content'] = hu_facebook_pull_render_block();//facebook_pull_render($graph_id, $type, $app_id, $app_secret, $options);//twitter_pull_render('@huameex', 'OpenPublish', 10); // swap out @deckfifty with your twitter handle, and 3 with the number of posts you want to display
+	    //t("content");
+	      break;
+}
+	return $block;
+}
+/*Press release slider methodlogy*/
+function howard_rotator_announcements(){
+	$currDate = date('Y-m-d H:i:s');
+	$query = howard_rotator_query_template();
+	$query -> join('field_data_field_release_type', 'f4', 'f4.entity_id = n.nid');
+	$query -> condition('n.type', 'press_release', '=');
+	$query -> condition('f1.field_date_value', $currDate, '<=');
+	$query -> condition('f4.field_release_type_value', 2, '=');
+	$query -> fields('f4', array('field_release_type_value'));
+	$query -> orderBy('f1.field_date_value','DESC');
+	$rows = $query -> execute() -> fetchAll();
+	if(!empty($rows))
+		$rows[0] -> start = TRUE;
+	$c = 0; $even = $odd = array();
+	foreach($rows as $key => $row){
+		$row->c = $c++;
+		if(($key%2) == 0) $even[] = $row;
+		else $odd[] = $row;
+	}
+	$even = array_reverse($even);
+
+	$blocktheme_vars = blocktheme_get_vars();
+	$blocktheme_vars = !empty($blocktheme_vars['howard-rotator_announcements']) ? $blocktheme_vars['howard-rotator_announcements'] : array();
+	$pathAlias = drupal_get_path_alias($_GET['q']);
+	$rowClass = !empty($blocktheme_vars[$pathAlias]) && is_numeric(trim($blocktheme_vars[$pathAlias])) ? 'rows_'.$blocktheme_vars[$pathAlias] : 'rows_1';
+
+	$moreText = 'More announcements';
+	$moreLinkVar = 'home';
+	$moreLink = l($moreText,$moreLinkVar);
+
+	$output = '<div class="howard_bx_carousel announcements"><h2>announcements</h2><div id="announcements-carousel" class="carousel module '.$rowClass.'">';
+	$output .= howard_rotator_output(1,$even,$odd);
+	$output .= '</div><div class="more_btn">'.$moreLink.'</div></div>';
+	return $output;
+}
+/*News slider methodlogy*/
+function howard_rotator_news(){
+	$currDate = date('Y-m-d H:i:s');
+
+	$pathAlias = drupal_get_path_alias($_GET['q']);
+	$blocktheme_vars = blocktheme_get_vars();
+	$blocktheme_vars = !empty($blocktheme_vars['howard-rotator_news']) ? $blocktheme_vars['howard-rotator_news'] : array();
+	$isotope = (!empty($blocktheme_vars[$pathAlias.':isotope']) && trim($blocktheme_vars[$pathAlias.':isotope']) == 1) ? TRUE : FALSE;
+
+	$query = howard_rotator_query_template();
+	$query -> join('field_data_field_release_type', 'f4', 'f4.entity_id = n.nid');
+	$query -> condition('n.type', 'press_release', '=');
+	$query -> condition('f1.field_date_value', $currDate, '<=');
+	$query -> condition('f4.field_release_type_value', 1, '=');
+	$query -> fields('f4', array('field_release_type_value'));
+	$query -> orderBy('f1.field_date_value','DESC');
+	if($isotope){
+		$query -> join('field_data_field_news_events_category', 'f5', 'f5.entity_id = n.nid');
+		$query -> join('taxonomy_term_data', 't', 't.tid = f5.field_news_events_category_tid');
+		$query -> fields('t', array('name'));
+	}
+	$rows = $query -> execute() -> fetchAll();
+	//echo "<pre>"; print_r($rows); die;
+
+	if(!empty($rows))
+		$rows[0] -> start = TRUE;
+	$c = 0; $even = $odd = array();
+	foreach($rows as $key => $row){
+		$row->c = $c++;
+		if(($key%2) == 0) $even[] = $row;
+		else $odd[] = $row;
+	}
+	$even = array_reverse($even);
+
+	$blocktheme_vars = blocktheme_get_vars();
+	$blocktheme_vars = !empty($blocktheme_vars['howard-rotator_news']) ? $blocktheme_vars['howard-rotator_news'] : array();
+
+	$rowClass = !empty($blocktheme_vars[$pathAlias]) && is_numeric(trim($blocktheme_vars[$pathAlias])) ? 'rows_'.$blocktheme_vars[$pathAlias] : 'rows_1';
+	$noStripe = (!empty($blocktheme_vars[$pathAlias.':noStripe']) && $blocktheme_vars[$pathAlias.':noStripe'] == 1) ? 'no-stripe' : '';
+
+	if($isotope){
+		$q1 = db_select('taxonomy_term_data','t');
+		$q1 -> condition('t.vid', 5, '=');
+		$q1 -> fields('t', array('name'));
+		$cats = $q1 -> execute() -> fetchCol();
+		$output = '<div class="announcements isotope '.$rowClass.' '.$noStripe.'"><div class="portfolioFilter_section"><div class="portfolioFilter"><div class="section_left"><span>Filter news by:</span><a href="javascript:void(0);" data-filter="*">All News</a>';
+		foreach($cats as $cat){
+			$catFilter = str_replace(' ', '_', strtolower($cat));
+			$output .= '<a href="javascript:void(0);" data-filter="._'.$catFilter.'">'.$cat.'</a>';
+		}
+		$output .= '</div><div class="section_right"><a href="javascript:void(0);">Archive</a><a href="javascript:void(0);">Publications</a><a href="javascript:void(0);">Media Resources</a></div></div></div><div class="carousel module isotope '.$rowClass.'">';
+	}else{
+		$output = '<div class="howard_bx_carousel announcements '.$noStripe.'"><div class="row"><div class="col-xs-12"><h2>News</h2></div></div><div id="announcements-carousel" class="carousel module '.$rowClass.'">';
+	}
+	$output .= howard_rotator_output(1,$even,$odd,$isotope);
+
+	$moreText = 'See Newsroom';
+	$moreLinkVar = 'http://www.howard.edu/newsroom';
+	$moreLink = l($moreText,$moreLinkVar);
+
+	$bottomDiv = ($isotope == TRUE) ? '<div class="bx-controls bx-has-pager bx-has-controls-direction custom">
+                	<div class="bx-controls-direction">
+                    	<a href="javascript:void(0);" class="bx-prev">Prev</a>
+                        <a href="javascript:void(0);" class="bx-next">Next</a>
+                    </div>
+                </div>' : '<div class="row"><div class="col-xs-12"><div class="more_btn">'.$moreLink.'</div></div></div>';
+	$output .= '</div>'.$bottomDiv.'</div>';
+	return $output;
+}
+/*Events slider methodlogy*/
+function howard_rotator_events(){
+	$currDate = date('Y-m-d H:i:s');
+
+	$pathAlias = drupal_get_path_alias($_GET['q']);
+	$blocktheme_vars = blocktheme_get_vars();
+	$blocktheme_vars = !empty($blocktheme_vars['howard-rotator_events']) ? $blocktheme_vars['howard-rotator_events'] : array();
+	$isotope = (!empty($blocktheme_vars[$pathAlias.':isotope']) && trim($blocktheme_vars[$pathAlias.':isotope']) == 1) ? TRUE : FALSE;
+
+	$q1 = howard_rotator_query_template();
+	$q1 -> condition('n.type', 'event', '=');
+	
+	/**  JPM – 150211 -  Join Tables to add field_end_date to the $q1 object  */
+	$q1 -> leftjoin('field_data_field_end_date', 'f6', 'f6.entity_id = n.nid');
+	 /**  JPM – 150211 - apply the logic of where clause */
+	 $db_or = db_or();
+	 $db_or->condition('f1.field_date_value', $currDate, '>=');
+	 $db_or->condition('f6.field_end_date_value', $currDate, '>='); 
+	 $q1->condition($db_or);
+	 $q1 -> orderBy('f1.field_date_value','ASC');
+	
+	if($isotope){
+		$q1 -> join('field_data_field_news_events_category', 'f5', 'f5.entity_id = n.nid');
+		$q1 -> join('taxonomy_term_data', 't', 't.tid = f5.field_news_events_category_tid');
+		$q1 -> fields('t', array('name'));
+	}
+	$rows1 = $q1 -> execute() -> fetchAll();
+
+	$q2 = howard_rotator_query_template();
+	$q2 -> condition('n.type', 'event', '=');
+	
+	/**  JPM – 150211 -  Join Tables to add field_end_date to the $q2 object  */
+	$q2 -> leftjoin('field_data_field_end_date', 'f6', 'f6.entity_id = n.nid');
+	 /**  JPM – 150211 - apply the logic of where clause */
+	 $db_or = db_or();
+	 $db_or->condition('f1.field_date_value', $currDate, '>=');
+	 $db_or->condition('f6.field_end_date_value', $currDate, '>='); 
+	 $q2->condition($db_or);
+	 $q2 -> orderBy('f1.field_date_value','ASC');
+	 
+	if($isotope){
+		$q2 -> join('field_data_field_news_events_category', 'f5', 'f5.entity_id = n.nid');
+		$q2 -> join('taxonomy_term_data', 't', 't.tid = f5.field_news_events_category_tid');
+		$q2 -> fields('t', array('name'));
+	}
+	$rows2 = $q2 -> execute() -> fetchAll();
+	if(!empty($rows2) && sizeof($rows2) > 3){
+		$rows2[2]->start = TRUE;
+	}
+	$rowClass = !empty($blocktheme_vars[$pathAlias]) && is_numeric(trim($blocktheme_vars[$pathAlias])) ? 'rows_'.$blocktheme_vars[$pathAlias] : 'rows_1';
+	$noStripe = (!empty($blocktheme_vars[$pathAlias.':noStripe']) && $blocktheme_vars[$pathAlias.':noStripe'] == 1) ? 'no-stripe' : '';
+
+	if($isotope){
+		$q1 = db_select('taxonomy_term_data','t');
+		$q1 -> condition('t.vid', 5, '=');
+		$q1 -> fields('t', array('name'));
+		$cats = $q1 -> execute() -> fetchCol();
+		$output = '<div class="announcements isotope '.$rowClass.' '.$noStripe.'"><div class="portfolioFilter_section"><div class="portfolioFilter"><div class="section_left"><span>Filter events by:</span><a href="javascript:void(0);" data-filter="*">All Events</a>';
+		foreach($cats as $cat){
+			$catFilter = str_replace(' ', '_', strtolower($cat));
+			$output .= '<a href="javascript:void(0);" data-filter="._'.$catFilter.'">'.$cat.'</a>';
+		}
+		$output .= '</div><div class="section_right"><a href="javascript:void(0);">Archive</a><a href="javascript:void(0);">Publications</a><a href="javascript:void(0);">Media Resources</a></div></div></div><div class="carousel module isotope '.$rowClass.'">';
+	}else{
+		$output = '<div class="howard_bx_carousel announcements '.$noStripe.'"><div class="row"><div class="col-xs-12"><h2>Events</h2></div></div><div id="events-carousel" class="carousel module '.$rowClass.'">';
+	}
+	$output .= howard_rotator_output(1,$rows1,$rows2,$isotope);
+
+	$moreText = 'More events';
+	$moreLinkVar = 'news-and-events/events';
+	$moreLink = l($moreText,$moreLinkVar);
+
+	$bottomDiv = ($isotope == TRUE) ? '<div class="bx-controls bx-has-pager bx-has-controls-direction custom">
+                	<div class="bx-controls-direction">
+                    	<a href="javascript:void(0);" class="bx-prev">Prev</a>
+                        <a href="javascript:void(0);" class="bx-next">Next</a>
+                    </div>
+                </div>' : '<div class="row"><div class="col-xs-12"><div class="more_btn">'.$moreLink.'</div></div></div>';
+	$output .= '</div>'.$bottomDiv.'</div>';
+	return $output;
+}
+/*News and Events slider methodlogy*/
+function howard_rotator_news_events(){
+	$currDate = date('Y-m-d H:i:s');
+
+	$q1 = howard_rotator_query_template();
+	$q1 -> join('field_data_field_release_type', 'f4', 'f4.entity_id = n.nid');
+	$q1 -> condition('n.type', 'press_release', '=');
+	$q1 -> condition('f1.field_date_value', $currDate, '<=');
+	$q1 -> fields('f4', array('field_release_type_value'));
+	$q1 -> orderBy('f1.field_date_value','DESC');
+	$rows1 = $q1 -> execute() -> fetchAll();
+	$rows1 = !empty($rows1) ? array_reverse($rows1) : $rows1;
+
+	$q2 = howard_rotator_query_template();
+	$q2 -> condition('n.type', 'event', '=');
+	
+	/**  JPM – 150211 -  Join Tables to add field_end_date to the $q2 object  */
+	$q2 -> leftjoin('field_data_field_end_date', 'f6', 'f6.entity_id = n.nid');
+	  /**  JPM – 150211 - apply the logic of where clause */
+	 $db_or = db_or();
+	 $db_or->condition('f1.field_date_value', $currDate, '>=');
+	 $db_or->condition('f6.field_end_date_value', $currDate, '>='); 
+	 $q2->condition($db_or);
+	 $q2 -> orderBy('f1.field_date_value','ASC');
+	 
+	$rows2 = $q2 -> execute() -> fetchAll();
+	if(!empty($rows2)){
+		$rows2[0]->start = TRUE;
+	}
+
+	$blocktheme_vars = blocktheme_get_vars();
+	$blocktheme_vars = !empty($blocktheme_vars['howard-rotator_news_events']) ? $blocktheme_vars['howard-rotator_news_events'] : array();
+	$pathAlias = drupal_get_path_alias($_GET['q']);
+
+	$rowClass = !empty($blocktheme_vars[$pathAlias]) && is_numeric(trim($blocktheme_vars[$pathAlias])) ? 'rows_'.$blocktheme_vars[$pathAlias] : 'rows_1';
+	$noStripe = (!empty($blocktheme_vars[$pathAlias.':noStripe']) && $blocktheme_vars[$pathAlias.':noStripe'] == 1) ? 'no-stripe' : '';
+	$moreText = 'More news & events';
+	$moreLinkVar = 'news-and-events';
+
+	$output = '<div class="howard_bx_carousel news_events '.$noStripe.'"><div class="row"><div class="col-xs-12"><h2>News &amp; Events</h2></div></div><div id="news_events-carousel" class="carousel module news_events_carousel '.$rowClass.'">';
+	$output .= howard_rotator_output(2,$rows1,$rows2);
+	$moreLink = l($moreText,$moreLinkVar);
+	$output .= '</div><div class="row"><div class="col-xs-12"><div class="more_btn">'.$moreLink.'</div></div></div></div>';
+	return $output;
+}
+
+function howard_rotator_output($rowCount = 1, $rows1 =  array(), $rows2 = array(), $isotope = FALSE){
+	$rows = empty($rows2) ? $rows1 : array_merge($rows1,$rows2);
+	$count = 0;
+	$output = '';
+	foreach($rows as $row){
+		if(empty($row->type) || empty($row->nid) || empty($row->uri) || empty($row->title) || empty($row->field_date_value))
+			continue;
+		//echo "<pre>"; print_r($row); echo "</pre>";
+		$count++;
+		if($rowCount == 2 && (($count == 1 && (sizeof($rows1) % 2) == 0) || ($count == sizeof($rows) && (sizeof($rows2) % 2) == 0))){
+			continue;
+		}
+		$type = !empty($row->type) ? $row -> type : '';
+		if(!empty($row->field_release_type_value)){
+			$type = ($row->field_release_type_value == 1) ? 'news' : 'announcements';
+		}elseif($type = 'event'){
+			$type = 'events';
+		}
+		$typeClass = NULL;
+		if($isotope == TRUE && !empty($row->name)){
+			$type = $row->name.' '.$type; //die;
+			$typeClass = 'news';
+		}
+		if(empty($typeClass))	{ $typeClass = ($type == 'announcements') ? 'announce' : $type; }
+		$typeLink = l($type,'node/'.$row->nid);
+
+		$type = '<span class="'.$typeClass.'">'.$typeLink.'</span>';
+		$imgUrl = image_style_url("howard_carousel", $row->uri);
+		$variables = array(
+	      'path' => $imgUrl,
+	      'alt' => $row->type,
+	      'title' => 'Carousel',
+	      'width' => '270px',
+	      'height' => '230px',
+	  	);
+	  	$img1 = theme('image', $variables);
+		$img = l($img1, 'node/'.$row->nid, array('html' => TRUE));
+		if(strlen($row->title) > 45){
+			$row->title = preg_replace('/\s+?(\S+)?$/', '', substr($row->title, 0, 45)) . '...';
+		}
+		//echo "<pre>"; print_r($row); die;
+		$redirectLink = !empty($row->field_redirect_url) ? $row->field_redirect_url : 'node/'.$row->nid;
+		$redirectLink = drupal_valid_path($redirectLink) ? $redirectLink : 'http://'.$redirectLink;
+		$title = l($row->title,$redirectLink,array('absolute' => TRUE));
+		$date = $row->field_date_value;
+		$timestamp = strtotime($date);
+		$DateString = date('m.d.y',$timestamp );
+		$grayBG = l('',$redirectLink,array('absolute' => TRUE, 'attributes'=>array('class'=>array('grayed'))));
+		$catFilter = ($isotope == TRUE && !empty($row->name)) ? '_'.str_replace(' ', '_', strtolower($row->name)) : '';
+		$output .= (!empty($row->start)) ? '<div class="single_detail start_here '.$catFilter.'">' : '<div class="single_detail '.$catFilter.'">';
+		$output .= $grayBG.$type.$img.'<p>'.$DateString.' | '.$title.'</p></div>';
+	}
+	return $output;
+}
+
+/*Get the News and Events rotator data*/
+function howard_rotator_query_template(){
+	global $_domain;
+	$domainId = $_domain['domain_id'];
+	$query = db_select('node', 'n');
+	$query -> join('domain_access', 'd', 'd.nid = n.nid');
+	//$query -> join('field_data_field_date', 'f1', 'f1.entity_id = n.nid');
+	//$query -> join('table2', 't2', 't2.fk = t1.pk');
+	$query -> join('field_data_field_date', 'f1', 'f1.entity_id = n.nid');
+	//$query -> join('table3', 't3', 't3.fk = t1.pk');
+	$query -> join('field_data_field_image', 'f2', 'f2.entity_id = n.nid');
+	//$query -> join('table4', 't4', 't4.pk = t3.fk');
+	$query -> join('file_managed', 'f3', 'f3.fid = f2.field_image_fid');
+	//$query -> leftJoin('table5', 't5', 't5.fk = t1.pk');
+	$query -> leftJoin('field_data_field_redirect', 'rl', 'rl.entity_id = n.nid');
+	$query -> condition('d.gid', $domainId, '=');
+	$query -> condition('n.status', 1, '=');
+	$query -> fields('n', array('nid','title','type'));
+	$query -> fields('f1', array('field_date_value'));
+	$query -> fields('f2', array('field_image_fid'));
+	$query -> fields('f3', array('uri'));
+	$query -> fields('rl', array('field_redirect_url'));
+	$query -> range(0,21);
+	return $query;
+}
+/*Alter the contextual_links*/
+function howard_contextual_links_view_alter(&$element, &$items) {
+	if(isset($element['#contextual_links']['views_ui'][1][0]) && ($element['#contextual_links']['views_ui'][1][0] == 'article_teaser' || $element['#contextual_links']['views_ui'][1][0] == 'header_slideshows')){
+		$menuTrail = menu_get_active_trail();
+		if(is_array($menuTrail))
+			$menuTrail = end($menuTrail);
+		if(isset($menuTrail['mlid']) && !empty($element['#links']['draggableviews-order']['href'])){
+			$mlid = $menuTrail['mlid'];
+			if(empty($element['#links']['draggableviews-order']['flag'])){
+				$element['#links']['draggableviews-order']['href'] .= '/'.$mlid;
+				$element['#links']['draggableviews-order']['flag'] = 1;
+			}
+		}
+	}
+}
+
+function howard_sort_events($nid1, $nid2){
+	$node1 = node_load($nid1);
+	$node2 = node_load($nid2);
+	$date1 = $node1->field_date['und'][0]['value'];
+	$date2 = $node2->field_date['und'][0]['value'];
+	$returnVal = 0;
+	if(!empty($date1) && !empty($date2)){
+		$time1 = strtotime($date1);
+		$time2 = strtotime($date2);
+		if($time1 > $time2){
+			$returnVal = 1;
+		}elseif($time1 < $time2){
+			$returnVal = -1;
+		}
+	}
+	return $returnVal;
+}
+
+/*Change the  views */
+function howard_views_query_alter(&$view, &$query){
+	if($view->name == 'independent_blocks' && $view->current_display != 'by_numbers')
+	{
+		$menuTrail = menu_get_active_trail();
+		if(!empty($menuTrail)){
+			$menuTrail = end($menuTrail);
+		}
+		$menupath = strtolower(arg(0)) == 'order' ? $_GET['destination'] : $menuTrail['link_path'];
+		$preferredLinks = get_preferred_menu_links($menupath);
+		$query->where[1]['conditions'][2]['value'] = $preferredLinks;
+		$query->where[1]['conditions'][2]['operator'] = 'in';
+	}
+}
+
+function get_preferred_menu_link($mlid = 0){
+ $query = db_select('menu_links', 'ml1');
+ $query -> join('menu_links', 'ml2', 'ml1.link_path = ml2.link_path');
+ $query -> condition('ml1.mlid', $mlid, '=');
+ //$query -> condition('ml2.menu_name', 'main-menu', '=');
+ //$query -> orderBy('ml2.mlid','DESC');
+ $query -> fields('ml2', array('mlid'));
+ return $query -> execute() -> fetchCol();
+}
+
+function get_preferred_menu_links($path = NULL){
+	$paths = array($path);
+	if(drupal_is_front_page() || $path == variable_get('site_frontpage', 'node')){
+		$paths[] = '<front>';
+	}
+	//echo "<pre>"; print_r($paths); die;
+	$query = db_select('menu_links', 'ml');
+	$query -> condition('ml.link_path', $paths, 'in');
+	$query -> condition('ml.menu_name', 'main-menu', '=');
+	$query -> fields('ml', array('mlid'));
+	$result = $query -> execute() -> fetchCol();
+	return $result;
+}
+
+function menu_link_get_preferred_new($path = NULL, $selected_menu = NULL) {
+  $preferred_links = &drupal_static(__FUNCTION__);
+
+  if (!isset($path)) {
+    $path = $_GET['q'];
+  }
+
+  if (empty($selected_menu)) {
+    // Use an illegal menu name as the key for the preferred menu link.
+    $selected_menu = MENU_PREFERRED_LINK;
+  }
+
+  if (!isset($preferred_links[$path])) {
+    // Look for the correct menu link by building a list of candidate paths,
+    // which are ordered by priority (translated hrefs are preferred over
+    // untranslated paths). Afterwards, the most relevant path is picked from
+    // the menus, ordered by menu preference.
+    $item = menu_get_item($path);
+    $path_candidates = array();
+    // 1. The current item href.
+    $path_candidates[$item['href']] = $item['href'];
+    // 2. The tab root href of the current item (if any).
+    if ($item['tab_parent'] && ($tab_root = menu_get_item($item['tab_root_href']))) {
+      $path_candidates[$tab_root['href']] = $tab_root['href'];
+    }
+    // 3. The current item path (with wildcards).
+    $path_candidates[$item['path']] = $item['path'];
+    // 4. The tab root path of the current item (if any).
+    if (!empty($tab_root)) {
+      $path_candidates[$tab_root['path']] = $tab_root['path'];
+    }
+
+    // Retrieve a list of menu names, ordered by preference.
+    $menu_names = menu_get_active_menu_names();
+    // Put the selected menu at the front of the list.
+    array_unshift($menu_names, $selected_menu);
+
+    $query = db_select('menu_links', 'ml', array('fetch' => PDO::FETCH_ASSOC));
+    $query->leftJoin('menu_router', 'm', 'm.path = ml.router_path');
+    $query->fields('ml');
+    // Weight must be taken from {menu_links}, not {menu_router}.
+    $query->addField('ml', 'weight', 'link_weight');
+    $query->fields('m');
+    $query->condition('ml.link_path', $path_candidates, 'IN');
+
+    // Sort candidates by link path and menu name.
+    $candidates = array();
+    foreach ($query->execute() as $candidate) {
+      $candidate['weight'] = $candidate['link_weight'];
+      $candidates[$candidate['link_path']][$candidate['menu_name']] = $candidate;
+      // Add any menus not already in the menu name search list.
+      if (!in_array($candidate['menu_name'], $menu_names)) {
+        $menu_names[] = $candidate['menu_name'];
+      }
+    }
+
+
+    // Store the most specific link for each menu. Also save the most specific
+    // link of the most preferred menu in $preferred_link.
+    foreach ($path_candidates as $link_path) {
+      if (isset($candidates[$link_path])) {
+        foreach ($menu_names as $menu_name) {
+          if (empty($preferred_links[$path][$menu_name]) && isset($candidates[$link_path][$menu_name])) {
+            $candidate_item = $candidates[$link_path][$menu_name];
+            $map = explode('/', $path);
+            _menu_translate($candidate_item, $map);
+            if ($candidate_item['access']) {
+              $preferred_links[$path][$menu_name] = $candidate_item;
+              if (empty($preferred_links[$path][MENU_PREFERRED_LINK])) {
+                // Store the most specific link.
+                $preferred_links[$path][MENU_PREFERRED_LINK] = $candidate_item;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  $selected_menu = 'main-menu';
+  return isset($preferred_links[$path][$selected_menu]) ? $preferred_links[$path][$selected_menu] : FALSE;
+}
+
+
+
+
+function howard_form_alter(&$form, &$form_state, $form_id) {
+	$empty = array('user_name' => '');
+	$nid = db_select('webform', 'wf')->fields('wf',array('nid'))->orderBy('nid', 'DESC')->execute()->fetchField();
+	$webform_id = isset($nid)?'webform_client_form_'.$nid:'webform_client_form_1';
+	switch ($form_id) {
+		// Custom redirection for any webforms you choose
+		case $webform_id :
+			// Set a hidden field for the parent node and add submit handler to handle redirect
+			if (empty($form_state['values']['redirect_override'])) {
+				// The redirect needs a normal path
+				$form['redirect_override'] = array('#type' => 'hidden', '#value' => serialize($_GET['q']), );
+				// But the action needs a url() path if errors happen
+				$form['#action'] = _howard_get_current_path();
+			}
+			// Add our custom submit handler LAST so that Webforms doesn't overwrite it with its redirect behaviors
+			array_push($form['#submit'], '_howard_webform_redirect_override');
+			$form['#validate'][] = 'webform_validate';
+			break;
+		case 'revisioning_ux_publish' : // Hide publish button in revisiong list page
+			hide($form['submit']);
+			break;
+		case 'instagram_block_admin_settings' :// add User name field in instagram form
+			$form['#data'] = variable_get('instagram_block_data', $empty);
+
+			$form['user_name'] = array('#type' => 'textfield', '#title' => t('User Name'), '#description' => t('Your unique Instagram user name. Eg. husportsinfo'), '#default_value' => isset($form['#data']['user_name']) ? $form['#data']['user_name'] : '', '#weight' => -30, );
+			break;
+		case 'block_admin_configure' :
+			if(!empty($form['module']['#value'])){
+				switch ($form['module']['#value']) {
+					case 'howard' :
+						$text = ' To change the number of rows, Enter values in the format: <em>page_url|number_of_rows</em>. Eg.: <em>home|2</em>. Upto 3 rows are allowed. Invalid entries will default to 1 row.';
+						//$text .= '<br/>To change the More Link Text, Enter values in the format <em>more-text|text_to_display</em>. Eg.: <em>more-text|More Content</em>';
+						//$text .= '<br/>To change the More Link URL, Enter values in the format <em>more-link|link_to_redirect</em>. Eg.: <em>more-link|home</em> To redirect to a different website, use <em>http://</em> before the Link';
+						$form['custom_block_theme']['blocktheme_vars']['#description'] .= $text;
+						break;
+					case 'system' :
+						if($form['delta']['#value'] == 'main'){
+							$text = ' To enable striped Background for the entire page, enter <em>page_url:stripedBG|1</em>. Eg.: <em>news-and-events:stripedBG|1</em>';
+							$form['custom_block_theme']['blocktheme_vars']['#description'] .= $text;
+							break;
+						}
+				}
+			}
+			break;
+	 	case 'user_login' :
+			$form['#validate'][] = 'howard_ldap_user_login';
+			$form['#submit'][] = 'howard_ldap_user_login_submit';
+			break;
+		case 'slideshow_node_form':
+		case 'article_node_form':
+		   hide($form['field_menu_pages']);
+		   $form['#validate'][] = "save_menu_preferences";
+		   break;
+	}
+}
+
+function save_menu_preferences($form, &$form_state){
+ $mlids = $form_state['values']['field_page_to_display']['und'];
+ foreach($mlids as $key => $mlid){
+  $form_state['values']['field_menu_pages']['und'][$key]['value'] = $mlid['mlid'];
+  $form_state['values']['field_menu_pages']['und'][$key]['_weight'] = $mlid['_weight'];
+ }
+}
+
+function howard_node_view($node, $view_mode, $langcode) {
+
+	if($node->type == 'event'){
+		
+			/** JPM - 150211 - If Start Date is not empty and End Date is Empty Do this */
+		if( (!empty($node->field_date['und'][0]['value'])) && (empty($node->field_end_date['und'][0]['value']))) {
+			$datestamp = strtotime($node->field_date['und'][0]['value']);
+			$date = date('F d, Y', $datestamp);
+			$time = date('g:ia', $datestamp);
+			/** JPM - 150219 - remove Date: label */
+			$additional_field = "<h4>$date | $time </h4><hr/>";
+			$node->content['my_additional_field'] = array(
+			    '#markup' => $additional_field,
+			    '#weight' => 0,
+			    //'#theme' => 'mymodule_my_additional_field',
+			);
+			
+			$node->content['field_location'][0]['#markup'] = nl2br($node->content['field_location'][0]['#markup']); 
+    
+        } 
+		
+		/** JPM - 150211 - If Start Date is not empty and End Date is Not Empty Do this */
+		if( (!empty($node->field_date['und'][0]['value'])) && (!empty($node->field_end_date['und'][0]['value']))) {
+			$datestamp = strtotime($node->field_date['und'][0]['value']);
+			$date = date('F d, Y', $datestamp);
+			$time = date('g:ia', $datestamp);
+			
+			$end_datestamp = strtotime($node->field_end_date['und'][0]['value']);
+			$end_date = date('F d, Y', $end_datestamp);
+			$end_time = date('g:ia', $end_datestamp);
+			/** JPM - 150211 - If Start Date is equal to end date */
+			if ($date == $end_date ){
+			  /** JPM - 150219 - remove Start: label */
+			  $additional_field = "<h4>$date | $time - $end_time </h4><hr/>";
+			} else {
+              $additional_field = "<h4>Start: $date | $time </h4><h4>End: $end_date | $end_time </h4><hr/>";
+            }
+			
+			$node->content['my_additional_field'] = array(
+			    '#markup' => $additional_field,
+			    '#weight' => 0,
+			    //'#theme' => 'mymodule_my_additional_field',
+			);
+			
+			$node->content['field_location'][0]['#markup'] = nl2br($node->content['field_location'][0]['#markup']); 
+        }
+		
+		$node->content['#prefix'] = '<div class="howard-event-view col-lg-8 col-md-8 col-sm-12 col-xs-12">';
+		$node->content['#suffix'] = '</div>';
+		hide($node->content['field_date']);
+		hide($node->content['field_end_date']);
+		
+	}
+
+}
+
+function howard_ldap_user_login($form, &$form_state){
+	if(!empty($form_state['values']['name']) && !empty($form_state['values']['pass'])){
+		$userObj = user_load_by_name($form_state['values']['name']);
+		if(!(!empty($userObj->uid) && $userObj->uid == 1)){
+			unset($_SESSION['messages']);
+			$status = FALSE;
+			$server = variable_get('howard_ldap_server','');
+			$port = variable_get('howard_ldap_port','');
+			$basedn = variable_get('howard_ldap_basedn','');
+
+			$ldaprdn = 'howardu\\'.$form_state['values']['name'];
+			$ldappass = $form_state['values']['pass'];
+
+			$ldapconn = ldap_connect($server,$port);
+
+			if ($ldapconn) {
+				$ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+				if ($ldapbind) {
+					$status = TRUE;
+				}
+			}
+			if($status == TRUE){
+				user_external_login_register($form_state['values']['name'], 'howard');
+				if(empty($userObj->uid) || (sizeof($userObj->roles) == 1 && $userObj->roles[2] == 'authenticated user')){
+					unset($_SESSION['messages']);
+					$logoutLink = l('Logout', 'user/logout');
+					drupal_set_message('You have successfully logged in. Please contact site administrator to provide you domain access and necessary permissions. '.$logoutLink);
+				}
+				global $user;
+				$account = user_load($user->uid);
+				global $_domain;
+				$domainId = $_domain['domain_id'];
+				if(empty($account->mail)){
+					$edit['mail'] = $form_state['values']['name'].'@howard.edu';
+					$edit['init'] = $form_state['values']['name'].'@howard.edu';
+					$edit['domain_user'][$domainId] = $domainId;
+					user_save($account,$edit);
+				}
+				drupal_goto('user');
+			}else{
+				//unset($_SESSION['messages']);
+				//form_set_error('', 'Login Failed');
+				//drupal_set_message('Invalid LDAP Credentials.', 'error');
+			}
+		}
+	}
+}
+
+function howard_ldap_user_login_submit($form, &$form_state){
+	global $user;
+	if($user->uid != 1){
+		unset($_SESSION['messages']);
+		drupal_set_message('Invalid LDAP Credentials. (You has successfully logged in through Drupal.)', 'error');
+	}
+}
+
+/*Alter Field in howard by numbers node form*/
+function howard_field_widget_form_alter(&$element, &$form_state, $context) {
+	if($context['field']['field_name'] == 'field_block_image' && $context['form']['#node']->type == 'howard_by_the_numbers'){
+		foreach (element_children($element) as $delta) {
+	      $element[$delta]['#process'][] = 'howard_field_widget_process';
+	    }
+	}
+}
+/*Alter Field in howard by numbers node form*/
+function howard_field_widget_process($element, &$form_state, $form) {
+  if ($element['alt']['#access']) {
+  	$element['alt']['#title'] = 'Link To';
+  	$element['alt']['#description'] = 'Use this field to link the corresponding image to external or internal url. If you leave empty, the image will be linked to the Home page';
+  }
+  return $element;
+}
+
+// Custom redirect submission for Webforms
+function _howard_webform_redirect_override($form, &$form_state) {
+  if (!empty($form_state['values']['redirect_override'])) {
+    $form_state['redirect'] = array(unserialize($form_state['values']['redirect_override']));
+  }
+}
+// Get the proper path for the current page
+function _howard_get_current_path() {
+  $url = drupal_lookup_path('alias', $_GET['q']);
+  if (empty($url)) {
+    $url = $_GET['q'];
+  }
+  // Front-page url should be empty
+  if ($url == "front") {
+    $url = "";
+  }
+  $url = url($url);
+  return $url;
+}
+
+/*Theming the facebok and twitter tpl*/
+function howard_theme() {
+  global $language;
+   $theme = array(
+    'facebook_pull_feed_hu' => array(
+      'variables' => array('items' => array()),
+      'template'  => 'facebook_pull-feed-hu',
+    ),
+   'twitter_pull_listing_hu' => array(
+      'variables' => array('tweets' => NULL, 'twitkey' => NULL, 'title' => NULL, 'lazy_load' => NULL, 'language' => $language->language),
+      'template' => 'twitter-pull-listing-hu',
+    ),
+  );
+  return $theme;
+
+}
+/*Get Facebook data*/
+function hu_facebook_pull_render_block() {
+  $app_id = variable_get('facebook_pull_app_id', '');
+  $app_secret = variable_get('facebook_pull_app_secret', '');
+  $graph_id = variable_get('facebook_pull_graph_id', '');
+  $type = variable_get('facebook_pull_object_type', '');
+  $limit = variable_get('facebook_pull_limit', '');
+
+  return hu_facebook_pull_render($graph_id, $type, $app_id, $app_secret, $options = array('limit' => $limit));
+}
+/**
+ * Serve up a facebook feed from the cache
+ */
+function hu_facebook_pull_render($graph_id, $type, $app_id, $app_secret, $options = array()) {
+  $data = _facebook_pull_feed_cached($graph_id, $type, $app_id, $app_secret, $options);
+  if (!$data) {
+    return '';
+  }
+  return theme('facebook_pull_feed_hu', array('items' => $data));
+}
+/*Check Current menu have child menu */
+function check_menu_level($dept_level){
+
+	$menuParent = menu_get_active_trail();
+	$menuParent = end($menuParent);
+	$depth = !empty($menuParent['depth'])?$menuParent['depth']:'';
+	$has_children = !empty($menuParent['has_children'])?$menuParent['has_children']:'';
+	if(($has_children == 1) && ($dept_level == $depth)){
+		return TRUE;
+	}
+	else if(($has_children == 0) && ($dept_level == $depth-1)){
+		return TRUE;
+	}
+	return FALSE;
+
+}
+/*Webform Validation*/
+function webform_validate(&$form, &$form_state){
+	 $email1 = $form['submitted']['e_mail']['#value'];
+	 $name = $form['submitted']['first_name']['#value'];
+	 $name_pattern = "/^[a-zA-Z\s]*$/";
+	 $email_pattern = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/";
+	 if (!preg_match($email_pattern, $email1)) {
+	 	form_set_error($email1,"Please enter a valid e-mail id");
+	}
+}
+/*Facebook like count */
+function get_likes_count($id){
+	$app_id = variable_get('facebook_pull_app_id', '');//Get the facebook App Id
+    $app_secret = variable_get('facebook_pull_app_secret', '');//Get the facebook Secret key
+	$token = _facebook_pull_accesstoken($app_id, $app_secret); //Using facebook pull module get token value
+	$fql  = "SELECT attachment.media.photo.pid, share_count, like_info.like_count, comment_info.comment_count ";
+    $fql .= " FROM stream WHERE post_id='".$id."'";
+    $fqlURL = "https://api.facebook.com/method/fql.query?format=json&query=".urlencode($fql)."&".$token;
+ 	$response = file_get_contents($fqlURL);
+	$result = json_decode($response);
+	$pid = is_array($result) && !empty($result[0]->attachment->media[0]->photo->pid) ? $result[0]->attachment->media[0]->photo->pid : 0;
+	$countArr = array();
+	$countArr['likes'] = is_array($result) && !empty($result[0]->like_info->like_count) ? $result[0]->like_info->like_count : 0;
+	$countArr['comments'] = is_array($result) && !empty($result[0]->comment_info->comment_count) ? $result[0]->comment_info->comment_count : 0;
+	$countArr['shares'] = is_array($result) && !empty($result[0]->share_count) ? $result[0]->share_count : 0;
+	$countArr['img'] = '';
+	if(!empty($pid)){
+		$photofql = "SELECT src_big FROM photo WHERE pid = '".$pid."'";
+		$photofqlURL = "https://api.facebook.com/method/fql.query?format=json&query=".urlencode($photofql)."&".$token;
+ 		$photoresponse = file_get_contents($photofqlURL);
+		$photoresult = json_decode($photoresponse);
+		if(!empty($photoresult)){
+			$countArr['img'] = $photoresult[0]->src_big;
+		}
+	}
+	return $countArr;
+
+	/*$app_id = variable_get('facebook_pull_app_id', '');//Get the facebook App Id
+    $app_secret = variable_get('facebook_pull_app_secret', '');//Get the facebook Secret key
+	  $token = _facebook_pull_accesstoken($app_id, $app_secret); //Using facebook pull module get token value
+	 $url = "https://graph.facebook.com/v2.0/%s/likes?%s&limit=10000000"; //Developer link to get like count
+	 $fullurl = sprintf($url,$id,$token);
+	  $raw = file_get_contents($fullurl);
+     $data = json_decode($raw);
+	 if (!isset($data->data)) {
+    $message = 'Failed to fetch data from the Facebook Graph';
+    $variables = array();
+    watchdog('facebook_pull', $message, $variables, WATCHDOG_WARNING);
+    return FALSE;
+  }
+	 return count($data->data); // return the likes count*/
+}
+
+/*JPs - 01.15.15 - Add function - Get Twitter account name - twitter-pull-listing-hu.tpl.php*/
+function twitter_account_name(){
+  $result = db_select('twitter_account', 't')
+    ->fields('t',array('screen_name'))
+    ->execute()
+    ->fetchField();
+  return $result;
+}

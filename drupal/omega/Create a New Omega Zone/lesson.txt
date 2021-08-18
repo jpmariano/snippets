@@ -1,0 +1,3 @@
+- Review Templates and Variables
+- Add a new zone to our theme
+- Configure regions for new zone

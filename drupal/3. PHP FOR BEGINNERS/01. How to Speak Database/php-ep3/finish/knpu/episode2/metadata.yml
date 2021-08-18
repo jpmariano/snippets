@@ -1,0 +1,56 @@
+title:  Episode 2: How to stop worrying and start writing PHP
+length: 0:26:52
+summary: |
+    This is episode 2 of our Epic PHP series. Find episode 1
+    [here](http://knpuniversity.com/screencast/php-ep1).
+
+    In this episode, we're learning all about forms, form submissions, how
+    this translates the the HTTP Request/Response world, and saving files
+    to the disk. This is a *huge* step forward, and all in under 30 minutes!
+    You'll learn:
+    
+    * How to access submitted form data
+    * What the HTTP method is for a request (and how to read it)
+    * How to save files
+    * How to redirect a user
+    * What request and response "headers" are
+    * Better code organization with functions.
+
+    This will get you ready for episode 3... which is all about databases!
+
+illustration: php-ep2.png
+tuts_hero:
+    start_step:  "Layout: Create and use header/footer"
+    finish_step: "RReorg: Full working save_pets process"
+
+chapters:
+    request-new-page:
+        title:      Request, New Page and - Hey, You Welcome Back!
+        is_free:    true
+        video_key:  cqblebjgek
+        activities:
+            - { name: create_page }
+    create-form:
+        title:      We deserve to Create a Form
+        video_key:  lv2ttcf8zn
+    reading-form-data:
+        title:      Reading POST'ed (Form) Data
+        video_key:  ugsivpf04s
+        activities:
+            - { name: form_dump_data }
+            - { name: check_http_method }
+    saving-pets:
+        title:      Saving Pets
+        video_key:  mjbsmkf4qh
+        activities:
+            - { name: save_to_file }
+    redirecting:
+        title:      The Art of Redirecting
+        video_key:  bu0it04eyc
+        activities:
+            - { name: redirect }
+    code-cleanup:
+        title:      Cleaning up with save_pets
+        video_key:  nr1nc80or8
+        activities:
+            - { name: refactor_into_function }

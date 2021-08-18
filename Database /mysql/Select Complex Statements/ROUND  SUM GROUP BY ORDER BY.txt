@@ -1,0 +1,6 @@
+0910 
+
+1. List the regions of the world that have a population density greater than 100 people per square kilometer in descending order by population density.
+
+Solution:
+SELECT Region, ROUND(SUM(Population)/SUM(SurfaceArea)) Density FROM Country GROUP BY Region ORDER BY Density DESC;

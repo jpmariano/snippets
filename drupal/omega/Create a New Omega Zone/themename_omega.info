@@ -1,0 +1,2 @@
+;This is how to create a zone, then move this zone in a section throught the GUI
+zones[footer_bottom] = 'Footer Bottom'

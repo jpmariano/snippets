@@ -1,0 +1,163 @@
+grayscale.info
+name = Grayscale
+core = 7.x
+engine = phptemplate
+
+stylesheets[all][] = css/style.css
+stylesheets[print][] = css/print.css
+stylesheets[screen, projector][] = theScreenProjectorStyle.css
+
+Adding Regions to Your Theme 
+
+-  .info 
+regions[alerts] = Alerts
+regions[featured] = Featured Articles
+regions[socialnetworks] = Social Networks
+
+- .tpl.php
+<div id=”alerts”>
+<?php print render($page['alerts']); ?>
+</div> <!-- /alerts -->
+
+-  .info
+Adding CSS Files to Your Theme
+;// add a style sheet that deals with colors for all mediums
+stylesheets[all][] = css/colors.css
+;// add a style sheet just for printing
+stylesheets[print][] = css/print.css
+;// add a style sheet just for projecting
+stylesheets[projector][] = css/showtime.css
+;// add a style sheet for screen
+stylesheets[screen][] = css/style.css
+;// add a style sheet for screen and projector
+stylesheets[screen, projector] = css/showit.css
+
+-  .info
+Adding JavaScript Files
+scripts[] = js/jcarousel.js
+
+-  .info
+Adding Settings to Your Theme
+settings[font_family] = 'ff-sss'
+settings[font_size] = 'fs-12'
+
+theme-settings.php
+<?php
+function grayscale_form_system_theme_settings_alter(&$form, &$form_state) {
+$form['styles'] = array(
+	'#type' => 'fieldset',
+	'#title' => t('Style settings'),
+	'#collapsible' => FALSE,
+	'#collapsed' => FALSE,
+);
+
+$form['styles']['font'] = array(
+	'#type' => 'fieldset',
+	'#title' => t('Font settings'),
+	'#collapsible' => TRUE,
+	'#collapsed' => TRUE,
+);
+$form['styles']['font']['font_family'] = array(
+		'#type' => 'select',
+		'#title' => t('Font family'),
+		'#default_value' => theme_get_setting('font_family'),
+		'#options' => array(
+		'ff-sss' => t('Helvetica Nueue, Trebuchet MS, Arial, Nimbus Sans L, FreeSans, sansserif'),
+		'ff-ssl' => t('Verdana, Geneva, Arial, Helvetica, sans-serif'),
+		'ff-a' => t('Arial, Helvetica, sans-serif'),
+		'ff-ss' => t('Garamond, Perpetua, Nimbus Roman No9 L, Times New Roman, serif'),
+		'ff-sl' => t('Baskerville, Georgia, Palatino, Palatino Linotype, Book Antiqua, URW
+		Palladio L, serif'),
+		'ff-m' => t('Myriad Pro, Myriad, Arial, Helvetica, sans-serif'),
+		'ff-l' => t('Lucida Sans, Lucida Grande, Lucida Sans Unicode, Verdana, Geneva,
+		sans-serif'),
+	),
+);
+
+$form['styles']['font']['font_size'] = array(
+	'#type' => 'select',
+	'#title' => t('Font size'),
+	'#default_value' => theme_get_setting('font_size'),
+	'#description' => t('Font sizes are always set in relative units - the sizes shown are
+	the pixel value equivalent.'),
+	'#options' => array(
+	'fs-10' => t('10px'),
+	'fs-11' => t('11px'),
+	'fs-12' => t('12px'),
+	'fs-13' => t('13px'),
+	'fs-14' => t('14px'),
+	'fs-15' => t('15px'),
+	'fs-16' => t('16px'),
+	),
+);
+}
+
+- template.php
+<?php
+/**
+* Override or insert variables into the html template.
+*/
+function grayscale_process_html(&$vars) {
+	// Add classes for the font styles
+	$classes = explode(' ', $vars['classes']);
+	$classes[] = theme_get_setting('font_family');
+	$classes[] = theme_get_setting('font_size');
+	$vars['classes'] = trim(implode(' ', $classes));
+}
+
+- html.tpl.php
+<body class="<?php print $classes; ?>" <?php print $attributes;?>>
+
+- css/style.css
+/* font family */
+.ff-sss {font-family: "Helvetica Nueue", "Trebuchet MS", Arial, "Nimbus Sans L",
+	FreeSans, sans-serif;}
+.ff-ssl {font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;}
+.ff-a {font-family: Arial, Helvetica, sans-serif;}
+.ff-ss {font-family: Garamond, Perpetua, "Nimbus Roman No9 L", "Times New Roman", serif;}
+.ff-sl {font-family: Baskerville, Georgia, Palatino, "Palatino Linotype", "Book Antiqua", "URW Palladio L", serif;}
+.ff-m {font-family: "Myriad Pro", Myriad, Arial, Helvetica, sans-serif;}
+.ff-l {font-family: "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", Verdana, Geneva, sans-serif;}
+/* Base fontsize */
+.fs-10 {font-size:0.833em}
+.fs-11 {font-size:0.917em}
+.fs-12 {font-size:1em}
+.fs-13 {font-size:1.083em}
+.fs-14 {font-size:1.167em}
+.fs-15 {font-size:1.25em}
+.fs-16 {font-size:1.333em}
+
+
+
+Overriding Template Files
+Other Template Files
+
+/**
+* Implements hook_theme().
+*/
+function comment_theme() {
+	return array(
+		'comment_block' => array(
+		'variables' => array(),
+		),
+		'comment_preview' => array(
+		'variables' => array('comment' => NULL),
+		),
+		'comment' => array(
+		'template' => 'comment',
+		'render element' => 'elements',
+		),
+		'comment_post_forbidden' => array(
+		'variables' => array('node' => NULL),
+		),
+		'comment_wrapper' => array(
+		'template' => 'comment-wrapper',
+		'render element' => 'content',
+		),
+	);
+}
+
+Introducing the theme() Function
+
+
+

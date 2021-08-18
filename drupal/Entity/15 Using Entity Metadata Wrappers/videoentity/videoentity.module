@@ -1,0 +1,310 @@
+<?php
+/**
+ * @file
+ * Provides a simple custom entity type named 'video' for tracking embed codes.
+ */
+
+/**
+ * Implements hook_entity_info().
+ */
+function videoentity_entity_info() {
+  $info = array();
+  // Our custom video entity needs to be defined here.
+  // See http://drupal.org/node/1026420 and http://drupal.org/node/878804
+  // for more documentation.
+  $info['video'] = array(
+    // Human readable label.
+    'label' => t('Video'),
+    // Table for storing entity data, defined in hook_schema().
+    'base table' => 'videoentity_video',
+    // This helps Entity API know how to query your custom table.
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    // This is a uri function provided by the Entity contrib module.
+    // It's a simple wrapper around the uri method in the controller class.
+    'uri callback' => 'entity_class_uri',
+    // These are the default controllers.
+    // 'entity class' => 'Entity',
+    'entity class' => 'VideoEntity',
+    // 'controller class' => 'DrupalDefaultEntityController',
+    // Other options provided by the EntityAPI contrib module:
+    // 'controller class' => 'EntityAPIController ',
+    // 'controller class' => 'EntityAPIControllerExportable',
+    'controller class' => 'VideoEntityController',
+     // The information below is used to extend the EntityDefaultUIController
+     'admin ui' => array(
+       'path' => 'admin/videoentity',
+       'controller class' => 'VideoEntityUIController',
+       'menu wildcard' => '%videoentity',
+       'file' => 'videoentity.admin.inc',
+     ),
+     'module' => 'videoentity',
+     // Access callback to determine permisisons.
+     'access callback' => 'videoentity_access_callback',
+     // Tell FieldAPI that fields can be attached to our video entity
+     'fieldable' => TRUE,
+     'bundles' => array(
+        'video' => array(
+          'label' => t('Video'),
+          'admin' => array(
+            'path' => 'admin/videoentity',
+            'access arguments' => array('administer video'),
+          ),
+        ),
+      ),
+     'views controller class' => 'EntityDefaultViewsController',
+     // Custom view modes.
+     'view modes' => array(
+      'non_member' => array(
+        'label' => t('Non-Member'),
+        'custom settings' => FALSE,
+      ),
+      'member' => array(
+        'label' => t('Member'),
+        'custom settings' => FALSE,
+      ),
+     ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function videoentity_entity_property_info() {
+  $info = array();
+  $properties = &$info['video']['properties'];
+  $properties['id'] = array(
+    'label' => t('Video ID'),
+    'description' => t('The uniquie ID of the video.'),
+    'type' => 'integer',
+    'schema field' => 'id',
+  );
+  $properties['name'] = array(
+    'label' => t('Name'),
+    'description' => t('Name of the video'),
+    'type' => 'text',
+    'schema field' => 'name',
+  );
+  $properties['embedcode'] = array(
+    'label' => t('Embedcode'),
+    'description' => t('YouTube embedcode for the video'),
+    'type' => 'text',
+    'schema field' => 'embedcode',
+  );
+  $properties['created_at'] = array(
+    'label' => t('Created date'),
+    'description' => t('Date the video was created'),
+    'type' => 'date',
+    'schema field' => 'created_at',
+  );
+  $properties['updated_at'] = array(
+    'label' => t('Updated date'),
+    'description' => t('Date the video last updated'),
+    'type' => 'date',
+    'schema field' => 'updated_at',
+  );
+  $properties['duration'] = array(
+    'label' => t('Duration'),
+    'description' => t('The duration of the video in seconds'),
+    'type' => 'integer',
+    'schema field' => 'duration',
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function videoentity_menu() {
+  $items = array();
+  $items['videoentity'] = array(
+    'title' => 'Demo page',
+    'page callback' => 'videoentity_demo_page',
+    'access callback' => TRUE,
+    'menu' => 'navigation',
+  );
+  $items['video/%videoentity'] = array(
+    'title' => 'Video',
+    'page callback' => 'videoentity_view_entity',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function videoentity_permission() {
+  return array(
+    'administer videos' => array(
+      'title' => t('Administer Video Entities'),
+    ),
+    'view videos' => array(
+      'title' => t('View Video Entities'),
+    ),
+  );
+}
+
+/**
+ * Check access permissions for video entities.
+ */
+function videoentity_access_callback($op, $videoentity = NULL, $account = NULL) {
+  if (($op == 'view' && user_access('view videos', $account)) || user_access('administer videos', $account)) {
+    return TRUE;
+  }
+  else if (user_access('administer videos', $account)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Menu autoloader for /video.
+ */
+function videoentity_load($id) {
+  $video = entity_load('video', array($id));
+  return array_pop($video);
+}
+
+/**
+ * Callback for /videoentity page.
+ *
+ * Just a place to test things out and be able to see the results on a page.
+ */
+function videoentity_demo_page() {
+  $video = entity_load('video', array(1));
+  kpr($video);
+
+  // Or load it with EFQ.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'video');
+  $results = $query->execute();
+  kpr($results);
+  return 'hello there!';
+}
+
+/**
+ * Callback for /video/ID page.
+ *
+ * Just a place to render a complete video entity.
+ */
+function videoentity_view_entity($video) {
+  drupal_set_title($video->name);
+  $video_entity = entity_view('video', array($video->id => $video), 'member');
+  kpr($video_entity);
+  return $video_entity;
+}
+
+/**
+ * Our custom entity class.
+ *
+ * The Entity class we're overriding is in
+ * sites/all/modules/contrib/entity/includes/entity.inc
+ */
+class VideoEntity extends Entity {
+  /**
+   * Override this in order to implement a custom default URI.
+   */
+  protected function defaultUri() {
+    return array('path' => 'video/' . $this->identifier());
+  }
+}
+
+/**
+ * Our custom controller for the videoentity type.
+ *
+ * We're choosing to extend the controller provided by the entity module for
+ * full CRUD support for videoentities.
+ *
+ * The EntityAPIController is found in
+ * sites/all/modules/contrib/entity/includes/entity.controller.inc
+ */
+class VideoEntityController extends EntityAPIController {
+
+  public function buildContent($entity, $view_mode = 'non_member', $langcode = NULL, $content = array()) {
+    $build = parent::buildContent($entity, $view_mode, $langcode, $content);
+
+    $build['duration'] = array(
+      '#type' => 'markup',
+      '#markup' => format_interval($entity->duration),
+    );
+
+    if ($view_mode == 'member') {
+      $build['embedcode'] = array(
+        '#type' => 'markup',
+        '#markup' => '<iframe width="560" height="315" src="http://www.youtube.com/embed/'. $entity->embedcode . '" frameborder="0" allowfullscreen></iframe>',
+      );
+    }
+    else {
+      $build['embedcode'] = array(
+        '#type' => 'markup',
+        '#markup' => '<p><a href="http://www.youtube.com/watch?v=' . $entity->embedcode . '">Link to YouTube video</a></p>',
+      ); 
+    }
+
+    return $build;
+  }
+
+  /**
+   * Override save method.
+   *
+   * Populate created and updated dates automatically.
+   */
+  public function save($entity, DatabaseTransaction $transaction = NULL) {
+
+    if (isset($entity->is_new)) {
+      $entity->created_at = REQUEST_TIME;
+    }
+
+    $entity->updated_at = REQUEST_TIME;
+
+    return parent::save($entity, $transaction);
+  }
+
+}
+
+/**
+ * Our custom controller for the admin ui.
+ *
+ * The EntityDefaultUIController can be found in
+ * sites/all/modules/contrib/entity/includes/entity.ui.inc
+ */
+class VideoEntityUIController extends EntityDefaultUIController {
+
+  /**
+   * Generates the table headers for the overview table.
+   */
+  protected function overviewTableHeaders($conditions, $rows, $additional_header = array()) {
+    $header = $additional_header;
+    array_unshift($header, t('Video'));
+    if (!empty($this->entityInfo['exportable'])) {
+      $header[] = t('Status');
+    }
+    // Add operations with the right colspan.
+    $header[] = array('data' => t('Operations'), 'colspan' => $this->operationCount());
+    return $header;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

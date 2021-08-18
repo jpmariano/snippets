@@ -1,0 +1,22 @@
+19 Events
+
+1. Create an event that begins at 2:00am tomorrow and performs the following statement every week thereafter:
+
+ANALYZE TABLE Country;
+
+Solution:
+CREATE EVENT analyzeCountry
+ON SCHEDULE EVERY 1 WEEK STARTS STR_TO_DATE(CONCAT(CURDATE() + INTERVAL 1 DAY, ' 02:00:00'), '%Y-%m-%d %T')
+DO ANALYZE TABLE Country;
+
+2. Create a table (in the world database for now) to keep track of how many threads are connected to the server at a certain point in time. Then create an event to populate this table every 15 minutes for the next two weeks beginning tomorrow morning at midnight. (The item we want to track can be found in the Global_Status table of the Information_Schema database.)
+
+Solution:
+CREATE TABLE world.connectionstats (
+connections SMALLINT,
+at_time TIMESTAMP)
+ENGINE MyISAM;
+
+CREATE EVENT analyzeCountry
+ON SCHEDULE EVERY 15 MINUTE STARTS STR_TO_DATE(CONCAT(CURDATE() + INTERVAL 1 DAY, ' 00:00:00'), '%Y-%m-%d %T') ENDS STR_TO_DATE(CONCAT(CURDATE() + INTERVAL 15 DAY, ' 00:00:00'), '%Y-%m-%d %T')
+DO INSERT INTO world.connectionstats VALUES (NOW(), (SELECT variable_value from information_schema.global_status WHERE variable_name = 'threads_connected'));

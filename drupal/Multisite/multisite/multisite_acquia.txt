@@ -1,0 +1,66 @@
+Is multisite the right choice for my next site? 
+
+complexity or commonality: possibly varries
+Upgrade: Concerned about the core update since database is separated. 
+experience and ability to work through a few common issues: Low level experience in a complex or a multisite that varries themes and might be functionality.
+But have experience in a multisite environment where the core and theme is the same.
+
+Is our site lightweight? It's not in terms of content and functionality. 
+
+sites/all/themes/howard  
+	howard theme is too customize if activated on another sub site in multisite it fails (Note: Test this using dev desktop).
+	Therefore, we want to have a multisite we have to make a new theme within sites/all/themes/newtheme or clean up the current theme and create a sub theme sites/all/themes/subtheme .
+sites/default --- howard (symlinks) points to this folder 
+
+In normal drupal site install, sites.php should include a variable array of  $sites['www2.howard.edu'] = 'howard';
+
+If we create a new multisite, folder structure should be sites/subdomain.howard --- subdomain.howard (symlinks) points to this folder.
+Since, the current theme can't be use, we would have to use or activate a barebones theme coming from sites/all/themes/newtheme or sites/subdomain.howard/themes/sub_newtheme.
+
+Our concern is authentication, since we are using LDAP can we use SSO module or CAS module with it? Would it conflict since it all serves the same purpose which is to authenticate.
+If LDAP can works SSO module or CAS module, would it require us to run on a main domain? 
+According to this article (https://www.lullabot.com/blog/article/single-sign-across-sub-domains-drupal-no-extra-modules), we have to. 
+Currently, we are running on a subdomain (www2.howard.edu). If somehow, LDAP/SSO or LDAP/CAS works, switching the domain from www2.howard.edu to www.howard.edu would it hurt our authenticatation?
+Also, keep in mind. We have SSL running on www2.howard.edu. 
+
+Add database
+Add URL 
+Site folder
+Code - include
+//changes the database uses
+configuresettings.php
+
+
+function tb_sirate_preprocess_page(&$variables) { 
+	$field_type_of_articles = field_get_items('node', $node, 'field_type_of_articles');
+	if ($field_type_of_articles = '1') {
+	  echo "1";
+	}
+	elseif ($field_type_of_articles = '2') {
+	  echo "2";
+	}
+	else {
+	  echo "3";
+	}
+	
+	
+	
+	
+	
+	// Check if custom layout defined in taxonomy
+    $field_type_of_articles = field_get_items('node', $node, 'field_type_of_articles');
+	if ($field_type_of_articles = '1') {
+	  $vars['theme_hook_suggestions'][] = 'page_department__'. str_replace('_', '--', $vars['node']->type);
+	}
+	elseif ($field_type_of_articles = '2') {
+	  $vars['theme_hook_suggestions'][] = 'page_programs__'. str_replace('_', '--', $vars['node']->type);
+	}
+	else {
+	  $vars['theme_hook_suggestions'][] = 'page_events__'. str_replace('_', '--', $vars['node']->type);
+	}
+}
+
+
+
+
+

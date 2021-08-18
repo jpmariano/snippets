@@ -1,0 +1,11 @@
+https://www.drupal.org/project/rules
+
+http://nodeone.se/sv/learn-drupal
+
+Download Entity API (Required module)
+
+Enable rules, and rule ui
+
+Rules - is the extended version of trigger 
+
+admin/config/workflow/rules

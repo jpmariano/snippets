@@ -1,0 +1,27 @@
+Confirm that DNS is working
+
+Go to your drupal site installation using the terminal and type pwd (Present Working Directory)
+Edit your Vitrual host using aptana, look for virtual host file
+Common vhosts file locations
+- Debian Ubuntu: /etc/apache2/sites-available
+- CentOS: /etc/httpd/conf/httpd.conf
+- RHEL: /etc/httpd/conf.d/vhosts.conf
+- MAMP: /etc/apache2/extra/http-vhosts.conf
+- WAMP: wamp\bin\apache\apache2.4.9\conf\extra\httpd-vhosts.conf
+
+Virtual Host Configuration
+<VirtualHost *:80>
+	DocumentRoot /home/udrupal/www
+	Servername udrupal.com
+	ServerAlias udrupalalumni.com
+	ServerAlias news.udrupal.com
+	<Directory>
+		Options FollowSymlinks
+		AllowOverride All
+	</Directory>
+	Errorlog /var/log/httpd/error_log
+	AllowOverride All
+</Virtualhost>
+
+Enable Virtual Host
+Restart Apache

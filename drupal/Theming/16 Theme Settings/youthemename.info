@@ -1,0 +1,5 @@
+; Settings
+#provides a default vale for your breadcrumb_delimiter (as an example) inside the theme-settings hook_form_system_theme_settings_alter
+settings[breadcrumb_delimiter] = ' >> '
+settings[use_twitter] = 1
+settings[twitter_search_term] = 'lullabot'

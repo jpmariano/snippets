@@ -1,0 +1,47 @@
+admin/config/development/maintenance - maintenance settings
+admin/config/system/cron - Cron 
+admin/config/development/performance - cache
+admin/reports/status - Site Status report
+admin/reports/updates - Check for core and module updates
+admin/reports/status/rebuild - 
+admin/content/media - add media
+admin/config/user-interface/shortcut - shortcut
+admin/config/system/site-information - Theming site-information
+admin/appearance/settings - logo
+admin/structure/contact - contact form Make sure enable the module
+admin/people/permissions  - 
+admin/structure/types -revisions,managing fields and content display
+
+Creating Content
+admin/structure/types - Create Content Type
+​admin/structure/taxonomy - Create Categorizing Node Types, URL for Taxonomy
+admin/structure/types/manage/article/fields - Add fields for taxonomy
+admin/config/search/path/patterns - Pathauto Module
+
+Menu
+admin/structure/menu
+disable toolbar, enable admin_menu (install it first)
+
+Exporting Users
+admin/structure/views
+
+Composer D7 and D8
+admin/config/system/composer-manager/settings
+
+drush sql-cli < /filepath/db_hprc.sql
+
+mysql -u root -p 
+SET GLOBAL innodb_file_format=Barracuda;
+SET GLOBAL innodb_file_per_table=on;
+SET GLOBAL innodb_large_prefix = ON;
+
+drush upwd --password="SOMEPASSWORD" hprc.admin
+
+drush sql-dump --result-file=/home/username/Repositories/opss-site/databases/opsstage.sql
+rsync -avr --delete /var/www/opss/sites/default/files/ /home/username/Repositories/opss-site/opss/files/
+Then:
+rsync -avr --delete -e ssh remote-stage-drupal-centers:/home/username/Repositories/opss-site/opss/files/ /home/username/Repositories/opss-site/opss/files/
+rsync -avr --delete -e ssh remote-drupal:/home/username/Repositories/opss-site/opss/databases/ /home/username/Repositories/usuhs-site/usuhs/databases/
+
+http://www.jesox.com/blog/how-install-drush-mac
+

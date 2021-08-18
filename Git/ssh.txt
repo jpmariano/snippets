@@ -1,0 +1,33 @@
+Generating SSH Keys
+Step 1:
+https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+New way*
+$ ssh-keygen -t ed25519 -C "your_email@example.com" 
+Old way*
+$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+Step 2:
+Dealing with multiple keys 
+https://stackoverflow.com/questions/21160774/github-error-key-already-in-use
+
+cat ~/.ssh/config
+vi ~/.ssh/config
+        # Default GitHub
+        Host github-test
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa
+
+        Host github-public
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_public
+
+Step 3:
+you will need to alter your .git/config remote url of your local repository to point to:
+git@github-test:<gh_username>/<gh_reponame>.git
+
+Step 4:
+ls ~/.ssh/*.pub 
+cat ~/.ssh/id_rsa.pub
+paste the token to github

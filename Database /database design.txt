@@ -1,0 +1,86 @@
+Gather data as how they gather data
+Gather data output (receipt)
+Make a preliminary list
+Step One: Review and Refine the List of Characteristics
+	Refining Items with the Same Name
+	Refining Items Representing the Same Characteristic
+	Ensuring Items Represent Characteristics
+		Can this word be used to describe something?
+		Does this word represent a component, detail, or 		piece of something in particular?
+		Does this word represent a collection of things?
+		Does this word represent something that can be 		broken down into smaller pieces?
+
+Step Two: Determine Whether There Are New Characteristics in Any of Your Samples
+	A Side Note: Value Lists - for example, drop down menu, 	radio buttons
+	The Calculated-Field List - For example, total, subtotal
+
+Interview
+Now you're ready to interview Mike's staff. Here are some points to remember as you're conducting the interviews:
+
+Identify the types of data staff members are using and how they use that data. Be sure to use the subject-identification technique and the characteristic-identification technique to help you analyze responses and formulate follow-up questions.
+
+Review all the samples you gathered during the beginning of the analysis process. Determine how each sample is used, write an appropriate description, and attach the description to the sample.
+
+Identify the staff's information requirements. Determine what information they're currently using, what additional information they need (remember to use the samples), and what kind of information they believe they'll need as the business evolves.
+
+It's a good idea to date your lists so that you can maintain a clear history of their development.
+
+Defining the Preliminary Table List
+ Identifying Implied Subjects from your preliminary field list 	(results from input and output)
+ Using the List of Subjects - results from interview
+	Step One: Resolve Duplicate Items 
+        Step Two: Resolve Items That Represent the Same Subject
+	Step Three: Combine the Items on the List of Subjects and   
+        the Preliminary Field List
+
+Defining the Final Table List
+Refining the Table Names
+	Create a unique, descriptive name that is meaningful to 	the entire organization.
+	Create a name that accurately, clearly, and unambiguously           identifies the subject of the table.
+	Use the minimum number of words necessary to convey the           subject of the table.
+	Do not use words that convey physical characteristics.
+	Do not use acronyms and abbreviations.
+	Do not use proper names or other words that will unduly          restrict the data that can be entered into the table. 
+	Do not use a name that implicitly or explicitly identifies         more than one subject.
+	Do use the plural form of the name. 
+Indicating the Table Types
+Composing the Table Descriptions
+	Guidelines for Composing a Table Description
+		Include a statement that accurately defines the table.
+		Include a statement that explains why this table is important to the organization.
+		Compose a description that is clear and succinct. 
+		Don't be too brief or too verbose. 
+		Do not include implementation-specific information in your table description, such as how or where the table is used.
+		Do not make the table description for one table dependent upon the table description of another table.
+		Do not use examples in a table description
+
+Associating Fields with Each Table
+
+	Refining the Fields
+		Improving the Field Names
+		Create a unique, descriptive name that is meaningful to the entire organization.
+		Create a name that accurately, clearly, and unambiguously identifies the characteristic a field represents.
+		Use the minimum number of words necessary to convey the meaning of the characteristic the field represents.
+		Do not use acronyms, and use abbreviations judiciously.
+		Do not use words that could confuse the meaning of the field name.
+		Do not use names that implicitly or explicitly identify more than one characteristic. 
+		Use the singular form of the name. 
+	Elements of the Ideal Field
+		It represents a distinct characteristic of the subject of the table.
+		It contains only a single value.
+		It cannot be deconstructed into smaller components.
+		It does not contain a calculated or concatenated value.
+		It is unique within the entire database structure.
+		It retains a majority of its properties when it appears in more than one table.
+		
+
+Resolving Multipart Fields
+	From name to firstname and lastname
+	From address to street address, state, zipcode etc
+Resolving Multivalued Fields
+	
+
+
+
+
+

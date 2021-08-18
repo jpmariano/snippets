@@ -1,0 +1,14 @@
+- Omega Responsive Options
+- Column Settings for your Grid
+- Viewports and media Queries
+- Omega CSS
+
+
+- Omega Responsive Options
+	- Apperance | Settings > Grid Settings
+		- Turn on - Scallable by User
+	- Apperance | Settings > Zone and Region Configuration
+	
+- Column Settings for your Grid
+- Viewports and media Queries
+- Omega CSS

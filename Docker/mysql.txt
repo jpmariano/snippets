@@ -1,0 +1,47 @@
+docker exec -t -i container_mysql_name /bin/bash
+docker exec -t -i drupaldb /bin/bash
+mysql -u username -p 
+mysql -u root -p 
+
+SELECT 
+   user 
+FROM 
+   mysql.user;
+
+CREATE DATABASE <databasename>;
+
+CREATE USER '<username>'@'%' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO '<username>'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO '<username>'@'%' WITH GRANT OPTION;
+ALTER USER webuppsuser IDENTIFIED BY 'T0psecret!';
+
+exit
+docker ps -a
+
+ $ docker rmi <imageid>
+
+Dockerfile
+FROM openjdk:8
+WORKDIR /
+ADD target/app-0.0.1-SNAPSHOT //
+EXPOSE 8080
+ENTRYPOINT [ "java", "-Dspring.profiles.active=mysql", "-jar", "/app-0.0.1-SNAPSHOT"]
+
+ $docker build  -t <imagename>:<version> . //to build the dockerfile image
+ docker run --name springboilerplate -p 8080:8080 springboilerplate:1.0
+
+    appserver:
+      # Configuration for building the docker image for the backend service
+      image: boilerplate:1.0
+      ports:
+        - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      restart: always
+      depends_on: 
+        - db # This service depends on mysql. Start that first.
+      environment: # Pass environment variables to the service
+        #SPRING_DATASOURCE_URL: jdbc:mysql://db:6603/<databasename>?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+        SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:6603/<databasename>?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        SPRING_DATASOURCE_USERNAME: <dbusername>
+        SPRING_DATASOURCE_PASSWORD: <dbpassword>  
+
+/var/lib/mysql/databases/06232020_opss.sql

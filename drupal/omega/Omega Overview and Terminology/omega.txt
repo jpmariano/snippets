@@ -1,0 +1,32 @@
+In This Lesson:
+- Omega Features
+- Helper Modules
+- Omega Terminology
+- Where to find Documentation
+
+- Omega Features 
+ - Repsonsive Framework
+ - HTML5 Markup
+ - combined theming and code
+ 	- doesn't go with the drupal workflow
+ 
+ 
+ Drupal.org/project/omega
+ Drupal.org/project/omega_tools
+ - Provides Drush for omega
+ Drupal.org/project/delta
+ -integrate omega with the context module
+ 
+
+Base and Sub-themes
+
+Alpha > Omega > Custom Sub-theme
+
+Page Structure
+- Section (Header)
+	- Zone (Header)
+- Section (Content)
+	- Zone (content)
+- Section (Footer)
+	- Zone (footer)
+

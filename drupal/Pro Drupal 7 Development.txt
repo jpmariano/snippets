@@ -1,0 +1,1102 @@
+Chapter 2: Writing a Module .................................................................................. 13
+Creating the Files ............................................................................................................. 13
+sites/all/modules/custom/annotate
+
+.info
+name = Annotate ----- match the name of the module; display the name of the module on the Modules configuration page; 
+description = "Allows users to annotate nodes." ------- displayed on the Modules configuration page
+package = Pro Drupal Development ----------- defines which package or group the module is associated with
+core = 7.x --------------------------------- defines the version of Drupal the module
+files[] = annotate.module ------------------ array of the names of the files that are associated with the module
+files[] = annotate.install
+files[] = annotate.admin.inc
+configure=admin/config/content/annotate/settings
+php = 5.2 ---------------------------------- what version of PHP is required by the module
+
+Comment
+/**
+* @file ---------- @file token denotes that what follows on the next line is a description of what this file does; documentation extractor and formatter, can find out what this file does
+* Lets users add private annotations to nodes.
+*
+* Adds a text field when a node is displayed
+* so that authenticated users may make notes.
+*/
+
+http://drupal.org/coding-standards#phptags
+http://drupal.org/coding-standards
+
+
+
+Implementing a Hook ....................................................................................................... 15
+
+hooks, sometimes called callbacks
+Drupal asks modules if they would like to do something
+
+/**
+* Implementation of hook_menu().
+*/
+function annotate_menu() {
+	$items['admin/config/annotate'] = array(
+		'title' => 'Node annotation',
+		'description' => 'Adjust node annotation options.',
+		'position' => 'right',
+		'weight' => -5,
+		'page callback' => 'system_admin_menu_block_page',
+		'access arguments' => array('administer site configuration'),
+		'file' => 'system.admin.inc',
+		'file path' => drupal_get_path('module', 'system'),
+    );
+	$items['admin/config/annotate/settings'] = array(
+		'title' => 'Annotation settings',
+		'description' => 'Change how annotations behave.',
+		'page callback' => 'drupal_get_form', ---------- call this function
+		'page arguments' => array('annotate_admin_settings'), ------ function arguments
+		'access arguments' => array('administer site configuration'), --- Only users with the permission administer site configuration
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'annotate.admin.inc', ------ Look for a function inside this file
+	);
+	return $items;
+}
+
+How module hook works?
+includes/module.inc (http://api.drupal.org/api/function/module_invoke_all/7)
+module_invoke_all()
+
+http://api.drupal.org/api/group/hooks/7
+
+
+Adding Module-Specific Settings .................................................................................... 17
+
+Use Case:
+to restrict the use of annotations to only some node types
+
+sites/all/modules/annotate/annotate.admin.inc
+
+/**
+* @file
+* Administration page callbacks for the annotate module.
+*/
+
+/**
+* Form builder. Configure annotations.
+*
+* @ingroup forms
+* @see system_settings_form().
+*/
+function annotate_admin_settings() {
+	// Get an array of node types with internal names as keys and
+	// "friendly names" as values. E.g.,
+	// array('page' => ’Basic Page, 'article' => 'Articles')
+	
+	$types = node_type_get_types();
+	foreach($types as $node_type) {
+	$options[$node_type->type] = $node_type->name;
+}
+
+$form['annotate_node_types'] = array(
+	'#type' => 'checkboxes',
+	'#title' => t('Users may annotate these content types'),
+	'#options' => $options,
+	'#default_value' => variable_get('annotate_node_types', array('page')),
+	'#description' => t('A text field will be available on these content types to
+	make user-specific notes.'),
+);
+
+$form['#submit'][] = 'annotate_admin_settings_submit';
+ 	return system_settings_form($form);
+}
+
+Defining Your Own Administration Section ...................................................................... 25
+
+/**
+* Implementation of hook_menu().
+*/
+function annotate_menu() {
+	$items['admin/config/annotate'] = array(
+		'title' => 'Node annotation',
+		'description' => 'Adjust node annotation options.',
+		'position' => 'right',
+		'weight' => -5,
+		'page callback' => 'system_admin_menu_block_page',
+		'access arguments' => array('administer site configuration'),
+		'file' => 'system.admin.inc',
+		'file path' => drupal_get_path('module', 'system'),
+	);
+	$items['admin/config/annotate/settings'] = array(
+		'title' => 'Annotation settings',
+		'description' => 'Change how annotations behave.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('annotate_admin_settings'),
+		'access arguments' => array('administer site configuration'),
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'annotate.admin.inc',
+	);
+	return $items;
+}
+
+
+Presenting a Settings Form to the User ........................................................................... 26
+Validating User-Submitted Settings ................................................................................. 29
+Storing Settings ............................................................................................................... 29
+Using Drupal’s variables Table ............................................................................................................... 29
+Retrieving Stored Values with variable_get() ......................................................................................... 30
+Further Steps ................................................................................................................... 30
+Summary ......................................................................................................................... 31
+
+Chapter 3: Hooks, Actions, and Triggers ............................................................... 33
+Understanding Events and Triggers ................................................................................. 33
+
+Event: Used in the generic programming sense, this term is generally understood
+as a message sent from one component of a system to other components.
+
+Hook: This programming technique, used in Drupal, allows modules to “hook
+into” the flow of execution. There are unique hooks for each operation that is
+performed on the “hookable” object (e.g., hook_node_insert).
+
+Trigger: This refers to a specific combination of a hook and an operation with
+which one or more actions can be associated. For example, the action of beeping
+can be associated with the login operation of the user hook.
+
+Example:
+sites/all/modules/custom/beep/beep.info
+
+name = Beep
+description = Simulates a system beep.
+package = Pro Drupal Development
+core = 7.x
+files[] = beep.module
+
+sites/all/modules/custom/beep/beep.module
+<?php
+/**
+* @file
+* Provide a simulated beep. Event Example
+*/
+function beep_beep() {
+	watchdog('beep', 'Beep!');
+}
+
+/**
+* Implementation of hook_user_login(). Action Example
+*/
+//Trigger example
+function beep_user(&$edit, $account) {
+  //Calling Event Example
+  beep_beep();
+}
+
+/**
+* Implementation of hook_node_insert(). Action Example
+*/
+//Trigger example
+function beep_node_insert($node) {
+  //Calling Event Example
+  beep_beep();
+}
+
+
+Understanding Actions ..................................................................................................... 35
+An action is something that Drupal does.
+
+	The Trigger User Interface ...................................................................................................................... 35
+	Note Not all actions are available for all triggers, because some actions do not make sense in certain contexts.
+	For example, you wouldn’t run the “Promote post to front page” action with the trigger “After deleting content.”
+	Depending on your installation, some triggers may display “No actions available for this trigger.”
+
+	Your First Action ..................................................................................................................................... 38
+	Table 3-2. How Hooks and Triggers Relate in Drupal 7
+	Hook 						Trigger Name
+	comment_insert 			After saving a new comment
+	comment_update 			After saving an updated comment
+	comment_delete 			After deleting a comment
+	comment_vew 			When a comment is being viewed by an authenticated user
+	cron 					When cron runs
+	node_presave 			When either saving a new post or updating an existing post
+	node_insert 			After saving a new post
+	node_update 			After saving an updated post
+	node_delete 			After deleting a post
+	node_view 				When content is viewed by an authenticated user
+	taxonomy_term_insert 	After saving a new term to the database
+	taxonomy_term_update 	After saving an updated term to the database
+	taxonomy_term_delete 	After deleting a term
+	user_insert 			After a user account has been created
+	user_update 			After a user’s profile has been updated
+	user_delete 			After a user has been deleted
+	user_login 				After a user has logged in
+    user_logout 			After a user has logged out
+	user_view 				When a user’s profile is being viewed
+
+	
+	
+	
+	
+	Assigning the Action ............................................................................................................................... 39
+	
+	1. Inform Drupal which triggers the action should support.
+	2. Create your action function.
+    
+    /**
+	*Implemenation of hook_action_info().
+	*/
+	//action function
+	function beep_action_info() {
+		return array(
+			'beep_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep annoyingly'),
+			'configurable' => FALSE,
+			//Trigger example
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'),
+			),
+		);
+	}
+
+	function beep_action_info() {
+		return array(
+			'beep_beep_action' => array(
+			'type' => 'system', ------------------- the kind of action you are writing. It can be for system, node, user, comment, and taxonomy
+			'label' => t('Beep annoyingly'), ------ friendly name of the action
+			'configurable' => FALSE, -------------- whether the action takes any parameters
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'), ----- array of trigger hooks
+			),
+		);
+	}
+	
+	/**
+	* Simulate a beep. A Drupal action.
+	*/
+	function beep_beep_action() {
+		beep_beep();
+	}
+	
+	Changing Which Triggers an Action Supports ........................................................................................ 40
+	/**
+	*Implemenation of hook_action_info().
+	*/
+	function beep_action_info() {
+		return array(
+			'beep_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep annoyingly'),
+			'configurable' => FALSE,
+			'triggers' => array('node_delete'), ------- it now only supports node_delete triggers
+			),
+		);
+	}
+	
+	/**
+	*Implemenation of hook_action_info().
+	*/
+	function beep_action_info() {
+		return array(
+			'beep_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep annoyingly'),
+			'configurable' => FALSE,
+			'triggers' => array('any'), ------- it now supports any triggers
+			),
+		);
+	}
+	
+	two kinds of actions: actions that take parameters (advanced action or a configurable action) and actions that do not
+	
+	Send e-mail -  needs an extra parameter to know where to send the email
+	
+	Simple Action: no parameters, no configration form; automatically available; 'configurable' => FALSE
+	Advanced Action: Requires parameter; requires configuration form; Must create instance of action using actions administration page; 'configurable' => true;
+	
+	
+	/**
+	*Implementation of hook_action_info().
+	*/
+	function beep_action_info() {
+	return array(
+			'beep_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep annoyingly'),
+			'configurable' => FALSE,
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'),
+		),
+			'beep_multiple_beep_action' => array(
+			'type' => 'system',
+			'label' => t('Beep multiple times'),
+			//	Advanced Action; Configuration page and look for Actions link and Beep multiple times 
+			'configurable' => TRUE,
+			'triggers' => array('node_view', 'node_insert', 'node_update', 'node_delete'),
+		),
+	);
+	}
+	
+	//form so that the administrator can choose how many beeps are desired
+	
+	/**
+	* Form for configurable Drupal action to beep multiple times
+	*/
+	function beep_multiple_beep_action_form($context) {
+		$form['beeps'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Number of beeps'),
+			'#description' => t('Enter the number of times to beep when this action executes'),
+			'#default_value' => isset($context['beeps']) ? $context['beeps'] : '1',
+			'#required' => TRUE,
+		);
+		return $form;
+	}
+	
+	//Form Validation; names of the functions are based on the action’s ID
+	function beep_multiple_beep_action_validate($form, $form_state) {
+	$beeps = $form_state['values']['beeps'];
+	
+	//instances of the “Beep multiple times” action
+	if (!is_int($beeps)) {
+		form_set_error('beeps', t('Please enter a whole number between 0 and 10.'));
+	}
+	//instances of the “Beep multiple times” action
+	else if ((int) $beeps > 10 ) {
+		form_set_error('beeps', t('That would be too annoying. Please choose fewer than 10
+		beeps.'));
+	} 
+	//instances of the “Beep multiple times” action
+	else if ((int) $beeps < 0) {
+		form_set_error('beeps', t('That would likely create a black hole! Beeps must be a
+		positive integer.'));
+	}
+	
+	}
+	
+	//Form Submission; names of the functions are based on the action’s ID
+	function beep_multiple_beep_action_submit($form, $form_state) {
+		return array(
+			'beeps' => (int)$form_state['values']['beeps']
+		);
+	}
+	
+Using the Context in Actions ............................................................................................ 45
+	How the Trigger Module Prepares the Context ....................................................................................... 45
+	Changing Existing Actions with action_info_alter() ................................................................................ 46
+	Establishing the Context ......................................................................................................................... 47
+How Actions Are Stored ................................................................................................... 49
+	The actions Table ................................................................................................................................... 49
+	Action IDs ............................................................................................................................................... 49
+Calling an Action Directly with actions_do() .................................................................... 50
+Defining Your Own Triggers with hook_trigger_info() ..................................................... 51
+Adding Triggers to Existing Hooks ................................................................................... 54
+Summary ......................................................................................................................... 55
+
+
+
+----------------------------------------------------------------------------------
+Understanding the Database Abstraction Layer
+Drupal 7 Uses:
+PHP’s Data Object (PDO) library and serves two main purposes. 
+ The first is to keep your code from being tied to any one database. 
+ The second is to sanitize user-submitted data placed into queries to prevent SQL injection attacks.
+Drupal also has a schema API
+ which allows you to describe your database schema (that is, which tables and fields you will be using) 
+ to Drupal in a general manner and have Drupal translate that into specifics for the database you are using.
+
+Figure 5-1. Drupal determines which database file to include by examining $databases.
+$databases = array (
+	'default' =>
+	array (
+		'default' =>
+		array (
+			'driver' => 'mysql', ----- includes/database.mysql.inc 
+		  < 'driver' => 'pgsql,', ----- includes/database.pgsql.inc >
+		  < 'driver' => 'sqlite', ----- includes/database.sqlite.inc >
+			'database' => 'databasename',
+			'username' => 'username',
+			'password' => 'password',
+			'host' => 'localhost',
+			'port' => '',
+			'prefix' => '',
+		),
+	),
+);
+
+Connecting to the Database
+If you are working outside Drupal itself (for example, you’re writing a stand-alone PHP script or
+have existing PHP code outside of Drupal that needs access to Drupal’s database)
+
+	// Make Drupal PHP's current directory.
+	chdir('/full/path/to/your/drupal/installation');
+	
+	// Bootstrap Drupal up through the database phase.
+	include_once('./includes/bootstrap.inc');
+	drupal_bootstrap(DRUPAL_BOOTSTRAP_DATABASE);
+	
+	using db_query().
+	$result = db_query('SELECT title FROM {node}');
+
+Performing Simple Queries
+table names - enclosed with { } so that table names can be prefixed to give them unique names, if necessary
+For Example ROLE Table: 
+
+//READ
+$result = db_query('SELECT name FROM {role} WHERE rid = :rid', array(':rid' => 2));
+$result = db_query('SELECT name FROM {<tablename>} WHERE <field_name> = <value_placeholder>', array('<value_placeholder>' => 2));
+
+db_query('SELECT name FROM {role} WHERE rid > :rid AND rid < :max_rid', array(':rid' => 0,':max_rid' => 3);
+db_query('SELECT name FROM {<tablename>} WHERE  WHERE rid > 0 AND rid < 3
+
+User-submitted data must always be passed in as separate parameters so the values can be sanitized to avoid SQL injection attacks.
+db_query('SELECT * FROM {joke} WHERE vid = :vid', array(':vid' => $node->vid)); 	
+db_query('SELECT * FROM {<tablename>} WHERE <field_name> = <value_placeholder>', array('<value_placeholder>' => $obj-><access an object method or property>));
+
+
+//CREATE
+insert a new row input
+$nid = db_insert('joke')
+->fields
+	(array(
+		'nid' => '4',
+		'vid' => 1,
+		'punchline' => 'And the pig said oink!',
+	  )
+    )
+->execute(); ---- executes the insert
+
+
+//UPDATE
+$num_updated = db_update('joke') --- update joke table
+	->fields(array(
+		'punchline' => 'Take my wife please!', ------- update punchline equal to “Take my wife please!""
+		)
+	)
+	->condition('nid', 3, '>=') ------- where the nid field is greater than or equal to 3
+	->execute();
+ 
+//DELETE
+$num_deleted = db_delete('joke') - delete from joke table
+  ->condition('punchline', 'Take my wife please!') ------- delete punchline equal to “Take my wife please!""
+->execute();
+-----------------------------------------------------------
+Retrieving Query Results
+
+Getting a Single Value
+$nbr_records = db_query("SELECT count(nid) FROM {joke}")->fetchField();
+                        retrieving the total number of records from the joke table
+
+Getting Multiple Rows
+
+$type = 'page';
+$status = 1;
+
+$result = db_query("SELECT nid, title FROM {node} WHERE type = :type AND status = :status",
+		array(
+			':type' => $type, ':status' => 1,
+		)
+	);
+	
+foreach ($result as $row) {
+	echo $row->title."<br/>";
+}
+
+$result = db_query("SELECT <pk_id>, title FROM {<tablelename>} WHERE <field_name_1> = :<field_name_1_value_placeholder> 
+         AND <field_name_2> = :<field_name_2_value_placeholder>",
+		array(
+			':<field_name_1_value_placeholder>' => $type, ':field_name_2_value_placeholder' => 1,
+		)
+	);
+
+
+foreach ($result as $row) {
+	echo $row->title."<br/>"; ------- echo title
+}
+
+
+Using the Query Builder and Query Objects
+
+$result = db_query('SELECT name FROM {role} WHERE rid = :rid', array(':rid' => 2));
+
+Step 1: create identifier to the table
+$query = db_select('role', 'r'); 
+
+Step 2: create a condition and fields to retrived
+$query
+->condition('rid', 2) ------- condition('pk_ide', 2)
+->fields('r', array('name')); ------- fields('table_identifier', array('name')
+
+Step 3: execute the query
+$result = $query->execute();
+
+Step 4: print out the query
+foreach($result as $row) {
+echo $row->name."<br/>";
+}
+
+
+Getting a Limited Range of Results
+
+$query = db_select('node', 'n');
+
+$query
+	->condition('type', 'page')
+	->fields('n', array('title'))
+	->range(0,100); ------ Limits result up to 100
+	
+$result = $query->execute();
+
+foreach($result as $row) {
+echo $row->title."<br/>";
+}
+------------------------------------------------------
+Getting Results for Paged Display
+
+Step 1: create a query object that uses a pager
+$query = db_select('node', 'n')->extend('PagerDefault'); 
+
+Step 2: add the condition, fields, and the number of items
+$query
+->condition('type', 'page') ----- where the node type is page
+->fields('n', array('title')) ---- get the node title field
+->limit(10); ----- the results to 10
+
+Step 3: execute the query and iterate through the result set
+$output = '';
+foreach ($result as $row) {
+	$output .= $row->title."<br/>";
+}
+
+Step 4: Next I’ll call the theming function and apply the pager theme to my output; for more info about pager. /includes/pager.inc
+$output .= theme('pager');
+print $output;
+
+Other Common Queries: http://drupal.org/node/310069
+
+$query
+->condition('type', 'page')
+->fields('n', array('title'))
+->orderBy('title', 'ASC'); ------ orderBy method allows you to sort the result set
+
+$query
+->condition('type', 'page')
+->fields('n', array('title', 'changed'))
+->orderBy('changed', 'DESC') ------ orderBy method allows you to sort the result set
+->orderBy('title', 'ASC');
+
+$query
+->condition('type', 'page')
+->fields('n', array('title', 'changed'))
+->orderBy('changed', 'DESC')
+->orderBy('title', 'ASC')
+->distinct(); -------------------- duplicate records can be filtered out by using the distinct method
+--------------------------------------------------------------------------------
+Inserts and Updates with drupal_write_record()
+- Drupal knows what fields a table has and what the default values are for each field
+- Drupal generate and execute the SQL instead of writing it by hand
+
+/**
+* Implements hook_schema().
+*/
+function bunny_schema() {
+	$schema['bunnies'] = array(
+			'description' => t('Stores information about giant rabbits.'),
+			'fields' => array(
+			'bid' => array(
+				'type' => 'serial',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+				'description' => t("Primary key: A unique ID for each bunny."),
+			),
+			'name' => array(
+				'type' => 'varchar',
+				'length' => 64,
+				'not null' => TRUE,
+				'description' => t("Each bunny gets a name."),
+			),
+			'tons' => array(
+				'type' => 'int',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+				'description' => t('The weight of the bunny to the nearest ton.'),
+			),
+			),
+			'primary key' => array('bid'),
+				'indexes' => array(
+				'tons' => array('tons'),
+			),
+	);
+	return $schema;
+}
+
+
+Inserting a new record is easy, as is updating a record:
+
+$table = 'bunnies'; -------------- The new bunny ID, $record->bid, was set by drupal_write_record()
+$record = new stdClass(); 
+$record->name = t('Bortha');
+$record->tons = 2;
+drupal_write_record($table, $record);
+
+
+// since $record is passed by reference.
+watchdog('bunny', 'Added bunny with id %id.', array('%id' => $record->bid)); ----- watchdog('type', 'message', array('message' => $record->bid));
+
+
+// Change our mind about the name.
+$record->name = t('Bertha');
+// Now update the record in the database.
+// For updates we pass in the name of the table's primary key.
+drupal_write_record($table, $record, 'bid');
+watchdog('bunny', 'Updated bunny with id %id.', array('%id' => $record->bid)); ----- watchdog('type', 'message', array('message' => $record->bid));
+
+Using Module .install Files
+
+Creating Tables pag 101
+-Drupal automatically checks to see whether a schema definition exists in the modules .install file
+
+$schema['tablename'] = array(
+	// Table description.
+	'description' => t('Description of what the table is used for.'),
+	'fields' => array(
+		// Field definition.
+		'field1' => array(
+		'type' => 'int',
+		'unsigned' => TRUE,
+		'not null' => TRUE,
+		'default' => 0,
+		'description' => t('Description of what this field is used for.'),
+		),
+	),
+	// Index declarations.
+	'primary key' => array('field1'),
+);
+
+/**
+* Implements hook_schema().
+*/
+
+function book_schema() {
+	$schema['book'] = array(
+		'description' => 'Stores book outline information. Uniquely connects each node
+		in the outline to a link in {menu_links}',
+		'fields' => array(
+			'mlid' => array(
+			'type' => 'int',
+			'unsigned' => TRUE,
+			'not null' => TRUE,
+			'default' => 0,
+			'description' => "The book page's {menu_links}.mlid.",
+			),
+			'nid' => array(
+			'type' => 'int',
+			'unsigned' => TRUE,
+			'not null' => TRUE,
+			'default' => 0,
+			'description' => "The book page's {node}.nid.",
+			),
+			'bid' => array(
+			'type' => 'int',
+			'unsigned' => TRUE,
+			'not null' => TRUE,
+			'default' => 0,
+			'description' => "The book ID is the {book}.nid of the top-level page.",
+			),
+		),
+		'primary key' => array('mlid'), -------- Primary Key
+		'unique keys' => array( ---------------- unique index (which means all entries in that field are unique)
+		'nid' => array('nid'),
+		),
+		'indexes' => array( -------------------- a regular index
+			'bid' => array('bid'),
+		),
+	);
+	return $schema;
+}
+---------------------------------------------
+Using the Schema Module
+
+http://drupal.org/project/schema ------ability to see a schema definition for any database table by clicking the Inspect tab
+Go to : Structure -> Schema
+
+Compare --- to compare what's in the code and database
+Mismatch:
+Declared: means in php
+Actual: means in database
+
+Describe --- Describes details about the database scheme (like relationships and datatypes, etc..)
+
+Inspect ---- how each module's schema got created in drupal php
+
+SQL -------- shows how each table got create in SQL syntax
+
+Show ------- shows an array of print out of an array
+
+
+What you can do with this module is to be able to create schema easily:
+1. Create the database in my phpmyadmin
+2. Go to Compare - it will show you that you have an extra table
+3. In Inspect - it will show you the extra table in a nice drupal schema format
+4. Copy the code from inpect
+5. Go to your module: mymodule/mymodule.install
+ /**
+  * Implementation of hook_schema()
+  */
+ function block_schema() {
+    <paste code from steps 4 here> 
+  	return $schema;
+ }
+
+
+Table Wizard module
+http://drupal.org/project/tw ----- to expose the details of any table in Drupal to the Views Module
+
+------------------------------------
+
+Field Type Mapping from Schema to Database
+
+Textual
+Textual fields contain text.
+
+	Varchar
+	$field['fieldname'] = array(
+		'type' => 'varchar', // Required. ---- MySQL 5.0.2 and earlier stores: 0–255 characters; MySQL 5.0.3 and later (0–65,535 characters); PostgreSQL might be larger
+		'length' => 255, // Required.
+		'not null' => TRUE, // Defaults to FALSE.
+		'default' => 'chocolate', // See below.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- If the default key has not been set and the not null key has been set to FALSE, the default will be set
+	to NULL.
+	
+	Char
+	
+	$field['fieldname'] = array(
+		'type' => 'char', // Required. ---- mysql 0–255 characters of fixed-length character
+		'length' => 64, // Required.
+		'not null' => TRUE, // Defaults to FALSE.
+		'default' => 'strawberry', // See below.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- If the default key has not been set and the not null key has been set to FALSE, the default will be set
+	to NULL.
+	
+	Text
+	
+	$field['fieldname'] = array(
+		'type' => 'text', // Required. --- textual data that can be quite large
+		'size' => 'small', // tiny | small | normal | medium | big
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- Default values may not be used for text fields
+
+Numerical
+	
+	Numerical data types are used for storing numbers and include the integer, serial, float, and numeric
+	types.
+	
+	Integer
+	$field['fieldname'] = array(
+		'type' => 'int', // Required. - used for storing integers, such as node IDs
+		'unsigned' => TRUE, // Defaults to FALSE.
+		'size' => 'small', // tiny | small | medium | normal | big
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- If the unsigned key is TRUE, negative integers will not be allowed
+	
+	Serial
+	$field['fieldname'] = array(
+		'type' => 'serial', // Required.
+		'unsigned' => TRUE, // Defaults to FALSE. Serial numbers are usually positive.
+		'size' => 'small', // tiny | small | medium | normal | big
+		'not null' => TRUE, // Defaults to FALSE. Typically TRUE for serial fields.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- keeps a number that increments
+	-- For example: when adding a new node, it uses db_last_insert_id() 
+	- must be indexed; it is usually indexed as the primary key
+	
+	Float
+	$field['fieldname'] = array(
+		'type' => 'float', // Required.
+		'unsigned' => TRUE, // Defaults to FALSE.
+		'size' => 'normal', // tiny | small | medium | normal | big
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	-specifies a double-precision field.
+	
+	Numeric
+	$field['fieldname'] = array(
+		'type' => 'numeric', // Required.
+		'unsigned' => TRUE, // Defaults to FALSE.
+		'precision' => 5, // Significant digits.
+		'scale' => 2, // Digits to the right of the decimal.
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- allows you to specify the precision and scale of a number
+	- Precision is the total number of significant digits in the number
+	- scale is the total number of digits to the right of the decimal point
+	
+	Date and Time: Datetime
+	$field['fieldname'] = array(
+		'type' => 'datetime', // Required.
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- Drupal core does not use this data type, preferring to use Unix timestamps in integer fields
+	- combined format containing both the date and the time.
+	
+	Binary: Blob
+	$field['fieldname'] = array(
+		'type' => 'blob', // Required.
+		'size' => 'normal' // normal | big
+		'not null' => TRUE, // Defaults to FALSE.
+		'description' => t('Always state the purpose of your field.'),
+	);
+	
+	- binary large object data (blob) type is used to store binary data
+	- Binary data may include music, images, or video
+	- Two sizes are available, normal and big
+
+Declaring a Specific Column Type with mysql_type pag 107
+
+$field['fieldname'] = array(
+	'mysql_type' > 'TINYBLOB', // MySQL will use this.
+	'type' => 'blob', // Other databases will use this.
+	'size' => 'normal', // Other databases will use this.
+	'not null' => TRUE,
+	'description' => t('Wee little blobs.')
+);
+
+
+Maintaining Tables
+
+How to update existing module's database tables:
+Step 1:
+Update the hook_schema() implementation in your .install
+
+Step 2: 
+upgrade path by writing an update function
+
+For Example Update 1:
+modulename_update_7000() 
+For Example Update 2: 
+modulename_update_7001()
+
+Other Example:
+modules/comment/comment.install
+
+/**
+* Rename {comments} table to {comment}.
+*/
+function comment_update_7002() {
+db_rename_table('comments', 'comment');
+}
+
+Run: http://example.com/update.php
+
+http://drupal.org/node/150220
+
+
+<?php 
+Step 2: upgrade path by writing an update function
+function example_update_6100() {
+ Step 1: Update the hook_schema() implementation in your .install
+  $schema['T'] = array(         
+    'fields' => array(
+      'a' => array('type' => 'int'),
+      'b' => array('type' => 'int'),
+  ));
+  
+  $ret = array();
+  db_create_table($ret, 'T', $schema['T']);  // THIS IS SAFE BECAUSE $schema IS EXPLICIT
+  return $ret;
+}
+?>
+
+
+https://api.drupal.org/api/drupal --- A full list of functions for dealing with schemas
+
+system table ---- stores schema version a module is currently using
+
+To make Drupal forget: 
+use the Reinstall Modules option of the Devel module, or
+delete the module’s row from the system table
+
+Deleting Tables on Uninstall
+
+- Modules page has an Uninstall tab that automatically removes the data from the database
+
+/**
+* Implements hook_uninstall().
+*/
+function annotate_uninstall() {
+ // Clean up our entry in the variables table.
+ variable_del('annotate_nodetypes');
+}
+
+--------------------------------------------
+
+Changing Existing Schemas with hook_schema_alter()
+- to add a column to the node table
+- hook_install() - alter the node table during your module’s installation 
+- hook_schema_alter() - modify the schema so that it actually reflects what is in the database
+
+For Example:
+markednode.install Contains markednode_install() and markednode_schema_alter(&$schema) -- to update markednode.module
+/**
+* Implements hook_install().
+*/
+function markednode_install() {
+$field = array(
+	'type' => 'int',
+	'unsigned' => TRUE,
+	'not null' => TRUE,
+	'default' => 0,
+	'initial' => 0, // Sets initial value for preexisting nodes.
+	'description' => t('Whether the node has been marked by the markednode module.'),
+);
+// Create a regular index called 'marked' on the field named 'marked'.
+$keys['indexes'] = array(
+	'marked' => array('marked')
+);
+db_add_field('node', 'marked', $field, $keys);
+}
+
+/**
+* Implements hook_schema_alter(). We alter $schema by reference.
+*
+* @param $schema
+* The system-wide schema collected by drupal_get_schema().
+*/
+
+function markednode_schema_alter(&$schema) {
+// Add field to existing schema.
+$schema['node']['fields']['marked'] = array(
+		'type' => 'int',
+		'unsigned' => TRUE,
+		'not null' => TRUE,
+		'default' => 0,
+		'description' => t('Whether the node has been marked by the
+		markednode module.'),
+	);
+}
+
+---------------------------------------------------------
+
+Modifying Other Modules’ Queries with hook_query_alter()
+- to modify queries created elsewhere in Drupal
+
+For Example:
+dbtest module
+
+Note: Tags are strings that identify a query
+
+function dbtest_query_alter(SelectQuery $query) {
+	// check if the query has tag of “db_test_alter_add_range”; then you might add a range
+	if ($query->hasTag('db_test_alter_add_range')) {
+	  $query->range(0, 2);
+	}
+	// check if the query has tag of “db_test_alter_add_join”;a join is added between the test and people tables
+	
+	if ($query->hasTag('db_test_alter_add_join')) {
+	  $people_alias = $query->join('test', 'people', "test_task.pid=people.id");
+	  $name_field = $query->addField('name', 'people', 'name');
+	  $query->condition($people_alias . '.id', 2);
+   }
+}
+
+________________________________________________
+
+Connecting to Multiple Databases Within Drupal
+-- your module can open a connection to a non-Drupal database and retrieve data
+
+For Example:
+$databases = array (
+	'default' =>
+	array (
+		'default' =>
+		array (
+			'driver' => 'mysql',
+			'database' => 'd7',
+			'username' => 'username',
+			'password' => 'userpassword',
+			'host' => 'localhost',
+			'port' => '',
+			'prefix' => '',
+		),
+	),
+	'legacy' =>
+	array (
+		'default' =>
+		array (
+			'driver' => 'mysql',
+			'database' => 'legacydatabase',
+			'username' => 'legacyusername',
+			'password' => 'legacyuserpassword',
+			'host' => '122.185.22.1',
+			'port' => '6060',
+		),
+	),
+);
+
+When you need to connect to one of the other databases in Drupal, you activate it by its key name
+and switch back to the default connection when finished:
+
+// Get some information from a non-Drupal database.
+db_set_active('legacy');
+$result = db_query("SELECT * FROM ldap_user WHERE uid = :uid", array(':uid' => $user->uid));
+
+// Switch back to the default connection when finished.
+db_set_active('default');
+
+Note: multiple kinds of database back ends (e.g., MySQL and PostgreSQL) cannot be used
+simultaneously
+
+Solution: http://drupal.org/node/19522
+-----------------------------------------------
+Using a Temporary Table
+
+$tablename = db_query_temporary($query, $arguments, $options);
+- $query is the prepared statement query to run.
+- $args is an array of values that will be substituted into the query.
+- $options is an array of options to control how the query operates.
+
+
+--The return value is the name of the temporary table. You can then query the temporary table using the temporary table name.
+$final_result = db_query('SELECT foo FROM '.$tablename);
+
+
+Note: as a temporary table is short-lived and does not go through the table prefixing process
+
+Note: Temporary tables are not used in the Drupal core, and the database user that Drupal is using to connect to
+the database may not have permission to create temporary tables. Thus, module authors should not assume that
+everyone running Drupal will have this permission.
+-----------------------------------------------
+
+Writing Your Own Database Driver
+
+Steps: copy an existing abstraction layer and modify it
+
+Step 1: First, we make a copy of includes/database/pgsql/database.inc rename to includes/database/dnabase/database.inc
+Step 2: change the logic inside each wrapper function ( includes/database/dnabase/database.inc)
+Step 3: We test the system by connecting to the DNAbase database within Drupal by updating $databases
+in settings.php.
+
+http://drupal.org/node/310087
+
+
+
+
+
+
+
+
+
+
+
+
+

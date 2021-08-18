@@ -1,0 +1,47 @@
+21 Efficiency Checks
+
+1. Copy the rows of the City and Country tables into new tables, but only bring along the ID, Name, CountryCode and Population columns for the City2 table and the Code, Name and Population columns for the Country2 table. We don't want any indexes to begin with. The default engine should be InnoDB.
+
+Solution:
+CREATE TABLE Country2 SELECT Code, Name, Population FROM Country;
+CREATE TABLE City2 SELECT ID, Name, CountryCode, Population FROM City;
+
+2. Select the Country Name, City Name and Population for all cities with populations over 8 million.
+
+Solution:
+SELECT co.Name, ci.Name, ci.Population
+FROM Country2 co JOIN City2 ci ON Code = CountryCode
+WHERE ci.Population > 8000000;
+
+3. Now let's examine this query using the EXPLAIN command. What do you notice?
+
+Solution:
+EXPLAIN SELECT co.Name, ci.Name, ci.Population
+FROM Country2 co JOIN City2 ci ON Code = CountryCode
+WHERE ci.Population > 8000000\G
+
+It take a LOT of reads to perform this query - and no indexes were available. The Country2 table was chosen to go first, probably because it's smaller.
+
+4. Now let's add an index to the CountryCode column of the City2 table and test the query again.
+
+Solution:
+ALTER TABLE City2 ADD INDEX (CountryCode);
+
+The number of reads on the City2 table has gone down dramatically.
+
+5. Now let's add a Primary Key column to the Country2 table.
+
+Solution:
+ALTER TABLE Country2 ADD PRIMARY KEY (Code);
+
+City2 is now the first table addressed, but we only need 1 read in the Country2 table for each row in the City2 table that meets the query criteria, so another reduction in reads.
+
+6. Now let's add another index to the City2 table, this time on the Population column.
+
+Solution:
+ALTER TABLE City2 ADD INDEX (Population);
+
+Now our query is VERY efficient, requiring only 10 reads on the City2 table and only 1 read on the Country2 table for each of those.
+
+
+

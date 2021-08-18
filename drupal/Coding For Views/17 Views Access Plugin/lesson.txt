@@ -1,0 +1,52 @@
+Handle handles the query
+
+Views Access Plugin deals with the output format like html
+
+Devel Switch user block
+
+Access control within views
+None
+Permission
+Role
+Defined in: Views/includes/plugins.inc uses views_views_plugin is a hook that say hey view I have a plugin for you
+
+Views/plugins
+
+class views_object
+	class views_handler
+	class views_plugin
+		class views_plugin_access
+			class views_plugin_access_none
+			class views_plugin_access_perm
+			class views_plugin_access_role	
+			class views_test_plugin_access_test_dynamic
+			class views_test_plugin_access_test_static
+		class views_plugin_argument_default
+		class views_plugin_argument_validate
+		class views_plugin_cache
+		class views_plugin_display
+		class views_plugin_display_extender
+		class views_plugin_exposed_form
+		class views_plugin_localization
+		class views_plugin_pager
+		class views_plugin_query
+		class views_plugin_row
+		class views_plugin_style
+		
+Step 1: Add a hook hook_views_plugins()
+Copy and paste code from plugins.inc 
+databasics_plugin_access
+
+Step 2: create file databasics_plugin_access.inc and then add it inside .info
+
+Step 3: create an obj inside databasics_plugin_access.inc class databasics_plugin_access extends views_plugin_access  
+
+Step 4: Inside the class databasics_plugin_access
+-Check Access
+-Create an option form
+-Summary title
+
+Step 5:
+make sure databasics.module databasics_check_access($restrictions) 
+This is where heavy lifting of checking the user access
+

@@ -1,0 +1,18 @@
+- Download and Install Themes: https://www.drupal.org/project/adminimal_themes
+- https://www.drupal.org/project/bootstrap/releases/7.x-3.15
+- https://www.drupal.org/docs/7/administering-drupal-7-site/working-with-the-overlay
+http://codekarate.com/daily-dose-of-drupal/drupal-7-administration-menu-module
+
+https://www.youtube.com/watch?v=xt7nfsiMZh8
+https://drupalize.me/videos/introduction-devel-module?p=1163
+https://drupalize.me/videos/using-theme-developer-tool?p=1161
+
+After you Install and enable these modules (Devel, Devel_themer, and simplehtmldom), you can use krumo. 
+
+For Example: In hook_form_alter https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_form_alter/7.x
+
+function hook_form_alter(&$form, &$form_state, $form_id) {
+  krumo($form); //When you view the page where your form is located. You can see the variables that is being used. 
+  krumo($form_state); 
+  krumo($form_id);
+}

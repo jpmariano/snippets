@@ -1,0 +1,55 @@
+title:  "Talking to a MySQL Database in PHP | Episode 3"
+length: 0:45:36
+summary: |
+    Woh, this is episode 3 of our Epic PHP series!
+    
+    * [Episode 1](http://knpuniversity.com/screencast/php-ep1).
+    * [Episode 2](http://knpuniversity.com/screencast/php-ep2).
+
+    Yep, and this one is all about databases:
+
+    * What the heck *is* a database anyways?
+    * Connecting to MySQL
+    * Creating a database and tables
+    * INSERT queries
+    * SELECT queries
+    * UPDATE and DELETE queries
+    * Using PDO in PHP to run queries
+    * Limiting Results
+    * Avoiding SQL Injection Attacks
+    * Prepared Statements
+    * Optional Function Arguments
+
+illustration: php-ep3.png
+
+tuts_hero:
+    start_step:  "RReorg: Full working save_pets process"
+    finish_step: "SQL Errors: Setting param as integer"
+
+chapters:
+    how-to-speak-database:
+        video_key:  ayxz5il911
+        is_free:    true
+    queries-databases-tables:
+        video_key:  27rr4b3h4v
+        is_free:    true
+    inserting-selecting-data:
+        video_key:  1vlfztvz9a
+    updating-deleting:
+        video_key:  mjezbumcol
+    php-talks-to-mysql:
+        video_key:  55huryvixu
+    object-oriented-intro:
+        video_key:  ci78yeno9w
+    central-configuration:
+        video_key:  n2z59hncjv
+    limiting-results:
+        video_key:  qt26g5d4y5
+    optional-function-arguments:
+        video_key:  rjgy4eomxr
+    query-parameters:
+        video_key:  2bvwhp9rec
+    query-for-one-pet:
+        video_key:  wj2frxes2q
+    sql-injection-prepared-statements:
+        video_key:  mu9ywnxxlg

@@ -1,0 +1,144 @@
+Chapter 2: Writing a Module .................................................................................. 13
+Creating the Files ............................................................................................................. 13
+sites/all/modules/custom/annotate
+
+.info
+name = Annotate ----- match the name of the module; display the name of the module on the Modules configuration page; 
+description = "Allows users to annotate nodes." ------- displayed on the Modules configuration page
+package = Pro Drupal Development ----------- defines which package or group the module is associated with
+core = 7.x --------------------------------- defines the version of Drupal the module
+files[] = annotate.module ------------------ array of the names of the files that are associated with the module
+files[] = annotate.install
+files[] = annotate.admin.inc
+configure=admin/config/content/annotate/settings
+php = 5.2 ---------------------------------- what version of PHP is required by the module
+
+Comment
+/**
+* @file ---------- @file token denotes that what follows on the next line is a description of what this file does; documentation extractor and formatter, can find out what this file does
+* Lets users add private annotations to nodes.
+*
+* Adds a text field when a node is displayed
+* so that authenticated users may make notes.
+*/
+
+http://drupal.org/coding-standards#phptags
+http://drupal.org/coding-standards
+
+
+
+Implementing a Hook ....................................................................................................... 15
+
+hooks, sometimes called callbacks
+Drupal asks modules if they would like to do something
+
+/**
+* Implementation of hook_menu().
+*/
+function annotate_menu() {
+	$items['admin/config/annotate'] = array(
+		'title' => 'Node annotation',
+		'description' => 'Adjust node annotation options.',
+		'position' => 'right',
+		'weight' => -5,
+		'page callback' => 'system_admin_menu_block_page',
+		'access arguments' => array('administer site configuration'),
+		'file' => 'system.admin.inc',
+		'file path' => drupal_get_path('module', 'system'),
+    );
+	$items['admin/config/annotate/settings'] = array(
+		'title' => 'Annotation settings',
+		'description' => 'Change how annotations behave.',
+		'page callback' => 'drupal_get_form', ---------- call this function
+		'page arguments' => array('annotate_admin_settings'), ------ function arguments
+		'access arguments' => array('administer site configuration'), --- Only users with the permission administer site configuration
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'annotate.admin.inc', ------ Look for a function inside this file
+	);
+	return $items;
+}
+
+How module hook works?
+includes/module.inc (http://api.drupal.org/api/function/module_invoke_all/7)
+module_invoke_all()
+
+http://api.drupal.org/api/group/hooks/7
+
+
+Adding Module-Specific Settings .................................................................................... 17
+
+Use Case:
+to restrict the use of annotations to only some node types
+
+sites/all/modules/annotate/annotate.admin.inc
+
+/**
+* @file
+* Administration page callbacks for the annotate module.
+*/
+
+/**
+* Form builder. Configure annotations.
+*
+* @ingroup forms
+* @see system_settings_form().
+*/
+function annotate_admin_settings() {
+	// Get an array of node types with internal names as keys and
+	// "friendly names" as values. E.g.,
+	// array('page' => ’Basic Page, 'article' => 'Articles')
+	
+	$types = node_type_get_types();
+	foreach($types as $node_type) {
+	$options[$node_type->type] = $node_type->name;
+}
+
+$form['annotate_node_types'] = array(
+	'#type' => 'checkboxes',
+	'#title' => t('Users may annotate these content types'),
+	'#options' => $options,
+	'#default_value' => variable_get('annotate_node_types', array('page')),
+	'#description' => t('A text field will be available on these content types to
+	make user-specific notes.'),
+);
+
+$form['#submit'][] = 'annotate_admin_settings_submit';
+ 	return system_settings_form($form);
+}
+
+Defining Your Own Administration Section ...................................................................... 25
+
+/**
+* Implementation of hook_menu().
+*/
+function annotate_menu() {
+	$items['admin/config/annotate'] = array(
+		'title' => 'Node annotation',
+		'description' => 'Adjust node annotation options.',
+		'position' => 'right',
+		'weight' => -5,
+		'page callback' => 'system_admin_menu_block_page',
+		'access arguments' => array('administer site configuration'),
+		'file' => 'system.admin.inc',
+		'file path' => drupal_get_path('module', 'system'),
+	);
+	$items['admin/config/annotate/settings'] = array(
+		'title' => 'Annotation settings',
+		'description' => 'Change how annotations behave.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('annotate_admin_settings'),
+		'access arguments' => array('administer site configuration'),
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'annotate.admin.inc',
+	);
+	return $items;
+}
+
+
+Presenting a Settings Form to the User ........................................................................... 26
+Validating User-Submitted Settings ................................................................................. 29
+Storing Settings ............................................................................................................... 29
+Using Drupal’s variables Table ............................................................................................................... 29
+Retrieving Stored Values with variable_get() ......................................................................................... 30
+Further Steps ................................................................................................................... 30
+Summary ......................................................................................................................... 31

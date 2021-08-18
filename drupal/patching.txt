@@ -1,0 +1,5 @@
+https://www.youtube.com/watch?v=oThwEQuKHms
+
+$ curl <url_patch> | patch -p1 
+Skip this patch? [y] n
+File to patch: <actual_file_location> 

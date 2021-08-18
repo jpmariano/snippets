@@ -1,0 +1,6 @@
+Tools Needed: Views, CTools, Devel
+
+APIs to work work
+Core API , CTools API, View API
+
+Steps: Create a View name Article 

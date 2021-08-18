@@ -1,0 +1,118 @@
+https://github.com/mikeyp/caching_demo
+https://www.youtube.com/watch?v=GSin_1jEyec&t=1998s
+
+Cacheability Metadata
+    - Determines how something can be cached
+    - Contain tags, contexts, and max-age
+    - Cacheability Metadata bubbles up through an entire page to control caching
+    - Drupal\Core\Cache\CacheableMetadata
+    - Defines a generic class for passing Cacheability Metadata
+    - Keymethods setCacheContexts(), setCacheTags(), setCacheMaxAge(), and applyTo()
+    - addCacheDependency() takes all the caheability metadata from another object and adds it to our already established data 
+    - uses CacheableDependencyInterface to get context, tags, and max-age from the other object 
+        - Provides a standard interface for getting cache metatdata from objects
+        - only three methods: 
+            - getCacheContext()
+            - getCacheTags()
+            - getCacheMaxAge()
+        - Lots of things implement this interface: entities, fields, blocks, views, access results, configuration, forms, etc. 
+        - anything that represents stored data, or represents rendered output - probably implements, CacheableDependencyInterface 
+
+
+Cache Context - core/core.services.yml - starts with cache_context
+https://www.drupal.org/docs/8/api/cache-api/cache-contexts
+    - Determines how to vary items according to request
+    - Similar to D7 block contants, but with many more options
+    - Organized into a hierarchy, chic is auto folded/combined/collapsed to prevent duplication 
+    -Examples:
+        cookies
+            :name
+        headers
+            :name
+        ip
+        languages
+            :type
+        request_format
+        route
+            .book_navigation
+            .menu_active_trails
+                :menu_name
+            .name
+        session
+            .exists
+        theme
+        timezone
+        url
+            .path
+                .is_front // Available in 8.3.x or higher.
+                .parent
+            .query_args
+                :key
+                .pagers
+                :pager_id
+            .site
+        user
+            .is_super_user
+            .node_grants
+                :operation
+            .permissions
+            .roles
+                :role
+    - Folding/Collapsing Cache
+        - First Item listed is most granular, last is most specific
+        - For Example url.query_args:foo only varies when?foo=bar is present in url, but url bu itself varies every single url (host, path, query param, etc)
+        - When both url.query_args:foo and url are present Drupal only evaluates url since it encompaesses url.query_args as well 
+    - Making your own cache contexts
+        - Must implement service that starts with cache_context 
+            - Example: cache_context.my_module_form 
+        - Tag the service with name: cache.context 
+        - Must implement CacheContextInterface or CalculatedCacheContextInterface 
+        - RequestStackCacheContextBase may be a good starting point if you depend on the request 
+Cache Tags - https://www.drupal.org/docs/8/api/cache-api/cache-tags
+    - Cache Tags Describe the data that your content depends on
+    - Cache Tags describe the data you retun on the page that is managed by drupal
+    - Cache tags allow caches to be cleared based on corresponding tags
+    - Can be configrued to integrated with CDN, uch as Fastly, CloudFlare, KeyCDN, or Varnish
+    - Cache Tags are just Strings, generally
+        - thing:indetifier , but can be anything without spaces
+    - Conventions are entity_type:id or entity_type_list
+    - Hint: When you update your content, and blocks content did not change use tags 
+    - Examples: node:5, node_list, config:system.performance
+    - Making your own cache tags
+        - Do whatever you want
+        - You should probably namespace it with your module or something
+        - Make sure you invalidate your own tags when your data changes 
+        - Example
+            $this->state()->set('my_module.some)_data', $data);
+            $this->cacheInvalidator->invalidateTags(['my_module:state:some_data']);
+            ...
+            $cacheableMetadata->setCacheTags(['my_module:state:some_data']);
+            $cacheableMetadata->applyTo($build);
+            return $build;
+Cache Max-age 
+    - Time Dependencies
+    - Controls how long an item may be cached by number of seconds
+    - Drupal Core does not use this, everything is cahced permanently, and uses cache tags for invalidation
+    - You should avoid using this as well
+    - Expressed as an integer number of seconds that the item is valid for
+    - 0 means the item is not cacheable, so to disable an item from all caching, set max-age = 0
+    - \Drupal\Core\Cache\Cache::PERMANENT means an item is cacheable forever, can only be cleared with cache tags 
+Cache Bubbling
+    - All data from each piece of markup is combined, into blocks, into regions and then into the page
+    - Duplicates are removed, contexts, are folded/collapsed
+    - All of that information is used to cache the entire page (including CDN)
+    - Individual Components remain cached at the render level
+
+Default Script 
+public function build(){
+    $build = [];
+    $cacheableMetadata = new CacheableMetadata();
+    $cacheableMetadata->setCacheContexts(['url.path']);
+    //Your Logic
+
+
+
+    $cachableMetadata->appyTo($build);
+    return $build;
+}
+

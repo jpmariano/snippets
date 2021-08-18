@@ -1,0 +1,11 @@
+- Omega Debugging Tools
+- Grid and Region Visual Indicators
+- Omega Debugging Settings
+
+- Omega Debugging Tools
+- Grid and Region Visual Indicators
+- Omega Debugging Settings
+ - Apperarnce | Theme Settings > Debugging
+ - Disable the debugging placeholder
+ 	- Check the site and see how the Omega blocks are not showing
+ 	- Re-enable the debugging placeholder

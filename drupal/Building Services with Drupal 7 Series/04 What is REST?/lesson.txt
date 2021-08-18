@@ -1,0 +1,48 @@
+Rest References:
+
+http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm
+http://restcookbook.com/
+
+nouns (article, user, setting)
+http verbs: GET - POST - PUT - DELETE - PATCH (Polymorphism)
+
+Request:
+GET : http://example.com/resource/{ID}
+Accept: application/json
+
+Response:
+HTTP 200 Ok
+Content-type: application/json
+{“message”: “Hello World!”}
+-----------------
+Request:
+POST : http://example.com/resource
+Accept: application/json
+Content-type: application/json
+{“id”:42, “title”:”Hello World!”}
+
+Response:
+HTTP 200 Ok
+Content-type: application/json
+-------------------
+6 Principals of REST
+
+‣ Uniform interface
+‣ Stateless
+‣ Cacheable
+‣ Client-Server
+‣ Layered system
+‣ Code on demand
+---------------------
+REST is a style.
+Not a strict protocol or specification
+--------------------
+What is REST?
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+<?php
+
+/*
+ *Implement hook_schema().
+ */
+//Shema Module: To create this scripts from GUI
+function demo2_schema() {
+  $schema = array();
+	//$schema['tablename/modulename'] = array(
+  $schema['demo2'] = array(
+    'description' => 'Information about node views.',
+    'fields' => array(
+      //'fieldname' => array(
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => "The node's {node}.nid.",
+      ),
+      //Foreign fields copy all the foreign field settings from the original table
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => "The user's {uid}.uid.",
+      ),
+      'view_count' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Simple node view counter per user.',
+      ),
+    ),
+    // array('nid', 'uid') - unique primary keys combination
+    'primary key' => array('nid', 'uid'),
+  );
+
+  return $schema;
+}
+
+/*
+ *Implements hook_update_N().
+ */
+ //You can add the schema above after running this hook_update_N() through siteurl.com/update.php
+function demo2_update_7000() {
+  drupal_install_schema('demo2');
+}
+
+
+
+
+
+
+
+
+

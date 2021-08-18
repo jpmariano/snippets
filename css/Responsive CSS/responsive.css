@@ -1,0 +1,30 @@
+// This applies from 0px to 600px 
+body { 
+  background: red; 
+}
+
+// This applies from 600px onwards 
+@media (min-width: 600px) {
+  body { 
+    background: green; 
+  }
+}
+
+// This applies from 600px onwards
+body { 
+  background: green; 
+}
+
+// This applies from 0px to 600px
+@media (max-width: 600px) {
+  body { 
+    background: red; 
+  }
+}
+
+// Mobile Phones: IP6 Plus 293.76, Samsung S5 275.9,  Samsung S4 264.5 ,IP 6 253.44,  Samsung S5 mini 245.6px,   Samsung s4 230.5, IP5c 223.68, IP 4-5-5s 221.76
+// Small Tablets: Ipad Mini 508.8, Fire HD 7 480,  Toshiba Excite Go 451.2, Galaxy Tab 3 441.6, Fire HD 6 393.6
+// Large Tablets: Samsung Galaxy 768, IPad 2 633.6, Acer Icona Tab 646.08, Fire HDX 8.9model 595.2, HTC Nexus 580.8
+// Laptops and Desktops: 800, 1024, 1050, 1200, 1536
+
+

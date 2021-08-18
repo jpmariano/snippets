@@ -1,0 +1,19 @@
+1502 show commands
+
+1. List the databases that contain the letter 'L' in their name.
+
+Solution:
+SHOW DATABASES LIKE '%L%';
+
+2. List all of the collations that are the defaults for their character set.
+
+Solution:
+SHOW COLLATION WHERE `Default` = 'yes';
+
+3. List all the numeric columns in the Country table.
+
+Possible solution (will not retrieve DOUBLE, but WILL retrieve TEXT types):
+SHOW COLUMNS FROM Country WHERE Type LIKE '%t(%';
+
+Better solution:
+SHOW COLUMNS FROM Country WHERE Type LIKE '%int(%' OR Type LIKE 'fl%' OR Type LIKE 'Dou%' OR Type LIKE 'Bit%';

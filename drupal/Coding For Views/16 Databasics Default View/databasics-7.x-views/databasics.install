@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Databasics module.
+ */
+
+/**
+ * Implementation of hook_schema().
+ *
+ * Describe the module's data model as an associative array. This removes
+ * the requirement to write database-specific SQL to create tables.
+ *
+ * For full details: http://drupal.org/node/146843
+ */
+function databasics_schema() {
+  // Schema definition of this table.
+  $schema['databasics'] = array(
+    'description' => t('Holds basic data for databasics.'),
+    'fields' => array(
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("The node's {node}.nid."),
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t("The user's {users}.nid."),
+      ),
+      'view_count' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('Simple counter per user.'),
+      ),
+     'last_viewed' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('Last viewed date.'),
+      ),
+    ),
+    'primary key' => array('nid', 'uid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add the "Last viewed date" field.
+ */
+function databasics_update_7000() {
+  $ret = array();
+
+  $spec = array(
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => t('Last viewed date.'),
+  );
+  db_add_field('databasics', 'last_viewed', $spec);
+
+  return t('The "Last viewed date" field has been added.');
+}

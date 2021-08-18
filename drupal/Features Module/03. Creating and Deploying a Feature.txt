@@ -1,0 +1,10 @@
+naming convetions must be unique
+
+edit components
+choose the component like views module; it will show the view you created
+Note that you created a content type prior creating that view
+So, choose the content type component to be included
+
+then download to generate your features module
+
+features use the ctools to export the module

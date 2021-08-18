@@ -1,0 +1,7 @@
+name = Databasics
+description = Database example module.
+core = 7.x
+package = Lullabot Examples
+
+files[] = databasics_handler_field_percent.inc
+files[] = databasics_handler_field_percent_graph.inc

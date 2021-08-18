@@ -1,0 +1,8 @@
+SELECT title from node INTO OUTFILE /Applications/xampp/htdocs/node_title.sql;
+SELECT title from node INTO OUTFILE node_title.sql;
+SELECT title FROM node;
+EXPLAIN node;
+SELECT node.title, field_data_body.body_value AS body FROM node, field_data_body WHERE node.nid=field_data_body.entity_id and node.type='page';
+SELECT node.title, field_data_body.body_value AS body FROM node, field_data_body WHERE node.nid=field_data_body.entity_id and node.type='page' INTO OUTFILE '/tmp/page.csv';
+SELECT node.title FROM node, field_data_body WHERE node.nid=field_data_body.entity_id and node.type='page' INTO OUTFILE '/tmp/page_test.csv';
+SHOW TABLES;

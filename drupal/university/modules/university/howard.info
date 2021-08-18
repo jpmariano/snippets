@@ -1,0 +1,13 @@
+name = Howard
+description = Functionalities specific to Howard University
+dependencies[] = ctools
+dependencies[] = views
+dependencies[] = draggableviews
+package = Other
+core = 7.x
+
+; Information added by ameex on 2014-06-11
+version = "7.x-1.0"
+core = "7.x"
+project = "howard"
+datestamp = "1402495282"

@@ -1,0 +1,8 @@
+Add the regions in the .info file of the Omega Sub-theme from your theme
+When Omega, you can move the region to a section and add a weight
+
+Remove any unused default regions in the .info of the Omega Sub Theme
+
+
+Sturcture | Blocks 
+- Add the blocks to regions

@@ -1,0 +1,48 @@
+ Step 1: Create a Filter by extending a current filter
+Go to line 88 in databasics.views.inc databasics_handler_filter_numeric
+
+Step 2: Create a file databasics_handler_filter_numeric.inc add this to .info
+
+Step 3: Create an object from views_handler_filter_numeric by extending it inside databasics_handler_filter_numeric.inc
+
+Step 4: Look inside views_handler_filter_numeric for definition
+
+https://api.drupal.org/api/views/handlers%21views_handler_filter.inc/class/hierarchy/views_handler_filter/7
+class views_object
+	class views_handler
+		class views_handler_area
+		class views_handler_argument
+		class views_handler_field
+		class views_handler_filter
+			class views_handler_filter_boolean_operator
+			class views_handler_filter_broken
+			class views_handler_filter_equality
+			class views_handler_filter_fields_compare
+			class views_handler_filter_history_user_timestamp
+			class views_handler_filter_in_operator
+			class views_handler_filter_node_access
+			class views_handler_filter_node_status
+			class views_handler_filter_node_tnid
+			class views_handler_filter_node_tnid_child
+			class views_handler_filter_numeric
+				class views_handler_filter_date
+				class views_handler_filter_group_by_numeric
+			class views_handler_filter_search
+			class views_handler_filter_string
+			class views_handler_relationship
+			class views_handler_sort
+	class views_plugin
+	
+
+
+https://api.drupal.org/api/views/handlers%21views_handler_filter_numeric.inc/class/views_handler_filter_numeric/7
+class views_handler_filter_numeric
+
+You can override all the methods inside this class
+
+For example:
+https://api.drupal.org/api/views/handlers%21views_handler_filter_numeric.inc/function/views_handler_filter_numeric%3A%3Aoperators/7
+function operators() { }
+
+
+Go inside databasics_handler_filter_numeric.inc

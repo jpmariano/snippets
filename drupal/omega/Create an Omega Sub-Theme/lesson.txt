@@ -1,0 +1,25 @@
+- Download Omega and Omega Tools
+- Create a Sub theme
+- Enable the new theme
+- Review Files of the new Theme
+
+
+
+
+
+
+- Download Omega, Omega Tools and Ctools
+    - Activate your choosen theme
+	- Go to modules and enable Omega Tools, do not activate the OMEGA Themes
+	- Go to Appearance and Create a New Omega Subtheme (Link)
+		- Name: Themename Omega
+		- Install Automatically checked
+		- Destination: default
+		- Base Theme: Omega
+		- Output: HTML5/XHTML
+		- Enable and Make it a defualt theme
+- Create a Sub theme
+	- Navigate inside omega theme and look at the default
+	- Go to your omegasubtheme_omega
+- Enable the new theme
+- Review Files of the new Theme

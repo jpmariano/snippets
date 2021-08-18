@@ -1,0 +1,5 @@
+Step 1: In databasics.views.inc add field variable $data['databasics']['databasics_area'] to expose it to views ui
+Step 2: Create a new file databasics_handler_area_databasics.inc and add to .info
+Step 3: Create a class that extends views_handler_area inside databasics_handler_area_databasics.inc 
+(To find Handler area classes Go inside the view/modules/handlers)
+Step 4: The method that are available for the Area handler are also similar to other field handler

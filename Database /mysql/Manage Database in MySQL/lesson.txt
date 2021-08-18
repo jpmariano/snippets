@@ -1,0 +1,21 @@
+http://www.mysqltutorial.org/mysql-create-drop-database.aspx
+
+Creating Database
+
+CREATE DATABASE [IF NOT EXISTS] database_name;
+For Example: CREATE DATABASE classicmodels;
+
+Displaying Databases
+SHOW DATABASES;
+
+Selecting a database to work with
+USE database_name;
+For Example: 
+USE classicmodels;
+
+Removing Databases
+DROP DATABASE [IF EXISTS] database_name;
+For Example:
+CREATE DATABASE IF NOT EXISTS temp_database;
+SHOW DATABASES;
+DROP DATABASE IF EXISTS temp_database;

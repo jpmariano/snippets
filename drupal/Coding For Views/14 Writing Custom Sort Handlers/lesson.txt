@@ -1,0 +1,11 @@
+Step 1: add the sort handler
+In line 69: databasics.views.inc 
+
+Step 2: Add the file in .info
+
+Step 3: Create the file databasics_handler_sort_custom.inc
+
+Step 4: Define the class inside databasics_handler_sort_custom.inc
+
+Parent Class : https://api.drupal.org/api/views/plugins%21views_plugin_query_default.inc/class/views_plugin_query_default/7
+https://api.drupal.org/api/views/plugins%21views_plugin_query_default.inc/function/views_plugin_query_default%3A%3Aadd_orderby/7

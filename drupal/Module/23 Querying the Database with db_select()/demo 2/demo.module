@@ -1,0 +1,85 @@
+<?php
+
+/*
+ * Implements hook_menu().
+ */
+function demo_menu() {
+  $items = array();
+
+  $items['admin/reports/node-list'] = array(
+    'title' => 'List of Nodes',
+    'description' => t('A list of nodes with published status.'),
+    'page callback' => 'demo_node_list',
+    'access arguments' => array('administer content'),
+  );
+
+  return $items;
+}
+
+/*
+ * Custom page callback for admin/reports/node-list
+ */
+function demo_node_list(){
+  
+  //Step 1:define variants
+  $node_types = node_type_get_types();
+  #krumo($node_types);
+  
+  //Step 2:
+  $stati = array(0, 1); //0 = unpublished, 1 = published
+
+  
+  //Step 3: loop through variants
+  foreach($node_types as $type) {
+    #krumo($type);
+    
+    //Step 3a: 
+    $typename = $type->type;
+    foreach($stati as $status) {
+      #krumo($status);
+
+      //SELECT COUNT FROM node WHERE type = $typename AND status = $status
+      //db_select('node', 'n') - node - table; n-node table alias, u - use table alias
+      $query = db_select('node', 'n')
+			 //condition('type', $typename) is like type = $typename
+        ->condition('type', $typename)
+				//condition('status', $status) is like status = $status
+        ->condition('status', $status);
+			// $query->addExpression('COUNT (nid)', 'node_count'); node_count - label for COUNT (nid)
+      $query->addExpression('COUNT (nid)', 'node_count');
+			//Running it
+      $results = $query->execute();
+			//Step one step further: This takes all the results and place it into objects
+      $data = $results->fetchObject();
+      #krumo($data);
+
+      //assign variables for printing
+      if ($status == 0) {
+        $status = 'unpusblished';
+      }
+      else {
+        $status = 'published';
+      }
+
+      //assemble strings for output
+      $items[] = t('The %type content type has %num %status nodes.', array('%type'=>$typename, '%num'=>$data->node_count, '%status'=>$status ));
+      
+    }  //end status loop
+  }  //end node type loop
+  
+  //Do a krumo after line 65
+  #krumo($items);
+  
+  
+  //Output the results
+  $content['node-list'] = array(
+    '#items' => $items,
+    '#theme' => 'item_list',
+  );
+
+  return render($content);
+
+}
+
+
+

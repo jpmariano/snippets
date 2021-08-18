@@ -1,0 +1,67 @@
+Current Configuration:
+
+Defaults:
+sites/default
+sites/howard.prod (Symlink of sites/default) -  www2.howard.edu points to this folder
+sites/default/files
+sites/default/settings.php
+
+sites/all/themes/howard - Too Customize (not a good idea to have the main theme being used)
+
+sites/all/libraries - can be shared accross sites
+sites/all/modules - can be shared accross sites
+sites/all/themes  - can be shared accross sites
+
+Steps To take:
+
+ Duplicate the Database: 
+ Work with andrew for cleanup Themes and Database
+ - Test LDAP (Our Authentication is not done through Drupal, it is Process by LDAP)
+ - Remove Users and Contents (I tested this locally and was able to bypass user 1. I reset johnpaul.mariano using user 1, but the LDAP is showing you are not authenticated)
+ - Reauthenticate - All users need to be re authenticated through LDAP.
+ - Maintain Theming Layer 
+ 
+ In normal multisite installations, the main default site (sites/default/) is just barebones and not being used. 
+ A sites/all/themes should have the main theme howard. The rest of the multisite should just create a subtheme. 
+ According to the book that Andrew shared, if you try to override the same theme in the sub sites ( like sites/<subdomain>.howard.prod/themes), we have to be careful.
+ It mentioned that we shouldn't really so much on the Drupal's fallback mechanism. 
+
+ - Have Andrew Figure out Zen theme as the base theme of howard or have the howard as the base theme
+ 
+ Create Folders (Check #acquia about symlinks)
+ sites/<subdomain>.howard.prod/libraries - site specifics libraries (note: can have a libraries specific to the site as long as it is not in sites/all)
+ sites/<subdomain>.howard.prod/modules - site specifics modules (note: can have a module specific to the site as long as it is not in sites/all)
+ sites/<subdomain>.howard.prod/themes - site specifics themes (note: can have a themes specific to the site as long as it is not in sites/all)
+ 
+  sites/<site_name>/settings.php - http://cooks.local/install.php (NORMAL PROCESS) check #acquia
+  $databases['default']['default'] = array(
+     'driver' => 'pgsql',
+     'database' => 'databasename',
+     'username' => 'username',
+     'password' => 'password',
+     'host' => 'localhost',
+    'prefix' => '',
+     );
+     
+   
+ sites.php - check #acquia
+ $sites['www2.howard.edu'] = 'default';
+ $sites['<subdomain.howard.eduy'] = 'foldername';
+ 
+ 
+    
+ Sharing Variables
+ 
+ if (file_exists('sites/all/shared-settings.php')) {
+     include 'sites/all/shared-settings.php';
+ }
+ shared-settings.php 
+ <?php /**
+      * @file
+      * Shared settings for all multi-sites.
+      */
+     global $conf;
+     $conf['site_slogan'] = "Quality Information";
+     
+ Email for Admin: admin+<sitename>@example.com
+ 

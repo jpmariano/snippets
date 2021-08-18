@@ -1,0 +1,104 @@
+Important URLs
+admin/config/development/performance
+- Turn on Caching in Production
+- Turn on Bandwidth Optimization
+
+Speedy Module
+
+Admin/config/development/logging
+- Turn off in production
+
+Admin/config/search/settings
+- make sure search indexed is 100%
+
+Make sure update manager is turned on
+
+
+Backup and Migrate Modules & Backup and Migrate files Modules
+Admin/config/backup_migrate/destination 
+Private File System Path (This is the path where you want to save database backup)
+../private - this is a folder outside public_html
+
+
+Updating Drupal
+1. Backup Database and Files
+2. Put the Site into maintenance mode
+3. Download the Latest drupal
+4. Copy Everything from the new drupal except the sites directory into the old drupal 
+- Note: Make sure the .htaccess, .git, .gitignore is not overriden
+5. Run update.php - if no access use user 1
+6. Run the update
+7. Take out the site in maintenance mode
+
+Backing Up using drush
+drush sql-dump
+drush upc - updates the drupal core files and create a backup
+drush updb - update.php
+
+Module Update
+- Make Sure to read the release notes
+- Make backup of files and database
+- Replace the old module with the new module
+- Run update.php
+
+
+Drupal 7 File And Folder Structure 
+http://www.elated.com/articles/understanding-permissions/
+Main Folder - 644 Recursive 
+Sites - 755 Recursive
+settings.php - 444 
+Notes: When moving the site to dev desktop set the file and folder settings first and delete settings.php 
+Additional note: Keep an eye for prefix
+
+sudo find /var/www/html/opss-retheme -type d -exec chmod 770 {} \;
+
+sudo find /var/www/html -type f -exec chmod 444 {} \;
+sudo find /var/www/html -type d -exec chmod 555 {} \;
+
+sudo find /var/www/html -type f -exec chmod 664 {} \;
+sudo find /var/www/html -type d -exec chmod 775 {} \;
+
+sudo find /var/www/html/themes -type f -exec chmod 664 {} \;
+sudo find /var/www/html/themes -type d -exec chmod 777 {} \;
+
+sudo find /var/www/html/modules -type f -exec chmod 664 {} \;
+sudo find /var/www/html/modules -type d -exec chmod 777 {} \;
+
+sudo find /sites/default -type f -exec chmod 664 {} \;
+sudo find /sites/default -type d -exec chmod 775 {} \;
+sudo find sites/default/files -type d -exec chmod 775 {} \;
+sudo find sites/default/files -type f -exec chmod 664 {} \;
+
+sudo chmod -R 777 files
+
+
+
+sudo find /jet/app/drupal -type d -exec chmod 770 {} \;
+
+sudo find /var/www/html/opss-retheme/sites -type d -exec chmod 755 {} \;
+sudo find /var/www/html/opss-retheme/sites/default/settings.php -type d -exec chmod 444 {} \;
+sudo find /jet/app/drupal/sites/default/settings.php -type d -exec chmod 444 {} \;
+sudo find /jet/app/drupal/opss_retheme -type d -exec chmod 770 {} \;
+drush dl drupal-7 --drupal-project-rename=<foldername>
+drush si --db-url=mysql://root:<password>@localhost/<foldername>
+drush si --db-url=mysql://root:@localhost/opss_retheme
+
+fda-feeds-export
+fda-feeds-export-csv
+https://www.youtube.com/watch?v=ssOF3nPgcfc&t=132s
+
+drush sql-drop 
+drush sql-cli < <filepath> //Importing Database
+drush sql-dump > <filepath> //Exporting Database
+
+cp -Prv /jet/app/drupal/opss/sites/default .
+
+mysqldump -u root -p tiag > /var/www/html/db_backup/staging_10042018.sql
+mysqldump -u root -p faamap_profile_map > /Users/infinamac6/Sites/devdesktop/faamap-profile-map/dbbackup/11192018_configuration.sql
+mysqladmin -u root -p drop tiag
+mysqladmin -u root -p create tiag
+mysql -u root -p tiag
+source /var/www/html/db_backup/feeds_working.sql
+
+https://www.drupal.org/forum/support/post-installation/2013-09-10/imporexport-data-as-a-csv
+

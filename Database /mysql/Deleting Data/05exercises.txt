@@ -1,0 +1,38 @@
+05 Deleting Data
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. Using the world database, delete these countries from the Country table:
+
+Code  Name
+OMN   Oman
+PCN   Pitcairn
+ROM   Romania
+
+Solution:
+DELETE FROM Country WHERE Code IN ('OMN', 'PCN', 'ROM');
+(This is the most efficient.)
+
+Alternate solutions:
+DELETE FROM Country WHERE Code = 'OMN';
+DELETE FROM Country WHERE Code = 'PCN';
+DELETE FROM Country WHERE Code = 'ROM';
+(Almost as good, but requires the execution of more statements.)
+
+DELETE FROM Country WHERE Name = 'Oman';
+DELETE FROM Country WHERE Name = 'Pitcairn';
+DELETE FROM Country WHERE Name = 'Romania';
+(Not as good because Name is not indexed. But it's a small table..)
+
+2. Using the world database, delete the countries in Antarctica from the Country table.
+
+Solution:
+DELETE FROM Country WHERE Continent = 'Antarctica';
+
+3. Delete the 5 largest cities from the City table of the world database.
+
+Solution:
+DELETE FROM City ORDER BY Population DESC LIMIT 5;
+
+
+

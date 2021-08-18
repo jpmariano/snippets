@@ -1,0 +1,3 @@
+- Apperarnce |Theme Settings > Zone and Region Configuration
+Match the Actual theme Grid System and the Omega Grid System
+Move Zones and Regions around

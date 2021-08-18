@@ -1,0 +1,25 @@
+09 Deriving New Tables
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. Create a new database named transworld and make it the current database.
+
+Solution:
+CREATE DATABASE transworld;
+USE transworld
+
+2. Copy the City, Country and CountryLanguage tables from the world database, but make them all InnoDB tables. (We are assuming these tables have been freshly rebuilt from the world.sql script.)
+
+Solution:
+CREATE TABLE City LIKE world.City;
+CREATE TABLE Country LIKE world.Country;
+CREATE TABLE CountryLanguage LIKE world.CountryLanguage;
+INSERT INTO City SELECT * FROM world.City;
+INSERT INTO Country SELECT * FROM world.Country;
+INSERT INTO CountryLanguage SELECT * FROM world.CountryLanguage;
+ALTER TABLE City ENGINE = 'InnoDB';
+ALTER TABLE Country ENGINE = 'InnoDB';
+ALTER TABLE CountryLanguage ENGINE = 'InnoDB';
+(Import was performed while tables were still MyISAM tables for speed.)
+
+We will be using these tables in subsequent exercises.

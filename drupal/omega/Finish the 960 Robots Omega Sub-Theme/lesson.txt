@@ -1,0 +1,7 @@
+-Review the theme files
+	-move the js, images, css folder into theme_omega (Make sure js and css  are declared in the .info )
+	-move the screenshot  into theme_omega
+	-move template.php into   into theme_omega
+-Look at our default CSS file
+ - Apply to all desktop
+-See the responsive changes

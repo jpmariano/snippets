@@ -1,0 +1,5 @@
+1. Install the Devel
+2. Create a random cotent (users, nodes )
+3. Install your theme (960 Robots)
+4. Arrange the Blocks
+5. Add the menu

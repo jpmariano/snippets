@@ -1,0 +1,188 @@
+Injecting Config & Services and using Interfaces
+
+app.php
+require __DIR__.'/vendor/autoload.php';
+use DiDemo\Mailer\FriendHarvester; 
+
+$dsn = 'sqlite:'.__DIR__.'/data/database.sqlite';
+$pdo = new PDO($dsn);
+$FriendHarvester = new FriendHarvester($pdo, array(
+    'server' = > 'smtp.url.com',
+    'user' = > 'smptuser',
+    'password' = > 't0psecret!',
+    'port' = > 465,
+));
+
+src/DiDemo/FriendHarvester.php
+namespace DiDemo; 
+use DiDemo\Mailer; 
+class FriendHarvester {
+    private $pdo;
+    private $smtpConfig;
+    public function __construct($pdo, array $smtpConfig) //This is an example of dependency 
+    {
+            $this->pdo = $pdo;
+            $this->smtpConfig = $smtpConfig;
+    }
+}
+
+
+--------------------------------------------------------------
+app.php
+require __DIR__.'/vendor/autoload.php';
+use DiDemo\Mailer\FriendHarvester; 
+
+$dsn = 'sqlite:'.__DIR__.'/data/database.sqlite';
+$pdo = new PDO($dsn);
+
+$mailer = new SmtpMailer(
+    'smtp.url.com',
+    'smptuser',
+    't0psecret!',
+    465,
+);
+$FriendHarvester = new FriendHarvester($pdo, $mailer);
+
+src/DiDemo/FriendHarvester.php
+namespace DiDemo; 
+use DiDemo\Mailer; 
+class FriendHarvester {
+    private $pdo;
+    private $mailer;
+    public function __construct(\PDO $pdo, SmtpMailer $mailer) //This is an example of dependency 
+    {
+            $this->pdo = $pdo;
+            $this->mailer = $mailer;
+    }
+}
+--------------------------------------------------------------
+MailerInterface.php
+namespace DiDemo\Mailer;
+interface MailerInterface
+{
+    public function sendMessage($recipientEmail, $subject, $message, $from);
+}
+
+SmtpMailer.php
+class SmtpMailer implements MailerInterface
+{
+
+}
+
+src/DiDemo/FriendHarvester.php
+namespace DiDemo; 
+use DiDemo\Mailer\MailerInterface; 
+class FriendHarvester {
+    private $pdo;
+    private $mailer;
+    public function __construct(\PDO $pdo, MailerInterface $mailer) //This is an example of dependency 
+    {
+            $this->pdo = $pdo;
+            $this->mailer = $mailer;
+    }
+}
+
+--------------------------------------------------------------
+logger.php
+
+class Logger
+{
+    public function logMessage($message)
+    {
+        $logPath = __DIR__.'/debug.log';
+
+        $fh = fopen($logPath, 'a');
+        fwrite($fh, $message.PHP_EOL);
+    }
+}
+
+HappyMessageSender.php
+class HappyMessageSender
+{
+    private $emailLoader;
+
+    private $logger;
+
+    public function __construct(EmailAddressLoader $emailLoader, Logger $logger)
+    {
+        $this->emailLoader = $emailLoader;
+        $this->logger = $logger;
+    }
+
+    public function sendHappiness()
+    {
+        $emails = $this->emailLoader->getAllEmails();
+        foreach ($emails as $email) {
+            // just print for testing
+            echo 'I hope you\'re having a GREAT day '.$email.'<hr/>';
+            $this->logger->logMessage($email);
+        }
+    }
+}
+
+--------------------------------------------------------------
+logger.php
+    class Logger
+        {   private  $logPath;
+            public function __construct($logPath)
+            {
+                $this->logPath = $logPath;
+            }
+            public function logMessage($message)
+            {
+                $logPath = __DIR__.'/debug.log';
+
+                $fh = fopen($logPath, 'a');
+                fwrite($fh, $message.PHP_EOL);
+            }
+        } 
+sendHappy.php
+
+    require_once 'EmailAddressLoader.php';
+    require_once 'HappyMessageSender.php';
+    require_once 'Logger.php';
+
+    $emailLoader = new EmailAddressLoader();
+    $logger = new Logger(__DIR__.'/debug.log');
+    $happyMessageSender = new HappyMessageSender($emailLoader, $logger);
+
+    $happyMessageSender->sendHappiness();
+
+    --------------------------------------------------------------
+    HappyMessageSender.php
+    class HappyMessageSender
+    {
+        private $emailLoader;
+
+        private $logger;
+
+        public function __construct(EmailLoaderInterface $emailLoader, Logger $logger)
+        {
+            $this->emailLoader = $emailLoader;
+            $this->logger = $logger;
+        }
+
+        public function sendHappiness()
+        {
+            $emails = $this->emailLoader->getAllEmails();
+            foreach ($emails as $email) {
+                // just print for testing
+                echo 'I hope you\'re having a GREAT day '.$email.'<hr/>';
+                $this->logger->logMessage($email);
+            }
+        }
+    }
+
+EmailLoaderLoader.php
+class EmailAddressLoader implements EmailLoaderInterface
+{
+    public function getAllEmails()
+    {
+        // a class to fake loading emails (e.g. from a database)
+        return [
+            'iluvhappyemails@symfony.com',
+            'grumpy_dude@yahoo.com',
+            'sunshine_gurl@gmail.com',
+        ];
+    }
+}

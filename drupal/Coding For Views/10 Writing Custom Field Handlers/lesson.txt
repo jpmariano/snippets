@@ -1,0 +1,16 @@
+Step 1:
+Find which handler to extend from
+In this case field numeric handler
+
+Step 2:
+Create a file definition for the handler: databasics_handler_field_percent.inc
+Add the file inside the .info
+
+Step 3: Create a class inside: databasics_handler_field_percent.inc
+
+Tips: Turn on the Views SQL to view sql output
+
+Step 4: Go to Drupal API and search the handler name to see the class and their heirarchy
+
+IF it's the parent class you are extending from - look at the child class as to how it got extended
+

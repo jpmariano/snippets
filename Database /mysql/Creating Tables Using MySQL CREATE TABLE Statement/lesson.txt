@@ -1,0 +1,87 @@
+CREATE TABLE [IF NOT EXISTS] table_name(
+        column_name data_type[size] [NOT NULL|NULL] [DEFAULT value] [AUTO_INCREMENT]
+        PRIMARY KEY (col1,col2,...)
+) engine=table_type
+
+For Example:
+CREATE TABLE IF NOT EXISTS tasks (
+  task_id int(11) NOT NULL AUTO_INCREMENT,
+  subject varchar(45) DEFAULT NULL,
+  start_date DATE DEFAULT NULL,
+  end_date DATE DEFAULT NULL,
+  description varchar(200) DEFAULT NULL,
+  PRIMARY KEY (task_id)
+) ENGINE=InnoDB
+
+
+Data Type
+http://www.mysqltutorial.org/mysql-data-types.aspx
+
+Numeric Data Types
+http://dev.mysql.com/doc/refman/5.0/en/numeric-types.html
+
+TINYINT		A very small integer					
+SMALLINT	A small integer
+MEDIUMINT	A medium-sized integer
+INT			A standard integer
+BIGINT		A large integer
+DECIMAL		A fixed-point number
+FLOAT		A single-precision floating-point number
+DOUBLE		A double-precision floating-point number
+BIT			A bit field
+
+
+
+String Data Types
+http://dev.mysql.com/doc/refman/5.0/en/string-types.html
+
+CHAR		A fixed-length non-binary (character) string
+VARCHAR		A variable-length non-binary string
+BINARY		A fixed-length binary string
+VARBINARY	A variable-length binary string
+TINYBLOB	A very small BLOB (binary large object)
+BLOB		A small BLOB
+MEDIUMBLOB	A medium-sized BLOB
+LONGBLOB	A large BLOB
+TINYTEXT	A very small non-binary string
+TEXT		A small non-binary string
+MEDIUMTEXT	A medium-sized non-binary string
+LONGTEXT	A large non-binary string
+ENUM		An enumeration; each column value may be assigned one enumeration member
+SET			A set; each column value may be assigned zero or more set members
+
+
+Date and Time Data Types
+http://dev.mysql.com/doc/refman/5.0/en/date-and-time-types.html
+
+DATE		A date value in ‘CCYY-MM-DD’ format
+TIME		A time value in ‘hh:mm:ss’ format
+DATETIME	A date and time value in ‘CCYY-MM-DD hh:mm:ss’ format
+TIMESTAMP	A timestamp value in ‘CCYY-MM-DD hh:mm:ss’ format
+YEAR		A year value in CCYY or YY format
+
+
+Spatial Data Types
+http://dev.mysql.com/doc/refman/5.0/en/spatial-extensions.html
+
+GEOMETRY			A spatial value of any type
+POINT				A point (a pair of X Y coordinates)
+LINESTRING			A curve (one or more POINT values)
+POLYGON				A polygon
+GEOMETRYCOLLECTION	A collection of GEOMETRY values
+MULTILINESTRING		A collection of LINESTRING values
+MULTIPOINT			A collection of POINT values
+MULTIPOLYGON		A collection of POLYGON values
+
+
+
+Create a Table with the same table structure
+
+CREATE TABLE IF NOT EXISTS test1(
+  id int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY(id)
+);
+ 
+CREATE TABLE IF NOT EXISTS test2 LIKE test1;
+CREATE TABLE IF NOT EXISTS test3 LIKE test1;
+CREATE TABLE IF NOT EXISTS test4 LIKE test1;

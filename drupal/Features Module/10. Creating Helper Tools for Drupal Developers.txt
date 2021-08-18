@@ -1,0 +1,22 @@
+Repeatitive task - like remove caching
+
+libdev - download from git
+
+upload and enable the module
+This module looks for and enable context_ui, view_ui, and devel
+This module adds information to the .info file of your created feature's module
+like recomment[] = 'context_ui'
+
+
+context inspector - helpful for debugging
+site/typography - typograhy help
+
+drush dis libdev - to disbable the module
+all automatically enable module will be disabled along with libdev
+
+go to cache page and save configuration and use strongarm to export settings in created feature
+drush fr lbddev - to revert changes
+
+
+
+

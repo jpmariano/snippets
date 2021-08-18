@@ -1,0 +1,130 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Validates username and email address during registration.
+ */
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function regval_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'user_register_form') {
+    drupal_add_css(drupal_get_path('module', 'regval') . '/regval.css');
+
+    // The location of fields may change depending on profile.module.
+    if (isset($form['account'])) {
+      $account_form = &$form['account'];
+    }
+    else {
+      $account_form = &$form;
+    }
+
+    $suffix = isset($account_form['name']['#suffix']) ? $account_form['name']['#suffix'] : '';
+    $account_form['name']['#suffix'] = $suffix . '<div id="regval-name-wrapper"></div>';
+    $account_form['name']['#ajax'] = array(
+      'callback' => 'regval_check_name',
+      'wrapper' => 'regval-name-wrapper',
+      'progress' => 'none',
+      'event' => 'blur',
+    );
+    $suffix = isset($account_form['mail']['#suffix']) ? $account_form['mail']['#suffix'] : '';
+    $account_form['mail']['#suffix'] = $suffix . '<div id="regval-mail-wrapper"></div>';
+    $account_form['mail']['#ajax'] = array(
+      'callback' => 'regval_check_mail',
+      'wrapper' => 'regval-mail-wrapper',
+      'progress' => 'none',
+      'event' => 'blur',
+    );
+  }
+}
+
+/**
+ * Menu callback for AJAX requests.
+ */
+function regval_check_name($form, $form_state) {
+  global $user;
+
+  $name = $form_state['values']['name'];
+  $output = '';
+
+  if (!empty($name)) {
+    $errors = array();
+    // Validate user name.
+    $error = user_validate_name($name);
+    if ($error) {
+      $errors[] = $error;
+    }
+    $result = db_query('SELECT uid FROM {users} WHERE name = :name', array(':name' => $name));
+    $exists = $result->rowCount();
+    if ($exists) {
+      $errors[] = t('This username already exists.');
+    }
+    if (count($errors)){
+      $output .= theme('image', array('path' => 'misc/watchdog-error.png', 'alt' => t('error'))) . ' ' . implode(' ', $errors);
+    }
+    else {
+      $output .= theme('image', array('path' => 'misc/watchdog-ok.png', 'alt' => t('ok'))) . ' ' . t('Username is available.');
+    }
+  }
+
+  $commands = array();
+  $commands[] = ajax_command_html(NULL, $output);
+
+  // NOTE: this API changed after the recording of the video
+  // "ajax_commands" is now "ajax" for the #type property
+  // and the "#ajax_commands"" property should now be "#commands"
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ * Menu callback for AJAX requests.
+ */
+function regval_check_mail($form, $form_state) {
+  global $user;
+
+  $mail = $form_state['values']['mail'];
+  $output = '';
+
+  if (!empty($mail)) {
+    $errors = array();
+    // Validate user name.
+    $error = !valid_email_address($mail);
+    if ($error) {
+      $errors[] = t('Invalid email address.');
+    }
+    $result = db_query('SELECT uid FROM {users} WHERE mail = :mail', array(':mail' => $mail));
+    $exists = $result->rowCount();
+    if ($exists) {
+      $errors[] = t('This email address is already registered.');
+    }
+    if (count($errors)){
+      $output .= theme('image', array('path' => 'misc/watchdog-error.png', 'alt' => t('error'))) . ' ' . implode(' ', $errors);
+    }
+    else {
+      $output .= theme('image', array('path' => 'misc/watchdog-ok.png', 'alt' => t('ok'))) . ' ' . t('Email address is valid.');
+    }
+  }
+
+  $commands = array();
+  $commands[] = ajax_command_html(NULL, $output);
+
+  if ($errors) {
+    $commands[] = ajax_command_css('#edit-mail', array('borderColor' => 'red', 'borderWidth' => '2px'));
+  }
+  else {
+    $commands[] = ajax_command_css('#edit-mail', array('borderColor' => '', 'borderWidth' => ''));
+  }
+  
+  // NOTE: this API changed after the recording of the video
+  // "ajax_commands" is now "ajax" for the #type property
+  // and the "#ajax_commands"" property should now be "#commands"
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}

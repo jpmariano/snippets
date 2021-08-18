@@ -1,0 +1,49 @@
+13 Views
+
+Using the world database:
+
+1. Create a view named Continents that shows aggregate information about the continents, including total population, surface area and GNP. Make sure the continent names can be sorted alphabetically so the view makes sense to users who don't know the origins of the view.
+
+Solution:
+CREATE VIEW Continents (Name, Population, SurfaceArea, GNP) AS
+SELECT CAST(Continent AS CHAR), SUM(Population), SUM(SurfaceArea), SUM(GNP)
+FROM Country GROUP BY Continent;
+
+2. Create a view named Capitals that contains all the countries. The columns should include country name, continent and population as well as capital city name and population.
+
+Solution:
+CREATE VIEW Capitals (Country, Continent, CountryPopulation, Capital, Population) AS
+SELECT co.Name, Continent, co.Population, ci.Name, ci.Population
+FROM Country co LEFT JOIN City ci on Capital = ID;
+
+Using the Employees database:
+
+1. Create a DeptManagers view that lists the number and name of each department along with the name of the current manager and the date the manager came to that position.
+
+Solution:
+CREATE VIEW DeptManagers AS
+SELECT d.*, CONCAT(e.last_name, ', ', e.first_name) AS name, dm.from_date
+FROM departments d JOIN dept_manager dm ON d.dept_no = dm.dept_no
+JOIN employees e ON dm.emp_no = e.emp_no
+WHERE dm.to_date > CURDATE() ORDER BY d.dept_name;
+
+2. Use this view to list the managers in order of seniority with the one having that position the longest listed first.
+
+Solution:
+SELECT * FROM DeptManagers ORDER BY from_date;
+
+3. Create a SalesEmployees view for accessing the information about employees in the Sales department. Include a column for the date they joined the department along with the rest of their information. But since we know they are in sales, the department information is not required.
+
+Solution:
+CREATE VIEW SalesEmployees AS
+SELECT e.*, de.from_date as joined_dept
+FROM employees e JOIN dept_emp de ON de.emp_no = e.emp_no
+AND de.dept_no = 'd007' AND de.to_date > CURDATE();
+
+4. Using this view, determine what percentage of the Sales employees have only ever worked in that department.
+
+Solution:
+SELECT COUNT(IF(hire_date = joined_dept, 1, NULL)) AS 'Only in Sales',
+COUNT(*) AS 'Total Employees',
+ROUND(100 * COUNT(IF(hire_date = joined_dept, 1, NULL))/COUNT(*), 2)
+AS Percentage FROM SalesEmployees;

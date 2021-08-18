@@ -1,0 +1,389 @@
+Default Site
+/sites/all ----> Points to howard.com
+/sites/default/files
+/sites/default/settings.php 
+	$db_url = 'mysqli://moe:shhhh@localhost/www'; 
+
+
+Multisite
+/sites/[sitename]
+
+/sites/site1.howard.com ----> Points to site site1.howard.com 
+/sites/site1.howard.com/files
+/sites/site1.howard.com/settings.php 
+	$db_url = 'mysqli://jdoe:secret@localhost/banana';
+	
+/sites/example.sites.php rename to /sites/sites.php
+ * The following examples look for a site configuration in sites/example.com:
+ * @code
+ * URL: http://dev.drupal.org
+ * $sites['dev.drupal.org'] = 'example.com';
+ *
+ * URL: http://localhost/example
+ * $sites['localhost.example'] = 'example.com';
+ *
+ * URL: http://localhost:8080/example
+ * $sites['8080.localhost.example'] = 'example.com';
+ *
+ * URL: http://www.drupal.org:8080/mysite/test/
+ * $sites['8080.www.drupal.org.mysite.test'] = 'example.com';
+ 
+ 
+ 
+$sites['howard.com'] = 'howard.com';
+$sites['site1.howard.com'] = 'howard.com';
+$sites['site2.howard.com'] = 'howard.com';
+
+Note: All subdomains need to point to the root directory of the installation (public_html)
+For Example: staging.howard.com points, site2.howard.com, and howard.com to public_html
+
+________________
+https://www.youtube.com/watch?v=a3LirLexdYk
+sudo mysqladmin -u root -p create site1database
+
+/sites/all
+/sites/howard
+/sites/howard.localhost
+/sites/site1.localhost/settings.php 
+	$db_url = 'mysqli://dbusername:dbpassword@localhost/site1database';
+	$db_prefix = '';
+
+symlink
+In terminal, CD to the location of the sites folder
+In terminal, ln -s ~/site1.localhost.6 ------- This creates a symlink file inside the sites folder
+	sudo gedit /etc/hosts
+ 		-- add a line in /etc/hosts: 127.0.0.1 site1.localhost, 127.0.0.1 <domain_name>
+
+Go to URL: site1.localhost/install.php
+
+sudo chmod 777 /<directory_location/files
+
+-----------------
+https://www.youtube.com/watch?v=iku-Q2-cah0
+
+Docroot /VAR/WWW
+Problem 1
+Incompatability 
+Production not stable
+How to merge and integrate the work of people
+
+Problem 2
+No Developments Standards. Panels? Context?
+Standards Exist, but not respected
+Drupal best practices are not respected
+Modules in all or in default?
+
+Problem 3
+Who Should Update Drupal?
+What Modules need to be updated?
+What is happening in my docroot?
+What are the lastes changes and stable versions?
+
+Problem 4
+How and When?
+How and how to run the test?
+In which environment
+
+Problem 5
+Cloud hosting usually is limite in multisite management
+
+Intoruction DOCMAN
+
+http://adyax.github.io/docman
+#gem install docman
+---See schema.png 
+GIT: Project A -- ONE WEB SITES
+GIT: Project B  -- ONE WEB SITES
+GIT: COMMON  -- COMMON MODULEA
+GIT: PROFILES
+GIT: CORE
+GIT: SITES ---SITES ALL
+GIT: CLOUD HOOKS
+
+https://github.com/adyax/docman-config
+docman-config/config.yaml
+
+environments:
+  dev:
+    deploy_target: git_target
+    state: development
+    target_checker:
+      handler: :ssh
+      file_path: /mnt/www/html/subscription_name_dev # Edit this!
+      ssh_host: staging-xxxx.prod.hosting.acquia.com # Edit this!
+      ssh_user: subscription_name # Edit this!
+  test:
+    deploy_target: git_target
+    state: staging
+    target_checker:
+      handler: :ssh
+      file_path: none
+      file_path: /mnt/www/html/subscription_name_dev # Edit this!
+      ssh_host: staging-xxxx.prod.hosting.acquia.com # Edit this!
+      ssh_user: subscription_name # Edit this!
+  prod:
+    deploy_target: git_target
+    state: stable
+    tagger:
+      enabled: true
+      handler: :option
+
+All configuration has to be standard
+
+Continue Stops at 15 min
+
+-------------------------------------------------
+Multisite books
+Creating a site folder
+
+
+sites/www.example.com/  - When a request comes from http://www.example.com it's ok, but not  http://example.com (it would serve the /sites/default/ )
+sites/example.com/ - Drupal points request http://www.example.com and http://example.com  to this folder. It also serves as fallback for  subdomains.example.com
+
+Domains with subdirectories
+
+sites/www.example. com.site2/ - Points request coming from http://www.example.com/site1
+sites/www.example. com.site2/ - Points request coming from http://www.example.com/site2
+
+sites/sites.php 
+Contains array of site mappings from site names to site folders
+<?php  sites['paperbacks.local'] = 'books.local'; ?>  --- request coming from books.local will point to paperbacks.local; an alternative to redirect in Apache's configuration
+
+Example: books.local, cooks.local, and looks.local
+sites/default/ - this will serve books.local 
+sites/local/ - assume maps to books.local, and all uri with .local (this will serve as a fallback for cooks.local, and looks.local)
+sites/books.local/ - this will serve books.local site before serving the sites/local/ and sites/default/
+sites/cooks.local - this will serve cooks.local site before serving the sites/local/ and sites/default/
+sites/looks.local - this will serve looks.local site before serving the sites/local/ and sites/default/
+
+sites/default/ - may be a permanently disabled site 
+sites/books.local/settings.php - make sure to have a chmod 777; 
+
+$databases['default']['default'] = array(
+     'driver' => 'mysql',
+     'database' => 'books_local',
+     'username' => 'drupal',
+     'password' => 'secret',
+     'host' => 'localhost',
+   );
+
+Files or  Folder Page: 35
+/sites/default/files - serves as a default folders for all sites
+sites/books.local/files/ - serves as a folders for books.local sites; files need to have a permission - run: chown www-data files or chown nobody file;  run: chmod 755 files
+For Private files - Place the folder above the root. The process is no different for multi-sites than for single-site installations.
+
+The Web Installer
+http:// books.local/install.php
+
+Email for Admin: admin+<sitename>@example.com
+
+sites/cooks.local/settings.php - http://cooks.local/install.php
+$databases['default']['default'] = array(
+     'driver' => 'mysql',
+     'database' => 'cooks_local',
+     'username' => 'drupal',
+     'password' => 'secret',
+     'host' => 'localhost',
+   );
+
+sites/looks.local/settings.php - http://looks.local/install.php
+$databases['default']['default'] = array(
+     'driver' => 'mysql',
+     'database' => 'looks_local',
+     'username' => 'drupal',
+     'password' => 'secret',
+     'host' => 'localhost',
+   );
+
+When Installation Fails:
+README.txt and INSTALL.txt documents 
+http://drupal.org/documentation/install
+http://groups.drupal.org
+Freenode.net - #drupal 
+Local community meet-ups
+
+
+Drupal Settings:
+Stored in settings.php and/or the 2nd place is the variables table
+
+Options:
+
+• Duplicate the data: You can set the same information for each site
+• Create a shared settings file: You can add a little logic to each settings file
+that will direct each Drupal instance to load a shared settings file
+
+Page 44
+There are ways to share database tables, but this is a very dangerous practice, and is discouraged by Drupal developers. 
+
+Creating a shared configuration file
+
+For Example:
+site slogan: Administration | Configuration | Site information 
+Overrides in Settings.php
+$conf['site_slogan'] = "Quality Information";
+	- Overrides should only be used when absolutely necessary.
+	
+if (file_exists('sites/all/shared-settings.php')) {
+     include 'sites/all/shared-settings.php';
+}
+shared-settings.php 
+<?php /**
+      * @file
+      * Shared settings for all multi-sites.
+      */
+     global $conf;
+     $conf['site_slogan'] = "Quality Information";
+     
+ 
+A word of warning about sharing settings
+should typically not be shared, like primary databases, caches, and hash keys.
+$conf['maintenance_theme'] = 'bartik'
+
+
+
+Configuring modules
+sites/all/modules/ - then all of our sites will have access to the module
+sites/books.local/modules/ - then only the Books site will have access to that module
+sites/default/modules/ - (and we have no default site), then no sites will be able to access the module
+
+sites/all/modules/custom/ - all of our sites will have access to the custom module
+sites/all/modules/contrib/  - all of our sites will have access to the contrib module
+
+Sharing modules
+sites/all/modules/contrib/media/
+modules are shared in one sense: the same module files are available to every site in our multi-site. 
+But, in another sense, they are not shared. Each site can enable or disable a module, 
+and each site can have different configurations of a module.
+
+Unshared modules
+sites/cooks.local/modules/contrib/textformatter - textformatter is only installed on cooks.local
+
+A note on using different versions of the same module
+
+you cannot install two versions of the same module in the sites/all/modules/ directory. 
+Attempting to do this will lead to fatal errors
+
+not a good idea to install one version of a module in - sites/all/modules/ and another version of the module in sites/SITENAME/modules/
+
+no assurance that other modules will respect the same order of precedence that Drupal uses
+
+This is ok.
+Version 7.x-1.0 is installed in sites/books.local/modules/contrib/
+Version 7.x-1.1 is installed in sites/looks.local/modules/contrib/
+
+Themes
+sites/all/themes - shared themes
+sites/SITENAME/themes/ - site-specific themes
+
+This can get tricky! Changing a template in a shared theme will change the template on all sites.
+
+
+• Anything that is stored in a code file (templates, CSS, info files, and so on) is shared
+• Anything stored in the database (enabled status, settings, certain information about classes, or IDs) is site-specific
+
+Subthemes and sharing
+the base theme was shared, but the subthemes are not
+
+• Share a common base theme by putting it in sites/all/themes
+• For each site's theme, put that theme in sites/SITENAME/themes (where
+SITENAME is the name of the particular site)
+
+Updating Drupal
+Minor updates move from one point release to another newer point release. 
+A point release is a software update that contains only bug fixes and minor feature changes.
+#acquia
+Since a multi-site runs only one copy of Drupal, all of the sites on a multi-site install must be updated at the same time.
+
+Database backups
+Backup and Migrate 
+Backing up through mysql:
+$ mysqldump –h localhost –u root –p \ books_local > books_local_backup.mysql
+$ mysql –h localhost –u root –p < books_local_backup.mysql.
+
+
+Putting Drupal in maintenance mode
+Major Upgrade:
+We need to put all of our sites into maintenance mode before we go any further
+Overwriting the existing files: Careful: .htaccess and robots.txt
+Pg 67
+
+Checking the default.settings.php file
+sites/default/default/settings.php
+- run diff www/sites/all/default/default.settings.php drupal-7.12/sites/all/default/default.settings.php
+
+Updating themes and modules
+1. Put all of the sites in maintenance mode.
+2. Download all of the modules and themes that you want to update.
+3. Unpack them and put them into their appropriate locations. We have been placing our contributed modules in sites/all/modules/contrib/ and our themes in sites/all/themes/.
+4. Run update.php as we did before.
+5. Bring all of the sites back out of maintenance mode.
+
+Drush:
+To update the code for all of your modules and themes, you can run drush updatecode, and then for each site run drush updatedb
+
+Check each site for status report
+Favicons and robots
+Favicon module - It will allow each site to declare its own favicon, and each site will handle requests for the favicon at the canonical /favicon.ico URL
+RobotsTxt module - to set site-specific robots directives.
+sitemap module -  to have a specific set of rules to generate the robust sitemap files that Google, Bing, and other search engines use to discover the content on your site
+
+Shared authentication 
+
+OpenID and other authentication services - allows users to use a specific shared ID (an Open ID) and use it on many different sites. OpenID shares the least amount of information between sites
+
+LDAP and Directory services - Another alternative is to use a local directory server or authentication service like LDAP, ActiveDirectory, CAS, or Kerberos. Under this setup, accounts are maintained on a separate server, and Drupal communicates with these servers to verify credentials.
+One advantage to this solution is that accounts can be handled independently.
+But the disadvantage is that maintaining directory or authentication servers adds another layer of complexity to your configuration. 
+LDAP module (http://drupal.org/ project/ldap) 
+CAS (Central Authentication Service) can be found at http://drupal.org/project/cas
+
+
+Using the Services module
+Services module (http://drupal.org/project/services) provides an underlying framework for sharing Drupal data with other sites
+And with the help of the Services SSO Client (http://drupal.org/project/ services_sso_client) and Services SSO Server Helper (http://drupal.org/ project/services_sso_server_helper) modules, it can be used for shared authentication.
+
+Using Bakery for SSO
+This module can share authentication information between multiple sites, provided all of the sites are under the same second-level domain. 
+
+Sharing a user database
+http://drupal.org/node/22267
+
+Sharing content with Services and Deploy
+
+Services module -  provides all of the architecture required for sharing content
+But the Deploy module (http://drupal.org/project/deploy), which is built on Services, 
+can be used to move content from one server to another.
+
+Deploy is a good fit if you want to synchronize content from one site to another. 
+The canonical case for Deploy is running a staging server (where content is authored) 
+and a live server (where users come to view the content), and deploying content from the 
+staging server onto the live server as it is ready.
+
+Domain Access as a multi-site alternative
+Domain Access (http:// drupal.org/project/domain) uses only one database. 
+Instead of creating separate Drupal installations (one for each site) 
+Domain Access creates a single Drupal instance that can listen on multiple hostnames, 
+reacting differently depending on which hostname the client requests.
+
+The Virtual Site module
+Virtual Site module can use different configuration parameters. For example, it can support different themes, different site names, and different menus.
+For example, it can be configured to serve a different "site" to mobile browsers than to desktop browsers.
+But Virtual Site shares one database
+
+Shared structure
+Features module (http://drupal.org/project/features) provides this capability. Features is a tool that transforms certain Drupal structures into versioned modules.
+
+
+Searching across sites
+Apache Solr module (http://drupal.org/project/apachesolr). This module relies on an external Apache Solr server (http://lucene.apache.org/solr/) to handle the technical details of searching.
+Xapian module (http://drupal.org/project/xapian), that can be used to access external search services.
+Zend Lucene project (http:// drupal.org/project/zend_lucene) may at some point provide multi-site search capabilities, but at this time of writing it does not.
+
+
+
+
+
+
+
+
+

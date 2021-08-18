@@ -1,0 +1,17 @@
+Search for Strings inside file and folder
+john-paul-macbook:context leemahi$ grep -nr <yourstring> .
+
+Search for the given string in a single file
+grep "literal_string" filename
+
+Search for the given string in a single file
+grep your_text* your_file.txt
+
+Checking for the given string in multiple files.
+grep your_text demo_*
+
+Case insensitive search using grep -i
+grep -i your_text your_file.txt
+
+Match regular expression in files
+grep "your_begin_text.*your_end_text" demo_file

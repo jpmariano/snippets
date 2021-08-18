@@ -1,0 +1,7 @@
+Default Configuration Locations
+- modules/my_module/config/install - read only once only on install time; Best when it's site essential
+- modules/my_module/config/optional - If there's dependencies involve. Nice to have but not essential
+
+Handling Config dependencies
+- Use the dependencies key in the configuration file
+- Use config and/or module keys under dependencies key 

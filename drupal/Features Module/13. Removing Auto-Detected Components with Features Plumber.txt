@@ -1,0 +1,29 @@
+Features plumber - Features will auto-detect dependencies for you, which can be very handy, 
+				but at times it can also be very frustrating when you don't want them to. 
+				It provides a checkbox to other autodetected components to include/exclude
+
+features plumber ui - included in download
+
+We are sometimes asked how Features can be removed. Since a Feature is just 
+a normal module, you can disable it on your module administration page, and 
+even uninstall and completely remove it from your modules folder. That will 
+completely remove the feature from your site.
+
+Enable both moduels
+
+drush fu feature_title - fu features update
+
+
+Edit components - strongarm -uncheck variable to remove and in the right pane the 
+strongarm component checkbox is also added by the features plumber
+
+Features plumber - add additional input to .info to what you removed
+Go to structure/features/settings - you can edit plumber settings
+
+drush fcl features_title variable - shows what components are avaible and then you can add or remove
+git diff - to see what changes
+
+drush fra feature_title
+drush cc all
+
+

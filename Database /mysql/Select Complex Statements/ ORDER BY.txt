@@ -1,0 +1,11 @@
+0905
+
+1. List the cities in Morocco (just their names) in descending order by population.
+
+Solution:
+SELECT Name FROM City WHERE CountryCode = 'mar' ORDER BY Population DESC;
+
+2. Now include the Population value to verify that the ordering was done correctly even when Population was not in the column list.
+
+Solution:
+SELECT Name, Population FROM City WHERE CountryCode = 'mar' ORDER BY Population DESC;

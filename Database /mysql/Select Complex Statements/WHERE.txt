@@ -1,0 +1,15 @@
+0903
+
+1. Retrieve the data for the United States. For China. For Antarctica.
+
+Solutions:
+SELECT * FROM Country WHERE Code = 'usa'\G
+SELECT * FROM Country WHERE Code = 'chn'\G
+SELECT * FROM Country WHERE Code = 'ata'\G
+
+2. Display the names and populations of all the countries in South America.
+
+Solution:
+SELECT Name, Population FROM Country WHERE Continent = 'South America';
+
+3. Perform other simple queries to get a feel for the tables in the world database.

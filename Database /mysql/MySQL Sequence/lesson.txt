@@ -1,0 +1,67 @@
+
+http://www.mysqltutorial.org/mysql-sequence/
+
+CREATE TABLE employees(
+ emp_no INT(4) AUTO_INCREMENT PRIMARY KEY,
+ first_name VARCHAR(50),
+ last_name  VARCHAR(50)
+)ENGINE = INNODB;
+
+INSERT INTO employees(first_name,last_name)
+VALUES('John','Doe'),
+      ('Mary','Jane');
+      
+SELECT * FROM employees;
+
+Output:
+emp_no	first_name	last_name
+1		John		Doe
+2 		Mary		Jane
+
+
+
+DELETE FROM employees
+WHERE emp_no = 2;
+
+Output:
+emp_no	first_name	last_name
+1		John		Doe
+
+INSERT INTO employees(first_name,last_name)
+VALUES('Jack','Lee');
+
+Output:
+emp_no	first_name	last_name
+1		John		Doe
+3 		Jack		Lee
+
+
+
+UPDATE employees
+SET first_name = 'Joe',
+    emp_no = 1
+WHERE emp_no = 3;
+
+Output:
+MySQL issued an error of duplicate entry for the primary key. Let’s fix it:
+
+UPDATE employees
+SET first_name = 'Joe',
+    emp_no = 10
+WHERE emp_no = 3;
+
+Output:
+emp_no	first_name	last_name
+1		John		Doe
+10 		Joe			Lee
+
+INSERT INTO employees(first_name,last_name)
+VALUES('Wang','Lee');
+
+Output:
+emp_no	first_name	last_name
+1		John		Doe
+4		Wang		Lee
+10 		Joe			Lee
+
+

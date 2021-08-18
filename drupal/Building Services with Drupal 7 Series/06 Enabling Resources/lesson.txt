@@ -1,0 +1,22 @@
+Click>structure>services>resources
+Resources Tab
+
+Make sure to be granular - for security reasons
+
+Resouce 
+CRUD Operations - Create, Rad, Update, Delete, and Index (List all nodes)
+Relationships(depending on resource) - Files, Comments (Let's you access to the related content)
+Targeted Actions - things that you can ask (CRUD, Actions) drupal on a particular resouce on drupal on behalf of the API
+None of them have a permission of their own
+
+For now: 
+Node:  In CRUD, select Create, Retrieve, and Index
+
+In Alias: It is for the url endpoint; instead of api/v1/node, you can have api/v1/content
+
+
+
+
+api/v1/node/2.json - request the rest through browser, give me the node id 2 in json
+api/v1/node.json - give me the all the node in json
+- uri - it links to the main node

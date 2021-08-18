@@ -1,0 +1,110 @@
+PIMPLE
+
+app.php
+require __DIR__.'/vendor/autoload.php';
+use DiDemo\Mailer\FriendHarvester; 
+
+$container = new Pimple();
+$container['database.dsn'] = 'sqlite:'.__DIR__.'/data/database.sqlite';
+$container['smtp.server'] = 'smtp.SendMoneyToStrangers.com';
+$container['smtp.user'] = 'smtpuser';
+$container['smtp.password'] = 'smtp';
+$container['smtp.port'] = 465;
+
+$container['mailer'] = $container->share(function(Pimple $container){
+    return new SmtpMailer(
+        $container['smtp.server'],
+        $container['smtp.user'],
+        $container['smtp.password'],
+        $container['smtp.port']
+    );
+});
+
+$container['pdo'] = $container->share(function(Pimple $container['database.dsn']){
+    return new PDO($container['database.dsn']);
+});
+
+$container['FriendHarvester'] = $container->share(function(Pimple $container){
+    return new FriendHarvester($container['pdo'], $container['mailer']);
+});
+
+
+
+$FriendHarvester = $container['FriendHarvester'];
+$mailer1 = $container['mailer'];
+$mailer2 = $container['mailer'];
+
+
+src/DiDemo/FriendHarvester.php
+namespace DiDemo; 
+use DiDemo\Mailer; 
+class FriendHarvester {
+    private $pdo;
+    private $mailer;
+    public function __construct(\PDO $pdo, SmtpMailer $mailer) //This is an example of dependency 
+    {
+            $this->pdo = $pdo;
+            $this->mailer = $mailer;
+    }
+}
+
+--------------------------------------------------------------------
+
+app.php
+/* START BUILDING CONTAINER */
+$container = new Pimple();
+require __DIR__.'/app/config.php';
+require __DIR__.'/app/services.php';
+/* END CONTAINER BUILDING */
+/** @var FriendHarvester $friendHarvester */
+$friendHarvester = $container['friend_harvester'];
+$friendHarvester->emailFriends();
+
+
+app/config.php
+$container['database.dsn'] = 'sqlite:'.__DIR__.'/../data/database.sqlite';
+$container['smtp.server'] = 'smtp.SendMoneyToStrangers.com';
+$container['smtp.user'] = 'smtpuser';
+$container['smtp.password'] = 'smtp';
+$container['smtp.port'] = 465;
+
+services.php
+use DiDemo\Mailer\SmtpMailer;
+use DiDemo\FriendHarvester;
+$container['mailer'] = $container->share(function(Pimple $container) {
+    return new SmtpMailer(
+        $container['smtp.server'],
+        $container['smtp.user'],
+        $container['smtp.password'],
+        $container['smtp.port']
+    );
+});
+$container['friend_harvester'] = $container->share(function(Pimple $container) {
+    return new FriendHarvester($container['pdo'], $container['mailer']);
+});
+$container['pdo'] = $container->share(function(Pimple $container) {
+    return new PDO($container['database.dsn']);
+});
+--------------------------------------------------------
+<?php
+
+require_once 'EmailLoaderInterface.php';
+require_once 'EmailAddressLoader.php';
+require_once 'HappyMessageSender.php';
+
+require __DIR__.'/vendor/autoload.php';
+
+use Pimple\Container;
+
+$container = new Container();
+$container['email_loader'] = function() {
+    return new EmailAddressLoader();
+};
+$container['happy_sender'] = function(Container $container) {
+    return new HappyMessageSender($container['email_loader']);
+};
+
+$emailLoader = $container['email_loader'];
+$happyMessageSender = $container['happy_sender'];
+
+$happyMessageSender->sendHappiness();

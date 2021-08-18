@@ -1,0 +1,34 @@
+https://api.drupal.org/api/drupal/developer%21topics%21oop.html/4.7
+
+OOP Concepts in Drupal
+
+Objects: Modules and Themes
+Abstraction: Drupal's hook system is the basis for its interface abstraction. 
+Encapsulation: Namespace Prefixes; 
+			   Each module can declare its own functions and variables without the worry of conflict with others
+			   Private Functions is prefix with underscores. 
+			   Public Functions can be called
+Polymorphism: Nodes are polymorphic in the classical sense contents changes
+			  Themes are polymorphics 
+Inheritance: Modules similarly have the selection of all Drupal hooks to override at will, 
+             and may pick and choose which ones to implement.
+             In the case of themes, the behavior of this class is determined by the functions in theme.inc; 
+             if a theme does not override a function defined there, the default rendering of an interface component is used
+             
+             
+Design Patterns in Drupal
+Singleton: 	If we are to think of modules and themes as objects, then they follow the singleton pattern. 
+			In general these objects do not encapsulate data; 
+			what separates one module from another is the set of functions it contains, 
+			so it should be thought of as a class with a singleton instance. 
+Decorator: For example, hook_nodeapi(), which allows arbitrary modules to extend the behavior of all nodes. 
+Observer: By implementing the hook, they have registered as observers 
+Bridge: Drupal database abstraction layer is implemented in a fashion similar to the Bridge design pattern
+Chain of Responsibility: Drupal's menu system follows the Chain of Responsibility pattern. 
+						 On each page request, the menu system determines whether there is a module to handle the request,
+						 whether the user has access to the resource requested, and which function will be called to do the work. 
+						 To do this, a message is passed to the menu item corresponding to the path of the request. If the menu item cannot handle the request, 
+						 it is passed up the chain. This continues until a module handles the request, a module denies access to the user, or the chain is exhausted.
+Command: Many of Drupal's hooks use the Command pattern to reduce the number of functions that are necessary to implement, 
+		 passing the operation as a parameter along with the arguments. In fact, the hook system itself uses this pattern, 
+		 so that modules do not have to define every hook, but rather just the ones they care to implement.

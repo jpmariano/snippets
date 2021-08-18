@@ -1,0 +1,15 @@
+i$ echo 'text'
+text
+john-paul-macbook:~ leemahi$ echo 'text' > ~/test.txt
+john-paul-macbook:~ leemahi$ cat ~/test.txt
+text
+john-paul-macbook:~ leemahi$ echo 'more text' >> ~/test.txt
+john-paul-macbook:~ leemahi$ cat ~/test.txt
+text
+more text
+john-paul-macbook:~ leemahi$ echo 'replacement text' > ~/test.txt
+john-paul-macbook:~ leemahi$ cat ~/test.txt
+replacement text
+john-paul-macbook:~ leemahi$ say 'hello'
+john-paul-macbook:~ leemahi$ say < ~/test.txt
+john-paul-macbook:~ leemahi$ cat ~/test.txt | say

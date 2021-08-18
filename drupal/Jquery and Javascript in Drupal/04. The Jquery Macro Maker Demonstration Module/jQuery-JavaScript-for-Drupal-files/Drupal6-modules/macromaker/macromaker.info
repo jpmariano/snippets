@@ -1,0 +1,6 @@
+; $Id$
+name = Macromaker
+description = A jQuery-enhanced interface for inserting snippets.
+core = 6.x
+package = Administration
+

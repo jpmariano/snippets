@@ -1,0 +1,11 @@
+1506 query information_schema
+
+1. Show which tables in which databases contain columns of the SET data type.
+
+Solution:
+SELECT DISTINCT Table_name FROM Information_Schema.Columns WHERE Column_Type LIKE 'SET%';
+
+2. How much storage space is required by the tables in the world database? (Hint: Both the data and the indexes take up space.)
+
+Solution:
+SELECT SUM(Data_Length + Index_Length) SpaceReqd FROM Information_Schema.Tables WHERE Table_Schema = 'world';

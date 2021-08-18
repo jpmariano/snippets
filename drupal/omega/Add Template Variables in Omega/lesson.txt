@@ -1,0 +1,4 @@
+- Omega's best practices
+- Create a process include file
+- add our region variables
+- add our custom variables

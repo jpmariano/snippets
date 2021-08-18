@@ -1,0 +1,141 @@
+What is Memcache?
+Memached is:speeding up dynamic web applications by alleviating database load. 
+Memcached essentially creates an in-memory shard on top of a pool of servers from which an 
+application can easily get and set up to 1MB of unstructured data. Memcached is two hash tables,
+one from the client to the server and another one inside the server. The magic is that none of 
+the memcached servers need know about each other.
+
+Use Memcached when:
+- normal users are authenticated
+- have server resources
+- have enough traffic to make a difference
+Don't use Memchached When:
+- Site is completely anonymous traffic
+--Static caching is better for this (such as Varnish or Boost)
+- Low traffic sites that are not straining server resources
+-- Probably won't see any noticeable benefit and have increased the complex of the system
+- Severly resource constrained single server hosting 
+-- can negatively impact performance/scalability in this case
+
+Setup 
+
+Components of Memcahced Solution
+- memchached deamon (v 1.4.x) - a service installed in your sever
+- php extension - to talk to memcache
+ -- PECL Memcache (<3.x)
+ -- PECL Memcache (<2.x)
+ -- TIP: Use the setting "memcache_extension" to select which library to use if you have both installed
+- Memcache Module 
+- Drupal
+
+PECL memcahce vs            PECL memcahced
+Stable				      Newer, more features
+Easy install		      Complex install
+Lower PHP footprint       Slightly faster
+better for single server  better for distributed or clustered 
+						  igbinary support
+						  
+Drupal Settings.php
+//Reguired Minimum settings
+$conf['cache_backends'][] = 'sites/all/modules/memcache/memcache.inc'; //Use the memcache library
+$conf['cache_default_class'] = 'MemCacheDrupal'; // By default use MemCacheDrupal as a caching system
+$conf['cache_class_cache_form'] = 'DrupalDatabaseCache'; //Always the form cache in the database
+
+//Optional, but recommended settings
+$conf['cache_inc'] = '/sites/all/modules/memcache/memcache.inc'; //use memcache
+$conf['session_inc'] = '/sites/all/modules/memcache/memcache-session.inc'; // use memcache when in session
+$conf['memcache_key_prefix'] = 'ai_';//Prefix your memcache with keys to avoid collisions; Remember about 250 byte key size limit
+$conf['lock_inc'] = 'sites/all/modules/memcache/memcache-lock.inc';	//all cache tables will be stored in Memcache (Make Sure module is enabled); 
+//If you see error, add this require_once dirname(__FILE__) . '/memcache-lock.inc'; (memcache.inc)
+$conf['memcache_stampede_protection'] = TRUE; //minimize the overhead of rebuilding cache
+
+//The following are required only if memcahced is on a different server
+$conf['memcache_servers'] = array( 'unix:///var/run/memcached/memcached.socket0' => 'default');
+$conf['memcache_bins'] = array( 'cache' => 'default');
+
+//Only if both PECL Memchache and Memcahced  are installed
+$conf['memcache_extension'] = 'Memcache';
+
+memcache honor your default drupal cache mechanism
+admin/config/development/performance -  but this only apply to page level
+
+Minimal Admin Module
+- Adds configuration page at Configuration => Mechached
+- Enable the option  "Show Memcache Statistics" to see  a log of all memcached calls on each page
+Devel Module
+- Enable the Query logging option: /admin/config/development/devel
+- Memcache Admin UIs:
+--https://code.google.com/p/memcached/
+
+
+Minimal Install: Verifying - Admin UIs
+Demo 
+- Drupal Memcahce Statistics
+- memcahce.php
+- memcahce admin
+
+You should not see this DrupalDatabaseCache::getMultiple when you enable the settings in devel (/admin/config/development/devel)
+
+Distributed Install
+When to use
+- High traffic site (when meachached daemon passes 1,024 cache request)
+- Large caches where it makes sense to separate out cache data type or update frequency (
+e.g. cache_menu is usually pretty static whereas the default cache could be constantly changing; Mecached starts getting over 128MB)
+
+Types of Distributed Types:
+Multi-server/Clustered
+- Distributes cache load across multiple memcached servers
+- Allows for handlin larger numbers of cache operations useful for high traffic sites
+- NOTE: caches are not replicated between multiple servers by default
+
+Multi-bin
+- Segments different types of caches to different servers
+- Useful for very large caches with varying characeristics (e.g. segmenting mostly read-only caches from caches that are frequently updated)
+
+Hybrid
+- You can combine both the above approaches (e.g. have multiple bins with each bin spread accress multiple servers) 
+
+
+Distributed Install: Configuration
+//Must be exactly the same on all web servers
+//Tells the memcahce which servers are for all default cache and my_readonly_bin 
+$conf['memcache_servers'] = array(
+	'10.11.12.13.11211' => 'default',
+	'10.11.12.14.11211' => 'default',
+	'10.11.12.15.11211' => 'my_readonly_bin',
+);
+//Where to store the cache table
+$conf['memcache_bins] = array(
+	'cache' => 'default', //must specify if setting this variable; cache is the tablename in mysql and default is the name of the bin
+	'cache_bootstrap' => 'my_readonly_bin', //Store thse in 10.11.12.15.11211
+	'cache_menu' => 'my_readonly_bin', //Store thse in 10.11.12.15.11211
+	'cache_path' => 'my_readonly_bin', //Store thse in 10.11.12.15.11211
+);
+$conf['memcache_options] = array(
+	Memcached::OPT_DISTRIBUTION => Memcached::DISTRIBUTION_CONSISTENT,
+);
+
+Tuning Tips 
+- Watch the Available Memomy  (try to keep them at 0)
+-- Evictons == 0
+-- reclaime == 0
+
+- watch (try to keep them at 0)
+-- max connections errors == 0
+-- accepting connections == 1
+-- connection yields == 0 
+-- listen disabled number == 0 - to determine when you need to move from a single memcached server to multiple servers
+
+Tips: https://www.pal-blog.de/entwicklung/perl/memcached-statistics-stas-command.html
+
+Other Caching options other than default drupal cache and memcache
+Redis (https://drupal.org/project/redis)
+MongoDB Cache (https://drupal.org/project/mongodb)
+
+
+
+
+
+
+
+

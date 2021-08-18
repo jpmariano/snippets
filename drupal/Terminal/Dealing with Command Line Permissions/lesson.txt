@@ -1,0 +1,29 @@
+ls -al
+d-user|group|everybody
+r- read
+w- write
+x- execute 
+
+u - user
+g - group
+o - other
+a - all
+- - remove permission
++ - add permission
+
+chmod o-rx file or folder
+chmod o+rx file or folder
+chmod go-w file or folder
+
+root - super user
+sudo - do as a super user
+chown - change ownership
+
+
+
+Example: sudo chown root file or folder 
+
+sudo chown nobody:admin file or folder
+	- nobody:admin - user:group
+
+

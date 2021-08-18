@@ -1,0 +1,4 @@
+name = "Registration Validation"
+description = "Validates username and email address during registration"
+core = 6.x
+package = Example

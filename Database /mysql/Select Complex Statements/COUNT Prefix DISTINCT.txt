@@ -1,0 +1,33 @@
+0908 
+
+1. In how many countries is Spanish spoken by native peoples?
+
+Solution:
+SELECT COUNT(*) FROM CountryLanguage WHERE Language = 'spanish';
+
+2. In how many countries is English spoken by native peoples?
+
+Solution:
+SELECT COUNT(*) FROM CountryLanguage WHERE Language = 'spanish';
+
+3. How could we get both answers into one statement? (Hint: WHERE might not be the answer…)
+
+Solution:
+SELECT COUNT(IF(Language = 'spanish', 1, NULL)) AS Spanish, COUNT(IF(Language = 'english', 1, NULL)) AS English FROM CountryLanguage;
+
+4. What is the minimum, maximum and average population for a country in Asia?
+
+Solution:
+SELECT MIN(Population) Minimum, MAX(Population) Maximum, ROUND(AVG(Population)) Average FROM Country WHERE Continent = 'Asia';
+
+5. How many government forms are in use by countries in South America? (Silly solution would be "One each".)
+
+Solution:
+SELECT COUNT(DISTINCT(GovernmentForm)) GovernmentForms FROM Country WHERE Continent = 'South America';
+
+6. Compare the number of distinct Country names with the number of distinct values derived by using only the first few characters of the name. Try values of 20, 15 and 10. (This is an important diagnostic that we'll explain in the MySQL 5 Administration course.)
+
+Solutions:
+SELECT COUNT(DISTINCT(Name)) FullValue, COUNT(DISTINCT(LEFT(Name, 20))) Prefix20 FROM Country;
+SELECT COUNT(DISTINCT(Name)) FullValue, COUNT(DISTINCT(LEFT(Name, 15))) Prefix15 FROM Country;
+SELECT COUNT(DISTINCT(Name)) FullValue, COUNT(DISTINCT(LEFT(Name, 10))) Prefix10 FROM Country;

@@ -1,0 +1,17 @@
+14 Multiple Table DML Operations
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. We just learned that the population of Atlanta, GA in the US increased by 200. We assume this is all births, so we want to increase both the population of that city as well as the population of the country it belongs to. Write a single query that performs both actions.
+
+Solution:
+UPDATE City ci JOIN Country co ON Code = CountryCode
+SET ci.Population = ci.Population + 200, co.Population = co.Population + 200
+WHERE Code = 'USA' AND ci.Name = 'Atlanta';
+
+2. We just discovered that we have number of mistakes in the City and CountryLanguage data for Sweden. Create a single query that removes the rows in both those tables that are related to Sweden, but leave the Sweden Country row intact.
+
+Solution:
+DELETE ci, cl FROM Country co LEFT JOIN City ci ON Code = ci.CountryCode
+LEFT JOIN CountryLanguage cl ON Code = cl.CountryCode
+WHERE Code = 'SWE';

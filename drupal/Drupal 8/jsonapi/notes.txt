@@ -1,0 +1,173 @@
+http://<host>/jsonapi/node/<nodetype>/uuid 
+params: _format, api_json 
+
+https://jsonapi.org/format/#document-resource-object-relationships
+{
+  "data": {
+    "type": "articles",
+    "id": "1",
+    "attributes": {
+      // ... this article's attributes
+    },
+    "relationships": {
+      // ... this article's relationships
+    }
+  }
+}
+
+
+{
+  "type": "articles",
+  "id": "1",
+  "attributes": {
+    "title": "Rails is Omakase"
+  },
+  "relationships": {
+    "author": {
+      "links": {
+        "self": "/articles/1/relationships/author",
+        "related": "/articles/1/author"
+      },
+      "data": { "type": "people", "id": "9" }
+    }
+  }
+}
+
+How to get UUID?
+http://<host>/jsonapi/node/article?_format=api_json 
+    - This is how you get the UUID from postman
+
+Sorting Collection
+http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=title
+multiple sort
+http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=created,title
+Sort Desc
+http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=-created&page[limit]=1
+Page Offset 
+http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=-created&page[limit]=1&page[offset]=0
+
+
+JSON API Includes
+http://<host>/jsonapi/node/article/<UUID>?_format=api_json&fields[node--article]=status,title,uid&fields[user--user]=name&include=uid,uid.user_picture&sort=-created&page[limit]=1&page[offset]=0
+
+JSON Sparse Fieldsets: see fields[node--article]=status,title,uid
+http://<host>/jsonapi/node/article/<UUID>?_format=api_json&fields[node--article]=status,title,uid&fields[user--user]=name&include=uid,uid.user_picture&sort=-created&page[limit]=1&page[offset]=0
+
+Filtering Collection
+http://<host>/jsonapi/node/article/<UUID>?_format=api_json&filter[titleFilter][condition][path]=title&filter[titleFilter][condition][value]=yourtitletosearch
+
+Filters and Nested Relationships
+http://<host>/jsonapi/node/article?_format=api_json&filter[ourAuthor][condition][path]=uid.name&filter[ourAuthor][condition][value]=authorname&fields[node--article]=title,uid&fields[user--user]=name&include=uid,uid.user_picture
+
+
+Simple Auth module and library
+Install Simple OAuth
+    -  composer require drupal/simple_oauth
+Set Token Expiration 
+ - Expiration time 870000
+Create keys
+    - openssl genrsa -out private.key 1024
+    - To extract the public key from the private key, we will need to execute: openssl rsa -in private.key -pubout -out public.key
+    Public Key: /var/wwww/dev.local/certificates/public.key
+    Private key Key: /var/wwww/dev.local/certificates/private.key
+Create a role
+    -   Role Name should be use in label when you add a client
+Register client /admin/config/people/simple_oauth/oauth2_client
+Add a Client
+Label:  React APP
+User:
+New Secret: <yourpassword>
+UUID: will become your client id
+
+POST {{protocol}}://{{host}}/oauth/debug?_format=json&XDEBUG_SESSION_START=PHPSTORM
+    Create a role with each client
+    that matches the Label 
+    In the body form data: 
+        - grant_type = password
+        - client_id = uuid 
+        - client_secret = 12345
+        - username = test
+        - password = test
+
+
+POST {{protocol}}://{{host}}/oauth/token?XDEBUG_SESSION_START=PHPSTORM
+In the body form data: 
+        - grant_type = refresh_token
+        - refresh_token = <refreshtoken>
+        - client_id = uuid 
+        - client_secret = 12345
+        - username = test
+        - password = test
+
+POST {{protocol}}://{{host}}/oauth/token
+In the body form data: 
+        - grant_type = password
+        - client_id = uuid 
+        - client_secret = 12345
+        - username = test
+        - password = test
+        - scope = administrator my_awesome_app 
+
+GET {{protocol}}://{{host}}/oauth/debug?_format=json
+- In the header form data: 
+    - Authorization = <token_type> <token>
+
+Make an Authenticated Request 
+ - Retrieve an OAuth authentication token
+ - Add an Authorization: Bearer HTTP header to authentication a Request
+ - loo at some exmple responses 
+
+http https://example.org/oauth/debug?_format=json 'Authorization:Bearer eyJ0eXAiO...WAJCRiw'
+
+Enable CORS in drupal
+sites/default/default.services.yml
+ # Configure Cross-Site HTTP requests (CORS).
+   # Read https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+   # for more information about the topic in general.
+   # Note: By default the configuration is disabled.
+  cors.config:
+    enabled: true
+    # Specify allowed headers, like 'x-allowed-header'.
+    allowedHeaders: ['*']
+    # Specify allowed request methods, specify ['*'] to allow all possible ones.
+    allowedMethods: ['*']
+    # Configure requests allowed from specific origins.
+    allowedOrigins: ['*']
+    # Sets the Access-Control-Expose-Headers header.
+    exposedHeaders: false
+    # Sets the Access-Control-Max-Age header.
+    maxAge: false
+    # Sets the Access-Control-Allow-Credentials header.
+    supportsCredentials: false
+
+
+   post http://<host>/jsonapi/node/article
+   - Content-Type: application/vnd.api+json. This header will tell Drupal that the body that the request contains is structured in JSON:API format. 
+   - Accept: application/vnd.api+json. This will instruct the server to return any responses back to our consumer using JSON:API format. 
+   - Authentication: Bearer eyJ0eXAi...dQOQw. This one contains the authentication token obtained above. This is the proof the server needs to trust that the request was originated from a valid Drupal user through OAuth 2.
+
+   patch http://<host>/jsonapi/node/article
+   - Content-Type: application/vnd.api+json. This header will tell Drupal that the body that the request contains is structured in JSON:API format. 
+   - Accept: application/vnd.api+json. This will instruct the server to return any responses back to our consumer using JSON:API format. 
+   - Authentication: Bearer eyJ0eXAi...dQOQw. This one contains the authentication token obtained above. This is the proof the server needs to trust that the request was originated from a valid Drupal user through OAuth 2.
+   Request body
+   {
+    "data": {
+        "type": "user--user",
+        "id": "ab3b164c-7b08-4a3c-ac82-845628ff2399",
+        "attributes": {
+        "field_bio": {
+            "value": "There are no rivers where I grew up.",
+            "format": "plain_text",
+            "summary": "Only salty water."
+        },
+        "field_contact_info": "Reach me by email at foo@example.com"
+        }
+    }
+    }
+
+    https://example.com/jsonapi/users/{user_uuid}
+
+    http DELETE https://www.example.org/jsonapi/node/article/c0a07ee4-157f-4404-a64f-4f8797703867 'Authorization:Bearer eyJ0eXAi...dQOQw'
+    
+Error objects provide additional information about problems encountered while performing an operation. Error objects MUST be returned as an array keyed by errors in the top level of a JSON:API document.

@@ -1,0 +1,15 @@
+parameters:
+    dino.roar.use_key_value_cache: true
+
+services:
+    dino_roar.roar_generator:
+        class: Drupal\dino_roar\Jurassic\RoarGenerator
+        arguments:
+            - '@keyvalue'
+            - '%dino.roar.use_key_value_cache%'
+
+    dino_roar.dino_listener:
+        class: Drupal\dino_roar\Jurassic\DinoListener
+        arguments: ['@logger.factory'] #@logger.factory is a service name - LoggerChannelFactoryInterface is used as an arguemnt in  __construct
+        tags: #use for registering event listener
+            - { name: event_subscriber } #This services gets added on top of - core/core.services.yml ; Also, the tags area is standard just copy and paste from core to your services for examole format: drupal_ajax

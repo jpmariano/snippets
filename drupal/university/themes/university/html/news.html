@@ -1,0 +1,963 @@
+<!doctype html>
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>News page</title>
+<script src="../js/jquery.min.js" type="text/javascript"></script>
+<script src="../js/css_browser_selector.js" type="text/javascript"></script>
+<script src="../js/custom.js" type="text/javascript"></script>
+<script src="../js/jquery.flexslider.js" type="text/javascript"></script>
+<script src="../js/jquery.bxslider.min.js" type="text/javascript"></script>
+<script src="../js/jquery.backgroundpos.js" type="text/javascript"></script>
+<script src="../js/jquery.isotope.js" type="text/javascript"></script>
+<link href="../css/flexslider.css" rel="stylesheet" type="text/css" />
+<link href="../css/index.css" rel="stylesheet" type="text/css" />
+<link href="../css/responsive.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+
+	$(window).load(function(){
+		var $container = $('.portfolioContainer');
+		$container.isotope({
+			filter: '*',
+			animationOptions: {
+				duration: 750,
+				easing: 'linear',
+				queue: false
+			}
+		});
+	 
+		$('.portfolioFilter a').click(function(){
+			$('.portfolioFilter .current').removeClass('current');
+			$(this).addClass('current');
+	 
+			var selector = $(this).attr('data-filter');
+			$container.isotope({
+				filter: selector,
+				animationOptions: {
+					duration: 750,
+					easing: 'linear',
+					queue: false
+				}
+			 });
+			 return false;
+		}); 
+	});
+
+	
+</script>
+</head>
+
+<body class="not-home news_events news_page">
+	
+    <div class="container">
+    	<div class="inner_container">                
+            <!--<div style="position:absolute;top:0; opacity:1;z-index:1;left:0;">
+                <img src="file:///D|/PROJECTS/HTML & CSS/Sites/Chandra/Howard University/jpeg/desktop/HOWU[Academics-LandingPg-8].jpg" >
+            </div>-->
+			<section class="slider">
+                <div class="transparent_img top"></div>
+                <header>
+                	<div class="inner_content">
+                        <a class="logo" href="home.html"><img src="../images/logo.png" alt="Logo" title="Logo"></a>
+                        <div class="top_section">
+                            <ul class="top_menu">
+                                <li><a href="">Students</a></li>
+                                <li><a href="">Faculty &amp; Staff</a></li>
+                                <li><a href="">Alumni &amp; Friends</a></li>
+                            </ul>
+                            <div class="search">
+                            	<input type="search" placeholder="Search" class="search_txt" >
+                                <a href="" class="submit"><img src="../images/search.png" alt="Search" title="Search"></a>                               
+                            </div>
+                            <ul class="social_net">
+                                <li><a href=""><img src="../images/fb.png" alt="" ></a></li>
+                                <li><a href=""><img src="../images/twitter.png" alt="" ></a></li>
+                                <li><a href=""><img src="../images/insta.png" alt=""></a></li>
+                                <li><a href=""><img src="../images/you_tube.png" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="primary">
+                            <ul class="menu_level1">
+                                <li>
+                                    <a href="">Admissions</a>
+                                    <ul class="menu_level2">
+                                        <li>
+                                            <a href="undergraduate.html">Undergraduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Dates &amp; Deadlines <span> ></span></a></li>
+                                                <li><a href="">Student Life <span> ></span></a></li>
+                                                <li><a href="fields_of_study.html">Fields of Study</a></li>
+                                                <li><a href="">Facts &amp; Figures</a></li>
+                                                <li><a href="">Apply <span> ></span></a></li>
+                                                <li><a href="">Athletics <span> ></span></a></li>
+                                                <li><a href="">Admissions Information <span> ></span></a>
+                                                    <ul class="menu_level4">
+                                                        <li><a href="">Prospective Students</a></li>
+                                                        <li><a href="">Pre-prospective</a></li>
+                                                        <li><a href="">Parents</a></li>
+                                                        <li><a href="">School Counselors</a></li>
+                                                        <li><a href="">Alumni Recruiters</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="">International Students <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="">Graduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Admission Process  Overview <span> ></span></a></li>
+                                                <li><a href="">Student Type <span> ></span></a></li>
+                                                <li><a href="">Online Application</a></li>
+                                                <li><a href="">Requirements for Enrollment <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="content_page.html">Virtual Tour</a></li>
+                                        <li><a href="">Financial Aid</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="academics.html">Academics</a>
+                                	<ul class="menu_level2">
+                                        <li>
+                                            <a href="undergraduate.html">Undergraduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Dates &amp; Deadlines <span> ></span></a></li>
+                                                <li><a href="">Student Life <span> ></span></a></li>
+                                                <li><a href="fields_of_study.html">Fields of Study</a></li>
+                                                <li><a href="">Facts &amp; Figures</a></li>
+                                                <li><a href="">Apply <span> ></span></a></li>
+                                                <li><a href="">Athletics <span> ></span></a></li>
+                                                <li><a href="">Admissions Information <span> ></span></a>
+                                                    <ul class="menu_level4">
+                                                        <li><a href="">Prospective Students</a></li>
+                                                        <li><a href="">Pre-prospective</a></li>
+                                                        <li><a href="">Parents</a></li>
+                                                        <li><a href="">School Counselors</a></li>
+                                                        <li><a href="">Alumni Recruiters</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="">International Students <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="">Graduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Admission Process  Overview <span> ></span></a></li>
+                                                <li><a href="">Student Type <span> ></span></a></li>
+                                                <li><a href="">Online Application</a></li>
+                                                <li><a href="">Requirements for Enrollment <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="content_page.html">Virtual Tour</a></li>
+                                        <li><a href="">Financial Aid</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="news_events.html" class="active">News &amp; Events</a>
+                                	<ul class="menu_level2">
+                                        <li>
+                                             <a href="news.html">News</a>
+                                             <ul class="menu_level3">
+                                                <li><a href="">Dates &amp; Deadlines <span> ></span></a></li>
+                                                <li><a href="">Student Life <span> ></span></a></li>
+                                                <li><a href="fields_of_study.html">Fields of Study</a></li>
+                                                <li><a href="">Facts &amp; Figures</a></li>
+                                                <li><a href="">Apply <span> ></span></a></li>
+                                                <li><a href="">Athletics <span> ></span></a></li>
+                                                <li><a href="">Admissions Information <span> ></span></a>
+                                                    <ul class="menu_level4">
+                                                        <li><a href="">Prospective Students</a></li>
+                                                        <li><a href="">Pre-prospective</a></li>
+                                                        <li><a href="">Parents</a></li>
+                                                        <li><a href="">School Counselors</a></li>
+                                                        <li><a href="">Alumni Recruiters</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="">International Students <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="">Graduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Admission Process  Overview <span> ></span></a></li>
+                                                <li><a href="">Student Type <span> ></span></a></li>
+                                                <li><a href="">Online Application</a></li>
+                                                <li><a href="">Requirements for Enrollment <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="content_page.html">Virtual Tour</a></li>
+                                        <li><a href="">Financial Aid</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="">About</a>
+                                	<ul class="menu_level2">
+                                        <li>
+                                            <a href="undergraduate.html">Undergraduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Dates &amp; Deadlines <span> ></span></a></li>
+                                                <li><a href="">Student Life <span> ></span></a></li>
+                                                <li><a href="fields_of_study.html">Fields of Study</a></li>
+                                                <li><a href="">Facts &amp; Figures</a></li>
+                                                <li><a href="">Apply <span> ></span></a></li>
+                                                <li><a href="">Athletics <span> ></span></a></li>
+                                                <li><a href="">Admissions Information <span> ></span></a>
+                                                    <ul class="menu_level4">
+                                                        <li><a href="">Prospective Students</a></li>
+                                                        <li><a href="">Pre-prospective</a></li>
+                                                        <li><a href="">Parents</a></li>
+                                                        <li><a href="">School Counselors</a></li>
+                                                        <li><a href="">Alumni Recruiters</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href="">International Students <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="">Graduate</a>
+                                            <ul class="menu_level3">
+                                                <li><a href="">Admission Process  Overview <span> ></span></a></li>
+                                                <li><a href="">Student Type <span> ></span></a></li>
+                                                <li><a href="">Online Application</a></li>
+                                                <li><a href="">Requirements for Enrollment <span> ></span></a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="content_page.html">Virtual Tour</a></li>
+                                        <li><a href="">Financial Aid</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="contactus.html">Contact</a></li>
+                            </ul>
+                        </div>
+                     </div>
+                </header>
+				<div class="flexslider">
+					<ul class="slides">
+						<li>
+							<img src="../images/news_events_slider_img1.jpg" />
+                            <div class="slider_content">
+                            	<h2>News &amp; Events s1</h2>
+                                <div class="slider_con_det">
+                                    <p>Biology majors in biochemistry lab</p>
+                                    <a href="">Learn More</a>
+                                </div>
+                            </div>
+               				<div class="transparent_img"></div>
+						</li>			
+						<li>
+							<img src="../images/news_events_slider_img1.jpg" />
+                            <div class="slider_content">
+                            	<h2>News &amp; Events s2</h2>
+                                <div class="slider_con_det">
+                                    <p>Biology majors in biochemistry lab</p>
+                                    <a href="">Learn More</a>
+                                </div>
+                            </div>
+                			<div class="transparent_img"></div>
+						</li>			
+						<li>
+							<img src="../images/news_events_slider_img1.jpg" />
+                            <div class="slider_content">
+                            	<h2>News &amp; Events s3</h2>
+                                <div class="slider_con_det">
+                                    <p>Biology majors in biochemistry lab</p>
+                                    <a href="">Learn More</a>
+                                </div>
+                            </div>
+                <div class="transparent_img"></div>
+						</li>					
+					</ul>
+				</div>
+                <div class="right_menu">
+                	<div>
+						<span> 
+							<img src="../images/arrow_white.png" alt="" /> 
+						</span>
+					</div>
+                    <ul>
+                    	<li><a href="">Apply</a></li>
+                    	<li><a href="">Donate</a></li>
+                    </ul>
+                </div>
+			</section>
+            
+            <div class="main_top_section share_right">
+            	<div class="inner_content">
+                	<div class="breadcrumb">
+                    	<ul>
+                        	<li><a href=""><img src="../images/breadcrumb.png" alt=" " ></a> ></li>
+                            <li><a href=""> News &amp; Events</a> > </li>
+                            <li><a href=""> News</a></li>
+                        </ul>
+                    </div>  
+                    <div class="share_section">
+                    	<ul>
+                        	<li>share:</li>
+                            <li><a href=""><img alt=" " src="../images/share_fb.png"></a></li>
+                            <li><a href=""><img alt=" " src="../images/share_twitter.png"></a></li>
+                            <li><a href=""><img alt=" " src="../images/share_insta.png" title=""></a></li>
+                            <li><a href=""><img alt=" " src="../images/share_youtube.png"></a></li>
+                        </ul>
+                    </div>                  
+                </div>
+            </div> 
+                   
+            <div class="portfolioFilter_section">
+                <div class="portfolioFilter"> 
+                    <div class="section_left">
+                        <span>Filter news by: </span>               
+                        <a href="#" data-filter="*" class="current">All News</a>
+                        <a href="#" data-filter="._alumni">Alumni</a>
+                        <a href="#" data-filter="._athletics">Athletics</a>
+                        <a href="#" data-filter="._campus">Campus</a>
+                        <a href="#" data-filter="._other">Other News</a>
+                    </div>
+                    <div class="section_right">
+                        <a href="#" data-filter="._archive">Archive</a>
+                        <a href="#" data-filter="._publication">Publications</a>
+                        <a href="#" data-filter="._media">Media Resources</a>                
+                    </div>
+                </div>
+            </div>
+            <div class="announcements news_section_slider">
+                <div id="announcements-carousel" class="carousel module portfolioContainer">
+                    <div class="slide _alumni _campus _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.09.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.09.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.09.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.11.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.11.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.11.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.17.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.17.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.17.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.19.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _archive _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.19.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.19.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.21.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.21.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img2.png">
+                            <p>5.21.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.23.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.23.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _archive">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.23.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.25.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.25.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _other">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.25.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _campus _media">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.27.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _athletics">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.27.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                    <div class="slide _alumni _archive _publication">
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.27.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img3.png">
+                            <p>5.13.14 | Lorem ipsum dolor sit</p>
+                        </div>
+                        <div class="single_detail">
+                            <span class="news">campus news</span>
+                            <img src="../images/news_events_slider-img1.png">
+                            <p>5.15.14 | Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bx-controls bx-has-pager bx-has-controls-direction">
+                	<div class="bx-controls-direction">
+                    	<a class="bx-prev">Prev</a>
+                        <a class="bx-next">Next</a>
+                    </div>
+                </div>
+            </div>                          
+            
+            <div class="parallax_section">            
+                <section id="home_academics" data-speed="10" data-type="background">                	
+                    <div class="parallax_top">
+                        <img src="../images/top_img1.png" alt="" />
+                        <h2>Howard Unversity</h2>
+                        <img src="../images/bottom_img1.png" alt="" />                        
+                        <p>Founded in 1867, Howard University’s is one of the nation’s leading research institutions devoted to empowering and transforming the lives of its students and community. </p>
+                    </div>
+                    <div class="parallax_left">
+                        <img src="../images/news_events_left_img1.png" alt="" />
+                    </div>
+                    <div class="parallax_right">
+                        <img src="../images/news_events_right_img1.png" alt="" />
+                    </div>
+                    <div class="parallax_bottom">
+                        <div class="more_btn"><a href="">Learn More</a></div>
+                    </div>
+                </section>
+            </div>
+            
+        </div>
+        <div class="footer_section">
+            <div class="inner_content">
+                <ul class="footer_left_menu">
+                    <li>
+                        <a href="">Admissions</a>
+                        <ul>
+                            <li><a href="undergraduate.html">Undergraduate</a></li>
+                            <li><a href="">Graduate</a></li>
+                            <li><a href="content_page.html">Virtual Tour</a></li>
+                            <li><a href="">Financial Aid</a></li>
+                        </ul>
+                     </li>
+                    <li>
+                        <a href="news_events.html">News &amp; Events</a>
+                        <ul>
+                            <li><a href="">News</a></li>
+                            <li><a href="">Events</a></li>
+                            <li><a href="">Publications</a></li>
+                            <li><a href="">Media Resources</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="academics.html">Academics</a>
+                        <ul>
+                            <li><a href="">Enrollment</a></li>
+                            <li><a href="">Schools/Colleges</a></li>
+                            <li><a href="">Libraries</a></li>
+                            <li><a href="">Programs</a></li>
+                            <li><a href="">Professional Development</a>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="">about</a>
+                        <ul>
+                            <li><a href="">History</a></li>
+                            <li><a href="">Board</a></li>
+                            <li><a href="">Administration</a></li>
+                            <li><a href="">About D.C.</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="contactus.html">Contact</a>
+                        <ul>
+                            <li><a href="">Map</a></li>
+                            <li><a href="">Directory</a></li>
+                            <li><a href="">Career Opportunities</a></li>
+                            <li><a href="">Giving</a></li>
+                            <li><a href="">visit</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="">Research</a>
+                    </li>
+                    <li><a href="">Current Students</a></li>
+                    <li><a href="">Faculty &amp; Staff</a></li>
+                    <li><a href="">Alumni &amp; Friends</a></li>
+                    <li><a href="">Search Results</a></li>
+                </ul>
+                <div class="footer_cont">
+                    <span>Contact Us</span>
+                    <div class="footer_cont_det">
+                        <p>Howard UNiversity</p>
+                        <p>2400 Sixth Street, NW</p>
+                        <p>Washington, DC 20059</p>
+                        <p>Phone: 202-806-6100</p>
+                    </div>
+                    <div class="footer_cont_det">
+                        <p>Undergraduate Admissions</p>
+                        <p>E-mail: <a href="">admission@howard.edu</a></p>
+                        <p>Toll Free: 1-800-822-6363</p>
+                        <p>Phone: 202-806-2763 or 202-806-2755</p>
+                        <p>Fax: 202-806-4465</p>                        
+                    </div>
+                    <div class="footer_cont_det">
+                        <p>graduate Admissions</p>
+                        <p>Email: <a href="">hugsadmission@howard.edu</a></p>
+                        <p>Toll Free: 1-800-822-6363</p>
+                        <p>Phone: 202-806-2763 or 202-806-2755</p>
+                        <p>Fax: 202-806-4465</p>
+                    </div>
+                    <div class="footer_cont_det">
+                        <p>Howard UNiversity Hospital</p>
+                        <p>2041 Georgia Avenue, NW</p>
+                        <p>Washington, DC 20060</p>
+                        <p>Phone: 202-806-6100</p>
+                    </div> 
+                    <div class="footer_btm">
+                        <a href=""><img src="../images/footer_logo.png" alt="" /></a>
+                        <ul>
+                            <li><a href="">Site Map</a></li>
+                            <li><a href="">Privacy Policy</a></li>
+                            <li><a href="">Terms of Use</a></li>
+                            <li><a href="">Search Results</a></li>
+                        </ul>
+                    </div>                   	
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+12 Joins
+
+Using the world database:
+
+1. List the names of all the cities along with their country name where the city name is exactly the same at the name of the country in which it lies. Be careful, because there are a couple of cities in our database that have the same name as a **different** country.
+
+Solution:
+SELECT co.name 'Country Name', ci.name 'City Name'
+FROM country co JOIN city ci ON co.name = ci.name
+WHERE co.code = ci.countrycode;
+
+2. Now list the cities that have the same name as a DIFFERENT country from the one in which they lie, showing both the name of the other country and the name of the city's country.
+
+Solution:
+SELECT c1.name 'Other Country', ci.name 'City Name', c2.name 'City Country'
+FROM country c1 JOIN city ci ON c1.name = ci.name
+JOIN country c2 ON ci.countrycode = c2.code
+WHERE c1.code <> c2.code;
+
+3. List some common European languages (English, French, Spanish, Portuguese, German, Dutch, Italian, Greek, Norwegian, Swedish, Russian and Polish) along with the number of countries in which each language is spoken natively today. Sort this result in descending order by number of counties. Also generate a hyphen-separated list (some country names contain commas) of those countries for each language, sorting the country names alphabetically.
+
+Solution:
+SELECT Language, COUNT(*) Countries, GROUP_CONCAT(Name ORDER BY Name SEPARATOR '-') 'Country Names' FROM Country JOIN CountryLanguage ON Code = CountryCode WHERE Language IN ('English', 'French', 'Spanish', 'Portuguese', 'German', 'Dutch', 'Italian', 'Norwegian', 'Swedish', 'Greek', 'Russian', 'Polish') GROUP BY Language ORDER BY Countries DESC\G
+
+4. List all the countries in Oceania along with their capital cities. Be sure to include all 28 countries, because not all of them have capital cities.
+
+Solution:
+SELECT co.Name, ci.Name AS 'Capital City'
+FROM Country co LEFT JOIN City ci ON Capital = ID
+WHERE Continent = 'South America' ORDER BY co.Name;
+
+Using the Employees database:
+
+1. List the current managers of all departments alphabetically by department name. Include a column that shows when they took this position.
+
+Solution:
+SELECT d.*, CONCAT(e.last_name, ', ', e.first_name) AS name, dm.from_date
+FROM departments d JOIN dept_manager dm ON d.dept_no = dm.dept_no
+JOIN employees e ON dm.emp_no = e.emp_no
+WHERE dm.to_date > CURDATE() ORDER BY d.dept_name;
+
+2. Now list them by seniority with the one having that position the longest listed first.
+
+Solution:
+SELECT d.*, CONCAT(e.last_name, ', ', e.first_name) AS name, dm.from_date
+FROM departments d JOIN dept_manager dm ON d.dept_no = dm.dept_no
+JOIN employees e ON dm.emp_no = e.emp_no
+WHERE dm.to_date > CURDATE() ORDER BY dm.from_date;
+
+3. List the departments alphabetically, along with the number of employees currently in each department.
+
+Solution:
+SELECT d.*, COUNT(*) AS Employees
+FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no
+JOIN employees e ON de.emp_no = e.emp_no
+WHERE de.to_date > CURDATE() GROUP BY d.dept_name;
+
+4. Now let's clean this up for presentation at the next Board meeting. But we also want to include the total number of employees at the end. No need for the department number this time - Board members don't relate to that.
+
+Solution:
+SELECT IFNULL(d.dept_name, '---Total Employees') AS Department, COUNT(*) AS Employees
+FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no
+JOIN employees e ON de.emp_no = e.emp_no
+WHERE de.to_date > CURDATE() GROUP BY d.dept_name WITH ROLLUP;
+
+5. The Board is also interested in the budget for employee salaries by department. List the departments alphabetically, along with the total current salaries of employees currently in each department. (You'll see why they're so concerned!)
+
+Solution:
+SELECT IFNULL(d.dept_name, '---Total Salaries') AS Department, SUM(s.salary) AS 'Labor Cost'
+FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no
+JOIN employees e ON de.emp_no = e.emp_no
+JOIN salaries s ON e.emp_no = s.emp_no
+WHERE de.to_date > CURDATE() AND s.to_date > CURDATE()
+GROUP BY d.dept_name WITH ROLLUP;
+
+6. The Board will also will also want to know the average employee salary by department. List the departments alphabetically, along with the average current salaries (rounded to an integer value for presentation) of employees currently in each department.
+
+Solution:
+SELECT IFNULL(d.dept_name, '---Average Salary') AS Department, ROUND(AVG(s.salary)) AS 'Avg Salary'
+FROM departments d JOIN dept_emp de ON d.dept_no = de.dept_no
+JOIN employees e ON de.emp_no = e.emp_no
+JOIN salaries s ON e.emp_no = s.emp_no
+WHERE de.to_date > CURDATE() AND s.to_date > CURDATE()
+GROUP BY d.dept_name WITH ROLLUP;
+
+7. Have fun exploring this database and coming up with your own queries as you dig further into it!
+

@@ -1,0 +1,30 @@
+A dependency is an object that can be used (a service). 
+An injection is the passing of a dependency to a dependent object (a client) that would use it.
+
+// app.php
+
+require __DIR__.'/vendor/autoload.php';
+use DiDemo\Mailer\FriendHarvester; 
+
+$dsn = 'sqlite:'.__DIR__.'/data/database.sqlite';
+$pdo = new PDO($dsn);
+$FriendHarvester = new FriendHarvester();
+
+------------------------------------------------------------------
+app.php
+require __DIR__.'/vendor/autoload.php';
+use DiDemo\Mailer\FriendHarvester; 
+
+$dsn = 'sqlite:'.__DIR__.'/data/database.sqlite';
+$pdo = new PDO($dsn);
+$FriendHarvester = new FriendHarvester($pdo);
+
+src/DiDemo/FriendHarvester.php
+
+class FriendHarvester {
+    private $pdo;
+    public function __construct($pdo) //This is an example of dependency 
+    {
+            $this->pdo = $pdo;
+    }
+}

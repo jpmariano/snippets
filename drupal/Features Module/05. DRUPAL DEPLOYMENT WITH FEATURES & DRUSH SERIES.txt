@@ -1,0 +1,16 @@
+Make sure in home/administration/structure/features that the blog feature is turned on and notice that it is currently 
+show in default (Note: Defaults are inside the database )
+
+Images might not show right 
+- Go to blog manage display and edit the changes
+- After changes is made the feature state is now overriden in code and not what's inside the database
+- install the diff module to know what what's overriden  - drush dl diff-2.0.beta2 
+- enable the module - drush en diff -y
+- overriden becomes a link and shows the diff between in default(database) - overriden (code)
+- Recreate tab - shows what's define in code 
+- click download - to download newly created edited feature
+- replace the old created feature and replace it with the created edited feature
+
+
+
+

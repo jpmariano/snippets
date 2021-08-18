@@ -1,0 +1,4 @@
+name = Drupalize.Me
+description = Coding with Views series example module.
+core = 7.x
+dependencies[] = views

@@ -1,0 +1,34 @@
+<?php
+
+//See 04 and look for macromaker module
+
+
+function hook_init() {
+	
+	//Replace Tokens; This gets added into drupal.setting 
+	$macros	= variable_get('macromaker_macros', array());
+	foreach ($macros as $mid => $macro) {
+		$macro = token_replace_multiple($macro, array('global', 'user'));
+		$macros[$mid] = $macro; }
+	
+	
+		drupal_add_js( array(
+		'macromaker' => array(
+				'macros' => $macros,
+				// theme () calls the theme functions macromaker_popup with an argument of $macros 
+				'popup' => theme('macromaker_popup', $macros),
+			)
+		), 'setting');
+	
+	//This gets added into drupal.setting; ^^ The top is the improvised version of the code. Replaces token with values
+	drupal_add_js( array(
+		'macromaker' => array(
+				'macros' => variable_get('macromaker_macros', array()),
+			)
+		), 'setting');
+		
+	$path = drupal_get_path('module', 'macromaker');
+	drupal_add_js($path . '/library.js');
+	drupal_add_js($path . '/modulename.js');
+	drupal_add_css($path . '/modulename.css');
+}

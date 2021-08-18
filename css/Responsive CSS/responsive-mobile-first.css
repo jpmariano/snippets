@@ -1,0 +1,237 @@
+
+/** Mobile Phones: IP6 Plus 293.76, Samsung S5 275.9,  Samsung S4 264.5 ,IP 6 253.44,  Samsung S5 mini 245.6px,   Samsung s4 230.5, IP5c 223.68, IP 4-5-5s 221.76
+   Small Tablets: Ipad Mini 508.8, Fire HD 7 480,  Toshiba Excite Go 451.2, Galaxy Tab 3 441.6, Fire HD 6 393.6
+   Large Tablets: Samsung Galaxy 768, IPad 2 633.6, Acer Icona Tab 646.08, Fire HDX 8.9model 595.2, HTC Nexus 580.8
+   Laptops and Desktops: 800, 1024, 1050, 1200, 1536
+*/
+
+/*********************************** Notes on Mobile First ****************************************/
+/** Defaults that is set is for mobile
+    Settings you override @media goes to desktop
+*/
+/*********************************** End Notes on  Mobile First ****************************************/
+
+
+
+
+/*********************************** Mobile First ****************************************/
+
+/*********************************** Mobile  ****************************************/
+/**  Mobile Phones: IP6 Plus 293.76, Samsung S5 275.9,  Samsung S4 264.5 ,IP 6 253.44,  Samsung S5 mini 245.6px,   Samsung s4 230.5, IP5c 223.68, IP 4-5-5s 221.76*/
+/** This applies from 0px to 222px */
+body { 
+  background: red; 
+}
+
+/** IP 4-5-5s Support */
+/** This applies from 222px onwards */
+@media screen and (min-width: 222px) {
+  body { 
+    background: green; 
+  }
+}
+
+
+
+/** IP 5c Support */
+/** This applies from 224px onwards */
+@media screen and (min-width: 224px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** Samsung s4 Support */
+/** This applies from 231px onwards */
+@media screen and (min-width: 231px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** Samsung S5 mini 246 px */
+/** This applies from 246 px onwards */
+@media screen and (min-width: 246px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/** IP 6 Support */
+/** This applies from 254px onwards */
+@media screen and (min-width: 254px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** Samsung S4 */
+/** This applies from 265px onwards */
+@media screen and (min-width: 265px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/** Samsung S4 */
+/** This applies from 276px onwards */
+@media screen and (min-width: 276px) {
+  body { 
+    background: blue; 
+  }
+}
+ 
+
+/** IP 6 Plus Support */
+/** This applies from 294px onwards */
+@media screen and (min-width: 294px) {
+  body { 
+    background: yellow; 
+  }
+}
+/*********************************** End Mobile  ****************************************/
+
+
+/*********************************** SMall Tab   ****************************************/
+/** Small Tablets: Ipad Mini 508.8, Fire HD 7 480,  Toshiba Excite Go 451.2, Galaxy Tab 3 441.6, Fire HD 6 393.6 */
+
+/** Fire HD 6 */
+/** This applies from 394px onwards */
+@media screen and (min-width: 394px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/** Galaxy Tab 3 */
+/** This applies from 442px onwards */
+@media screen and (min-width: 254px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** Toshiba Excite Go */
+/** This applies from 452px onwards */
+@media screen and (min-width: 452px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/** Fire HD 7 */
+/** This applies from 480px onwards */
+@media screen and (min-width: 480px) {
+  body { 
+    background: blue; 
+  }
+}
+ 
+
+/** Ipad Mini Support */
+/** This applies from 509px onwards */
+@media screen and (min-width: 509px) {
+  body { 
+    background: yellow; 
+  }
+}
+/*********************************** End Small Tab  ****************************************/
+
+/*********************************** Large Tab   ****************************************/
+/** Large Tablets: Samsung Galaxy 768, IPad 2 633.6, Acer Icona Tab 646.08, Fire HDX 8.9model 595.2, HTC Nexus 580.8
+
+/** HTC Nexus */
+/** This applies from 581px onwards 
+@media screen and (min-width: 581px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/** Fire HDX 8.9 */
+/** This applies from 596px onwards */
+@media screen and (min-width: 596px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** IPad 2 */
+/** This applies from 634px onwards */
+@media screen and (min-width: 634px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/** Acer Icona Tab */
+/** This applies from 647px onwards */
+@media screen and (min-width: 647px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+
+/**  Samsung Galaxy  Support */
+/**  This applies from 768px onwards */
+@media screen and (min-width: 768px) {
+  body { 
+    background: yellow; 
+  }
+}
+/*********************************** End large Tab  ****************************************/
+
+/*********************************** Laptop Desktop   ****************************************/
+
+/**  Size 800 */
+/**  This applies from 800px onwards */
+@media screen and (min-width: 800px ) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/**  Size 1024 */
+/**  This applies from 1024px onwards */
+@media screen and (min-width: 1024px) {
+  body { 
+    background: blue; 
+  }
+}
+
+/**  Size 1050 */
+/**  This applies from 1050px onwards */
+@media screen and (min-width: 1050px) {
+  body { 
+    background: blue; 
+  }
+}
+
+
+/**  Size 1200 */
+/**  This applies from 1200px onwards */
+@media screen and (min-width: 1200px) {
+  body { 
+    background: blue; 
+  }
+}
+ 
+
+/**  Size 1536  */
+/**  This applies from 1536px onwards */
+@media screen and (min-width: 1536px) {
+  body { 
+    background: yellow; 
+  }
+}
+/*********************************** End Laptop Desktop  ****************************************/
+
+/*********************************** End Mobile First  ****************************************/

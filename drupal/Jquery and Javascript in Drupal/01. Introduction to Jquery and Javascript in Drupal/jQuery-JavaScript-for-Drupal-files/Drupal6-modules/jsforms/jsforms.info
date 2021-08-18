@@ -1,0 +1,4 @@
+name = "JavaScript Forms Demo"
+description = "Provides a few examples of JavaScript form behaviors."
+core = 6.x
+package = Example

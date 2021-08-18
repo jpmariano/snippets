@@ -1,0 +1,21 @@
+0909 
+
+1. How many countries use each government form in South America?
+
+Solution:
+SELECT GovernmentForm, COUNT(*) Countries FROM Country WHERE Continent = 'South AMerica' GROUP BY GovernmentForm;
+
+2. Now sort that result in descending order by number of countries.
+
+Solution:
+SELECT GovernmentForm, COUNT(*) Countries FROM Country WHERE Continent = 'South America' GROUP BY GovernmentForm ORDER BY Countries DESC;
+
+3. Now add a comma-separated list of the countries for each government form. (Hint: Learn about the very useful GROUP_CONCAT aggregation function in the online manual.)
+
+Solution:
+SELECT GovernmentForm, COUNT(*) Countries, GROUP_CONCAT(Name) CountryNames FROM Country WHERE Continent = 'South America' GROUP BY GovernmentForm ORDER BY Countries DESC\G
+
+4. Now list those names in alphabetic order and make the list more readable by using a comma AND a space to separate them.
+
+Solution:
+SELECT GovernmentForm, COUNT(*) Countries, GROUP_CONCAT(Name ORDER BY Name SEPARATOR ', ') CountryNames FROM Country WHERE Continent = 'South America' GROUP BY GovernmentForm ORDER BY Countries DESC\G

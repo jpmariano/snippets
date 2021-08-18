@@ -1,0 +1,8 @@
+Alpha > Omega > Subtheme
+Design Mobile First
+Subtheme | CSS
+global.css - Mobile  
+narrow.css - Tablet
+normal.css - average Desktop
+wide.css - Desktop
+default.css 

@@ -1,0 +1,312 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * A jQuery-enhanced interface for inserting snippets.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function macromaker_menu() {
+  $items = array();
+
+  $items['admin/settings/macromaker'] = array(
+    'title' => 'Macros',
+    'description' => 'Create text macros that can be used on textareas and text fields.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('macromaker_settings_form'),
+    'access arguments' => array('administer site configuration'),
+  );
+  $items['admin/settings/macromaker/list'] = array(
+    'title' => 'List',
+    'description' => 'Create text macros that can be used on textareas and text fields.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('macromaker_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'weight' => 0,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/macromaker/add'] = array(
+    'title' => 'Add macro',
+    'description' => 'Add another macro.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('macromaker_edit_form'),
+    'access arguments' => array('administer site configuration'),
+    'weight' => 5,
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/settings/macromaker/edit'] = array(
+    'title' => 'Edit macro',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('macromaker_edit_form'),
+    'access arguments' => array('administer site configuration'),
+    'weight' => 5,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_init();
+ * runs on every page
+ */
+function macromaker_init() {
+  
+  // Replace tokens.
+  $macros = variable_get('macromaker_macros', array());
+  foreach ($macros as $mid => $macro) {
+    $macro = token_replace_multiple($macro, array('global', 'user'));
+    $macros[$mid] = $macro;
+  }
+
+  drupal_add_js(array(
+    'macromaker' => array(
+      'macros' => $macros,
+      'popup' => theme('macromaker_popup', $macros),
+    )
+  ), 'setting');
+  
+  $path = drupal_get_path('module', 'macromaker');
+  drupal_add_js($path . '/jquery.insertAtCaret.js');
+  drupal_add_js($path . '/macromaker.js');
+  drupal_add_css($path . '/macromaker.css');
+  
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function macromaker_theme() {
+  $items = array();
+
+  $items['macromaker_settings_form'] = array(
+    'arguments' => array('form' => NULL),
+  );
+  
+  $items['macromaker_popup'] = array(
+    'arguments' => array('items' => array()),
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm()
+ */
+function macromaker_perm() {
+  return array('use macros');
+}
+
+/**
+ * Menu callback for admin/settings/macromaker. Show a list of all macros.
+ */
+function macromaker_settings_form() {
+  $macros = variable_get('macromaker_macros', array());
+  $form = array();
+
+  $form['macros']['#tree'] = TRUE;
+  $position = 0;
+  foreach ($macros as $mid => $macro) {
+    $position++;
+    $form['macros'][$mid]['delete'] = array(
+      '#type' => 'checkbox',
+    );
+    $form['macros'][$mid]['title'] = array(
+      '#value' => $macro['title']
+    );
+    $form['macros'][$mid]['mid'] = array(
+      '#type' => 'hidden',
+      '#value' => $mid,
+    );
+    // This field will be hidden by javascript.
+    $form['macros'][$mid]['position'] = array(
+      '#type' => 'textfield',
+      '#default_value' => $position,
+      '#size' => 3,
+      '#maxlenth' => 4,
+      '#attributes' => array('class' => 'macro-position'),
+    );
+    $form['macros'][$mid]['edit'] = array(
+      '#value' => l(t('edit'), 'admin/settings/macromaker/edit/' . $mid),
+    );
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+
+/**
+ * Theme the display of the settings form as a table.
+ */
+function theme_macromaker_settings_form($form) {
+  $headers = array(t('Title'), t('Position'), t('Edit'), t('Delete'));
+  $rows = array();
+  foreach (element_children($form['macros']) as $mid) {
+    $row = array();
+    $row[] = drupal_render($form['macros'][$mid]['title']);
+    $row[] = drupal_render($form['macros'][$mid]['position']);
+    $row[] = drupal_render($form['macros'][$mid]['edit']);
+    $row[] = drupal_render($form['macros'][$mid]['delete']);
+    $rows[] = array('data' => $row, 'class' => 'draggable');
+  }
+
+  if (empty($rows)) {
+    $rows[] = array(array('colspan' => 4, 'data' => t('There are currently no macros.')));
+  }
+  else {
+  	//Syntax: drupal_add_tabledrag($table_id, $action, $relationship, $group, $subgroup = NULL, $source = NULL, $hidden = TRUE, $limit = 0)
+    drupal_add_tabledrag('macromaker-macros', 'order', 'sibling', 'macro-position');  
+  }
+
+  $rows[] = array(array('colspan' => 4, 'data' => l(t('Add another'), 'admin/settings/macromaker/add')));
+
+  $output = '';
+  $output .= theme('table', $headers, $rows, array('id' => 'macromaker-macros'));
+  $output .= drupal_render($form);
+
+  return $output;
+}
+
+/**
+ * Submit handler for the macromaker_settings_form().
+ */
+function macromaker_settings_form_submit($form, $form_state) {
+  usort($form_state['values']['macros'], 'macromaker_sort');
+
+  $macros = variable_get('macromaker_macros', array());
+  $ordered = array();
+  $deleted = FALSE;
+  foreach ($form_state['values']['macros'] as $macro) {
+    $mid = $macro['mid'];
+    if (!$macro['delete']) {
+      $ordered[$mid] = $macros[$mid];
+    }
+    else {
+      unset($macros[$mid]);
+      $deleted = TRUE;
+    }
+  }
+  // In the event that a macro has been added while the form was being submitted.
+  $ordered += $macros;
+  
+  variable_set('macromaker_macros', $ordered);
+
+  if ($ordered !== $macros) {
+    drupal_set_message(t('The macro order has been saved.'));
+  }
+  if ($deleted) {
+    drupal_set_message(t('The checked macros have been deleted.'));
+  }
+  if (!$deleted && $ordered === $macros) {
+    drupal_set_message(t('No changes have been made.'));
+  }
+}
+
+/**
+ * Form to add or edit a macro.
+ */
+function macromaker_edit_form($form_state, $mid = NULL) {
+  if ($mid != NULL) {
+    $macros = variable_get('macromaker_macros', array());
+    $macro = isset($macros[$mid]) ? $macros[$mid] : NULL;
+  }
+
+  if (!isset($macro)) {
+    // on the "add" form, we use an empty array
+    $macro = array('title' => '', 'content' => '');
+    $mid = NULL;
+  }
+
+  $form = array();
+  $form['mid'] = array(
+    '#type' => 'value',
+    '#value' => $mid,
+  );
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#required' => 1,
+    '#title' => t('Macro title'),
+    '#description' => t('This is the text that a user will click to insert the text below. Tokens allowed.'),
+    '#default_value' => $macro['title'],
+  );
+  $form['content'] = array(
+    '#type' => 'textarea',
+    '#required' => 1,
+    '#title' => t('Macro content'),
+    '#description' => t('This is the text that will be inserted when the user clicks the title.'),
+    '#default_value' => $macro['content'],
+  );
+  if (!module_exists('token')) {
+    $form['content']['#description'] .= ' ' . t('Optionally, you may install <a href="http://drupal.org/project/token">Token module</a> to insert placeholders   into macros.');
+  }
+  else {
+    $form['tokens'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Tokens'),
+      '#description' => theme('token_help', array('global', 'user')),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+/**
+ * Submit function for macromaker_edit_form()
+ */
+function macromaker_edit_form_submit($form, &$form_state) {
+  $macros = variable_get('macromaker_macros', array());
+  $title = $form_state['values']['title'];
+  $content = $form_state['values']['content'];
+  $macro = array('title' => $title, 'content' =>  $content);
+  $mid = $form_state['values']['mid'];
+  if ($mid) {
+    $macros[$mid] = $macro;
+    drupal_set_message(t('Macro has been updated.'));
+  }
+  else {
+    $macros[] = $macro;
+    drupal_set_message(t('New macro has been saved.'));
+  }
+  variable_set('macromaker_macros', $macros);
+  $form_state['redirect'] = 'admin/settings/macromaker';
+}
+
+/**
+ * Theme function to generate popup
+ */
+function theme_macromaker_popup($items) {
+  $output  = '<div class="macro-popup">';
+  $output .= '<div class="macro-title">' . t('macros') . '</div>';
+  $list = '';
+  foreach($items as $mid => $item) {
+    // the "rel" attribute acts as a lookup for the complete string
+    $list .= '<li><a href="#" rel="' . $mid . '">' . $item['title'] . '</a></li>';
+  }
+  if (strlen($list)) {
+    $output .= "<ul>". $list ."</ul>";
+  }
+  $output .= '</div>';
+  return $output;
+}
+
+/**
+ * Custom sorting function.
+ */
+function macromaker_sort($a, $b) {
+  return strcmp($a['position'], $b['position']);
+}
+

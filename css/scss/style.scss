@@ -1,0 +1,128 @@
+//http://sass-lang.com/guide
+//Variables
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #333;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+
+//Nesting
+nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+  }
+}
+
+/********************************************************/
+//Partials (Use to Organize Variables, Mixins into a separate file 
+//_filename.scss 
+// === COLORS ===
+$text-color: #222222;
+$theme-color: #170a48;
+$secondary-color: #f27731;
+$ternary-color: #ccf962;
+$link-color: $secondary-color;
+$menu-item-color: white;
+
+// === FONTS ===
+$text-font: Verdana, Arial, sans-serif;
+$headline-font: 'Palatino Linotype', Georgia, serif;
+
+// === SIZES ===
+$content-width: 960px;
+$header-height: 60px;
+$footer-height: 90px;
+
+//To Import partials to your main.scss @import "filename";
+@import "filename";
+nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: $text-color; 
+  }
+}
+/********************************************************/
+//Mixins
+//Declaring Mixins
+@mixin navigationul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@mixin large-text {
+  font: {
+    size: 22px;
+    weight: bold;
+  }
+}
+
+@mixin a {
+  @include large-text;
+  display: block;
+  padding: 6px 12px;
+  text-decoration: none;
+  color: $text-color; 
+}
+
+//Using Mixins
+nav {
+  ul {
+    @include navigationul;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    @include a;
+  }
+}
+
+/********************************************************/
+//Mixins with arguments
+//More examples: snippets/css/scss/sass-04-after-mixins-arguments/scss/_mixins.scss
+//Mixins are like javascript functions this is how to declare it 
+//$radius: - gives a default parameter input of 6px whcich can be overriden if you want
+$primary-color: #333;
+@mixin rounded($radius: 6px) {
+  border-radius: $radius;
+}
+
+@mixin box($radius: 6px, $border: 1px solid #000) {
+  @include rounded($radius);
+  border: $border;
+}
+
+//Using Mixins
+nav {
+  ul {
+    @include box($radius: 8px, $border: 2px solid $primary-color);
+  }
+
+  li { 
+      @include rounded; //if no parameter passed border radius will be 6px; If there's a parameter, it would be @include rounded($radius: 8px);
+      display: inline-block; 
+  }
+
+}

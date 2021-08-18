@@ -1,0 +1,6 @@
+name = YouTube Channel Block
+description = Provides a block with the latest videos from your YouTube channel
+core = 7.x
+package = Youtube
+
+

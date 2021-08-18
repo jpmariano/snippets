@@ -1,0 +1,25 @@
+Step 1: Create a view
+
+Step 2:
+Where the output is coming from
+First What is the display (Responsible for the wrapping elements): page, block, rss
+View Style: UL, table
+Row: a single record
+Field - you can theme per field
+
+
+Step 3: Find the file
+View UI
+Theme Information: Shows template suggestions and the ones that is highlighted is what being used
+These suggested templates are inside the views module theme's folder
+
+Copy and paste it inside your theme
+
+if you open the file, it only has <?php print $output; ?>
+
+you can add a div element or css etc.
+
+
+If you want to make a preprocess function, convert the template file (views-view-field.tpl.php) 
+into a function themename_preprocess_views_view_field()
+

@@ -1,0 +1,16 @@
+- Implement hook_token_info
+- Provide data for a new token type
+- Provide data for new tokens
+
+[Token Type:Tokens] 
+
+
+Global Tokens
+[databasics-totals:count] 
+
+Per-page Tokens
+[databasics-page-totals:view-count] 
+[databasics-page-totals:last-viewed] 
+
+[node:view-count] 
+[node:view-count:last-viewed] 

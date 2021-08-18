@@ -1,0 +1,16 @@
+08 Importing Data
+
+1. Create a new database (I called mine "memberdata", butter use any name you wish) and create the "members" table using the script in the membertable.txt file in the work files for this chapter.
+
+Then determine how to import the data in the memberExport.txt file into this table, causing the auto_incrementer to generate the ID values and making sure that the date values get converted on import. This was performed in one of our lessons in this chapter, but now it's your turn.
+
+Solution:
+LOAD DATA INFILE '<path to import file>' INTO TABLE members
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r'
+IGNORE 2 LINES
+(@SKIP, @FNM, @LNM, @JDT, Email, Addr, City, State, Zip, Phone)
+SET Name = CONCAT(@LNM, ', ', @FNM),
+JoinedDate = STR_TO_DATE(@JDT, '%b %e %Y');
+
+There are many pitfalls, some of which are platform-specific (such as file and directory permissions).

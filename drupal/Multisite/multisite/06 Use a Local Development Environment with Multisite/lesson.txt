@@ -1,0 +1,25 @@
+https://api.drupal.org/api/drupal/sites%21example.sites.php/7
+inside sites.php
+$sites['URL'] = 'folder';
+$sites['udrupal.dev'] = 'udrupal.com';
+$sites['udrupalalumni.dev'] = 'udrupalalumni.com';
+$sites['news.udrupal.dev'] = 'news.udrupal.com';
+
+Edit Vhost
+Common vhosts file locations
+- Debian Ubuntu: /etc/apache2/sites-available
+- CentOS: /etc/httpd/conf/httpd.conf
+- RHEL: /etc/httpd/conf.d/vhosts.conf
+- MAMP: /etc/apache2/extra/http-vhosts.conf
+- WAMP: wamp\bin\apache\apache2.4.9\conf\extra\httpd-vhosts.conf
+
+<VirtualHost *:80>
+	DocumentRoot /main/folder/multi/location
+	Servername udrupal.dev
+	ServerAlias udrupalalumni.dev
+	ServerAlias news.udrupal.dev
+</Virtualhost>
+
+/etc/host
+#work
+127.0.0.1 udrupal.dev  udrupalalumni.dev news.udrupal.dev

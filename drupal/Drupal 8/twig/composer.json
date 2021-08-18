@@ -1,0 +1,11 @@
+{
+    "name": "knpuniversity/php-beginner-series",
+    "require": {
+    },
+    "authors": [
+        {
+            "name": "Ryan Weaver",
+            "email": "ryan@knpuniversity.com"
+        }
+    ]
+}

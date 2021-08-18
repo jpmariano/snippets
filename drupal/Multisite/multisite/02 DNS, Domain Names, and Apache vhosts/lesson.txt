@@ -1,0 +1,53 @@
+Documentation
+Apache -  http://httpd.apache.org/docs/2.2/vhosts/
+- Page of Examples
+Operating System Specific
+
+Hosts and Vhosts
+- Hosts
+-- Map IP address to hostname
+-- Managed by domain name hosts
+-- lives in operating system
+- Virtual Hosts
+-- Allows a web server to manage multiple domains
+-- Maps an IP or name to a directory
+-- lives in the web server
+
+Host Record Configuration
+- Mostly encountered with local development
+- File is in the Operating System
+- Most commonly found at etc/hosts
+-- Windows at windows\system32\drivers\etc\hosts
+- Need an IP address and a domain name
+127.0.0.1 localhost udrupal.dev
+
+Working with Vhosts
+- File is in the web server
+- Different OS have different locations
+- May need to "enable" the vhost
+-- Main http.conf file
+-- Run an apache2 command
+- Must Restart web server to see new configuration
+
+Common vhosts file locations
+- Debian Ubuntu: /etc/apache2/sites-available
+- CentOS: /etc/httpd/conf/httpd.conf
+- RHEL: /etc/httpd/conf.d/vhosts.conf
+- MAMP: /etc/apache2/extra/http-vhosts.conf
+- WAMP: wamp\bin\apache\apache2.4.9\conf\extra\httpd-vhosts.conf
+
+Virtual Host Configuration
+<VirtualHost *:80>
+	DocumentRoot /www/example
+	Servername example.com
+	ServerAlias www.example.com
+	Errorlog /var/log/httpd/error_log
+	AllowOverride All
+</Virtualhost>
+
+Mac Hostfile
+/etc/host 
+
+#work
+127.0.0.1 example.com
+

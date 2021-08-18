@@ -1,0 +1,17 @@
+pwd - where I am in the folder structure
+ls - list files and folder
+ls -al - list all
+cd - change directory
+	cd folder_name or directory
+	cd d (press tab - this is case sensitve)
+ls | less - list contents in pages, use space to go to next page, q for quit
+cd .. - folder goes up
+cd ../.. - folder goes up 2x
+cd ~ - takes you to home directory
+cd ../folders
+cd cd / - go to root
+man pwd - means manual for pwd 
+man man - manual for manual
+clear - cleans your screen
+
+. - means the file is hidden

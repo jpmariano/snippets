@@ -1,0 +1,730 @@
+
+
+https://drupalize.me/tutorial/prepare-drupal-drupal-migration?p=2578
+Prepare for a Drupal-to-Drupal Migration
+Evaluate your application
+-Which modules are you using? Which of those modules are now in core? And, which modules can you just retire?
+-Are there new best practices that you should consider using instead of what you're using now? For example, are you using node/user references in Drupal 7? This might be a good time to update them to use the more generic, and supported, entity references.
+-How do you like your theme? You're going to have to recreate it so that it works in Drupal 8, so this might also be a good time to reorganize your CSS, implement a preprocessor like Sass, or even implement a redesign.
+
+Consider your content and content types
+Which content types on your existing site are actually being used?
+Which content types can be removed?
+-Same for things like vocabularies and other entities. Is there content that you could just get rid of instead of migrating?
+-Have you been wanting to modify your content types? Perhaps change the name, add/remove fields, or maybe split that blobby body field into some chunky semantic fields? This might be a good time to tackle that as well. The transform phase of a migration is a great place to do this kind of data munging.
+-Is this a good time to split a monolithic site into smaller sites? In our example migration we're doing just that: moving the Drupalize.Me blog to its own Drupal installation and upgrading it to Drupal 8 at the same time. This isolates it from the main functionality of our site so it's easier to maintain, and allows us to move things over to Drupal 8 in segments instead of all at once.
+-Are there pieces of functionality on your site that may no longer be important? This is especially important to think about when it comes to custom modules that you're maintaining. If you're not using it, don't bother porting it.
+
+Drupal to Drupal Migration with the UI 
+- Install Migrate modules in Drupal 8 installation 
+    - Enable: Migrate, Migrate Drupal, and Migrate Drupal UI 
+    - Click Upgrade Form
+    - Provide Drupal 7 database and sites files directory 
+//http://drupal-8-6-1-base.dd:8083/upgrade
+
+- Use the UI to Perform a Drupal to Drupal Migration
+- Examine where log data for our migration is stored
+
+
+Use Upgrade Status and Contrib Tracker
+drush dl upgrade_status && drush en upgrade_status --yes
+<site_url>/admin/reports/updates/upgrade
+
+
+
+
+http://ec2-54-165-117-126.compute-1.amazonaws.com/users/hprcadmin#overlay=admin/reports/updates/upgrade
+
+https://www.drupal.org/project/contrib_tracker
+
+
+
+Extract, Transform, Load
+Extract 
+    Source plugins extract data from a source - https://drupalize.me/tutorial/source-plugins?p=2578
+        - https://api.drupal.org/api/drupal/core%21modules%21migrate%21src%21Plugin%21MigratePluginManager.php/class/MigratePluginManager/8.2.x
+        - Migrate source plugins implement \Drupal\migrate\Plugin\MigrateSourceInterface and often extend \Drupal\migrate\Plugin\migrate\source\SourcePluginBase. 
+            - They are annotated with the \Drupal\migrate\Annotation\MigrateSource annotation and must be at src/Plugin/migrate/source of the module that defines them.
+        - Write a Custom Source Plugin
+            - Connecting DB - Example: sites/default/settings.php
+                $databases['migrate']['default'] = array (
+                'database' => 'lahman_2016',
+                'username' => 'root',
+                'password' => 'root',
+                'prefix' => '',
+                'host' => 'localhost',
+                'port' => '3306',
+                'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+                'driver' => 'mysql',
+                );
+            - Source plugins need to do the following:
+                - Use PHP to extract data from some data store and then divide it up into rows and fields that can be iterated over
+                - Provide a unique ID for each row of data for tracking purposes
+                - Tell the Migrate API about the fields of data so they can be processed during the next phase of the import
+            - Drupal\{MY_MODULE}\Plugin\migrate\source - For Example: baseball_migration/src/Plugin/migrate/source/BaseballPlayer.php
+                - Annotation
+                    /**
+                    * Source plugin for baseball players.
+                    *
+                    * @MigrateSource(
+                    *   id = "baseball_player"
+                    * )
+                    */
+                - Example:
+                    <?php
+                    namespace Drupal\baseball_migration\Plugin\migrate\source;
+
+                    use Drupal\migrate\Plugin\migrate\source\SqlBase;
+                    use Drupal\migrate\Row;
+
+                    /**
+                    * Source plugin for baseball players.
+                    *
+                    * @MigrateSource(
+                    *   id = "baseball_player"
+                    * )
+                    */
+                    class BaseballPlayer extends SqlBase {
+
+                    /**
+                    * {@inheritdoc}
+                    */
+                    public function query() {
+                        // Write a query using the standard Drupal query builder that will be run
+                        // against the {source} database to retrieve information about players. Each
+                        // row returned from the query should represent one item that we would like
+                        // to import. So, basically, one row per player.
+                        //
+                        // In this case, we can just select all rows from the master table in the
+                        // {source} database, and limit to just the fields we plan to migrate.
+                        $query = $this->select('master', 'm')
+                        ->fields('m', array(
+                            'playerID',
+                            'birthYear',
+                            'birthMonth',
+                            'birthDay',
+                            'deathYear',
+                            'deathMonth',
+                            'deathDay',
+                            'nameFirst',
+                            'nameLast',
+                            'nameGiven',
+                            'weight',
+                            'height',
+                            'bats',
+                            'throws',
+                        ));
+                        return $query;
+                    }
+
+                    /**
+                    * {@inheritdoc}
+                    */
+                    public function fields() {
+                        // Provide documentation about source fields that are available for
+                        // mapping as key/value pairs. The key is the name of the field from the
+                        // database, and the value is the human readable description of the field.
+                        $fields = array(
+                        'playerID' => $this->t('Player ID'),
+                        'birthYear' => $this->t('Birth year'),
+                        'birthMonth' => $this->t('Birth month'),
+                        'birthDay' => $this->t('Birth day'),
+                        'deathYear' => $this->t('Death year'),
+                        'deathMonth' => $this->t('Death month'),
+                        'deathDay' => $this->t('Death day'),
+                        'nameFirst' => $this->t('First name'),
+                        'nameLast' => $this->t('Last name'),
+                        'nameGiven' => $this->t('Given name'),
+                        'weight' => $this->t('Weight'),
+                        'height' => $this->t('Height'),
+                        'bats' => $this->t('Bats'),
+                        'throws' => $this->t('Throws'),
+                        );
+
+                        // If using prepareRow() to create computed fields you can describe them
+                        // here as well.
+
+                        return $fields;
+                    }
+
+                    /**
+                    * {@inheritdoc}
+                    */
+                    public function getIds() {
+                        // Use a Schema Definition array to describe the field from the source row
+                        // that will be used as the unique ID for each row.
+                        //
+                        // @link https://www.drupal.org/node/146939 - Schema array docs.
+                        //
+                        // @see \Drupal\migrate\Plugin\migrate\source\SqlBase::initializeIterator
+                        // for more about the 'alias' key.
+                        return [
+                        // Key is the name of the field from the fields() method above that we
+                        // want to use as the unique ID for each row.
+                        'playerID' => [
+                            // Type is from the schema array definition.
+                            'type' => 'text',
+                            // This is an optional key currently only used by SqlBase.
+                            'alias' => 'm',
+                        ],
+                        ];
+                    }
+                    }
+                - In your YMAL File 
+                    source:
+                      plugin: baseball_player
+            - Using services
+                - use http_client service - to pull data via http
+            - Examples:
+                - Migrate_Example module a good example it's part of - https://www.drupal.org/project/migrate_plus
+                - https://www.chapterthree.com/blog/drupal-to-drupal-8-via-migrate-api
+                - https://ohthehugemanatee.org/blog/2015/05/02/how-to-build-a-new-source-for-drupal-migrate-8/
+
+    - Drupal Migrate Module migrate source
+    - Migrate Source csv
+    - Migrate Source json
+    - Migrate Source xml
+    - Migrate Plus
+Transform
+    - Process plugins manipulate data during the transform phase of the ETL process - https://drupalize.me/tutorial/process-plugins?p=2578
+    - Available Plugins - https://api.drupal.org/api/drupal/namespace/Drupal%21migrate%21Plugin%21migrate%21process/
+    - Writing Process plugin
+        - Drupal/{MY_MODULE}/src/Plugin/migrate/process - Drupal/baseball_migration/src/Plugin/migrate/process/StrToUpper.php
+        - Write a migration process plugin that can convert an entire string, or the first letter of a string, to uppercase.
+        <?php
+            /**
+            * @file
+            * Example of how to write a Migrate API process plugin.
+            */
+
+            // Process plugins live in the Drupal\{MODULE}\Plugin\migrate\process
+            // namespace.
+            namespace Drupal\baseball_migration\Plugin\migrate\process;
+
+            use Drupal\migrate\ProcessPluginBase;
+            use Drupal\migrate\MigrateException;
+            use Drupal\migrate\MigrateExecutableInterface;
+            use Drupal\migrate\Row;
+
+            /**
+            * This plugin converts a string to uppercase.
+            *
+            * @MigrateProcessPlugin(
+            *   id = "strtoupper"
+            * )
+            */
+            class StrToUpper extends ProcessPluginBase {
+
+            /**
+            * {@inheritdoc}
+            */
+            public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
+                // In the transform() method we perform whatever operations our process
+                // plugin is going to do in order to transform the $value provided into its
+                // desired form, and then return that value.
+                if (is_string($value)) {
+                // Check the plugin configuration to see if we should be using the ucfirst
+                // or strtoupper function to perform our transformation. Configuration is
+                // read from the migration YAML file where we've specified that we want
+                // this process plugin to be used for a specific field.
+                if (isset($this->configuration['ucfirst']) && $this->configuration['ucfirst'] == TRUE) {
+                    return ucfirst($value);
+                }
+                else {
+                    return strtoupper($value);
+                }
+                }
+                else {
+                // Throw an exception indicating our process plugin failed to transform
+                // this value.
+                throw new MigrateException(sprintf('%s is not a string', var_export($value, TRUE)));
+                }
+            }
+            }
+        -  migration YAML file
+            process:
+            uid: uid
+            name:
+                plugin: strtoupper
+                source: name
+            pass: pass
+            mail: mail
+        - Additional Information: https://www.drupal.org/node/2129651
+Load
+    - Destination plugins:
+        Dictate the fields that data can be saved to
+        Determine the unique ID of the record created during the migration for mapping purposes
+        Create new records from imported data and persist them to Drupal's storage
+    - Do I need to write a destination plugin? 
+        - Destination plugins are typically provided by the module that is responsible for the data in question. So unless you're the maintainer of the module you probably don't need to write a destination plugin.
+    - Drupal/{MY_MODULE}/src/Plugin/migrate/destination
+    - Implementations of Destination Plugins: https://api.drupal.org/api/drupal/core%21modules%21migrate%21src%21Annotation%21MigrateDestination.php/class/annotations/MigrateDestination/8.2.x
+        - Drupal core already provides destination plugins for common use cases. In fact, it's unlikely that you'll need to write your own destination plugins. Drupal 8 has standardized data storage around either the Entity API (content) or the Configuration API (configuration) and provides generic destination plugins for both that will work in most cases.
+        - Importing content is the most common use case, and the entity:{entity type} plugin works great for this. Replace {entity type} with the machine name of your entity type. Example: entity:node to create new nodes.
+        - Importing configuration values is another common use case for destination plugins. Drupal core provides a generic config destination, and an EntityConfigBase class that can be extended to write custom destination plugins for configuration entities.
+    - Example Config Migrate - https://api.drupal.org/api/drupal/core%21modules%21migrate_drupal%21src%21Plugin%21migrate%21source%21d8%21Config.php/8.6.x
+        - look for is any documentation about configuration options in the @docblock
+        - For example, the @docblock for the Config class contains:
+            * Available configuration keys:
+            * - store null: (optional) Boolean, if TRUE, when a property is NULL, NULL is
+            *   stored, otherwise the default is used. Defaults to FALSE.
+            * - translations: (optional) Boolean, if TRUE, the destination will be
+            *   associated with the langcode provided by the source plugin. Defaults to
+            *   FALSE.
+            *
+            * Destination properties expected in the imported row:
+            * - config_name: The machine name of the config.
+            * - langcode: (optional) The language code of the config.
+        - YMAL 
+            destination:
+              plugin: 'config'
+              config_name: mymodule.settings
+    - Additional Information: https://www.drupal.org/docs/8/api/migrate-api/migrate-destination-plugins-examples
+
+Write a Custom Migration
+    - Make a plan
+        - What source plugin are you going to use to retrieve data during the extract phase?
+        - What destination plugin are you going to use to save the new records in Drupal during the load phase?
+        - Create a list of all the source fields and indicate the destination fields they are going to be mapped to, as well as what process plugin(s) you'll use during the transform phase
+    - Use Migrate Plus and Migrate Tools to make things easier
+        - Insall - https://www.drupal.org/project/migrate_plus and https://www.drupal.org/project/migrate_tools
+    - Create Your Module
+        - drupal generate:module
+        - modules/custom/baseball_migration/baseball_migration.info.yml
+            name: Baseball Migration
+            type: module
+            description: Example custom migration imports from MySQL database of baseball stats.
+            core: 8.x
+            package: Custom
+            dependencies:
+            - migrate
+            - migrate_plus
+            - migrate_tools
+        - baseball_migration/config/install/migrate_plus.migration.baseball_player.yml
+        # The machine name for a migration. Also used by various CLI tools when
+        # referencing the migration as an argument for a command.
+        id: baseball_player
+
+        # A human-friendly description of the migration. This is used by varous UI and
+        # CLI tools when showing a list of available migrations.
+        label: Migrate list of players
+
+        # Optional group for the migration. This is a feature provided by the
+        # migrate_plus module and allows for running an entire group of migrations
+        # together.
+        migration_group: baseball
+
+        # Every migration must have a source plugin. Set this to the ID of the plugin to
+        # use.
+        #
+        # This is the extract phase of your migration.
+        #
+        # For our custom migration this should be the source plugin we wrote.
+        # \Drupal\baseball_migration\Plugin\migrate\source\BaseballPlayer The value here is
+        # the ID value from the source plugin's annotation.
+        source:
+        plugin: baseball_player
+
+        # Every migration must also have a destination plugin, which handles writing
+        # the migrated data in the appropriate form for that particular kind of data.
+        # This value should be the ID of the destination plugin to use.
+        #
+        # This is the load phase of your migration.
+        destination:
+        plugin: entity:node
+
+        # Here's the meat of the migration - the processing pipeline. This describes how
+        # each destination field is to be populated based on the source data. For each
+        # destination field, one or more process plugins may be invoked.
+        #
+        # This is the transform phase of your migration.
+        process:
+        # Hardcode the destination node type (bundle) as 'player' using the
+        # 'default_value' process plugin.
+        type:
+            plugin: default_value
+            default_value: player
+
+        # Simple field mappings that require no extra processing can use the default
+        # 'get' process plugin. This just copies the value from the source to the
+        # destination. 'get' is the default when no plugin is defined, so you can just
+        # do destination_field: source_field.
+        #
+        # Our player content type in Drupal has a field named, 'field_player_weight'
+        # and our Source plugin defines a 'weight' field in its ::getFields() method.
+        # The destination field (or property) name goes on the left and the source
+        # field goes on the right.
+        field_player_weight: weight
+        field_player_height: height
+        field_player_bats: bats
+        field_player_throws: throws
+        field_player_given_name: nameGiven
+
+        # We generate the node.title (which we treat as the name) by concatenating
+        # two soure fields together and putting a space between them using the
+        # 'concat' process plugin.
+        title:
+            plugin: concat
+            source:
+            - nameFirst
+            - nameLast
+            delimiter: " "
+
+        # Same thing with the birthday, concat these fields together using the
+        # 'concat' process plugin.
+        field_player_birth:
+            plugin: concat
+            source:
+            - birthMonth
+            - birthDay
+            - birthYear
+            delimiter: /
+
+        # For death day we need to provide a default value in the case where the
+        # player hasn't died yet. Also provides an example of using multiple process
+        # plugins together. In this case we first use the 'concat' plugin to combine
+        # three fields from the source data, and then use the 'default_value' plugin
+        # to provide a default value for the field in the case that the previous step
+        # resulted in an empty value.
+        field_player_birthday:
+            -
+            plugin: concat
+            source:
+                - deathMonth
+                - deathDay
+                - deathYear
+            delimiter: /
+            -
+            plugin: default_value
+            default_value: ""
+
+        # Declare optional dependencies on another migration for this migration.
+        # This one has none.
+        migration_dependencies: {}
+    - Prepare your source and destination site
+    - drush migrate-import {MIGRATION_ID} - drush migrate-import baseball_player
+        - Pro-tip: When testing, add a ->range(0, 10) call to your source plugin's query builder. This will allow your migrations to execute super fast since you're only importing 10 rows. It helps when you're debugging or just testing and you don't want to wait for all 7k rows to import.
+        - The migrate-import Drush command also has a --limit flag that you can use to accomplish roughly the same thing.
+    - Testing and debugging migrations
+        - Since the configuration you define inside your module's config/install directory is only read into the active configuration store at the time when you enable the module, you will need to re-import this configuration frequently while developing the migration -- every time you make changes to the YAML.
+        - Option 1: mymodule.install - hook_uninstall() 
+            <?php 
+                /** 
+                * Implements hook_uninstall(). 
+                */ 
+                function mymodule_uninstall() { 
+                db_query("DELETE FROM {config} WHERE name LIKE 'mymodule.migration.my_migration%'"); 
+                drupal_flush_all_caches(); 
+                } 
+            ?>
+        - Option 2: dependencies:
+            enforced:
+            module:
+            # By adding the module that provided this migration/configuration here, it
+            # will be removed when the module is uninstalled.
+            - mymodule
+        - Option 3: https://www.drupal.org/project/config_devel
+            - With config_devel enabled, add the names of the files that contain your migrations to the module's auto import configuration and they will be automatically updated when you edit the YAML files.
+    - Non-MySQL migrations
+        - https://github.com/karens/import_drupal
+        - https://www.palantir.net/blog/migrating-xml-drupal-8
+    - Additional Information 
+        - https://www.drupal.org/project/migrate_plus
+        - https://www.chapterthree.com/blog/drupal-to-drupal-8-via-migrate-api
+Run Custom Migrations
+- Drush Commands
+    - drush migrate-status - to verify that Drupal can see your custom 
+    - drush migrate-import
+    - drush migrate-rollback
+    - drush migrate-reset-status
+- Install Migrate Tools - https://www.drupal.org/project/migrate_tools
+    - drush --filter=migrate_tools
+    > All commands in migrate_tools: (migrate_tools)
+    >  migrate-fields-source (mfs)  List the fields available for mapping in a source.
+    >  migrate-import (mi)          Perform one or more migration processes.
+    >  migrate-messages (mmsg)      View any messages associated with a migration.
+    >  migrate-reset-status (mrs)   Reset a active migration's status to idle.
+    >  migrate-rollback (mr)        Rollback one or more migrations.
+    >  migrate-status (ms)          List all migrations with current status.
+    >  migrate-stop (mst)           Stop an active migration operation.     
+- List migrations and check their status
+    - drush migrate-status - to verify that Drupal can see your custom 
+- Find a migration's ID
+    - modules/custom/baseball_migration/config/install/migrate_plus.migration.baseball_player.yml:
+    # The machine name for a migration. Also used by various CLI tools when
+    # referencing the migration as an argument for a command.
+    id: baseball_player
+- Run a migration
+    - drush migrate-import --all or drush migrate-import --limit=100 baseball_player
+    - drush migrate-message baseball_player - to see where the failures happen
+    - drush migrate-status
+    - drush migrate-rollback baseball_player
+    - drush migrate-reset-status 
+
+Custom Drupal-to-Drupal Migrations
+- Install the required modules
+    Migrate (Drupal core)
+    Migrate Drupal (Drupal core)
+    Migrate Drupal UI (Drupal core)
+    Migrate Upgrade (drupal.org/project/migrate_upgrade)
+    Migrate Tools (drupal.org/project/migrate_tools)
+    Migrate Plus (drupal.org/project/migrate_plus)
+- Tell the Migrate API where to find your source Drupal site - settings.php
+    $databases['migrate']['default'] = array (
+    'database' => 'd7_db',
+    'username' => 'd7_dbuser',
+    'password' => 'd7_dbpass',
+    'prefix' => '',
+    'host' => 'localhost',
+    'port' => '3306',
+    'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+    'driver' => 'mysql',
+    );
+- Generate some migration configuration entities
+    - https://drupalize.me/tutorial/create-migrations-core-templates?p=2578
+    -  drush migrate-status to list all the generated but not yet executed migrations. 
+- Create a new module to house your custom migration
+- Create a custom module
+    Alter the data model so that what was two fields in your old Drupal site becomes one field on the new site
+    Change field names on the Drupal 8 site and update the mapping in the migration
+    Change the source plugin used
+    Add mappings for a new field that doesn't exist on the old site and give it a default value on the new site
+    Change the process plugin used to map a field from the default get to any other process plugin
+    - Write: Source Plugin 
+        - Ideas about other things you could do with a custom source plugin:
+            Limit the values for other data sets that are being migrated
+            Use ::prepareRow() to generate new computed fields and then update your mapping in the YAML file
+            - hook_migrate_prepare_row() to further customize the migration
+            - https://drupalize.me/tutorial/use-hookmigratepreparerow?p=2578
+            /**
+            * Implements hook_migrate_prepare_row().
+            *
+            * This function will be called once for every row in every migration. Which
+            * makes it quite powerful.
+            *
+            * It's also important to use some smart logic in this function to ensure you're
+            * only performing your extra logic when it's really needed. Not doing so has
+            * the potential to really slow things down.
+            *
+            * We recommend at a minimum always checking the $migration->id() value to see
+            * which migration is currently being executed.
+            */
+            function dmeblog_migrate_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+            // This example performs some extra processing when running the
+            // upgrade_d7_field migration. In this case we only want to migrate the fields
+            // that are used by our Drupal 7 blog_post content type, and not all the
+            // fields defined on our Drupal 7 site. So for each row in the Drupal 7 fields
+            // list we compare it against a static list and tell the Migrate API to skip
+            // any that are not in our list.
+            if ($migration->id() == 'dmeblog_d7_field' || $migration->id() == 'dmeblog_d7_field_instance') {
+                // Drupal 7 field names for all the fields we know we DO want to migrate.
+                $blog_fields = [
+                'field_blog_post_images',
+                'field_blog_post_files',
+                'field_planet',
+                'taxonomy_blog_tags',
+                ];
+
+                // The `field_name` property here comes from the source plugin which defines
+                // the list of source fields.
+                // @see \Drupal\field\Plugin\migrate\source\d7\Field::fields()
+                if (!in_array($row->getSourceProperty('field_name'), $blog_fields)) {
+                // Skip this row by throwing a new MigrateSkipRowException exception.
+                // Using FALSE here also instructs the Migrate API to forgo creating an
+                // entry in the map table for this particular record instead of marking
+                // it as ignored. Either would work in this case, this method works for us
+                // since we don't really need to record that it was STATUS_IGNORED for any
+                // reason.
+                throw new MigrateSkipRowException('', TRUE);
+                }
+            }
+            }
+- Export the migration configuration entities to YAML in your custom module
+- Customize the migration YAML files to meet your needs
+- Execute your custom migration
+- Additional Information - https://www.lullabot.com/articles/merging-entities-during-a-migration-to-drupal-8
+
+
+
+
+Make sure your Drupal 7 site is up-to-date
+
+Get Inventory of Installed modules
+- drush pm-list --type=module --status=enabled --format=csv > module_list.csv
+
+Create a copy of your Drupal 7 site
+
+Assessing a module's readiness
+- Question 1: Do I still need this module?
+- Question 2: Is there a Drupal 8 version of the module available?
+    https://www.drupal.org/project/contrib_tracker
+        - https://drupalize.me/tutorial/use-upgrade-status-and-contrib-tracker?p=2578
+        - This checks what's the status of contributed modules project
+    https://www.drupal.org/project/upgrade_status
+        - Download and install Upgrade Status module or Drush: drush dl upgrade_status && drush en upgrade_status --yes
+        - Generate a report
+        - Review the report
+    - Another way to tell if your module supports migration is if it contains a migration folder
+
+Check for Alterations with Hacked
+- https://www.drupal.org/project/hacked
+    - Use the Hacked! module to check for modifications to the code of Drupal core, or any contributed modules or themes, that your site uses.
+    - Go to reports tab 
+        - You can see if the module has been unchecked, changed, or unchanged
+        - It can show you which file changed
+- https://www.drupal.org/project/diff
+
+
+- Common Issues with Migrations
+    - https://www.drupal.org/node/2456259
+    - Features - The Drupal 7 Features module is often used in Drupal 7 sites to allow for the storage of configuration information in files instead of the database. 
+    - Views 
+        - manually recreating the views you need in your Drupal 8 
+        - https://www.drupal.org/project/view_migration
+        - https://www.drupal.org/project/migrate_views
+    - References and Entity References
+        - https://www.drupal.org/node/2611066
+        - https://www.drupal.org/project/entityreference_migration - The purpose of this module is to migrate fields created from the References module to the Entity Reference module. 
+
+Drupal-to-Drupal Migration with the UI - https://drupalize.me/tutorial/drupal-drupal-migration-ui?p=2578
+- Install Both the Drupal 7 (Old site) and Drupal 8 (New Site) Locally
+- In Drupal 8,
+    - Install https://www.drupal.org/project/migrate
+    - Enable: Migrate, Migrate Drupal, and Migrate UI
+    - Click Upgrade Form link
+        - follow instruction and click continue
+        - Connect the database and the root source files of the Drupal 7 
+            - If your previous site has private files to migrate, a copy of your files directory must be accessible on the host this site is on.
+        - See the available upgrade path and the missing upgrade path (Upgrade path means migration is supported in Drupal 8)
+            - In general, enable all modules on this site that are enabled on the previous site. For example, if you have used the Book module on the previous site then you must enable the Book module on this site for that data to be available on this site.
+            - Put this site into maintenance mode.
+            - Click continue to upgrade_status
+            - when finished, go to admin/reports/dblog - to see migration report status
+            - To review the log messages for your migration, set the filter type to 'migrate_drupal_ui'. 
+            - drush watchdog-show - to see a condensed view of your watchdog log
+
+    - Incremental migrations 
+        - Import new configuration and content from old site button in the Migrate Drupal UI
+        - it makes it easier to develop an upgrade and keep it up-to-date with an existing site.
+        - https://drupalize.me/tutorial/drupal-drupal-migration-drush?p=2578
+
+    - Roll back a migration
+        - Rollbacks are not currently supported via the Migrate Drupal UI module.
+        - the best way to handle this is to import a backup of your Drupal 8 database, which you should have created prior to attempting an upgrade.
+        - https://www.drupal.org/node/2683421
+
+    - Find help with failures - should be logged in your Watchdog log
+    - https://www.drupal.org/node/2701541
+
+Drupal-to-Drupal migration with Drush
+- Install https://www.drupal.org/project/migrate_upgrade
+    - Drush does not support prepping a migration - Use the migrate ui for this
+- Step 1: To run a migration with Drush, enable the following modules:
+    - Migrate
+    - Migrate Drupal
+    - Migrate Upgrade
+    - $ drush en migrate_drupal migrate_upgrade -y
+- Step 2: Backup your Drupal 8 DB - drush sql-dump > /path/to/save/migrate-backup.sql
+- Step 3: Create a file in the root of your Drupal 8 site, called cleanmigrate.sh.
+    - Add the following:
+    drush sql-drop -y
+    drush sqlq < /path/to/migrate-backup.sql
+    drush en migrate_drupal migrate_upgrade -y
+    - Now make your script executable:
+        - chmod +x cleanmigrate.sh`
+    - You can now import a clean database and enable modules like so:
+        - ./cleanmigrate.sh
+
+- Step 4: Type the following into your terminal: 
+    - drush help migrate-upgrade 
+    Perform one or more upgrade processes.
+        Examples:
+        migrate-upgrade                           Upgrade a Drupal 6 database to
+        --legacy-db-url='mysql://root:pass@127.0  Drupal 8
+        .0.1/d6'
+
+        Options:
+        --legacy-db-prefix                        Prefix of the legacy Drupal
+                                                installation.
+        --legacy-db-url                           A Drupal 6 style database URL.
+                                                Required.
+        --legacy-root                             Site address or root of the legacy
+                                                Drupal installation
+
+
+- Step 5: To start a full migration, you can type the following:
+     - drush migrate-upgrade --legacy-db-url='mysql://user:pass@host/dbname' --legacy-root=/var/www/drupal7
+        - If you have files you want to migrate, you should also pass the --legacy-root flag with the path to your site's files. 
+        - If you use Entity References to point to files, upgrading their paths is not supported yet; see: https://www.drupal.org/node/2611066
+        - If you're working with private files, there is no current upgrade path, see https://www.drupal.org/node/2505283
+
+- The debug flag
+    - Logging your debug output
+        - drush migrate-upgrade --debug 2>&1 | tee -a migration.log
+        - This will write your migration output to migration.log in the current directory, as well as display it in your terminal.
+        - tee command allows us to write to stdout, and a logfile. The -a flag we pass with tee will append to the file. This can be useful if you need to run your migration multiple times, and wish to log everything in one place.
+- Highwater marks
+    - to support continuous upgrades
+    - If a highwater mark exists for the import, the content will not be reimported unless changed.
+    - With Drupal 7 Nodes for example, the data used as the highwater mark is the node_last_changed field.
+
+Set up Migrate Demo Site and Source Data
+    - Download the data
+        Download the .zip file containing the SQL data to import: http://seanlahman.com/files/database/2016-03-09_mysql-core.zip
+
+    - Unzip the file
+        Unzip the downloaded file and locate the /stats.sql file in the root of the resulting directory. This is the one we're going to import.
+
+    - Import into a new MySQL Database
+        Create a new MySQL database to house the data, we named ours lahman_2016, and then import the stats.sql file into this database using a tool of your choice.
+
+    - Inspect the source data
+        - study the relationship
+    - Set up a Drupal destination site - Create a content type
+        FIELD NAME	MACHINE NAME	TYPE
+        Name	title	Node module element
+        Player ID	field_player_id	Text
+        Given name	field_player_given_name	Text
+        Weight	field_player_weight	Integer
+        Height	field_player_height	Integer
+        Throws	field_player_throws	List (text) - possible values are "R,Right, L,Left"
+        Bats	field_player_bats	List (text) - possible values are "R,Right, L,Left"
+        Birth	field_player_birth	Date - date only
+        Death	field_player_death	Date - date only
+        Notes	field_player_notes	Long text
+        Teams	field_player_teams	Entity Reference - multiple value, references Team content type
+        --------------	--------------------------	----
+        Create a content type named Team (machine name: team), with the following fields:
+
+        FIELD NAME	MACHINE NAME	TYPE
+        Team Name	title	Node module element
+        Park	field_team_park	Text
+    - Tell your destination site where the source data lives
+        Update your settings.php and add a database connection configuration for the database where your source data lives. This could be the same host, or an external host. For more about how to define a database connection configuration look for the related docblock in your settings.php file.
+        The important part is to name your configuration $databases['migrate']['default'] so that the SQL Source can find it easily.
+    - // Note the key 'migrate' here is important.
+        $databases['migrate']['default'] = array (
+        // The database that contains the source data we're going to import.
+        'database' => 'lehman_2016',
+        'username' => 'root',
+        'password' => 'root',
+        'prefix' => '',
+        'host' => 'localhost',
+        'port' => '3306',
+        'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+        'driver' => 'mysql',
+        );
+
+
+
+
+
+
+
+
+
+
+https://www.drupal.org/project/migrate
+Step 1: Install and Enable the module
+Step 2: Click Content then migrate tab
+Step 3: 

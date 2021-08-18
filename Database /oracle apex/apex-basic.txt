@@ -1,0 +1,9 @@
+Database (one to Many - Changes above Effects Below)            APEX
+Tablespaces                                                     Workspace
+Datafiles                                                       Application
+Segments                                                        Pages
+Extents                                                         Regions
+Blocks                                                          Items
+Rows of Data
+
+Click Create Workspace

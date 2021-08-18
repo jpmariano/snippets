@@ -1,0 +1,17 @@
+Rest Console
+
+Target
+Request URI: http:example.com/api/v1/node - returns a max of 25 by default 
+Request URI: http:example.com/api/v1/node?pagesize=3 - returns 3  
+Request URI: http:example.com/api/v1/node?pagesize=3&page=2- returns 3 with pagination
+Query codes are inside: services/resources/node_resource.inc
+Operation
+- Retrieve 
+- Create
+- Index - param is the parameter (Page, Fields, Parameters, Pagesize)
+http:example.com/api/v1/node?parameters[type]=page - outputs only nodetype page
+
+Services Tools
+Definition: Provides a UI for actions and Operations
+Shows a Detailed API definition
+

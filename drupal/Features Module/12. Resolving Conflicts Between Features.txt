@@ -1,0 +1,23 @@
+Common Conflicts
+- define common components - when this happen do a rollback
+git log - to see all commits
+git reset HEAD-1 - revert 1 commit 
+git reset HEAD-2 --hard - revert the commits as well as the code
+git status - to check changes
+drush fr feature_title - fr is features revert
+drush cc all
+
+deselect which of the created features from features UI you want to remove to resolve conflict
+
+drush en feature_title - to enable the feature
+
+compare the .info from both created feature
+change the .inc file - change the role in .inc and .info role should match
+
+people/permissions/role
+
+Note: different components reaact differently
+
+Manual Edit
+
+

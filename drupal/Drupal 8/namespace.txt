@@ -1,0 +1,63 @@
+//Old way
+foo.php
+    class Foo
+    {
+        public function doAwesomeThings()
+        {
+           echo 'Hi listeners'; 
+        }
+    }
+
+some-other-file.php
+    require 'Foo.php';
+    $foo = new Foo();
+    $dt = new DateTime();
+
+//New OOP
+foo.php
+
+    namespace Acme\Tools;
+    class Foo
+    {
+        public function doAwesomeThings()
+        {
+           echo 'Hi listeners'; 
+        }
+    }
+
+some-other-file.php
+    namespace Acme\Tools;
+    use \DateTime;
+    require 'Foo.php';
+    $foo = new \Acme\Tools\Foo();
+    $dt = new DateTime();
+
+or this
+
+some-other-file.php
+    namespace Acme\Tools;
+    require 'Foo.php';
+    use \Acme\Tools\Foo as SomeFooClass; //Use give a class nickname
+    use \DateTime;
+    $foo = new SomeFooClass();
+    $dt = new DateTime();
+
+or this
+
+some-other-file.php
+    namespace Acme\Tools;
+    require 'Foo.php';
+    use \Acme\Tools\Foo;
+    use \DateTime;
+    $foo = new Foo();
+    $dt = new DateTime();
+
+or this
+
+some-other-file.php
+    namespace Acme\Tools;
+    require 'Foo.php';
+    use Acme\Tools\Foo;
+    use DateTime;
+    $foo = new Foo();
+    $dt = new DateTime();

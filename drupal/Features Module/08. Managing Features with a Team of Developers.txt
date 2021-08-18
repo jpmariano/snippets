@@ -1,0 +1,15 @@
+Make changes of the view that is produce by your feature
+
+drush fu title  - files update your feature module
+git status - show files that change
+git diff - prints out whats the different between the original and the change file
+git checkout title.features.field.inc - and undo the code manually, or use the gui where you made changes
+
+
+git add . - add all changes to commit
+git diff --cached -  shows whats going to be added
+git reset --hard - undoing commit
+
+go to your features UI and when you see conflict - 
+git pull to make back up
+check the checkbox of overriden - and pressed revert

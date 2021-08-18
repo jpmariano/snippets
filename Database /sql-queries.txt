@@ -1,0 +1,591 @@
+SELECT - extracts data from a database
+     DISTINCT statement is used to return only distinct (different) values.
+UPDATE - updates data in a database
+DELETE - deletes data from a database
+INSERT INTO - inserts new data into a database
+CREATE DATABASE - creates a new database
+ALTER DATABASE - modifies a database
+CREATE TABLE - creates a new table
+ALTER TABLE - modifies a table
+DROP TABLE - deletes a table
+CREATE INDEX - creates an index (search key)
+DROP INDEX - deletes an index
+
+UNION operator combines the result of two or more SELECT statements.
+
+CREATE DATABASE statement is used to create a database.
+CREATE TABLE statement is used to create a table in a database.
+SELECT INTO statement selects data from one table and inserts it into a new table.
+INSERT INTO SELECT statement copies data from one table and inserts it into an existing table.
+CREATE INDEX statement is used to create indexes in tables.
+GROUP BY statement is used in conjunction with the aggregate functions to group the result-set by one or more columns.
+
+
+
+SQL constraints are used to specify rules for the data in a table.
+    NOT NULL - Indicates that a column cannot store NULL value
+    UNIQUE - Ensures that each row for a column must have a unique value
+    PRIMARY KEY - A combination of a NOT NULL and UNIQUE. Ensures that a column (or combination of two or more columns) have a unique identity which helps to find a particular record in a table more easily and quickly
+    FOREIGN KEY - Ensure the referential integrity of the data in one table to match values in another table
+    CHECK - Ensures that the value in a column meets a specific condition
+    DEFAULT - Specifies a default value for a column
+
+
+VIEW is a virtual table.
+
+WHERE clause is used to filter records.
+    AND & OR operators are used to filter records based on more than one condition.
+    LIKE operator is used in a WHERE clause to search for a specified pattern in a column.
+    IN operator allows you to specify multiple values in a WHERE clause.
+    BETWEEN operator is used to select values within a range.
+ORDER BY keyword is used to sort the result-set.
+
+A wildcard character can be used to substitute for any other character(s) in a string.
+    %	        A substitute for zero or more characters
+    _	        A substitute for a single character
+    [charlist]	Sets and ranges of characters to match
+    [^charlist] Matches only a character NOT specified within the brackets
+    or
+    [!charlist]	
+
+ALIASES are used to temporarily rename a table or a column heading.
+
+joins are used to combine rows from two or more tables.
+    INNER JOIN: Returns all rows when there is at least one match in BOTH tables
+    LEFT JOIN: Return all rows from the left table, and the matched rows from the right table
+    RIGHT JOIN: Return all rows from the right table, and the matched rows from the left table
+    FULL JOIN: Return all rows when there is a match in ONE of the tables
+USE <databasename>;
+
+/****************
+SELECT 
+*****************/
+SELECT * FROM <tablename>; 
+SELECT <column_name,column_name>
+FROM <table_name>;
+
+/****************
+SELECT DISTINCT
+*****************/
+SELECT DISTINCT <column_name,column_name>
+FROM <table_name>;
+
+/****************
+WHERE 
+*****************/
+SELECT <column_name,column_name>
+FROM <table_name>
+WHERE <column_name> <operator> <value>; //Country='Mexico';
+    /****************
+    AND & OR Operators
+    *****************/
+    SELECT <column_name,column_name>
+    FROM <table_name>
+    WHERE <column_name> <operator> <value>
+    AND <column_name> <operator> <value>;
+
+    SELECT <column_name,column_name>
+    FROM <table_name>
+    WHERE <column_name> <operator> <value>
+    OR <column_name> <operator> <value>;
+
+/****************
+SQL ORDER BY
+*****************/
+SELECT <column_name,column_name>
+FROM <table_name>
+ORDER BY <column_name>  ASC|DESC, <column_name> ASC|DESC; //ORDER BY Country, CustomerName; || ORDER BY Country ASC, CustomerName DESC;
+
+/****************
+INSERT INTO
+*****************/
+INSERT INTO <table_name>
+VALUES (<value1,value2,value3,...>);
+
+INSERT INTO <table_name> (<column1,column2,column3,...>)
+VALUES (<value1,value2,value3,...>);
+
+/****************
+UPDATE
+*****************/
+UPDATE <table_name>
+SET <column_name> <operator> <value>,<column_name> <operator> <value>, ...
+WHERE <column_name> <operator> <value>;
+
+/****************
+DELETE
+*****************/
+DELETE FROM <table_name>
+WHERE <column_name> <operator> <value>;
+
+/****************
+SELECT TOP 
+*****************/
+//Oracle script
+SELECT <column_name,column_name>
+FROM <table_name>
+WHERE <column_name> <= <value>;
+
+/****************
+LIKE  Operator          
+*****************/
+SELECT <column_name,column_name>
+FROM  <table_name>
+WHERE <column_name> LIKE '<%pattern%>';
+
+        SELECT <column_name,column_name>
+        FROM  <table_name>
+        WHERE <column_name> NOT LIKE '<%pattern>';
+
+        //More wildcard examples
+        https://www.w3schools.com/sql/sql_wildcards.asp
+
+/****************
+IN  Operator          
+*****************/
+SELECT <column_name,column_name>
+FROM  <table_name>
+WHERE <column_name> IN (<value1,value2,...>);
+
+/****************
+BETWEEN  Operator          
+*****************/
+SELECT <column_name,column_name>
+FROM <table_name>
+WHERE <table_name> BETWEEN <value1> AND <value2>;
+
+/****************
+Aliases         
+*****************/
+SELECT <column_name> AS <alias_name>
+FROM <table_name>;
+
+SELECT <column_name,column_name>
+FROM <table_name> AS <alias_name>;
+
+/****************
+JOIN         
+*****************/
+    /****************
+    INNER JOIN         
+    *****************/
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    INNER JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+    /****************
+    LEFT JOIN         
+    *****************/
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    LEFT JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    LEFT OUTER JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+    /****************
+    RIGHT JOIN         
+    *****************/
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    RIGHT JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    RIGHT OUTER JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+    /****************
+    FULL OUTER JOIN         
+    *****************/
+    SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+    FROM <table_name1>
+    FULL OUTER JOIN <table_name2>
+    ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+
+/****************
+UNION  Operator       
+*****************/
+    SELECT <column_name,column_name, ..> FROM <table_name1> 
+    UNION
+    SELECT <column_name,column_name, ..> FROM <table_name2>;
+
+    SELECT <column_name,column_name, ..> FROM <table_name1> 
+    UNION ALL
+    SELECT <column_name,column_name, ..> FROM <table_name2>;
+
+    https://www.w3schools.com/sql/sql_union.asp
+    SELECT <column_name,column_name, ..> FROM <table_name1> 
+    WHERE <column_name> <operator> <value>;
+    UNION ALL
+    SELECT <column_name,column_name, ..> FROM <table_name2>;
+    WHERE <column_name> <operator> <value>;
+    ORDER BY <column_name>  ASC|DESC, <column_name> ASC|DESC; 
+
+/****************
+SELECT INTO Statement    
+*****************/
+https://www.w3schools.com/sql/sql_select_into.asp
+SELECT <column_name,column_name, ..>
+INTO <newtable> IN  '<external_databasename.mdb>'
+FROM <table1>;
+
+/****************
+SELECT INTO SELECT Statement    
+*****************/
+INSERT INTO <table_name2> (<column_name,column_name, ..>)
+SELECT <column_name,column_name, ..>
+FROM <table_name1>;
+
+    INSERT INTO <table_name2> (<column_name,column_name, ..>)
+    SELECT <column_name,column_name, ..>
+    FROM <table_name1>;
+    WHERE <column_name> <operator> <value>;
+
+/****************
+CREATE DATABASE 
+*****************/
+CREATE DATABASE <dbname>;
+    /****************
+    DROP DATABASE 
+    *****************/
+    DROP DATABASE <dbname>
+
+/****************
+CREATE TABLE 
+*****************/
+CREATE TABLE <tablename>
+(
+    <columnname> <dataype>(<#size>),
+    <columnname> <dataype>(<#size>),
+    <columnname> <dataype>(<#size>),
+    <columnname> <dataype>(<#size>)
+);
+    /****************
+    DROP TABLE 
+    *****************/
+    DROP TABLE <tablename>
+
+    /****************
+    TRUNCATE TABLE //to delete the data inside the table, and not the table itself
+    *****************/
+    TRUNCATE TABLE <tablename>
+
+    /****************
+    ALTER TABLE 
+    *****************/
+    ALTER TABLE <tablename>
+    ADD <columnname> <dataype>
+
+    ALTER TABLE <tablename>
+    MODIFY COLUMN <columnname> <dataype>
+
+
+/****************
+Constraints
+*****************/
+    CREATE TABLE <tablename>
+    (
+        <columnname> <dataype>(<#size>) <constraint_name>,
+        <columnname> <dataype>(<#size>) <constraint_name>,
+        <columnname> <dataype>(<#size>) <constraint_name>,
+        <columnname> <dataype>(<#size>)
+    );
+        //Example Oracle
+        CREATE TABLE Persons
+        (
+            P_Id int NOT NULL,
+            LastName varchar(255) NOT NULL,
+            FirstName varchar(255),
+            Address varchar(255),
+            City varchar(255),
+            CONSTRAINT uc_PersonID UNIQUE (P_Id,LastName)
+        )
+    
+    /****************
+    UNIQUE
+    *****************/
+    ALTER TABLE <tablename>
+    ADD UNIQUE (<columnname>)
+
+    ALTER TABLE <tablename>
+    ADD CONSTRAINT <columnname> UNIQUE (<columnname>,<columnname>)
+    
+    /****************
+    DROP CONSTRAINT 
+    *****************/
+    ALTER TABLE <tablename>
+    DROP CONSTRAINT <columnname>
+   
+    /****************
+    PRIMARY KEY
+    *****************/
+        /****************
+        PRIMARY KEY CREATE TABLE
+        *****************/
+        CREATE TABLE <tablename>
+        (
+            <columnname> <dataype>(<#size>) NOT NULL PRIMARY KEY,
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>) 
+        )
+
+        //example
+        CREATE TABLE Persons
+        (
+            P_Id int NOT NULL,
+            LastName varchar(255) NOT NULL,
+            FirstName varchar(255),
+            Address varchar(255),
+            City varchar(255),
+            CONSTRAINT pk_PersonID PRIMARY KEY (P_Id,LastName)
+        )
+
+        /****************
+        PRIMARY KEY ALTER TABLE
+        *****************/
+        ALTER TABLE <tablename>
+        ADD PRIMARY KEY <columnname> 
+
+        ALTER TABLE <tablename>
+        ADD CONSTRAINT <columnname_pk> PRIMARY KEY (<columnname1, columnname2> >)
+    
+        /****************
+        PRIMARY KEY DROP
+        *****************/
+        ALTER TABLE <tablename>
+        DROP CONSTRAINT <columnname_pk>
+
+    /****************
+    FOREIGN KEY
+    *****************/
+        /****************
+        FOREIGN KEY CREATE TABLE
+        *****************/
+        CREATE TABLE <tablename>
+        (
+            <columnname> <dataype>(<#size>) NOT NULL PRIMARY KEY,
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            <columnnID_fk> FOREIGN KEY REFERENCES <othertable>(<PK_Id>)
+        )
+
+        CREATE TABLE <tablename>
+        (
+            <columnname> <dataype>(<#size>) NOT NULL PRIMARY KEY,
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            CONSTRAINT  <columnnID_fk> FOREIGN KEY (<PK_Id>),
+            REFERENCES Persons(PK_Id)
+        )
+
+        /****************
+        FOREIGN KEY ALTER TABLE
+        *****************/
+        ALTER TABLE <tablename>
+        ADD FOREIGN KEY (<PK_Id>)
+        REFERENCES <othertable>(<PK_Id>)
+
+        ALTER TABLE <tablename>
+        ADD CONSTRAINT <columnnID_fk>
+        FOREIGN KEY (PK_Id)
+        REFERENCES othertable>(<PK_Id>)
+    
+        /****************
+        FOREIGN KEY DROP
+        *****************/
+        ALTER TABLE <tablename>
+        DROP CONSTRAINT <columnnID_fk>
+    /****************
+    CHECK 
+    *****************/
+        /****************
+        CHECK  CREATE TABLE
+        *****************/
+        CREATE TABLE <tablename>
+        (
+            <columnname_pk> <dataype> NOT NULL CHECK (columnname_pk > 0),
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            <columnnID_fk> FOREIGN KEY REFERENCES <othertable>(<PK_Id>)
+        )
+
+        CREATE TABLE <tablename>
+        (
+            <columnname_pk> <dataype>(<#size>) NOT NULL PRIMARY KEY,
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname_city> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            CONSTRAINT <columnname> CHECK (columnname_pk>0 AND columnname_city='somevalue')
+        )
+
+        /****************
+        CHECK  ALTER TABLE
+        *****************/
+        ALTER TABLE <tablename>
+        ADD CHECK (columnname_pk > 0);
+
+
+        ALTER TABLE <tablename>
+        ADD CONSTRAINT <columnname> CHECK (columnname_pk>0 AND columnname_city='somevalue')
+    
+        /****************
+        CHECK  DROP
+        *****************/
+        ALTER TABLE <tablename>
+        DROP CONSTRAINT <columnname>
+
+    /****************
+    DEFAULT 
+    *****************/
+        /****************
+        DEFAULTCREATE TABLE
+        *****************/
+        CREATE TABLE <tablename>
+        (
+            <columnname> <dataype>(<#size>) NOT NULL PRIMARY KEY,
+            <columnname> <dataype>(<#size>) NOT NULL,
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>),
+            <columnname> <dataype>(<#size>) DEFAULT '<somevalue>'
+        )
+
+        //example
+        CREATE TABLE Orders
+        (
+            O_Id int NOT NULL,
+            OrderNo int NOT NULL,
+            P_Id int,
+            OrderDate date DEFAULT GETDATE()
+        )
+
+        /****************
+        DEFAULT ALTER TABLE
+        *****************/
+        ALTER TABLE <tablename>
+        MODIFY <columnname> DEFAULT '<somevalue>'
+
+        /****************
+        DEFAULT DROP
+        *****************/
+        ALTER TABLE <tablename>
+        ALTER COLUMN <columnname> DROP DEFAULT
+
+/****************
+    CREATE INDEX 
+*****************/
+    //Duplicates allowed
+    CREATE INDEX <index_name>   
+    ON <tablename> (<columnname>)
+
+    //Duplicates not allowed
+    CREATE UNIQUE INDEX <index_name>
+    ON <tablename> (<columnname>)
+
+    //Duplicates allowed
+    CREATE INDEX <index_name>   
+    ON <tablename> (<columnname, columnname>)
+
+    /****************
+    INDEX DROP
+    *****************/
+    DROP INDEX <index_name>
+
+/****************
+AUTO INCREMENT FIELD 
+*****************/
+CREATE TABLE <tablename>
+(
+    <columnname> <dataype> NOT NULL AUTO_INCREMENT,
+    <columnname> <dataype>(<#size>),
+    <columnname> <dataype>(<#size>),
+    <columnname> <dataype>(<#size>)
+);
+    /****************
+    AUTO INCREMENT FIELD  Alter
+    *****************/
+    ALTER TABLE <tablename> AUTO_INCREMENT=100
+
+    //Example 
+    CREATE SEQUENCE seq_person
+    MINVALUE 1
+    START WITH 1
+    INCREMENT BY 1
+    CACHE 10
+
+    INSERT INTO Persons (ID,FirstName,LastName)
+    VALUES (seq_person.nextval,'Lars','Monsen')
+
+/****************
+VIEW
+*****************/
+CREATE VIEW <view_name> AS
+SELECT <column_name(s)>
+FROM <table_name>
+WHERE <column_name> <operator> <value>
+
+    /****************
+    Update VIEW
+    *****************/
+    CREATE OR REPLACE VIEW <view_name> AS
+    SELECT <column_name(s)>
+    FROM <table_name>
+    WHERE <column_name> <operator> <value>
+
+    /****************
+    DROP VIEW
+    *****************/
+    DROP VIEW <view_name>
+
+/****************
+GROUP BY Statement
+*****************/
+SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+FROM <table_name1>
+LEFT JOIN <table_name2>
+ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>;
+GROUP BY <table_name1.column_name>;//note: just column_name
+
+/****************
+IS NULL Operator
+*****************/
+SELECT <column_name, column_name>  FROM <table_name>
+WHERE <column_name> IS NULL;
+
+/****************
+HAVING Clause
+*****************/
+SELECT <table_name1.column_name, table_name2.column_name, ...> //Columns that will be displayed
+FROM <table_name1>
+INNER JOIN <table_name2>
+ON <table_name1>.<column_name_pk>=<table_name2>.<column_name_fk>
+HAVING COUNT(table_name2.column_name) > 10;
+
+/****************
+Comments
+*****************/
+//single line comment
+--Select all:
+
+//multiline line comment
+/*Select all the columns       
+of all the records
+in the Customers table:*/
+
+
+/****************
+OTHERS
+*****************/
+
+SELECT owner, table_name
+  FROM dba_tables

@@ -1,0 +1,12 @@
+Go to your Omega Sub Theme
+- scroll all the way to the bottom in there you can: Revert Theme Settings,  Export Theme Settings,  Download Theme Settings
+
+ Export Theme Settings
+ - copy
+ - Paste this in your .info file
+ 
+ Theme Settings
+ copy theme-settings.php from your original theme to your omega sub theme
+ rename the function name to match your themename
+ 
+

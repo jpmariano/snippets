@@ -1,0 +1,6 @@
+0904
+
+1. Retrieve the data for countries that have a government form that is some kind of republic, that have a population greater than 50 million, that gained their independence after 1900 and that have a life expectancy of less than 65.
+
+Solution:
+SELECT * FROM Country WHERE GovernmentForm LIKE '%Republic%' AND Population > 50000000 AND IndepYear > 1900 AND LifeExpectancy < 65 ORDER BY Population DESC\G

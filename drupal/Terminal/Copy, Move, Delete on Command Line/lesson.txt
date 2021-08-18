@@ -1,0 +1,7 @@
+cp -r old_folder/ new_folder - copy recursibly the old folder to new folder
+mkdir newfolder - make new folder
+rm file or folder - remove
+mv file or folder /new_folder_path - move
+mv file* /new_folder_location
+
+

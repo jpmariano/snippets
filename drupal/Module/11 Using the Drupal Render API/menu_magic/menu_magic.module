@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function menu_magic_menu() {
+  $items = array();
+
+  $items['magic'] = array(
+    'title' => 'A little magic',
+    'page callback' => 'menu_magic_basic',
+    'access arguments' => array('access content'),
+  );
+
+  $items['magic/%'] = array(
+    'title' => 'Even more magical',
+    'page callback' => 'menu_magic_extra',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'menu_magic.extra.inc',
+  );
+
+  $items['user/%/magic'] = array(
+    'title' => 'Magic',
+    'description' => 'Magical magic for users',
+    'page callback' => 'menu_magic_user_tab',
+    'page arguments' => array(1),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer users'),
+    'file' => 'menu_magic.user.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  // node_load(%)
+  $items['node/%node/magic'] = array(
+    'title' => 'Magic',
+    'description' => 'Do amazing and magical things',
+    'page callback' => 'menu_magic_node_context',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'menu_magic.context.inc',
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  return $items;
+}
+
+//Documentation of Rendery arrays https://www.drupal.org/node/930760
+function menu_magic_basic() {
+  $content = array();
+
+  // This is a very, very simple page element. It will appear on the page,
+  // but other modules can't customize it and themes can't override its markup.
+  //raw_markup if the key doesn't start with a #, it is a new element; If it starts with a #, it is a property
+  //https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7.x
+  $content['raw_markup'] = array(
+    '#type' => 'markup',
+    //Documentation can be found in forms API; Search for Type and then markup; 
+    '#markup' => 'Truly, this is magical!',
+    //#prefix and #suffix it is separated in #markup for overrides purpose
+    '#prefix' => '<p>',
+    '#suffix' => '</p>',
+  );
+
+  $variables = array(
+    'path' => 'http://placekitten.com/440/400',
+    'alt' => t('This is a magical kitten'),
+    'title' => t('This is the title'),
+  );
+	//themed_data just add new key with a naming convention key
+  $content['themed_data'] = array(
+    '#type' => 'markup',
+    //You can use a url of the image, or theme_image($variable), but theme('image', $variables) allows you to pass some variables;
+    '#markup' => theme('image', $variables),
+    '#prefix' => '<div class="menu-magic-image">',
+    '#suffix' => '</div>',
+    //Documentation: forms_api_reference.html; #attached let's you attached css, js, or libraries
+    //https://api.drupal.org/api/drupal/developer%21topics%21forms_api_reference.html/7.x
+    '#attached' => array(
+      'css' => array(
+        //takes 2 arguments - the type of thing you are tyring to get path to and the path of the thing (menu_magic)
+        drupal_get_path('module', 'menu_magic') . '/menu_magic.css',
+      ),
+    ),
+  );
+
+  $content['renderable_element'] = array(
+    // '#theme' => 'item_list' - uses theme_item_list($variables) function; #title and #items gets process by theme_item_list($variables) function
+    //https://api.drupal.org/api/drupal/includes%21theme.inc/function/theme/7.x
+    // https://api.drupal.org/api/drupal/includes%21theme.inc/function/theme_item_list/7.x
+    '#theme' => 'item_list',
+    '#title' => t('How do we know it\'s magic?'),
+    '#items' => array(
+      t("Is it made of wood?"),
+      t("Does it sink in water?"),
+      t("Does it weigh the same as a duck?"),
+      t('The current time is %time.', array('%time' => date('r'))),
+    ),
+    '#cache' => array(
+      'keys' => array('menu_magic', 'renderable_element'), // This saves into the cache in database. cache keys - menu_magic:renderable_element
+      //bin refers to the cache bin to store to, you can name it like cache_menu_magic; check the cache table database if it exist
+      'bin' => 'cache', //there's hsould be a cache tables in database
+      'expire' => time() + 30, //should exprire after 30 seconds
+      //Documentation: DRUPAL_CACHE_PER_PAGE - hook_block_info https://api.drupal.org/api/drupal/modules%21block%21block.api.php/function/hook_block_info/7.x
+      'granularity' => DRUPAL_CACHE_PER_PAGE,
+    ),
+  );
+
+  return $content;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

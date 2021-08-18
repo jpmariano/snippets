@@ -1,0 +1,466 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Administration Views List Display */
+.adminContactName {
+	
+}
+
+/*Code to keep academics parallax feature behind the alerts box and the photoslider*/
+.flexslider {
+
+}
+
+/*JP added on 01.13.15 -- code (from Earl) for substitute for a table layout that is "responsive" */
+._bl .content ul {
+  width:90%;
+}
+
+._bl .content li {
+  display:inline-block;
+  float:left;
+  height:136px;
+  margin:15px;
+  max-width:300px;
+  min-width:180px;
+  overflow:visible;
+  padding:15px;
+  width:30%;
+}
+
+.main_top_section .inner_content .region-content {
+    float: left;
+    overflow: hidden;
+    padding-bottom: 52px;
+    width: 100%;
+}
+
+/*Fields of Study Menu */
+/*
+._bla .content li {
+    display: block;
+    float: left;
+    margin: 5px 5px 10px 0;
+    width: 30%;
+}
+
+._bla .content li {
+    font: 2em;
+}
+
+._bla .content a {
+   color: #033664;
+}
+
+._bla .content a:hover {
+   color: #035fb3;
+}
+
+*/
+
+.alert_section {_h
+z-index:1000;
+}
+
+.parallax_section #home_academics{
+border-top:#2C3E50 1px solid;
+clear:both;
+z-index:1;
+}
+
+
+.parallax_section > .parallax_section > section {
+float:left;
+width:100%;
+overflow:hidden;
+}
+
+/** Maintenance Page Styles **/
+	
+.maintenance-page div#header {
+	width: 100%;
+	display: inline-block;
+	background: url('/sites/all/themes/howard/images/blue_bg.png') repeat;
+	padding: 10px 0;
+}
+
+	.maintenance-page div#logo-title {
+		text-align: center;
+	}
+
+.maintenance-page div#container {
+	width: 100%;
+	text-align: center;
+	display: inline-block;
+}
+
+/** End Maintenance Page Styles **/
+
+/*
+.alert_section {
+	z-index:1000;
+}
+
+
+
+.parallax_section #home_academics .more_btn {
+	z-index: 1000;
+}
+
+
+.parallax_section #home_academics{
+	border-top:#2C3E50 1px solid;
+	z-index:1;
+}
+
+*/
+
+/*Image Block Responsive - adopted from code in responsive.css for flexslider*/
+
+@media only screen and (min-width: 1200px) and (max-width: 2500px) {
+/*.imageblock-image {max-height:500px}*/
+ /*.flexslider .slides > li{max-height:500px}
+ .not-front .flexslider .slides > li{max-height:400px}*/
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+	/*.imageblock-image {max-height:450px}*/
+	
+ /*.flexslider .slides > li{max-height:450px}
+ .not-front .flexslider .slides > li{max-height:400px}*/
+ 
+}
+
+@media only screen and (min-width: 901px) and (max-width: 1024px) {
+	/*.imageblock-image {max-height:450px} */
+ /*.flexslider .slides > li{max-height:450px} 
+ .not-front .flexslider .slides > li{max-height:400px}*/
+}
+@media only screen and (min-width: 769px) and (max-width: 900px) {
+ 
+ /*.not-front li .transparent_img{opacity: 1;position: relative !important}*/
+ 
+}
+
+@media only screen and (min-width:0px) and (max-width: 768px) {
+ 
+ /*li .transparent_img{opacity: 1;position: relative !important}
+ .transparent_img{opacity: 1;position: absolute !important}
+  .not-front .slider >.transparent_img{opacity:1;position:absolute !important}
+  header .inner_content{position:relative} 
+  .not-front header{margin-top:0 !important;}*/
+}
+
+
+/*Image Block Responsive - adopted from code in howard.responsive.css for flexslider*/
+/*Adding the code below forces a computer browser to resize the image at ONE media query, but thats it.  It does not make it responsive on my iphone*/
+/*
+@media only screen and (min-width: 0px) and (max-width: 767px) {
+	.imageblock-image {height: 355px !important;margin: 0 auto;width: auto !important;transform: translateX(-14.5%); -ms-transform: translateX(-14.5%);-webkit-transform: translateX(-14.5%);-moz-transform:translateX(-14.5%)}*/
+ 
+	/*.flexslider .slides > li{overflow:hidden}
+	.flexslider .slides img{height: 355px !important;margin: 0 auto;width: auto !important;transform: translateX(-14.5%); -ms-transform: translateX(-14.5%);-webkit-transform: translateX(-14.5%);-moz-transform:translateX(-14.5%)}
+}*/
+/*
+@media only screen and (min-width: 0px) and (max-width: 568px) {
+	.imageblock-image img{transform: translateX(-20.5%); -ms-transform: translateX(-20.5%);-webkit-transform: translateX(-20.5%);-moz-transform: translateX(-20.5%);}
+	/*.flexslider .slides img{transform: translateX(-20.5%); -ms-transform: translateX(-20.5%);-webkit-transform: translateX(-20.5%);-moz-transform: translateX(-20.5%);}
+	}
+	*/
+/*
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+	.imageblock-image img{height: 250px !important;margin: 0 auto;width: auto !important;transform: translateX(-20.5%); -ms-transform: translateX(-20.5%);-webkit-transform: translateX(-20.5%);-moz-transform: translateX(-20.5%)}
+	/*.flexslider .slides img{height: 250px !important;margin: 0 auto;width: auto !important;transform: translateX(-20.5%); -ms-transform: translateX(-20.5%);-webkit-transform: translateX(-20.5%);-moz-transform: translateX(-20.5%)}
+	.not-front .slider_content p{margin: 25px 10px;}
+	.not-front .slider_content p.desc, .not-front .slider_content p.desc a{font: 14px/15px "opensans-regular";}
+}*/
+
+/*
+@media only screen and (min-width: 0px) and (max-width: 360px) {
+	.imageblock-image img{height: 200px !important;margin: 0 auto;width: auto !important;transform: translateX(-25.5%); -ms-transform: translateX(-25.5%);-webkit-transform: translateX(-25.5%);-moz-transform: translateX(-25.5%)}
+	/*.flexslider .slides img{height: 200px !important;margin: 0 auto;width: auto !important;transform: translateX(-25.5%); -ms-transform: translateX(-25.5%);-webkit-transform: translateX(-25.5%);-moz-transform: translateX(-25.5%)}
+	
+}*/
+
+
+/*Schools and Colleges Views List */
+/*.schoolCollegeEmail a {
+	font-weight:normal;
+	text-decoration:underline;
+}
+
+.schoolCollegeEmail {
+	font-weight:normal;
+	text-decoration:underline;
+}
+*/
+
+
+/*Fields of Study Sub Menu */
+#fieldsStudySubMenu  ul {
+	display:inline;
+	list-style:none;
+}
+
+#fieldsStudySubMenu  li {
+	display:inline;
+	list-style-image:none;
+}
+
+/*For margin at bottom of Undergrad Fields of Study because COAS program list is so long that it covers whatever is below it 
+.region-feature #block-views-fields-of-study-block-2{margin-bottom:650px;}
+.region-feature #block-views-fields-of-study-block-4{margin-bottom:300px;}
+*/
+
+/*Spacing between Fields of Study Views List on the Fields of Study page */
+/*
+.region-feature #block-views-fields-of-study-block-2{margin-bottom:20px;}
+
+.region-feature #block-views-fields-of-study-block-3{margin-bottom:20px;}
+*/
+
+/*FIELDS OF STUDY Views Lists - Taken from styles.css (212-233) - Was applied to the original fields of Study views list that C30 created, which is set to display ALL fields of study.  For the duplicate views lists that were created for specific groups (graduate, professional, undergraduate), the CSS was copied and the ID names were changed to reflect the new views lists by adding a dash and number to the name, which reflects the Drupal's naming conventions in duplicate views lists */
+.region-feature #block-views-fields-of-study-block-2{width:100%;float:left;background:url(../images/schools_colleges_bg.png) repeat;padding:15px 0 60px}
+
+.region-feature #block-views-fields-of-study-block-2 .content{padding:0;margin: 0 auto;max-width: 1020px;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-2 .view-header h3{color: #003A63;font: 36px/24px 'serif12beta-regular';text-align: left;text-transform: uppercase;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-2 .view-header p{color: #003A63;font: 18px/22px 'opensans-bold';}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list > ul{width:33.33%;position:relative;float:left}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li{list-style:none;width:100%;float:left}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li a{font:18px/40px 'opensans-bold';color:#5f6060;width:97%;float:left;padding:0 0 0 3%;text-decoration:none } 
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a:hover,.region-feature #block-views-fields-of-study-block-2 .item-list ul li a.active, 
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li.show > a {color:#2a6ebb;background:#fff;}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul ul{top:0;position:absolute;height:auto;min-height:100%;left: 100%;width: 200%;background:#fff;float:left;display:none}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li:hover ul, .region-feature #block-views-fields-of-study-block-2 .item-list ul li.show ul{display:block}
+
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li{width:50%;float:left;margin: 0;}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a{font:18px/36px 'opensans-regular';color:#5f6060;padding-left:25px}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list ul li a.see_all{font:12px/20px 'opensans-regular';color:#003a63;border:2px solid #e51937;width:auto;position:absolute;bottom:30px;right:0;padding:0 20px}
+
+.region-feature #block-views-fields-of-study-block-2 .item-list .extra{display: none;}
+
+.region-feature #block-views-fields-of-study-block-3{width:100%;float:left;background:url(../images/schools_colleges_bg.png) repeat;padding:15px 0 60px}
+
+.region-feature #block-views-fields-of-study-block-3 .content{padding:0;margin: 0 auto;max-width: 1020px;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-3 .view-header h3{color: #003A63;font: 36px/24px 'serif12beta-regular';text-align: left;text-transform: uppercase;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-3 .view-header p{color: #003A63;font: 18px/22px 'opensans-bold';}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list > ul{width:33.33%;position:relative;float:left}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li{list-style:none;width:100%;float:left}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li a{font:18px/40px 'opensans-bold';color:#5f6060;width:97%;float:left;padding:0 0 0 3%;text-decoration:none } 
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a:hover,.region-feature #block-views-fields-of-study-block-3 .item-list ul li a.active, 
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li.show > a {color:#2a6ebb;background:#fff;}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul ul{top:0;position:absolute;height:auto;min-height:100%;left: 100%;width: 200%;background:#fff;float:left;display:none}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li:hover ul, .region-feature #block-views-fields-of-study-block-3 .item-list ul li.show ul{display:block}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li{width:50%;float:left;margin: 0;}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a{font:18px/36px 'opensans-regular';color:#5f6060;padding-left:25px}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list ul li a.see_all{font:12px/20px 'opensans-regular';color:#003a63;border:2px solid #e51937;width:auto;position:absolute;bottom:30px;right:0;padding:0 20px}
+
+.region-feature #block-views-fields-of-study-block-3 .item-list .extra{display: none;}
+
+.region-feature #block-views-fields-of-study-block-4{width:100%;float:left;background:url(../images/schools_colleges_bg.png) repeat;padding:15px 0 60px}
+
+.region-feature #block-views-fields-of-study-block-4 .content{padding:0;margin: 0 auto;max-width: 1020px;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-4 .view-header h3{color: #003A63;font: 36px/24px 'serif12beta-regular';text-align: left;text-transform: uppercase;width: 100%;}
+
+.region-feature #block-views-fields-of-study-block-4 .view-header p{color: #003A63;font: 18px/22px 'opensans-bold';}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list > ul{width:33.33%;position:relative;float:left}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li{list-style:none;width:100%;float:left}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li a{font:18px/40px 'opensans-bold';color:#5f6060;width:97%;float:left;padding:0 0 0 3%;text-decoration:none } 
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a:hover,.region-feature #block-views-fields-of-study-block-4 .item-list ul li a.active, 
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li.show > a {color:#2a6ebb;background:#fff;}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul ul{top:0;position:absolute;height:auto;min-height:100%;left: 100%;width: 200%;background:#fff;float:left;display:none}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li:hover ul, .region-feature #block-views-fields-of-study-block-4 .item-list ul li.show ul{display:block}
+
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li{width:50%;float:left;margin: 0;}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a{font:18px/36px 'opensans-regular';color:#5f6060;padding-left:25px}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list ul li a.see_all{font:12px/20px 'opensans-regular';color:#003a63;border:2px solid #e51937;width:auto;position:absolute;bottom:30px;right:0;padding:0 20px}
+
+.region-feature #block-views-fields-of-study-block-4 .item-list .extra{display: none;}
+*/
+
+
+/*--------------------------------------------------------------------*/
+
+/*FIELDS OF STUDY Views Lists - Taken from howard.responsive.css (scattered throughout) - */
+
+@media only screen and (min-width: 1201px) and (max-width: 2525px) {
+	/*Undergrad list */
+	.region-feature #block-views-fields-of-study-block-2 .view-header h3{font:34px/20px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-2 .view-header p{font:17px/20px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li a{font:17px/38px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a{font:17px/34px 'opensans-regular'}
+	/*Grad List */
+	.region-feature #block-views-fields-of-study-block-3 .view-header h3{font:34px/20px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-3 .view-header p{font:17px/20px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li a{font:17px/38px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a{font:17px/34px 'opensans-regular'}	
+	/*Prof List */
+	.region-feature #block-views-fields-of-study-block-4 .view-header h3{font:34px/20px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-4 .view-header p{font:17px/20px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li a{font:17px/38px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a{font:17px/34px 'opensans-regular'}	
+	}
+
+	
+@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+	/*Undergrad list */
+	.region-feature #block-views-fields-of-study-block-2 .view-header h3{font:31px/18px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-2 .view-header p{font:16px/19px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li a{font:16px/36px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a{font:16px/32px 'opensans-regular'}
+	/*Grad List */
+	.region-feature #block-views-fields-of-study-block-3 .view-header h3{font:31px/18px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-3 .view-header p{font:16px/19px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li a{font:16px/36px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a{font:16px/32px 'opensans-regular'} */
+	/*Prof List */
+	.region-feature #block-views-fields-of-study-block-4 .view-header h3{font:31px/18px 'serif12beta-regular'}
+	.region-feature #block-views-fields-of-study-block-4 .view-header p{font:16px/19px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li a{font:16px/36px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a{font:16px/32px 'opensans-regular'}
+	}
+	
+@media only screen and (min-width: 0px) and (max-width: 767px) {
+	/*Undergrad list */	
+	.region-feature #block-views-fields-of-study-block-2{ padding: 15px 3% 60px;width: 100%;}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li a.see_all{position: static;}
+	/*Grad List */
+	.region-feature #block-views-fields-of-study-block-3{ padding: 15px 3% 60px;width: 100%;}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li a.see_all{position: static;}
+	/*Prof List */
+	.region-feature #block-views-fields-of-study-block-4{ padding: 15px 3% 60px;width: 100%;}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li a.see_all{position: static;}
+	}
+
+
+@media only screen and (min-width: 0px) and (max-width: 640px) {
+	/*Not sure what views list this is */
+	#block-views-fields-of-study-block-1 .three-col-section-det{ padding: 10px 5%;width: 100%;text-align: center;}
+	#block-views-fields-of-study-block-1 .three-col-section-det h4{text-align: center;}
+	#block-views-fields-of-study-block-1 .three-col-section-det span{text-align: left;}
+
+	/*Undergrad list */
+	.region-feature #block-views-fields-of-study-block-2 .item-list > ul{width: 80%;}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul ul{width:100%;left:0;position:relative}
+    .region-feature #block-views-fields-of-study-block-2 .view-header h3{font: 48px/48px 'serif12beta-regular';}
+    .region-feature #block-views-fields-of-study-block-2 .view-header p{font: 24px/22px 'opensans-bold';}
+    .region-feature #block-views-fields-of-study-block-2 .item-list ul li a{font: 30px/43px 'opensans-semibold';}
+    .region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a{font: 24px/40px 'opensans-regular';}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li{width: 100%;}
+	
+	/*Grad List */
+	
+	.region-feature #block-views-fields-of-study-block-3 .item-list > ul{width: 80%;}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul ul{width:100%;left:0;position:relative}
+    .region-feature #block-views-fields-of-study-block-3 .view-header h3{font: 48px/48px 'serif12beta-regular';}
+    .region-feature #block-views-fields-of-study-block-3 .view-header p{font: 24px/22px 'opensans-bold';}
+    .region-feature #block-views-fields-of-study-block-3 .item-list ul li a{font: 30px/43px 'opensans-semibold';}
+    .region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a{font: 24px/40px 'opensans-regular';}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li{width: 100%;}
+	
+	/*Prof List */
+	.region-feature #block-views-fields-of-study-block-4 .item-list > ul{width: 80%;}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul ul{width:100%;left:0;position:relative}
+    .region-feature #block-views-fields-of-study-block-4 .view-header h3{font: 48px/48px 'serif12beta-regular';}
+    .region-feature #block-views-fields-of-study-block-4 .view-header p{font: 24px/22px 'opensans-bold';}
+    .region-feature #block-views-fields-of-study-block-4 .item-list ul li a{font: 30px/43px 'opensans-semibold';}
+    .region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a{font: 24px/40px 'opensans-regular';}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li{width: 100%;}
+}
+
+	
+
+@media only screen and (min-width: 0px) and (max-width: 320px) {
+	/*Undergrad list */	
+	.region-feature #block-views-fields-of-study-block-2 .view-header h3 {font: 24px/24px 'serif12beta-regular';}
+	.region-feature #block-views-fields-of-study-block-2 .view-header p{font: 12px/11px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li a{font:15px/22px 'opensans-semibold'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li ul li a{font:12px/20px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-2 .item-list ul li a.see_all{font:9px/15px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-2{ padding: 15px 5% 30px; width: 90%;}
+	/*Grad List */
+	.region-content #block-views-upcoming-dates-block-3 h2{font:24px/24px 'serif12beta-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .view-header h3 {font: 24px/24px 'serif12beta-regular';}
+	.region-feature #block-views-fields-of-study-block-3 .view-header p{font: 12px/11px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li a{font:15px/22px 'opensans-semibold'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li ul li a{font:12px/20px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-3 .item-list ul li a.see_all{font:9px/15px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-3{ padding: 15px 5% 30px; width: 90%;}
+	/*Prof List */
+	.region-content #block-views-upcoming-dates-block-4 h2{font:24px/24px 'serif12beta-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .view-header h3 {font: 24px/24px 'serif12beta-regular';}
+	.region-feature #block-views-fields-of-study-block-4 .view-header p{font: 12px/11px 'opensans-bold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li a{font:15px/22px 'opensans-semibold'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li ul li a{font:12px/20px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-4 .item-list ul li a.see_all{font:9px/15px 'opensans-regular'}
+	.region-feature #block-views-fields-of-study-block-4{ padding: 15px 5% 30px; width: 90%;}
+}	
+
+
+/*Earl - 1.20.15 - Added for Howard CSE Module display */
+#edit-submit {
+    background: url("http://howardstg.prod.acquia-sites.com/sites/all/themes/howard/images/search.png") no-repeat scroll 100% 50% rgba(0, 0, 0, 0) !important;
+    width: 25px;
+}
+
+#search-block-form input {
+    margin: 2px 5px 0 0;
+    position: relative;
+    width: 20px;
+    z-index: 99;
+}
+
+input#edit-search-block-form--2  {
+    width: 109px;
+}
+
+
+/*Fields of CSS Responsive*/
+.collapse {display:none;}
+
+@media only screen and (min-width: 0px) and (max-width: 420px) 
+    {		
+			block-views-fields-of-study-block-2 {display:none;}
+			.collapse {display:block;}
+			.collapse .content	dl {
+						background: url("up.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+						padding-left: 42px;
+					}
+			.collapse .content	dl > dd {display:none;}	
+			.collapse .content	dl.active {
+						background: url("down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+						}	
+			.collapse .content  dl.active > dd {display:block;}
+}

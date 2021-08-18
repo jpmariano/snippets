@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ * Provides a simple custom entity type named 'video' for tracking embed codes.
+ */
+
+ //Step 1: 
+/**
+ * Implements hook_entity_info().
+ */
+function videoentity_entity_info() {
+  $info = array();
+  // Our custom video entity needs to be defined here.
+  // See http://drupal.org/node/1026420 and http://drupal.org/node/878804
+  // for more documentation.
+  $info['video'] = array(
+    // Human readable label.; Property
+    'label' => t('Video'),
+    // Table for storing entity data, defined in hook_schema().; Property
+    'base table' => 'videoentity_video',
+    // This helps Entity API know how to query your custom table. ; This is the Primary key field of your schema
+    'entity keys' => array(
+      'id' => 'id',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function videoentity_menu() {
+  $items = array();
+  $items['videoentity'] = array(
+    'title' => 'Demo page',
+    'page callback' => 'videoentity_demo_page',
+    'access callback' => TRUE,
+    'menu' => 'navigation',
+  );
+  return $items;
+}
+
+/**
+ * Callback for /videoentity page.
+ *
+ * Just a place to test things out and be able to see the results on a page.
+ */
+function videoentity_demo_page() {
+  $video = entity_load('video', array(1));
+  kpr($video);
+
+  // Or load it with EFQ.
+  $query = new EntityFieldQuery(); //class from includes/entity.inc; https://www.drupal.org/node/1343708
+  $query->entityCondition('entity_type', 'video'); //entityCondition is a public function of EntityFieldQuery
+  $results = $query->execute(); //execute is a public function of EntityFieldQuery
+  kpr($results);
+  return 'hello there!';
+}

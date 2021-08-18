@@ -1,0 +1,16 @@
+0907 
+
+1. List all the Regions in North America.
+
+Solution:
+SELECT DISTINCT Region FROM Country WHERE Continent = 'North America';
+
+2. List the codes for all the countries that have a city named 'San Jose'.
+
+Solution:
+SELECT DISTINCT CountryCode FROM City WHERE Name = 'San Jose';
+
+3. List all the regions in the Country table along with their Continent. For extra points, list them alphabetically by Continent and Region.
+
+Solution:
+SELECT DISTINCT Continent, Region FROM Country ORDER BY CAST(Continent AS CHAR), Region;

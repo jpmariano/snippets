@@ -1,0 +1,10 @@
+$ mysqldump -u <username> -p <databasename>  > <filename.sql>
+$ rm <filename.sql>
+$ sudo chmod 777 filename.sql
+
+$mysql -u root -p 
+mysql> DROP DATABASE <DBNAME>
+mysql> CREATE DATABASE <DBNAME>
+mysql -u root -p <dbname> <  <path>/<filename.sql> 
+
+

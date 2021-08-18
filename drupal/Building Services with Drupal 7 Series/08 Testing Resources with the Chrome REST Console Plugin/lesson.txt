@@ -1,0 +1,19 @@
+Install: REST Console chrome extensions
+Set Permission: Allow anonymous user to create a content
+
+options: choose bootstrap theme
+
+Target: 
+Request URI: http://example.com/api/v1/node/2 - the URI you are connecting to 
+Method: Get, Post, Delete.. Etc.
+Accept: what format you want to receive
+Request Timeout: 60 seconds
+
+Save Configuration
+
+Body (Where are you sending your data to)
+Content Headers
+Content-Type:
+Custom Headers: Custom Authentication in headers
+
+Authorization - authorization method

@@ -1,0 +1,22 @@
+<?php
+
+
+//General called first or by module weight
+/*
+ * Implements hook_form_alter().
+ */
+function demo_form_alter(&$form, &$form_state, $form_id) {
+  #krumo($form_id);
+  switch ($form_id) {
+  	//user_profile_form is the form ID
+    case 'user_profile_form' :
+      
+      $form['account']['pass']['#description'] = t('To change the current user password, enter the new password in both fields. Please do not use common passwords like "password", "12345", "love".');
+      #krumo($form);
+
+    break;
+  }
+}
+
+
+

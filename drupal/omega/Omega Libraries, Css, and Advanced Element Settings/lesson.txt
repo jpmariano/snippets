@@ -1,0 +1,16 @@
+- Enable/disable Scripts libraries
+- Enable/disable theme sytle sheets
+- Enable/disable core/contrib stylesheet
+- Typical Theme settings
+
+
+- Enable/disable Scripts libraries
+	- Apperarnce |Theme Settings > Toggle Libraries (These will add settings to your regions)
+		- Formalize : Make form elements the same accross browsers
+		- Media Queries
+		- Equal Height: 
+	- Apperarnce |Theme Settings > Toggle Libraries 
+	- Apperarnce |Theme Settings > Toggle Elements 
+	
+		
+

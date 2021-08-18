@@ -1,0 +1,8 @@
+sites/default - no sites pointing
+sites/udrupal.com
+sites/udrupalalumni.com
+sites/news.udrupal.com
+
+sites/udrupal.com/settings.php
+sites/udrupalalumni.com/settings.php - edit the database information
+sites/news.udrupal.com/settings.php - edit the database information

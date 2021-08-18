@@ -1,0 +1,19 @@
+drush fr  feature_title - to revert changes to your features
+drush cc all
+
+Best practice - kit module best practice when creating features
+Exporting permissions - using standard role you can safely assume that
+you can export it
+Other roles might have conflict - for example editor in one site and editor on another site already exist
+add a role - then edit permissions
+add that permission to the features that you created
+
+To export
+Use the features UI
+click on recreate
+edit components - select roles and permissions that goes with that role
+
+Download
+
+
+

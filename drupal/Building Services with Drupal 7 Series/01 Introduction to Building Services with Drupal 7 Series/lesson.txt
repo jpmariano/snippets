@@ -1,0 +1,2 @@
+Views module as resources to api
+Views Expose Filter to allow more control to clients

@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * Implements hook_node_view().
+ */
+  //Step 3
+function demo2_node_view($node, $view_mode = 'full') {
+  //only when looking at the full version, NOT the teaser
+  if ($view_mode == 'full') {
+    	
+   //currently login user
+    global $user;
+
+    // Everytime a node is viewed, increment the node_views count
+    // in the demo2 table by one and include the result in the node content
+
+
+    // Get record
+    // $node->nid -  from line 6, $user->uid - line 10
+    $record = demo2_get_record($node->nid, $user->uid);
+		
+		#krumo($record);
+
+    //If no record, create one that we can insert later
+    if ($record === FALSE) {
+      $record = new StdClass();
+      $record->nid = $node->nid;
+      $record->uid = $user->uid;
+      $record->view_count = 0;
+    }
+
+    // Increment view_count by 1
+    $record->view_count++;
+
+
+    // Set the record
+    demo2_set_record($record);
+
+    krumo($record);
+
+
+    // Set up an array of placeholders to pass to t().
+    $t_args = array(
+    //gran the view_count from the database
+      '%num' => $record->view_count,
+    );
+
+    $node->content['node_views'] = array(
+      '#markup' => t('You have viewed this page %num times.', $t_args),
+      '#weight' => 10,
+    );
+  }
+}
+
+
+/**
+ * Get the record.
+ *
+ * @param int $nid
+ *   The node id.
+ * @param int $uid
+ *   The user id.
+ * @return mixed
+ *   The stdClass record, or FALSE if no record exists.
+ */
+
+ //Step 1 (get and set is a helper function)
+function demo2_get_record($nid, $uid) {
+  //SELECT view_count FROM demo2 WHERE nid = $nid & uid = $uid
+  // $query = db_select('tablename', 'optional alias')
+  $query = db_select('demo2', 'd')
+	//->fields('tablename or alias if given', array('colunm1', 'column2' ..., 'columnN'))
+    ->fields('d', array('nid', 'uid', 'view_count'))
+    ->condition('nid', $nid)
+    ->condition('uid', $uid);
+		//$query->execute() - run the query; fetch() - outputs default format
+  $record = $query->execute()->fetch();
+	//outputs the resuld
+  return $record;
+
+}
+
+
+/**
+ * Save a record.
+ *
+ * @param stdClass $record
+ *   The record to save.
+ */
+ // //Step 2
+function demo2_set_record($record) {
+  //sanity check
+  if (!is_object($record)) {
+  	//watchdog -  read from drupal.org; demo2 is the modulename
+    return watchdog('demo2', 'We could not update information about node views.', array(), WATCHDOG_ERROR);
+  }
+
+
+  //INSERT/UPDATE into demo2 ('nid', 'uid', 'node_views') VALUES ('nid', 'uid', 'node_views')
+  //$query = db_merge('tablename') 
+  $query = db_merge('demo2')
+	//->key(array('nid' =>$record->nid)) if nid values are in
+    ->key(array('nid' =>$record->nid))
+    ->key(array('uid' => $record->uid))
+	//cast $record as an array
+    ->fields((array) $record);
+	//run the query
+  $query->execute();
+
+}
+
+
+
+
+
+
+
+
+
+
+

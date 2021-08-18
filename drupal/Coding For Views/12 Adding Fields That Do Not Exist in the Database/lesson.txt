@@ -1,0 +1,8 @@
+psuedo field 
+- like edit link for administrative use
+
+Step 1: 
+
+Copy  line 76 from databasics.views.inc 
+and paste it below and make changes  in line 96
+

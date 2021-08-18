@@ -1,0 +1,9 @@
+#edit-name.progress-disabled,
+#edit-mail.progress-disabled {
+  float: none;
+}
+
+#regval-name-wrapper img,
+#regval-mail-wrapper img {
+  vertical-align: middle;
+}

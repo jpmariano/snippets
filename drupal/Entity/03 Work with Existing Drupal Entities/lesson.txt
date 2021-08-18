@@ -1,0 +1,22 @@
+Handy functions that can be used inside entitydemo.demo1.inc
+
+$node = node_load(10); <--- wrapper for entity_load
+dsm($node);
+
+
+https://api.drupal.org/api/drupal/includes%21common.inc/function/entity_load/7 
+includes/common.inc, line 7923
+Common functions that many Drupal modules will need to reference.
+
+
+entity_load($entity_type, $ids = FALSE, $conditions = array(), $reset = FALSE);
+$entity = entity_load(node, array(75));
+dsm($entity);
+
+$entity =  entity_load(node, array($id));
+$entity = reset($entity);
+
+https://api.drupal.org/api/drupal/includes%21common.inc/function/entity_extract_ids/7
+list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+dsm($id);
+

@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Demonstrates the possibilities of Plugins in Drupal 8.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\PluginSettingsInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+
+/**
+ * Implements hook_field_formatter_third_party_settings_form().
+ *
+ * Add a number field to the field formatter settings form. The input value will
+ * automatically be stored in "third party settings".
+ */
+function demo_plugin_field_formatter_third_party_settings_form(PluginSettingsInterface $plugin, FieldDefinitionInterface $field_definition, $view_mode, $form, FormStateInterface $form_state) {
+  $elements = array();
+
+  if ($plugin->getPluginId() == 'entity_reference_label') {
+    $elements['limit'] = array(
+      '#type' => 'number',
+      '#title' => t('Maximum number of items'),
+      '#default_value' => $plugin->getThirdPartySetting('demo_plugin', 'limit'),
+      '#description' => t('Max number of terms to display. Set to zero for unlimited'),
+    );
+  }
+  return $elements;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary_alter().
+ *
+ * Append a message to the field display summary showing the configured value.
+ */
+function demo_plugin_field_formatter_settings_summary_alter(&$summary, $context) {
+
+  if ($context['formatter']->getPluginId() == 'entity_reference_label') {
+    if ($limit = $context['formatter']->getThirdPartySetting('demo_plugin', 'limit')) {
+      $summary[] = t('Display max @limit terms.', array('@limit' => $limit));
+    }
+    else {
+      $summary[] = t('Display all terms.');
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field templates.
+ *
+ * Limit the number of taxonomy terms according to the field configuration.
+ */
+function demo_plugin_preprocess_field(&$variables) {
+
+  if ($variables['element']['#formatter'] == 'entity_reference_label') {
+    $entity = $variables['element']['#object'];
+    $view_mode = $variables['element']['#view_mode'];
+    $field_name = $variables['element']['#field_name'];
+
+    // Get the field formatter settings.
+    $entity_display = EntityViewDisplay::collectRenderDisplay($entity, $view_mode);
+    $field_display = $entity_display->getComponent($field_name);
+
+    // Limit the number of terms to the configured value.
+    if (isset($field_display['third_party_settings']['demo_plugin']['limit'])) {
+      $limit = $field_display['third_party_settings']['demo_plugin']['limit'];
+      if ($limit) {
+        $variables['items'] = array_slice($variables['items'], 0, $limit);
+      }
+    }
+  }
+}

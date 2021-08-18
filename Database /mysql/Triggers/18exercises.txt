@@ -1,0 +1,43 @@
+18 Triggers
+
+In the world database:
+
+1. Create triggers for the Country table that manage the parent-child relationships with the City and CountryLanguage tables. These will be AFTER triggers that make sure there are no orphan rows in those tables caused by changes to a Country row.
+
+Solution:
+DELIMITER //
+CREATE TRIGGER country_au AFTER UPDATE ON Country
+FOR EACH ROW
+BEGIN
+    IF NEW.code <> OLD.code THEN
+        UPDATE City SET CountryCode = NEW.code WHERE CountryCode = OLD.code;
+        UPDATE CountryLanguage SET CountryCode = NEW.code WHERE CountryCode = OLD.code;
+    END IF;
+END//
+CREATE TRIGGER country_ad AFTER DELETE ON Country
+FOR EACH ROW
+BEGIN
+    DELETE FROM City WHERE CountryCode = OLD.code;
+    DELETE FROM CountryLanguage WHERE CountryCode = OLD.code;
+END//
+DELIMITER ;
+
+2. Create triggers for the Country table that disallows the IndepYear value from being greater than the current year when a new Country row is being inserted or updated.
+
+Solution:
+DELIMITER //
+CREATE TRIGGER country_bi BEFORE INSERT ON Country
+FOR EACH ROW
+BEGIN
+    IF NEW.IndepYear > YEAR(CURDATE()) THEN
+        SET NEW.IndepYear = YEAR(CURDATE());
+    END IF;
+END//
+CREATE TRIGGER country_bu BEFORE UPDATE ON Country
+FOR EACH ROW
+BEGIN
+    IF NEW.IndepYear > YEAR(CURDATE()) THEN
+        SET NEW.IndepYear = OLD.IndepYear;
+    END IF;
+END//
+DELIMITER ;

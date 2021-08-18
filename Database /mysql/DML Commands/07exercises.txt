@@ -1,0 +1,45 @@
+07 Other MySQL DML Commands
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. Using the world database, use the REPLACE command to insert the following rows into the Country table. Then select the MSQ and USA country rows and analyze what happened.
+
+Code  Name                       Population
+MSQ   MySQL Nation                 1000000
+USA   United States of America   300000000
+
+Solution:
+REPLACE INTO Country (Code, Name, Population) VALUES ('MSQ', 'MySQL Nation', 1000000), ('USA', 'United States of America', 300000000);
+SELECT * FROM Country WHERE Code IN ('MSQ', 'USA')\G
+
+REPLACE is not UPDATE, so data was lost in the existing record that was replaced. The new row was created with default values where a value was not supplied. The existing row was removed and then created anew with default values where a value was not supplied.
+
+2. Using the world database, use the INSERT command to insert the following rows into the country table. Use the ON DUPLICATE KEY UPDATE option to ensure that the Population figure is passed into any rows that already exist. For reference, test to see whether these rows already exist and what their contents are before and after performing the insert. Analyze what happened.
+
+Code  Name               Population
+SAK   Sakila Land           1000000
+GBR   Great Britain        65000000
+
+
+Solution:
+SELECT * FROM Country WHERE Code IN ('SAK', 'GBR')\G
+INSERT INTO Country (Code, Name, Population) VALUES ('SAK', 'Sakila Land', 1000000), ('GBR', 'Great Britain', 65000000) ON DUPLICATE KEY UPDATE Population = VALUES(Population);
+SELECT * FROM Country WHERE Code IN ('SAK', 'GBR')\G
+
+ON DUPLICATE KEY UPDATE performs updates as needed and specified.  The new row was created with default values where a value was not supplied. The existing row was updated, but only for the column specified in the ON DUPLICATE KEY UPDATE clause, not with all column values supplied in the main statement.
+
+3. Using the world database, remove all rows from the City table using the TRUNCATE TABLE command. But examine the count of rows and the table creation statement both before and after. Analyze what you see.
+
+Solution:
+SELECT COUNT(*) FROM City;
+SHOW CREATE TABLE City\G
+TRUNCATE TABLE City;
+SELECT COUNT(*) FROM City;
+SHOW CREATE TABLE City\G
+
+TRUNCATE TABLE is not the same as deleting all rows. Since it is performed by the file system, no "rows" were actually "affected" (individually acted upon). Notice also that the AUTO_INCREMENT seed value was removed (and reset to 0).
+
+For comparison, recreate the City table and perform a "DELETE FROM City" with no other clauses.
+
+4. Practice performing other operations with these commands, if you wish. But keep in mind that they are designed for very special circumstances. You may never encounter a need for them in your real work, but it's good to know they exist - and what the appropriate uses are for them.
+

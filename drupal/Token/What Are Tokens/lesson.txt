@@ -1,0 +1,46 @@
+-use case tokens
+-Token Syntax
+-Global vs Contextual Tokens
+
+What are Tokens?
+Tokens are specially formatted chunks of text that serve as placeholders for a dynamically generated value.
+
+For Example:
+Welcome, Joe
+Welcome, [current-user:name]
+
+Other Use Cases:
+- System Generated Emails
+- Path for Filefield Upload Files to be saved
+- Pathauto
+- Automatic Node Titles
+- Etc.
+
+Standardize API & Syntax
+This can get out of control quick if everyone has their own system.
+{user.name}
+@@NAME@@
+[user-name]vs[user:name]vs[user.name]
+
+
+Standardized API & Syntax
+Drupal 7 provides a standardized way to:
+
+Announce tokens - hook_token_info()
+Provide token values - hook_tokens()
+Replace tokens in strings - token_replace()
+
+Token Module
+Contrib Module Provides UI and enhancements
+
+[user:name], [node:author:name] (Chained Token)
+[Token Type: Token]
+
+Global Tokens
+Can be calculated without additional context.
+
+Contextual Tokens
+Require additional data related to the current context in order to calculate a value.
+
+
+

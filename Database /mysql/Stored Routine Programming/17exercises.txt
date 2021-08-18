@@ -1,0 +1,92 @@
+17 Stored Routine Programming
+
+1. Create a stored function for converting between degrees Fahrenheit and degrees Celsius. Provide a means of knowing which direction the conversion should go.
+
+Solution:
+DELIMITER //
+CREATE FUNCTION tempconvert (degrees SMALLINT, type CHAR) RETURNS SMALLINT
+main: BEGIN
+    IF type NOT IN ('F', 'C') THEN
+        RETURN NULL;
+        LEAVE main;
+    END IF;
+    CASE type
+        WHEN 'F' THEN RETURN ROUND((degrees - 32) * 5 DIV 9);
+        WHEN 'C' THEN RETURN ROUND(degrees * 9 DIV 5 + 32);
+    END CASE;
+END//
+DELIMITER ;
+
+2. Create a stored function that converts a dollar-and-cent amount to a character string that describes that number, as for writing on a check.
+
+Solution:
+DELIMITER $$
+CREATE FUNCTION moneystring (moneyAmount DECIMAL(7,2)) RETURNS VARCHAR(100)
+main: BEGIN
+	DECLARE thousands, hundreds, units, pennies INT DEFAULT 0;
+	DECLARE moneyString VARCHAR(100) DEFAULT '';
+	IF moneyAmount < 0 OR moneyAmount >= 100000.00 THEN
+		RETURN NULL;
+		LEAVE main;
+	END IF;
+	-- parse input into logical numeric range values
+	SET thousands=FLOOR(moneyAmount / 1000);
+	SET hundreds=FLOOR((moneyAmount % 1000) / 100);
+	SET units=FLOOR(moneyAmount) % 100;
+	SET pennies=(moneyAmount * 100) % 100;
+	-- build moneyString
+	-- parse thousands part
+	IF (thousands > 19) THEN
+		SET moneyString=CONCAT(moneyString,ELT(FLOOR(thousands/10)+1,'','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'),' ');
+		SET moneyString=CONCAT(moneyString,ELT((thousands%10)+1,'','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'),' ');
+		SET moneyString=CONCAT(moneyString,'Thousand ');
+	ELSEIF (thousands > 9) THEN
+		SET moneyString=CONCAT(moneyString,ELT(thousands-9,'Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'),' Thousand ');
+	ELSEIF (thousands > 0) THEN
+		SET moneyString=CONCAT(moneyString,ELT(thousands+1,'','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'),' Thousand ');
+	END IF;
+	-- parse hundreds part
+	IF (hundreds) THEN
+		SET moneyString=CONCAT(moneyString,ELT(hundreds+1,'','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'),' Hundred ');
+	END IF;
+	-- parse units part
+	IF (units > 19) THEN
+		SET moneyString=CONCAT(moneyString,ELT(FLOOR(units/10)+1,'','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'),' ');
+		SET moneyString=CONCAT(moneyString,ELT((units%10)+1,'','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'),' ');
+	ELSEIF (units > 9) THEN
+		SET moneyString=CONCAT(moneyString,ELT(units-9,'Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'),' ');
+	ELSEIF (units > 0) THEN
+		SET moneyString=CONCAT(moneyString,ELT(units+1,'','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'),' ');
+	END IF;
+	-- special case if only pennies
+	IF (moneyAmount < 1) THEN
+		SET moneyString='Zero ';
+	END IF;
+	-- parse pennies part
+	IF NOT pennies THEN
+		SET moneyString=CONCAT(moneyString,'and no/100');
+	ELSE
+		SET moneyString=CONCAT(moneyString,'and ',pennies,'/100');
+	END IF;
+	-- return result
+	RETURN moneyString;
+END$$
+DELIMITER ;
+
+3. Create a stored procedure that creates a new Country row when provided with a Code, Name, Continent and Population. But this procedure also creates a new default City, which it sets as the capital with 50% of the country's population and a new default Language spoken by 100% of the population, which is the official language.
+
+Solution:
+DELIMITER //
+CREATE PROCEDURE newcountry (ccode CHAR (3), cname VARCHAR (52), ccont VARCHAR (20), cpop INT)
+main: BEGIN
+    DECLARE EXIT HANDLER FOR SQLSTATE '23000' SELECT CONCAT('Country Code ', ccode, ' already exists.') AS Error;
+    IF ccont NOT IN ('Asia','Europe','North America','Africa','Oceania','Antarctica','South America') THEN
+        SELECT CONCAT(ccont, ' is not a valid continent.') AS Error;
+        LEAVE main;
+    END IF;
+    INSERT INTO Country (Code, Name, Continent, Population) VALUES (ccode, cname, ccont, cpop);
+    INSERT INTO City (CountryCode, Name, Population) VALUES (ccode, CONCAT(cname, ' City'), ROUND(cpop / 2));
+    UPDATE Country SET Capital = LAST_INSERT_ID() WHERE Code = ccode;
+    INSERT INTO CountryLanguage VALUES (ccode, CONCAT(REPLACE(cname, ' ', ''), 'ese'), 'T', 100.0);
+END//
+DELIMITER ;

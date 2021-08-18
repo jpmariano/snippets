@@ -1,0 +1,18 @@
+Command line Tools to interact with web services
+- CURL (Hard but widely used)
+
+- Enable create a new node in permissions
+- Download Curl and install it in your local machine
+-- Look for HTTP Scripting in CURL website
+-- curl http://example.com - show me the content
+-- curl -I http://example.com - show me the header
+-- curl http://example.com/api/v1/node/2 - outputs the data (By defualt it outpus xml)
+-- curl http://example.com/api/v1/node/2 --header "Accepts: application/json"- outputs the data in json
+-- curl http://example.com/api/v1/node --header "Content-Type: application/json" --data '{"title":"hello world", "type":"page"}' - creates a new node in drupal (Outputs XML in Curl taht show you the node that got created)
+-- curl http://example.com/api/v1/node/51 --header "Accepts: application/json" - returns the node in json format
+
+
+
+
+
+

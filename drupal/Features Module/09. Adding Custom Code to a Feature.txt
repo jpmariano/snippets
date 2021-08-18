@@ -1,0 +1,32 @@
+check .module file - you can apply hook_init - to add css, js and init initialization files
+
+inside .module
+function feature_title_init() {
+	drupal_add_css(drupal_get_pah('module', 'feature_title') . '/feature_title.css');
+}
+
+Next: Add role and and add user
+
+inside .module
+function feature_title_permission() { 
+   return array (
+   	'administer feature title status' => array(
+   		'title' => t('Administer blog post status'), ),
+   );
+}
+
+In your people role, you shoud see permissions for this feature being implemented
+
+check by sigining in as a user
+
+
+inside .module
+function feature_title_form_alter(&$form, &$form_state) { 
+   //dsm($form);
+   //find element to modify
+   unset ($form['options']['$group']);//remove what's not needed
+   if (user_acces('administer title status')) {
+   	$form['options']['#acces'] = TRUE; //add publishing options
+   }
+}
+

@@ -1,0 +1,14 @@
+Documentation
+- drupal.org/documentation/install/multi-site
+- install.txt
+
+File Structure
+- Settings.php
+- File directory
+- Modules and themes directories (Optional)
+
+How Drupal Find the Right Site
+Looks for settings.php in this order
+1. sites/<fully matching URl>(e.g. blog.example.com)
+2. sites/<Partially matching URl>(e.g. example.com)
+3. sites/default

@@ -1,0 +1,4 @@
+You need to be in the specific sites directory where you wan to install the modules and themes
+cmd ~/sites/drush and look for command examples
+
+drush @sites en views -  enable views in all sites

@@ -1,0 +1,91 @@
+04 Inserting Data
+
+When completing these exercises, you can restore the main tables of the world database by running the world.sql script against that database. Exercises for further will assume this has been done.
+
+1. Using the world database, add these new countries to the Country table:
+
+Code  Name                Population   Continent
+BJT   B and J Territory         3000   North America
+LUC   Lucian Alliance          22508   North America
+ALN   Alternate Nation           120   Oceania
+
+Solution:
+INSERT INTO Country (Code, Name, Population, Continent) VALUES
+('BJT', 'B and J Territory', 3000, 'North America'),
+('LUC', 'Lucian Alliance', 22508, 'North America'),
+('ALN', 'Alternate Nation', 120, 'Oceania');
+
+2. Using the world database, add these new New Zealand cities to the City table:
+
+Name           Population  District
+Kerikeri             6000  Far North
+Gisborne            34000  Gisborne
+New Plymouth        52200  Taranaki
+Tauranga           120000  Bay of Plenty
+
+Solution:
+INSERT INTO City (Name, CountryCode, Population, District) VALUES
+('Kerikeri', 'NZL', 6000, 'Far North'),
+('Gisborne', 'NZL', 34000, 'Gisborne'),
+('New Plymouth', 'NZL', 52200, 'Taranaki'),
+('Tauranga', 'NZL', 120000, 'Bay of Plenty');
+
+3. In the test database, create a table for tracking members of your local Garden Club. Set default values for the city, state and zip code (or the appropriate columns for your country) that would be most common for those members. Also create an ID column, making it the Primary Key that automatically generates a new number for each new member added. Now insert some names and addresses into this table for people who live in the default part of town, taking advantage of the defaults (including the auto_incrementing ID column).
+
+Solution:
+CREATE TABLE members (
+  ID SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  FirstName VARCHAR (15) NOT NULL,
+  LastName VARCHAR (25) NOT NULL,
+  Address VARCHAR (40) NOT NULL,
+  City VARCHAR (25) NOT NULL DEFAULT 'Bedford',
+  State CHAR (2) NOT NULL DEFAULT 'NH',
+  Zipcode CHAR (5) NOT NULL DEFAULT '03110');
+
+INSERT INTO members (FirstName, LastName, Address) VALUES
+('Ann', 'Andrews', '349 Anson Avenue'),
+('Ben', 'Barnett', '987 Bedford Blvd.');
+
+or
+
+INSERT INTO members (FirstName, LastName, Address, City, Zipcode) VALUES
+('Ann', 'Andrews', '349 Anson Avenue', DEFAULT, DEFAULT),
+('Ben', 'Barnett', '987 Bedford Blvd.', DEFAULT, DEFAULT);
+# But this is less efficient.
+
+4. Now insert a few people into the members table who live in surrounding towns. The defaults won't help you here.
+
+Solution:
+INSERT INTO members (FirstName, LastName, Address, City, Zipcode) VALUES
+('Carrie', 'Carlson', '238 Clarion Court', 'Amherst', '03031'),
+('Dan', 'Dykstra', '10 Derryfield Drive', 'Merrimack', '03054');
+
+5. Now insert a few people into the members table, some of whom live in surrounding towns and others live in the default town.
+
+Solution:
+INSERT INTO members (FirstName, LastName, Address, City, Zipcode) VALUES
+('Edie', 'Edwards', '325 Everett Expwy', 'Manchester', '03101'),
+('Fred', 'Flynn', '822 Farnham Fwy', DEFAULT, DEFAULT);
+
+6. Insert one new person into the members table. then test the server to find out what ID number was most recently used.
+
+Solution:
+INSERT INTO members (FirstName, LastName, Address) VALUES
+('Gwenn', 'Geralds', '45 Garden Gateway');
+
+SELECT LAST_INSERT_ID();
+
+7. Now Insert group of new people into the members table. then test the server to find out what ID number was most recently used.
+
+Solution:
+INSERT INTO members (FirstName, LastName, Address) VALUES
+('Hal', 'Hanson', '228 Haverel Hwy'),
+('Irma', 'Isaacs', '705 Indiana Inlet'),
+('Jim', 'Johnson', '62 Jeremiah Junction');
+
+SELECT LAST_INSERT_ID();
+
+
+
+
+

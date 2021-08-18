@@ -1,0 +1,5 @@
+Step 1: Create a databasics view
+Step 2: Export the view copy
+Step 3: Create a file databasics.views_default.inc
+And paste the export view here
+Step 4: 

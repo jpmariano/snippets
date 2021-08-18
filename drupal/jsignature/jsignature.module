@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function jsignature_field_widget_info() {
+  return array(
+    'jsignature' => array(
+      'label' => t('JSignature'),
+      'field types' => array('text_long'),
+      'settings' => array('rows' => 5),
+    ),
+  );
+}
+
+function jsignature_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $main_widget = array();
+  $jsignature_lib = drupal_get_path('module', 'jsignature') . '/jsignature.min.js';
+  $jsignature_scripts = drupal_get_path('module', 'jsignature') . '/jsignature.scripts.js';
+  $jsignature_css = drupal_get_path('module', 'jsignature') . '/jsignature.css';
+
+  switch ($instance['widget']['type']) {
+
+    case 'jsignature':
+      $main_widget = array(
+        '#type' => 'hidden',
+        '#attributes' => array('class' => array('jsignature')),
+        '#default_value' => isset($items[$delta]['value']) ? $items[$delta]['value'] : NULL,
+        '#description' => t('Sign Here'),
+        '#prefix' => '<div id="signatureparent"><div id="signature"></div><label class="signature"> Sign Here </label><button type="button" onclick="resetSignature(this)">Reset Signature</button>',
+        '#suffix' => '</div>',
+        '#attached' => array(
+          'js' => array($jsignature_lib, $jsignature_scripts ),
+          'css' => array($jsignature_css),
+        ),
+       
+      );
+      // Fall through to the next case.
+
+      break;
+  }
+
+  if ($main_widget) {
+    // Conditionally alter the form element's type if text processing is enabled.
+    if ($instance['settings']['text_processing']) {
+      $element = $main_widget;
+      $element['#type'] = 'text_format';
+      $element['#format'] = isset($items[$delta]['format']) ? $items[$delta]['format'] : NULL;
+      $element['#base_type'] = $main_widget['#type'];
+    }
+    else {
+      $element['value'] = $main_widget;
+    }
+  }
+
+  return $element;
+}
+
+
+
+function jsignature_form_alter(&$form, &$form_state, $form_id) {
+  //kpr($form);
+  $jsignature_exist = false;
+  
+  if (array_key_exists('field_signature', $form)) {
+    $jsignature_exist = true;
+  }
+  
+  if($jsignature_exist === true) {
+    $form['actions']['submit']['#attributes']['onclick'] = array("captureSignature()");
+  }
+}
+
+function jsignature_field_formatter_info() {
+  return array(
+    'jsignature_default' => array(
+      'label' => t('Jsignature Default'),
+      'field types' => array('text', 'text_long', 'text_with_summary'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function jsignature_field_formatter_view($entity_type, $entity, $field, $instance, $lang_code, $items, $display) {
+  $element = array();
+  switch ($display['type']) {
+    case 'jsignature_default':
+        foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#type' => 'html_tag',
+          '#tag' => 'img',
+          '#attributes' => array(
+            'src' => $item['value'],
+          ),
+        );
+      
+      }
+      break;
+  }
+  return $element;
+}

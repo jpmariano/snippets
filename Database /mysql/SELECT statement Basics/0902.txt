@@ -1,0 +1,16 @@
+0902
+
+1. Select all the data for all the cities.
+
+Solution:
+SELECT * FROM City;
+
+2. Select just the Name and Population data for all the cities.
+
+Solution:
+SELECT Name, Population FROM City;
+
+2. Select just the Name and Population Density for all the cities.
+
+Solution:
+SELECT Name, ROUND(Population/SurfaceArea) AS Density FROM City;

@@ -1,0 +1,102 @@
+@import "variables";
+
+@mixin warning {
+  background-color: orange;
+  color: #fff;
+}
+
+@mixin large-text {
+  font: {
+    size: 22px;
+    weight: bold;
+  }
+}
+
+@mixin rounded {
+  border-radius: 6px;
+}
+
+@mixin fancy-links {
+  a {
+    font-style: italic;
+    text-decoration: none;
+  }
+}
+
+@mixin clearfix {
+  display: inline-block;
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  * html & { height: 1px }
+}
+
+body {
+  font-family: $text-font;
+  color: $text-color;
+}
+
+h1, h2, h3, h4 {
+  font-family: $headline-font;
+}
+
+h2 {
+  @include large-text;
+}
+
+p {
+  font-family: $text-font;
+}
+
+a {
+  color: $link-color;
+}
+
+@include fancy-links;
+
+.warning-button {
+  @include warning;
+  @include rounded;
+  padding: 8px 12px;
+}
+
+#header {
+  @include rounded;
+  height: $header-height;
+  background-color: $theme-color;
+
+  #main-menu {
+    
+    li {
+      display: inline;
+    }
+    a {
+      color: $menu-item-color;
+    }
+  }
+  
+  #logo {
+
+  }
+}
+
+#main {
+  width: $content-width;
+  margin-left: auto;
+  margin-right: auto;
+
+  #content {
+  }
+
+  #sidebar {
+  }
+}
+
+#footer {
+  height: $footer-height;
+  background-color: $ternary-color;
+}

@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * Latest video in YouTube Channel
+ * 
+ * @author DigiSin
+ * @link http://www.digisin.it digisin homesite
+ * @copyright Copyright (c) 2013, Digisin soc. coop
+ */
+
+/**
+ * Implements hook_menu()
+ * @return string
+ */
+function howard_youtube_menu() {
+  $items = array();
+
+  $items['admin/config/howard_youtube'] = array(
+      'title' => t('YouTube Channel block'),
+      'description' => t('Sets the name of your YouTube channel'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('howard_youtube_system_form'),
+      'access arguments' => array('administer site configuration'),
+      'file' => 'howard_youtube.inc',
+      'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['admin/config/howard_youtube/config'] = array(
+      'title' => t('YouTube Channel block'),
+      'description' => t('Sets the name of your YouTube channel'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('howard_youtube_system_form'),
+      'access arguments' => array('administer site configuration'),
+      'file' => 'howard_youtube.inc',
+      'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function howard_youtube_block_info() {
+  $blocks['yt_last'] = array(
+      'info' => t('Last posts in YouTube Channel'),
+      'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_theme().
+ * @return type
+ */
+function howard_youtube_theme() {
+  return array(
+      'ds_ytchannel_posts' => array(
+          'vars' => array(),
+      ),
+  );
+}
+
+/**
+ * Implements hook_block_view().
+ * @param type $delta
+ * @return string
+ */
+function howard_youtube_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'yt_last':
+      $block['subject'] = t('Last posts in You Tube Channel');
+      $block['content'] = theme('ds_ytchannel_posts', array());
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Theme posts
+ * @param type $vars
+ * @return string
+ */
+ /*Theming the youtube channel Block*/
+function theme_ds_ytchannel_posts($vars) {
+  $channel = variable_get('ds_ytchannel_channel_name', '');
+
+  $settings = array(
+      'channelName' => $channel,
+  );
+  drupal_add_js(drupal_get_path('module', 'howard_youtube') . '/js/jquery.timeago.js');
+  drupal_add_js(array('dsYtChannel' => $settings), 'setting');
+  drupal_add_js(drupal_get_path('module', 'howard_youtube') . '/js/ytchannel.min.js');
+
+  drupal_add_js('https://apis.google.com/js/platform.js', 'external');
+
+  $output = '';
+ // $output .= '<div class="g-ytsubscribe" data-channel="' . $channel . '" data-layout="default" data-count="hidden"></div>';
+ // $output .= '</div>';
+  $output .= '<div class="ytchannel"><img src="' . drupal_get_path('module', 'howard_youtube') . '/images/ajax-loader-2.gif" /></div>';
+
+  return $output;
+}

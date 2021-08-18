@@ -1,0 +1,66 @@
+MySQL Primary Key
+http://www.mysqltutorial.org/mysql-primary-key/
+
+The following example creates users table whose primary key is user_id column:
+CREATE TABLE users(
+   user_id INT AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(40),
+   password VARCHAR(255),
+   email VARCHAR(255)
+);
+
+
+
+You can also specify the PRIMARY KEY at the end of the CREATE TABLE statement as follows:
+CREATE TABLE roles(
+   role_id INT AUTO_INCREMENT,
+   role_name VARCHAR(50),
+   PRIMARY KEY(role_id)
+);
+
+primary key consists of multiple columns (Note: the statement also created two foreign key constraints)
+CREATE TABLE userroles(
+   user_id INT NOT NULL,
+   role_id INT NOT NULL,
+   PRIMARY KEY(user_id,role_id),
+   FOREIGN KEY(user_id) REFERENCES users(user_id),
+   FOREIGN KEY(role_id) REFERENCES roles(role_id)
+);
+
+
+
+
+
+
+ALTER TABLE table_name
+ADD PRIMARY KEY(primary_key_column);
+
+For Example:
+CREATE TABLE t1(
+   id int,
+   title varchar(255) NOT NULL
+);
+
+ALTER TABLE t1
+ADD PRIMARY KEY(id);
+
+
+
+
+
+PRIMARY KEY vs. UNIQUE KEY vs. KEY
+
+A UNIQUE index creates a constraint for a column whose values must be unique. Unlike the PRIMARY index, MySQL allows NULL values in the UNIQUE index. A table can also have multiple UNIQUE indexes.
+
+Add a   UNIQUE index for the username column
+
+ALTER TABLE users
+ADD UNIQUE INDEX username_unique (username ASC);
+
+Add a UNIQUE index for the email column
+
+ALTER TABLE users
+ADD UNIQUE INDEX  email_unique (email ASC) ;
+
+
+

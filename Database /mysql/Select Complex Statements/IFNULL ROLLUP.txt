@@ -1,0 +1,6 @@
+0911
+
+1. Generate a report of World Population Density subdivided by Continent and Region - and make it pretty.
+
+Solution:
+SELECT IFNULL(Continent, 'Overall Density') ContinentName, IFNULL(Region, REPEAT('-', 25)) RegionName, ROUND(SUM(Population)/SUM(SurfaceArea)) Density FROM Country GROUP BY Continent, Region WITH ROLLUP;

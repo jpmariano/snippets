@@ -1,0 +1,24 @@
+<?php
+
+/*
+ * Implements hook_menu().
+ */
+function demo_menu() {
+  $items = array();
+
+  $items['admin/reports/node-list'] = array(
+    'title' => 'List of Nodes',
+    'description' => t('A list of nodes with published status.'),
+    'page callback' => 'demo_node_list',
+    'access arguments' => array('administer content'),
+  );
+
+  return $items;
+}
+
+/*
+ * Custom page callback for admin/reports/node-list
+ */
+function demo_node_list(){
+  return 'It Works!';
+}

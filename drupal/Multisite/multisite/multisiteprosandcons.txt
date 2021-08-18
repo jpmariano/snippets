@@ -1,0 +1,29 @@
+Is multisite the right choice for my next site?
+
+Are the websites related enough? 
+
+Drupal core files and contributed modules are shared:
+Pros: One place to upload core and contrib
+Cons: you'll have to make all of your shared websites unavailable during upgrades
+
+complexity
+traffic patterns
+commonalities between the two websites
+experience and ability to work through a few common issues
+
+--------------------------
+
+Are they lightweight, and is the traffic low enough to not strain the server?
+
+You're sharing not only your codebase, but the websites are also sharing memory, PHP processes, and database use (if shared). 
+For each website added, fewer resources are available to all of the websites.
+
+If your websites are sharing a database and website A causes the database to crash, website B will go down, since all the resources are shared. 
+This is also true for memory and other server resources.
+
+Would a combined development workflow help or hurt me?
+Lots of development on website B means that the version control repository grows, 
+which increases the size of checkouts for website A, because it means checking out code for both websites.
+
+Is this new website big, complex, and important enough to deserve its own isolated environment?
+A bigger or heavily trafficked website may be better in an isolated environment to prevent either slowdowns or upgrades to other websites from risking the larger site's integrity

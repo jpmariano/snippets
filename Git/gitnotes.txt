@@ -1,0 +1,1109 @@
+https://confluence.atlassian.com/display/STASH/Basic+Git+commands
+
+git init - Create a new local repository
+
+
+Remote Repositories
+1. Go into the folder that you want to push remotely
+2. git remote - to see if there's any remote repositories locally
+3. git remote add <alias> <url> - to upload your files in github. Github should give you a detailed instructions
+   git remote add origin https://github.com/...
+   git remove -v - to see what url to fetch and pull git
+   git push -u origin master - to push to master
+4. cat .git/config
+   ls -la .git/refs/remotes/origin
+   git branch -r - to see remote branch
+   git branch -a - to see both remote and local branch
+   
+git clone /path/to/repository - Check out a local repository
+git clone username@host:/path/to/repository - Check out a remote repository
+
+Tracking Remote Branch
+cat .git/config
+git config branch.<nontrackingbranchname>.remote origin
+git config branch.<nontrackingbranchname>.merge refs/heads/master
+git branch --set-upstream <nontractingbranchname> origin/<nontractingbranchname>
+
+Pushing Changes to a Remote Repository
+1. Make sure all your commits are committed locally
+	git log --oneline - to see local repo log
+	git log --oneline origin/master - to see remote repo log
+	git diff origin/master..master - to compare local branch to remote branch
+2. git push origin master
+
+
+Fetch Changes from remote Repo
+git fetch origin - to get the changes from the remote repositories
+git merge <branchnametomerge> 
+git pull - git fetch + git merge
+git log --oneline -5 origin/master - to see the log of remote repo
+git log --oneline -5 master - to see the log of local repo
+
+git branch <newlocalbranchname> origin/<branchname> - creates a tracting branch
+git branch --branch <newlocalbranchname> origin/<branchname>   - creates a tracting branch and gets commited right away
+
+git add <filename>	- Add one or more files to staging (index):	
+
+git commit -m "Commit message" - Commit changes to head (but not yet to the remote repository):	
+git commit -a - Commit any files you've added with git add, and also commit any files you've changed since then:	
+
+Note: Message should be lessthan 50 Char, complete description, add ticket number (optional), buttlet points (optional), short hand notation per company standard (Ie. js, css)
+
+Head - last commit of what branch that you are on
+Cat HEAD- to see where the head
+Navigate to the Head and use Cat branchname
+
+
+git log - to view lates commit, it contains commit id, author, date
+git help log
+git log -n 2 - returns 2 commit
+git log --since="2012-06-05"
+git log --until="2012-06-05"
+git log --author="john"
+
+git push origin master - Send changes to the master branch of your remote repository:	
+
+git status- 	Status	List the files you've changed and those you still need to add or commit:	
+
+git remote add origin <server> - If you haven't connected your local repository to a remote server, add the server to be able to push to it:
+git remote -v - List all currently configured remote repositories:	
+
+
+Branches
+
+git checkout -b <branchname> - Create a new branch and switch to it:	
+git checkout <branchname> - Switch from one branch to another:	
+git branch - List all the branches in your repo, and also tell you what branch you're currently in:	
+git branch -d <branchname> - Delete the feature branch:	
+    - If branch has not been merged, use 
+        - $ git branch -D <branchname>
+        - $ git push origin :<deletedbranch>  - push the branch to delete at remote (This means push nothing) - Prior 1.7 git version 
+        - $ git push --delete origin <deletedbranch> or git push --d origin <deletedbranch> - 1.7 or higher 
+git push origin <branchname> - Push the branch to your remote repository, so others can use it:	
+git push --all origin Push all branches to your remote repository:	
+git push origin :<branchname> - Delete a branch on your remote repository:	
+
+Update from the remote repository
+
+git pull Fetch and merge changes on the remote server to your working directory:	
+git merge <branchname> To merge a different branch into your active branch:	
+
+View all the merge conflicts:
+
+View the conflicts against the base file:
+
+Preview changes, before merging:
+
+git diff
+git diff --staged
+git diff --base <filename>
+
+git diff <sourcebranch> <targetbranch>
+After you have manually resolved any conflicts, you mark the changed file:	
+git add <filename>
+Tags
+
+You can use tagging to mark a significant changeset, such as a release:	
+git tag 1.0.0 <commitID>
+CommitId is the leading characters of the changeset ID, up to 10, but must be unique. Get the ID using:	
+git log
+Push all tags to remote repository:	
+git push --tags origin
+Undo local changes
+
+If you mess up, you can replace the changes in your working tree with the last content in head:
+
+Changes already added to the index, as well as new files, will be kept.
+
+git checkout -- <filename>
+Instead, to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it, do this:	
+git fetch origin
+
+git reset --hard origin/master
+Search
+
+Search the working directory for foo():	git grep "foo()"
+Contact GitHub API Training Shop Blog About
+
+VIM Environment
+i - to get into insert mode; Then write your message
+esc - to get back into normal mode
+:x or :wq - to quit and save and go back to git
+
+git status - to check status and to know what branch you are in
+git add . - add everyfiles
+git add *.html - add only html files
+
+
+
+git stash - when you are not ready to commit
+git stash apply - to continue editing your repositories
+
+
+Deleting files
+- right click delete the file
+- git status
+- git rm <filename>
+- git status
+- git commit -m "Delete file"
+
+or git rm <filename> - directly
+
+Moving renaming file
+- right click change the filename
+- git add <filename>
+- git rm <oldfilename>
+- git commit -m "rename file"
+or
+git mv <oldfilename> <newfilename>
+git mv <oldfilename> <newfoldernocation/newfilename>
+- git commit -m "moved the files"
+
+
+Undoing Changes
+git checkout -- index.html - make the index.html same as from the repository
+git reset HEAD resources.html - reset the resources.html the same from the respository's HEAD
+git commit --amend -m "ammend message" -  change the message of your last commit buut it creates a new commit
+git checkout <commitnumber> -- resources.html - replaces current resources.html with the commit number that you indicated
+git revert <commitnumber> - reverts to whatever commit you made
+git reset - specify where the head pointer
+git reset --soft <commit number> - all it does is that it moves the head pointer
+git reset --mixed <commit number> - (default), changes are not gone and ready to re-staged
+git reset --hard <commit number> - move back to specific point in time, but it is still movaeable
+git reset HEAD <filename> - unstages changes 
+git clean -n - tells the file to remove
+git clean -f - deletes untract files
+cat .git/HEAD 
+
+Ignoring files
+- create .gitignore file - using nano .gitignore
+inside .gitignore: 
+<filename> - ignore file that you enter
+*.log - this ignores all the files with .log extension
+!index.php - track this file
+foldername/folder/ - ignore all files in that directory
+
+Ignore files in all repositories or user specific
+git config --global core.excludesfile <folderlocation>/.gitignore_global
+nano folderlocation/.gitignoreglobal
+cat <folderlocation/.gitconfig
+
+Ignore track files
+add the files to the ignore
+git rm --cached <filename> - removed from staging 
+git add .gitignore
+git commit - m "remove file"
+
+Tracking Empty Directories
+touch <folderlocation/foldertokeep>/.gitkeep
+
+
+Navigate repository commit tree
+
+Commit number
+Head
+Branch
+Tag
+
+- Parent Commit
+-HEAD^, <commitnum>^, <branch>^
+-HEAD~1, HEAD~
+Grand Parent Commit
+-HEAD^^, <commitnum>^^, <branch>^^
+-HEAD~2
+Great Grand Parent Commit
+-HEAD^^^, <commitnum>^^^, <branch>^^^
+-HEAD~3
+
+git help ls-tree
+git ls-tree <branchname>
+git ls-tree <branchname> <folderloc>
+git ls-tree <commitnum>
+
+git log --oneline - gives one list of your log 
+git log --oneline -3 - shows last 3 commits
+git log --since="2012-06-20"
+git log --until="2012-06-20"
+
+git log --since="2 weeks ago" --until="3 days ago"
+git log --since="2.weeks" --until="3.days
+git log --author="kevin"
+git log --grep="temp"
+git log <fromcommitnum..tocommitnum> --oneline
+git log <fromcommitnum..> <filename> - check what happen to that file in that particular commit
+git log -p - shows a diff of each changes
+git log -p <commitnum> 
+git log --stat --summary
+git log --graph --oneline --all --decorate
+
+viewing commits
+git show <commitnum>
+git show --format==oneline <commitnum/tree/blob>
+git diff --staged <commitnum>
+git diff --cached <commitnum>
+git diff  <commitnum> <filename>
+git diff  <commitnum> <filename>
+git diff  <previouscommitnum..previouscommitnum> or <branchname..otherbranchname> or <branchname..otherbranchname^>
+git diff  <previouscommitnum..previouscommitnum> <filename>
+git diff --stat --summary  <previouscommitnum..nextcommitnum> 
+git diff --ignore-space-change  <previouscommitnum..nextcommitnum> 
+git diff --color-words  <previouscommitnum..nextcommitnum> 
+git diff -b  <previouscommitnum..nextcommitnum> 
+git diff -w  <previouscommitnum..nextcommitnum> 
+
+
+Branching
+cat .git/HEAD
+ls -la .git/refs/heads - list the branches
+cat .git/refs/heads/master
+git branch - to see what branch you are on
+git branch <branchname> - to create a new branch
+git checkout  <branchname> - to switch to the branch you need to work on
+git checkout -b <branchname> - created the branch and switch at the same time
+git log --graph --oneline --decorate --all - to see all branches commitnum
+git branch --merged - to see if your current branch is  updated with the master
+git branch -m <oldbranchname> <newbranchname> - to rename the branch, make sure you are outside the branch that you tried to rename
+git branch --delete <branchtodelete> - you can't delete the branch that you are on
+__git_ps1 - to get out cd..
+echo $PS1
+
+
+Merge
+git merge <branchname> - make sure your are in the receiving branch
+git merge --no-ff <branchname>
+git merge --ff-only <branchname>
+git commit -am "Commit Message""
+
+Abort the Merge
+git merge --abort
+
+git status - to find which file has a conflict
+To fix the conflict
+1. Make sure you are in the branch you are trying to merge to
+2. Open the file and look at the conflict
+3. Edit the file and remove git embeded syntax
+4. Save and close the file
+5. git add <filename>
+6. git commit
+
+To avoid Conflicts
+- keep line short
+- keep commits small and focused
+- merge often
+- track changes to master (means make sure your banch is nsync with the master)
+
+Stash
+git status - Tells you when to use stash
+git stash save "your comment" - create a stash
+git log --oneline -3
+git stash list - to see the list of stash, you can apply stash on any branch
+git stash show <stashid> - to see the details
+git stash show -p <stashid> - to see the details
+git stash pop <stashid> - pulls the stash but leaves a copy in the stash
+git stash apply - added your stash into your branch
+git stash drop <stashid> - delete the stash
+-----------------------------------------------------------------------------------
+
+Staging Area VS Working Directory VS Git Repository
+
+Working Directory
+Changes where it is being made
+
+Staging Area (index)
+git add 
+
+Good Commit Messages
+messages #ticketnumber
+messages (Version 1.0)
+
+
+Git Repository
+.git folder where all the magik happens
+
+
+How git stores files
+Blob - a git object, converts into 40 character hash; stores header information and contents; it is also can be seen as a file
+zidlib compression library - to keep files small
+tree - in the results is like a folder
+
+How the files is stores
+Tree directory listing
+
+Inside the tree
+- Header Information
+- For each file and directory in the directory
+-- File permissions
+-- Object type (Blob or tree)
+-- SHA-1
+-- File / Directory Name ( The Name the programers name it)
+
+How git stores
+Commit - or snapshots
+
+Inside Commit 
+- author information
+- commiter information
+- commit message
+- SHA-1 of any parent commits (The commit before the new commit)
+- SHA-1 of a tree that the commits points to
+
+How git track changes
+commit 1 = ./ is the tree object contains a SHA-1
+the next commit is a blob objects
+
+commit 2 
+creates a next tree that creates a new blob	where you made changes and points to you old blob
+
+git references
+SHA-1 HASH
+Branches
+HEAD - reference that point to 
+Ancestry reference - head points to commit 4, head~ points to commit 3, head~1 points to commit 2, head~2 points to commit 1
+
+head^ (Commit 1) and head^2 (Commit 2)
+
+For example if you merge commit 1 and commit 2 you create commit 3 
+to reference commit 1 head^ and to reference commit 2 head^2
+
+
+--------------
+git log - to view history
+git log --stat - to view what file is change and how many got added and deleted
+git log --oneline - to get the hash and the sigle line update of the files
+git log --oneline -3 - same as above but will show only 3
+git diff 2345345 todo - to see what changes
+git log --graph - to get the log
+git log --oneline --graph -  oneline tree structure
+git log --pretty="%h, %cn, $cr" - output summary report (more pretty and log options http://git-scm.com/docs/git-log)
+git log --since="YYYY-MM-DD"
+git log --since="2 weeks ago"  --until="3 days ago"
+git log --since=2.week  --until=3.days
+git log --until="YYYY-MM-DD"
+git log --author="<author_name>"
+git log --grep="<filename>" - Global regular expression (GREP) this will show what all commits that happened to that file
+git log <from_shah..to_shah> --oneline - shows the beginning commit and the end commit
+
+
+gitk - outputs ui
+
+--------------
+
+git staging and status
+git status - repositories status
+git add file.txt - add changes to commit
+git add src/*.js  - to add all js inside source folder
+git add folder_name - to add the whole folder
+git add . - to add all files to staging
+
+---------------
+
+ignoring file
+project/ .gitignore - to create a ignore file
+ add line by line the files you want to ingore inside .gitignore
+vim .gitignore
+	*.php - ignore all files with .php 
+	folder/*.txt - ignore files inside these folder with .txt
+    !filename/foldername - ! make sure to track files or folder
+    !foldername/tour_*.mp4 - ! make sure to track file
+    folder/ - ignore all files within a directory (make sure you add a / to folder)
+    # - comments 
+    blank lines are skipped
+- quit when done
+when you run git status only .gitignore will show
+
+nano .gitignore - to create a .gitignore file in your directory that you are in
+	nano opens add ignorefiles.txt here
+	control + X  - to exit 
+ls -la - to see .gitignore
+git status - to see status
+
+git add .gitignore - to add to the repository
+git commit -m "your message"
+place the .gitignore to staging
+git commit -m 'added a .gitignore file" - -m add messages to commit
+git reset head folder/filename.txt  - unstage 
+
+What not to tracked
+Compiled Source Code
+Packages and compressed files
+logs and databases
+Operating system generated files
+
+------------
+
+git commit 
+git commit -a  - stage all the files that are previously commited and made changes on
+git add file_name - 
+git commit -m 'your text' - commit with messages
+git commit -am - combines -a and -m flag
+
+----------------
+Deffing Files: Git Essentials
+
+git diff file1 file2
+git diff filename - shows that change was made to the file between working and staging
+git diff --staged filename -to compare stage and the latest commit
+git diff --cached readme - same as the previous (older version of --staged)
+git diff HEAD filename - compares working directory and last committed version of the file
+git diff HEAD - compare working and last committed version of the file	
+
+-----------
+
+referencing commits
+HEAD^ 123415^ master^ - ALL Means to go up 1
+
+HEAD, HEAD~1 - Also meas go up 1
+
+
+grand parent
+HEAD^^, HEAD~2 - go up 2
+
+great grandparent
+HEAD^^^, HEAD~3 - GO UP 3
+
+git help <your command>
+
+git ls-tree <you can type HEAD, MASTER> 
+git ls-tree HEAD, git ls-tree MASTER, git ls-tree MASTER foldername/,  git ls-tree <hash number>
+git ls-tree MASTER^ foldername/ - shows what happen to the folder one commit above
+
+----------------------
+
+git branch - shows list of branches * means the current branch
+cat .git/HEAD - get the current Head 
+ls -la .git.refs/heads - Contains the reference to all the branches
+cat .git.refs/heads/master - outputs a shah of the current existing branch
+
+git branch branch_name - creates branch_name - head still points to the master
+ls -la .git.refs/heads  - shows master and branch_name
+cat .git.refs/heads/branch_name - outputs branch_name shah
+cat .git/HEAD - get the current Head 
+
+Switching Branch
+git branch - shows list of branches * means the current branch
+git checkout branch_name - switched to new brach
+cat .git/HEAD - get the current Head 
+
+Make change to a file
+git status - to see changes
+git commit -am "message" - commit all changes with message
+git checkout master - switch to master branch
+git log --oneline - show the commit of that branch
+
+
+Get a branch and check it out
+git show HEAD - shows all the diff of that commits
+git checkout -b branch_name - creates and checkout branch_name
+git log --oneline - 
+git checkout --filename - checks out files
+git add file.txt - add file.txt to stage
+git commit -m "message" - 
+git log --graph --oneline --decorate --all - shows all the brach and their tip 
+and it will also show you where your current head
+
+Note: You cant checkout a branch if you have uncommitted commits
+Options:
+1. commit the changes
+2. git checkout --filename - to discard the changes of that file
+3. stash - save for later
+
+Comparing branches
+git diff master..branch_name - compares the two version of branch
+git diff --color-words master..branch_name - compares the two version of branch in oneline
+git diff --color-words master..branch_name^ - compares master to the previous commit of the other branch
+git branch --merged - show all branch where they merged to 
+
+renaming branches
+git branch --m branch_oldname branch_newname 
+
+deleting branch
+git branch -d branch_name_to_delete - you have to get of the branch that you are on -D is much 
+
+__git_ps1 - comes from .bash_profile; this returns the branch you are on; to get out cd ..
+echo $PS1 - 
+export PS1="whateveryouwantyourprompttolooklike" 
+export PS1='$(__git_ps1 "(%s)") >' - outputs (master) >
+export PS1='$(\W$__git_ps1 "(%s)") >' - outputs yourcurrentprompt(master) >
+
+Merging Branches
+
+git branch - to get branches
+git diff master..branch_name - to see the difference between branch
+git checkout master - you should be in the branch you are trying to merge into
+git merge branch_name - you just merge branch_name to master; If a message shows up as , "fast forward merge", it means no changes were made in master.
+git log - to see the current branch log 
+git diff master..branch_name - you shouldn't see a diff between branches after you just merge them
+git branch --merged - you should see that the master is fully incorporated into master
+git log branch_name --oneline -3 - while in master, you should see what  branch_name commits you just merge into master
+git log master --oneline -3 - while in master, you should see exact commits as git log branch_name --oneline -3
+git merge  --no-ff branch_name - forces a commit and add a commit id, disregard fast forward. This make sure you documented the merge.
+git merge  --no-ff-only branch_name - do do a merge only if it's a ff, or else abort
+
+Fast Forward Merge
+When master has the head pointer, do a ff merged
+git merge branch_name - you have to be in the branch where you are trying to merge into
+git log (branch_name/master) --oneline -3 - to compare commits id 
+
+True Merge
+When master doesn't have the head pointer, don't do a ff merged 
+git merge branch_name - git pops up a message; hit save and close 
+
+git status
+git log --oneline -3 - to compare commmits 
+git log branch name --oneline -3 to compare commmits
+
+
+Merge Conflict in Branch
+Happens when changes are in the same file and in the same line
+git log text_edits --oneline - to see text edits in oneline (Good For trouble shooting)
+git merge text_edits - if there is a conflict error will show and (Master|Merging) - it means you are in the middle of merge
+git status - to see what's going on
+//Open the file where the problem is to see the conflict
+
+//What to do when merge conflict: abort the conflict, resolve the conflict mannually, use a merge tool
+git merge --abort 
+	git log --oneline -3 - to look at what got committed
+	git show #commitnumber - to see what's the detail change of that commit
+// look for <<<, ======, and >>>, to see the beginning and end of conflict 
+Manual fix: remove <<<, ======, and >>>, and make your changes (git add filename.txt) and do a git commit
+A message should show up, remove the conflict message and save and close the file
+git branch --merged - you should see where the current head is 
+git log --graph --oneline --all --decorate - it should how the branches nicely (Just like source tree)
+
+git mergetool - shows all the tools
+git mergetool=toolname - to use particular tool
+
+keep line short
+keep commits small and focused 
+beware stray edits to whitespace, like tabs, spaces, and line returns
+merge often - you can stay in your branch
+track changes to master - your branch need to stay as close as the master
+
+---------------- Stash
+Stash - a changes but with out a commit number or a shah associated with them
+git branch - to see the branches
+git checkout branch_name - to checkout a brach
+git branch merged
+git stash save "You're meaningful title of stash" - runs git reset hard head (takes what ever in the repo and both the file and working directory)
+git log --oneline -3 - to confirm if it stashed your changes
+
+git stash list - to get list of stash; it is always available whatever branches you are on
+git stash show stash@{0} - shows a diff of the stash
+git stash show  -p stash@{0} - display as a diff patch
+
+git stash apply - pull what stash out and puts it in the working directory but leaves a copy of stash
+git stash pop - pull what stash out and puts it in the working directory but it doesn't leaves a copy of stash (Normally used
+git stash pop stash@{0} -  the same as git stash pop
+git stash pop stash@{1} - pulls the 2nd stash
+git stash pop stash@{2} - pulls the 3rdstash
+git stash list - to confirm no more stashed left
+
+git stash drop stash@{0} - deletes the first stashed
+git stash clear - deletes all stash
+
+------- Remotes
+
+-----------------------------------------------------------------------------------
+Staging Area VS Working Directory VS Git Repository
+
+Working Directory
+Changes where it is being made
+
+Staging Area (index)
+git add 
+
+Good Commit Messages
+messages #ticketnumber
+messages (Version 1.0)
+
+
+Git Repository
+git init - inside the folder where you want to save the file
+git clone ../git_remote <optional rename the folder of your clone>  - you cloned the master
+
+
+.git folder where all the magik happens
+
+
+How git stores files
+Blob - a git object, converts into 40 character hash; stores header information and contents; it is also can be seen as a file
+zidlib compression library - to keep files small
+tree - in the results is like a folder
+
+How the files is stores
+Tree directory listing
+
+Inside the tree
+- Header Information
+- For each file and directory in the directory
+-- File permissions
+-- Object type (Blob or tree)
+-- SHA-1
+-- File / Directory Name ( The Name the programers name it)
+
+How git stores
+Commit - or snapshots
+
+git commit - m "JP - filename.txt -yourchange"
+git add file.txt
+git push origin master
+
+
+Inside Commit 
+- author information
+- commiter information
+- commit message
+- SHA-1 of any parent commits (The commit before the new commit)
+- SHA-1 of a tree that the commits points to
+
+How git track changes
+commit 1 = ./ is the tree object contains a SHA-1
+the next commit is a blob objects
+
+commit 2 
+creates a next tree that creates a new blob	where you made changes and points to you old blob
+
+git references
+SHA-1 HASH
+Branches
+HEAD - reference that point to 
+Ancestry reference - head points to commit 4, head~ points to commit 3, head~1 points to commit 2, head~2 points to commit 1
+
+head^ (Commit 1) and head^2 (Commit 2)
+
+For example if you merge commit 1 and commit 2 you create commit 3 
+to reference commit 1 head^ and to reference commit 2 head^2
+
+
+git config --list - get the config 
+git config --global user.name "john.paul"
+git config --global user.email "john.paul"
+git config --global core.edit notepad++
+
+git help
+git help <command>
+
+
+--------------
+git log - to view history
+git log --stat - to view what file is change and how many got added and deleted
+git log --oneline - to get the hash and the sigle line update of the files
+git log --oneline -3 - same as above but will show only 3
+git diff 2345345 todo - to see what changes
+git log --graph - to get the log
+git log --oneline --graph -  oneline tree structure
+git log --pretty="%h, %cn, $cr" - output summary report (more pretty and log options http://git-scm.com/docs/git-log)
+git log --since="YYYY-MM-DD"
+git log --since="2 weeks ago"  --until="3 days ago"
+git log --since=2.week  --until=3.days
+git log --until="YYYY-MM-DD"
+git log --author="<author_name>"
+git log --grep="<filename>" - Global regular expression (GREP) this will show what all commits that happened to that file
+git log <from_shah..to_shah> --oneline - shows the beginning commit and the end commit
+
+
+gitk - outputs ui
+
+--------------
+
+git staging and status
+git status - repositories status
+git add file.txt - add changes to commit
+git add src/*.js  - to add all js inside source folder
+git add folder_name - to add the whole folder
+git add . - to add all files to staging
+
+---------------
+
+ignoring file
+project/ .gitignore - to create a ignore file
+ add line by line the files you want to ingore inside .gitignore
+vim .gitignore
+	*.php - ignore all files with .php 
+	folder/*.txt - ignore files inside these folder with .txt
+    !filename/foldername - ! make sure to track files or folder
+    !foldername/tour_*.mp4 - ! make sure to track file
+    folder/ - ignore all files within a directory (make sure you add a / to folder)
+    # - comments 
+    blank lines are skipped
+- quit when done
+when you run git status only .gitignore will show
+
+nano .gitignore - to create a .gitignore file in your directory that you are in
+	nano opens add ignorefiles.txt here
+	control + X  - to exit 
+ls -la - to see .gitignore
+git status - to see status
+
+git add .gitignore - to add to the repository
+git commit -m "your message"
+place the .gitignore to staging
+git commit -m 'added a .gitignore file" - -m add messages to commit
+git reset head folder/filename.txt  - unstage 
+
+What not to tracked
+Compiled Source Code
+Packages and compressed files
+logs and databases
+Operating system generated files
+
+------------
+
+git commit 
+git commit -a  - stage all the files that are previously commited and made changes on
+git add file_name - 
+git commit -m 'your text' - commit with messages
+git commit -am - combines -a and -m flag
+
+----------------
+Deffing Files: Git Essentials
+
+git diff file1 file2
+git diff filename - shows that change was made to the file between working and staging
+git diff --staged filename -to compare stage and the latest commit
+git diff --cached readme - same as the previous (older version of --staged)
+git diff HEAD filename - compares working directory and last committed version of the file
+git diff HEAD - compare working and last committed version of the file	
+
+-----------
+
+referencing commits
+HEAD^ 123415^ master^ - ALL Means to go up 1
+
+HEAD, HEAD~1 - Also meas go up 1
+
+
+grand parent
+HEAD^^, HEAD~2 - go up 2
+
+great grandparent
+HEAD^^^, HEAD~3 - GO UP 3
+
+git help <your command>
+git show <commit-id> - show history of commit
+
+git ls-tree <you can type HEAD, MASTER> 
+git ls-tree HEAD, git ls-tree MASTER, git ls-tree MASTER foldername/,  git ls-tree <hash number>
+git ls-tree MASTER^ foldername/ - shows what happen to the folder one commit above
+
+----------------------
+
+git branch - shows list of branches * means the current branch
+cat .git/HEAD - get the current Head 
+ls -la .git.refs/heads - Contains the reference to all the branches
+cat .git.refs/heads/master - outputs a shah of the current existing branch
+
+git branch branch_name - creates branch_name - head still points to the master
+ls -la .git.refs/heads  - shows master and branch_name
+cat .git.refs/heads/branch_name - outputs branch_name shah
+cat .git/HEAD - get the current Head 
+
+Switching Branch
+git branch - shows list of branches * means the current branch
+git checkout branch_name - switched to new brach
+cat .git/HEAD - get the current Head 
+
+Make change to a file
+git status - to see changes
+git commit -am "message" - commit all changes with message
+git checkout master - switch to master branch
+git log --oneline - show the commit of that branch
+
+
+Get a branch and check it out
+git show HEAD - shows all the diff of that commits
+git checkout -b branch_name - creates and checkout branch_name
+git log --oneline - 
+git checkout --filename - checks out files
+git add file.txt - add file.txt to stage
+git commit -m "message" - 
+git log --graph --oneline --decorate --all - shows all the brach and their tip 
+and it will also show you where your current head
+
+Note: You cant checkout a branch if you have uncommitted commits
+Options:
+1. commit the changes
+2. git checkout --filename - to discard the changes of that file
+3. stash - save for later
+
+Comparing branches
+git diff master..branch_name - compares the two version of branch
+git diff --color-words master..branch_name - compares the two version of branch in oneline
+git diff --color-words master..branch_name^ - compares master to the previous commit of the other branch
+git branch --merged - show all branch where they merged to 
+
+rename branches
+git branch -m branch_oldname branch_newname 
+
+deleting branch
+git branch -d branch_name_to_delete - you have to get of the branch that you are on -D is much 
+
+__git_ps1 - comes from .bash_profile; this returns the branch you are on; to get out cd ..
+echo $PS1 - 
+export PS1="whateveryouwantyourprompttolooklike" 
+export PS1='$(__git_ps1 "(%s)") >' - outputs (master) >
+export PS1='$(\W$__git_ps1 "(%s)") >' - outputs yourcurrentprompt(master) >
+
+Merging Branches
+
+git branch - to get branches
+git diff master..branch_name - to see the difference between branch
+git checkout master - you should be in the branch you are trying to merge into
+git merge branch_name - you just merge branch_name to master; If a message shows up as , "fast forward merge", it means no changes were made in master.
+git log - to see the current branch log 
+git diff master..branch_name - you shouldn't see a diff between branches after you just merge them
+git branch --merged - you should see that the master is fully incorporated into master
+git log branch_name --oneline -3 - while in master, you should see what  branch_name commits you just merge into master
+git log master --oneline -3 - while in master, you should see exact commits as git log branch_name --oneline -3
+git merge  --no-ff branch_name - forces a commit and add a commit id, disregard fast forward. This make sure you documented the merge.
+git merge  --no-ff-only branch_name - do do a merge only if it's a ff, or else abort
+
+Fast Forward Merge
+When master has the head pointer, do a ff merged
+git merge branch_name - you have to be in the branch where you are trying to merge into
+git log (branch_name/master) --oneline -3 - to compare commits id 
+
+True Merge
+When master doesn't have the head pointer, don't do a ff merged 
+git merge branch_name - git pops up a message; hit save and close 
+
+git status
+git log --oneline -3 - to compare commmits 
+git log branch name --oneline -3 to compare commmits
+
+
+Merge Conflict in Branch
+Happens when changes are in the same file and in the same line
+git log text_edits --oneline - to see text edits in oneline (Good For trouble shooting)
+git merge text_edits - if there is a conflict error will show and (Master|Merging) - it means you are in the middle of merge
+git status - to see what's going on
+//Open the file where the problem is to see the conflict
+
+//What to do when merge conflict: abort the conflict, resolve the conflict mannually, use a merge tool
+git merge --abort 
+	git log --oneline -3 - to look at what got committed
+	git show #commitnumber - to see what's the detail change of that commit
+// look for <<<, ======, and >>>, to see the beginning and end of conflict 
+Manual fix: remove <<<, ======, and >>>, and make your changes (git add filename.txt) and do a git commit
+A message should show up, remove the conflict message and save and close the file
+git branch --merged - you should see where the current head is 
+git log --graph --oneline --all --decorate - it should how the branches nicely (Just like source tree)
+
+git mergetool - shows all the tools
+git mergetool=toolname - to use particular tool
+
+keep line short
+keep commits small and focused 
+beware stray edits to whitespace, like tabs, spaces, and line returns
+merge often - you can stay in your branch
+track changes to master - your branch need to stay as close as the master
+
+git branch -d branch_name
+git rm filename.txt - remove a file
+
+---------------- Stash
+Stash - a changes but with out a commit number or a shah associated with them
+git branch - to see the branches
+git checkout branch_name - to checkout a brach
+git branch merged
+git stash save "You're meaningful title of stash" - runs git reset hard head (takes what ever in the repo and both the file and working directory)
+git log --oneline -3 - to confirm if it stashed your changes
+
+git stash list - to get list of stash; it is always available whatever branches you are on
+git stash show stash@{0} - shows a diff of the stash
+git stash show  -p stash@{0} - display as a diff patch
+
+git stash apply - pull what stash out and puts it in the working directory but leaves a copy of stash
+git stash pop - pull what stash out and puts it in the working directory but it doesn't leaves a copy of stash (Normally used
+git stash pop stash@{0} -  the same as git stash pop
+git stash pop stash@{1} - pulls the 2nd stash
+git stash pop stash@{2} - pulls the 3rdstash
+git stash list - to confirm no more stashed left
+
+git stash drop stash@{0} - deletes the first stashed
+git stash clear - deletes all stash
+
+------- Remotes
+
+-----------------------------------------------------------------------------------
+Thinkful Nodejs to heroku 
+git --version
+git init - creates the .git 
+ls -a - to confirm .git is created
+rm -rf .git - deletes the .git
+git status
+    //What Not to Tracked in nodejs 
+    server.log 
+git add package.json 
+git public/
+git add server.js
+git add views/
+    //create a .gitignore 
+    node_modules/
+    server.log
+git add .gitignore 
+git commit -m 'saving nodejs' 
+
+//Create SSH Keys
+https://support.coinbase.com/customer/portal/articles/1148716-payment-methods-for-us-customers
+//Check if SSH key exits
+ls -al ~/.ssh //If no .ssh, create one -  mkdir ~/.ssh
+
+
+//If no SSH
+ssh-keygen -t rsa -b 4096 -C 'jppm***@***.com'
+ssh-keygen -t rsa -b 4096 -C 'johnpaul.marino@agencyq.com'
+    //just click enter
+    id_rsa - contains private key do not give to anyone
+    id_rsa.pub - public key that you git to github or heroku 
+eval "$(ssh-agent -s)" - start ssh agent program and print agent pid, if you get pid its good 
+ssh-add  ~/.ssh/id_rsa - to tell ssh where the the private key is 
+
+pbcopy < ~/.ssh/id_rsa.pub  - copies the content of the file to the clipboard
+
+Go to Github GUI
+In settings, SSH and GPG Keys add SSH key 
+Title - enter computer name or be descriptive
+paste pbcopy(clipboard) to the key textbox in github 
+
+//From Terminal
+ssh -T git@github.com //test if github is communicating with your computer
+enter yes
+
+Create a new repository in github 
+Push your local repo to github - https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
+Your code are now in github 
+
+Register to Heroku 
+Install Heroku command line tool visit toolbelt.heroku.com 
+From terminal
+$ heroku help 
+$ heroku login //login to heroku
+$ heroku keys:add //to upload rsa pub 
+$ heroku keys //to see all the keys 
+$ heroku keys:remove  <email> //to remove key
+$ ssh -v git@heroku.com //look for authentication succedded 
+
+//Edit your nodejs app server.js environment port 
+var port = process.env.PORT || 3000;
+//Edit package.json scripts start 
+"scripts": {
+    "start": "node server.js"
+},
+//To run scripts start locally 
+npm start 
+
+$ git add . //staged your files for commit 
+$ git commit -m "setup start script and heroku port"
+$ git push 
+
+$ heroku create //make sure you are inside your nodejs app
+$ git push heroku //will push your code to heroku and will give you a url 
+$ heroku open //it will open your app in the browser 
+
+for app in $(heroku apps); do heroku apps:destroy --app $app --confirm $app; done
+git remote -v //to see all remote heroku app
+git remote rm heroku //Delete all app from heroku
+
+---------
+Git Intermediate
+Force push to Remote (Push when merging is undesireable and you need to totally replace the remote) - warning very distructive
+$ git push -f or git push --force 
+
+$ git branch --merged  - to get the list of branch that has been merged 
+$ git branch --no-merged - to get the list of branch that has not been merged 
+    - If there are branches that are not merged, merge it with your current branch
+        - (yourbranch) $ git merge <branchtomerge> 
+$ git branch -r --merged - list the remote branches tha has been merged 
+
+Identify Merged Branches 
+$ git branch --merged HEAD 
+$ git branch --merged <branchname, commit_id>
+
+Prune Stale Branches 
+- Delete all stale remote-tracking(a local branch that tracks a deleted remote branch) branches
+- $ git remote prune origin 
+- $ git remote prune origin --dry-run 
+- $ git fetch --prune - this prune everything 
+- $ git fetch -p
+- $ git config --global fetch.prune true - always prune before fetching (not safe)
+
+Tag
+    $ git tag <tagname> <commit_id> - lightweight tag 
+    $ git tag -a <v1.1> -m "<Version 1.0" <commit_id> - most common tag 
+    $ git tag --list or $ git tag --l - to get the list of tag 
+        $ git tag -l "<v2*>" - get list of all v2 tag 
+        $ git tag -l -n - git tag list with annotation 
+    $ git show <tag_number> or git show <v1.1>
+    $ git diff v1.0..v1.1 
+
+    Deleting Tags
+    git tag --delete v1.1 
+    git tag -d v1.1 
+
+    Push tags to a remote 
+    git push origin v1.1 - push a single tags 
+    git push origin --tags - push all tags 
+
+    git fetch 
+    git fetch --tags 
+
+    git push origin :v1.1 - delete remote tags
+    git push --delete origin v1.1 
+    git push -d origin v1.1 
+
+    Checking out tags 
+    $ git checkout -b <new_branch_name> v1.1 - preferred state 
+    $ git checkout v1.1 - be careful it will move the head backwards which can cause detached head state 
+        $ git tag temp 
+        $ git branch temp_branch
+        $ git checkout -b temp_branch 
+    
+Interactive Staging 
+$ git add --interactive 
+$ git add -i
+
+Patch Mode 
+Allows staging portions of a changed file 
+git add -i 
+    -   choose p for patch 
+    - choose which file 
+    - enter ? to see all options
+    - enter n 
+    - enter y 
+    - enter q to exit 
+
+Cherry Picking Commits 
+- Choosing from one or more existing commits 
+- like copy and paste 
+- $ git cherry-pick <commit_id_of_other_branch> 
+
+How to Create Diff Patches 
+$ git diff <from-commit> <to-commit> > folder_loc/output.diff 
+
+Applying Diff Patches 
+$ git apply output.diff  
+
+Rebasing 
+- Cleaner than merge 
+- (new_feature) $ git rebase <branch_you_want_the_commit_to_move>  
+- (new_feature) $ git rebase master 
+- (master) $ git log --graph --all --decorate --oneline - useful for visualizing branches 
+- (master) $ git merge-base master new_feature - shows wheres the common commit id of both master and new_feature 
+
+Cloning From Bitbucket without the project folder
+git init .
+git remote add origin git@github.com:tiagjmariano@bitbucket.org/tiagjmariano/drupal-8-6-1-base.git
+git fetch origin
+git checkout master
+
+git clone https://tiagjmariano@bitbucket.org/tiagjmariano/drupal-8-6-1-base.git .
+
+https://stackoverflow.com/questions/1139762/ignore-files-that-have-already-been-committed-to-a-git-repository
+
+revert to specific commit 
+git push -f origin master
+git reset --hard origin/master
+
+changing author
+https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-one-specific-commit

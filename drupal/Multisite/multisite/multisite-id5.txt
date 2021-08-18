@@ -1,0 +1,10 @@
+Folder Sturctures
+sites/all/libraries - Should be the library fallback to all sites in multisite
+sites/all/modules/contrib - Should be the contrib fallback to all sites in multisite
+sites/all/modules/custom - Should be the custom fallback to all sites in multisite
+sites/all/themes - Should be the themes fallback to all sites in multisite
+
+sites/default - This folder should be left alone for theming (Sub-theme) updates , and testing. No live site should be pointing here unless necassary for LDAP and SSO purpose
+
+
+sites/sites.php $sites['www2.howard.edu'] = 'howard';

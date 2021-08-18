@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function spy_glass_menu() {
+  $items = array();
+  $items['node/%node/spy_glass'] = array(
+    'title' => 'Spy Glass',
+    'description' => 'Take a closer look',
+    'page callback' => 'spy_glass_page',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+ //let's you apply theme implementation in drupal; Documenation: hook_theme 
+function spy_glass_theme() {
+  return array(
+    //spy_glass_item is going to be template file
+    'spy_glass_item' => array(
+      'arguments' => array('title' => NULL, 'data' => NULL), //arguments comes from spy_glass_preprocess_spy_glass_item
+      //spy-glass-item.tpl.php themable template file (Note: use this if you have more html)
+      'template' => 'spy-glass-item',
+    ),
+    /** for theme function (Note: use this if you have more PHPs and if you are planning to call this over and over)
+		//the outer key will become the hook name; what's going to be themable
+    'spy_glass_item' => array(
+      'variables' => array('item' => NULL),
+    ),
+    */
+  );
+}
+
+
+//page callback
+function spy_glass_page($node) {
+  $information = _spy_glass_serious_spying_business($node);
+  //dsm($information);
+  $content = array();
+	//$item will be title and data
+  foreach ($information as $item) {
+    $content[] = array(
+      '#type' => 'markup',
+      //spy_glass_item is the hook name themable function which can be allowed to be override
+      //'#markup' => theme_spy_glass_item($item) this works but it won't let you override on theme layer
+      '#markup' => theme('spy_glass_item', $item),
+      
+    );
+  }
+  return $content;
+}
+
+//Need to create a variable for tpl.php modulename_hookname; preprocess always use &; _spy_glass_item from line 27
+function spy_glass_preprocess_spy_glass_item(&$variables) {
+	//dsm($variables);
+	//title becomes $title, data becomes $data
+  $variables['title'] = check_plain($variables['title']);
+  $variables['data'] = check_plain($variables['data']);
+  $variables['module_name'] = t('Spy Glass');
+}
+
+/*
+ //theme_hook_name which is the outer key; points from line 32; each of the output gets passed to this function 
+function theme_spy_glass_item($variables) {
+  $output = '<p>';
+  $output .= '<strong>' . check_plain($variables['title']) . '</strong><br/>';
+  $output .= check_plain($variables['data']);
+  $output .= '</p>';
+  return $output;
+}
+*/
+
+/**
+ * Collecting some super secret information about this node.
+ */
+function _spy_glass_serious_spying_business($node) {
+  $information = array();
+  $information[] = array(
+    'title' => t('Title Character Count'),
+    'data' => t('There are @num characters in the $node->title.', array('@num' => strlen($node->title))),
+  );
+  $seconds = $node->changed - $node->created;
+  $information[] = array(
+    'title' => t('Timestamp Differences'),
+    'data' => t('The $node->changed timestamp is @seconds different from the $node->created timestamp.', array('@seconds' => $seconds)),
+  );
+  if ($node->translate == 0) {
+    $information[] = array(
+      'title' => t('Translated?'),
+      'data' => t('This node is NOT translated into pirate speak, hope you know English.'),
+    );
+  }
+  $information[] = array(
+    'title' => t('Hash'),
+    'data' => md5($node->title),
+  );
+  // Example of potential user input data that needs to be sanitized.
+  // Instead of hard-coding this, it could be getting loaded from the db
+  // where a user has entered the info.
+  $information[] = array(
+    'title' => t('Nefarious data'),
+    'data' => '<a href="#" onclick="alert(\'Pwned!\'); return false;">click me</a>',
+  );
+  return $information;
+}

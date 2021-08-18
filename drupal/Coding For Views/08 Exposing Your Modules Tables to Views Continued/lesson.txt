@@ -1,0 +1,2 @@
+This lesson expose the modules tables to views
+All the code are inside databasics folder

@@ -1,0 +1,15 @@
+06 Updating Data
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. Using the world database, increase the populations of each of the cities in Switzerland by 10%.
+
+Solution:
+UPDATE City SET Population = Population * 1.1 WHERE CountryCode = 'CHE';
+
+2. Using the world database, change the head of state for the United States to whoever has that position when you perform this exercise.
+
+Solution:
+UPDATE Country SET headofstate = 'name goes here' WHERE CountryCode = 'USA';
+
+3. Update the heads of state for a few other countries. Notice that we need to perform these updates using separate statements - or create a very complicated calculation that actually requires more effort.

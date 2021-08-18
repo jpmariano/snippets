@@ -1,0 +1,77 @@
+Plugin: An individual unit of functionality
+Plugin Types: Definition of what functionality provided (block for example)
+Plugin Manager: Central controlling class
+    - Discovery and discovery decorators
+    - Factories for instatiation
+    - Derivatives
+Plugin Consumer: Custom code that leverages the functionality provided by plugins
+
+Common plugin types
+    Block: Add a new block that an administrator can place via the block layout UI
+    Field formatter: Add a new option for display data contained in fields of a specific type(s)
+    Field widget: Add a new form widget for collecting data for fields of a specific type(s)
+    Menu link: Define a menu link
+    Menu local task: Define a local task. For example, edit tabs on content pages
+    Views field: Add a new field option to Views
+    Views filter: Add a new filter option to Views
+
+To get list of plugins:
+drupal  debug:plugin //Display Plugin type and Plugin manager class
+
+To see all plugin managers: https://api.drupal.org/api/drupal/services
+- search for any prefixed with plugin.manager
+
+To get a list of the plugin types that Drupal console can generate for you
+drupal list generate:plugin
+
+All plugin managers are implementations of the \Drupal\Component\Plugin\PluginManagerInterface, 
+    which extends the \Drupal\Component\Plugin\Discovery\DiscoveryInterface, 
+    \Drupal\Component\Plugin\Factory\FactoryInterface and, 
+    \Drupal\Component\Plugin\Mapper\MapperInterface
+
+@Block 
+
+https://www.drupal.org/docs/8/api/plugin-api/d8-plugin-discovery
+Types of Discovery
+Annotated Class Discovery 
+    - \Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery
+    - MyPluginManager::discovery = new AnnotatedClassDiscovery('Plugin/Block', $namespaces, 'Drupal\block\Annotation\Block');
+YAML discovery 
+    - \Drupal\Core\Plugin\Discovery\YamlDiscovery
+    - MyPluginManager::discovery = new YamlDiscovery('sandwich', $module_handler->getModuleDirectories());
+Info hook discovery
+    - \Drupal\Core\Plugin\Discovery\HookDiscovery
+    - MyPluginManager::discovery = new HookDiscovery($this->moduleHandler, 'block_info');
+Static Discovery
+    - \Drupal\Component\Plugin\Discovery\StaticDiscovery
+    - MyPluginManager::discovery = new StaticDiscovery();
+Write your own
+
+Plugin-factories-and-mappers
+
+Factories provide the plugin manager with a MyPluginManager::createInstance() method which proxies the request to the selected factory class, 
+which, in turn, can instantiate and return the specified plugin instance.
+\Drupal\Component\Plugin\Factory\FactoryInterface
+
+The default factory
+Example return from DefaultFactory::createInstance() for the plugin class HamSandwich:
+// Arguments passed to __construct() method:
+// - $configuration (array): Passed to the createInstance() method from caller.
+// - $plugin_id (string): Unique ID of the plugin being instantiated.
+// - $plugin_definition (array): Plugin meta-data read from the annotation.
+return new HamSandwich($configuration, $plugin_id, $plugin_definition);
+
+The container factory
+The Drupal\Core\Plugin\Factory\ContainerFactory class extends the Drupal\Component\Plugin\Factory\DefaultFactory class 
+and as such does the same things with one major addition: it injects a copy of the Drupal services container by calling the plugin's ::create()
+
+The reflection factory
+Drupal\Component\Plugin\Factory\ReflectionFactory 
+
+Mappers
+Mappers are used when the plugin manager needs to locate a plugin instance based on application context instead of via a unique ID. 
+Mappers provide the plugin manager with a ::getInstance() method that can return the correct plugin based on additional logic.
+Checkout the example from \Drupal\Core\Field\FormatterPluginManager::getInstance() to get an idea of how this might work.
+
+
+Plugin Derivatives

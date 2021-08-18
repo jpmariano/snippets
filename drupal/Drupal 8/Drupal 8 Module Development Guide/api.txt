@@ -1,0 +1,12 @@
+drush dl restui
+drush en restui
+
+//http://drupal-8.dd:8083/admin/config/services/rest
+//Step 1: Configure the module
+//Step 2: Set rest module permission
+http://drupal-8.dd:8083/node/2?_format=hal_json
+http://drupal-8.dd:8083/node/2?_format=xml
+
+{
+    
+}

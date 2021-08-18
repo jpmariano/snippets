@@ -1,0 +1,5 @@
+jquery update
+Views Slideshow
+jcarousel
+quick tabs
+Jquery UI for 6 and below

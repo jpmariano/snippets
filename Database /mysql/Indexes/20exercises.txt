@@ -1,0 +1,52 @@
+20 Indexes
+
+Before performing these exercises, restore the main tables of the world database to their original contents by executing the world.sql script against that database. Do this again when you have completed these exercises, because exercises for further chapters will assume this has been done.
+
+1. Create a new index in the Country table for the Name column. Examine the Country table description and/or creation statement to check your work.
+
+Solution:
+ALTER TABLE Country ADD INDEX (Name);
+
+or
+
+CREATE INDEX Name ON Country (Name);
+
+2. Our DBA has decided that we only want to index this column on its first 15 characters. Make the correction. Examine the Country table description and/or creation statement to check your work.
+
+Solution:
+ALTER TABLE Country DROP INDEX Name, ADD INDEX (Name (15));
+
+or
+
+DROP INDEX Name ON Country;
+CREATE INDEX Name ON Country (Name (15));
+
+Execute the books.sql script, found in the work files for this chapter, to create the Books table used for the FULLTEXT exercises. The lessons on FULLTEXT indexes have this table installed in the "test" database. Use either the SOURCE command in the mysql client or use that client program on the shell command line and redirect the script to it. The Books table will be installed in the "test" database.
+
+1. Select the Author and Title for all the books that have something to do with "time".
+
+Solution:
+
+SELECT Author, Title FROM Books WHERE MATCH (Title) AGAINST ('time');
+
+2. Now add "land" to the search criteria.
+
+Solution:
+SELECT Author, Title FROM Books WHERE MATCH (Title) AGAINST ('time land')
+
+3. Now make "time" a required word.
+
+Solution:
+SELECT Author, Title FROM Books WHERE MATCH (Title) AGAINST ('+time land' IN BOOLEAN MODE);
+
+4. Now make "time" a rejected word.
+
+Solution:
+SELECT Author, Title FROM Books WHERE MATCH (Title) AGAINST ('-time land' IN BOOLEAN MODE);
+
+5. Now use only "land", but use the Query Expansion facility.
+
+Solution:
+SELECT Author, Title FROM Books WHERE MATCH (Title) AGAINST ('land' WITH QUERY EXPANSION);
+
+Have fun exploring FULLTEXT queries. Add more titles, if you like. This was only a small sample set.

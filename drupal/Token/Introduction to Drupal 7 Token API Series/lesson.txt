@@ -1,0 +1,18 @@
+Tokens are simple strings of text that serve as placeholders for an as of yet unknown dynamic value. Think about all those emails you get from marketers who address you by name. Or the email you get when you use Drupal's password reset tool that contains your username and a one-time login link.
+
+It's unlikely that those marketers are writing an email to every individual person on their mailing list or that Drupal site administrators are hand crafting every password reset email.
+
+Instead, they're inserting placeholder tokens into the copy of the email, which the program that is sending the email will recognize as "this string here that contains a token that is formatted using this specific syntax should be replaced with the name of person who I'm sending this specific email to.". This is just one of the many use cases for dynamic tokens.
+
+Prior to Drupal 7 the token replacement system was provided to the token module from contrib. However, this functionally proved to be so useful and universally used that it was included into core for Drupal 7. When the features where included as part of core only the developer facing API was added. The contrib module still exists and fills in some of the gaps like providing a user interface for browsing available tokens, and some additional validation features. This series will look at integrating with both the core API and the contrib token module.
+
+Things you'll learn in this series:
+
+What are tokens and why might you want to provide tokens via your module?
+The syntax for placeholder tokens.
+How to provide new tokens and their values for Drupal.
+Be able to allow your end users to use placeholder tokens in the strings of text provided by your module.
+How to use the token browsing interface provided by the contrib token module.
+This series is intended for Drupal 7 module developers who are interested in providing new tokens and/or allowing for the use of static placeholder tokens with dynamic values in strings of text used within their module. We assume that anyone watching this series is already familiar with the basics of Drupal 7 module development since we'll jump right in to the Token API bits. If you need a refresher checkout our series on Drupal 7 module development.
+
+After completing the lessons in this series you should have all the tools and knowledge you need in order to use the Drupal 7 core token API and the additional features provided by the contrib Token module.

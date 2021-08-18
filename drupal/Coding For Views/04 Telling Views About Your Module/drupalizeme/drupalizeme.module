@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function drupalizeme_views_api() {
+ return array(
+   //Version of the API
+   'api' => 3,
+   //views path location
+   'path' => drupal_get_path('module', 'drupalizeme') . '/includes/views',
+ );
+}

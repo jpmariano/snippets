@@ -1,0 +1,5 @@
+name = JSignature
+description = Adds a Text widget to text field which allows to capture user signature
+core = 7.x
+files[] = jsignature.module
+

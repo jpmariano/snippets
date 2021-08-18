@@ -1,0 +1,11 @@
+0906
+
+1. What are the top 5 countries by Population?
+
+Solution:
+SELECT Name, Population FROM Country ORDER BY Population DESC LIMIT 5;
+
+2. What are the 5 most crowded countries (highest population density)?
+
+Solution:
+SELECT Name, ROUND(Population / SurfaceArea) AS Density FROM Country ORDER BY Density DESC LIMIT 5;

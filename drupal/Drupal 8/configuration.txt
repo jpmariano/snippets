@@ -1,0 +1,22 @@
+What Are Configuration Entities?
+- Enables you to store multiple sets of configuration
+- part of the Entity API (other type is Content Entity)
+
+Configuration Entity Type
+- Define custom CRUD functions
+- Implemented as Plugins:
+    - annotation
+    - php class that extends ConfigEntityBase 
+        - /web/core/modules/image/src/Entity/ImageStyle.php
+            - grep -inr "ConfigEntityBase" . 
+- Structure defined in YML files stored:
+    - config/schema 
+        - grep -inr "type: config_entity" .
+        - example: /web/core/modules/image/config/schema
+- Instances are called "configuration entities"
+- Default Configuration Examples
+    - <module>/config/install
+    - <module>/config/optional
+    - example: 
+        - /web/core/modules/image/config/install 
+        - /web/core/modules/node/config

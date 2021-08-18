@@ -1,0 +1,131 @@
+http://www.mysqltutorial.org/mysql-foreign-key/
+
+MySQL create table foreign key
+
+CONSTRAINT constraint_name
+FOREIGN KEY foreign_key_name (columns)
+REFERENCES parent_table(columns)
+ON DELETE action
+ON UPDATE action
+
+
+
+MySQL create table foreign key example
+
+CREATE DATABASE IF NOT EXISTS dbdemo;
+ 
+USE dbdemo;
+ 
+CREATE TABLE categories(
+   cat_id int not null auto_increment primary key,
+   cat_name varchar(255) not null,
+   cat_description text
+) ENGINE=InnoDB;
+ 
+CREATE TABLE products(
+   prd_id int not null auto_increment primary key,
+   prd_name varchar(355) not null,
+   prd_price decimal,
+   cat_id int not null,
+   FOREIGN KEY fk_cat(cat_id)
+   REFERENCES categories(cat_id)
+   ON UPDATE CASCADE
+   ON DELETE RESTRICT
+)ENGINE=InnoDB;
+
+
+
+
+
+
+MySQL add foreign key
+
+ALTER table_name
+ADD CONSTRAINT constraint_name
+FOREIGN KEY foreign_key_name(columns)
+REFERENCES parent_table(columns)
+ON DELETE action
+ON UPDATE action
+
+
+MySQL add foreign key example:
+
+USE dbdemo;
+ 
+CREATE TABLE vendors(
+    vdr_id int not null auto_increment primary key,
+    vdr_name varchar(255)
+)ENGINE=InnoDB;
+
+
+ALTER TABLE products 
+ADD COLUMN vdr_id int not null AFTER cat_id;
+
+
+To add a foreign key to the products table, you use the following statement:
+
+ALTER TABLE products
+ADD FOREIGN KEY fk_vendor(vdr_id)
+REFERENCES vendors(vdr_id)
+ON DELETE NO ACTION
+ON UPDATE CASCADE;
+
+MySQL drop foreign key
+ALTER TABLE table_name 
+DROP FOREIGN KEY constraint_name
+
+
+To obtain the generated constraint name of a table, you use the SHOW CREATE TABLE
+SHOW CREATE TABLE table_name
+
+SHOW CREATE TABLE products
+Outputs:
+CREATE TABLE products (
+  prd_id int(11) NOT NULL AUTO_INCREMENT,
+  prd_name varchar(355) NOT NULL,
+  prd_price decimal(10,0) DEFAULT NULL,
+  cat_id int(11) NOT NULL,
+  vdr_id int(11) NOT NULL,
+  PRIMARY KEY (prd_id),
+  KEY fk_cat (cat_id),
+  KEY fk_vendor(vdr_id),
+ 
+  CONSTRAINT products_ibfk_2 
+  FOREIGN KEY (vdr_id) 
+  REFERENCES vendors (vdr_id) 
+  ON DELETE NO ACTION 
+  ON UPDATE CASCADE,
+ 
+  CONSTRAINT products_ibfk_1 
+  FOREIGN KEY (cat_id) 
+  REFERENCES categories (cat_id) 
+  ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+
+You can drop the foreign keys of the products table by using the following statement:
+ALTER TABLE products 
+DROP FOREIGN KEY products_ibfk_1;
+ 
+ALTER TABLE products 
+DROP FOREIGN KEY products_ibfk_2;
+
+
+
+MySQL disable foreign key checks
+if you disable the foreign key checks, you can load data into any orders
+
+To disable foreign key checks, you use the following statement:
+SET foreign_key_checks = 0
+
+And of course, you can enable it by using the statement below:
+SET foreign_key_checks = 1
+
+
+
+
+
+
+
+
+

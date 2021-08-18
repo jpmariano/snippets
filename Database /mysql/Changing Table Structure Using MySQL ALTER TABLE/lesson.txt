@@ -1,0 +1,38 @@
+http://www.mysqltutorial.org/mysql-alter-table.aspx
+
+MySQL ALTER TABLE syntax
+
+ALTER TABLE table_name action1[,action2,…]
+
+For Example:
+CREATE  TABLE tasks (
+  task_id INT NOT NULL ,
+  subject VARCHAR(45) NULL ,
+  start_date DATE NULL ,
+  end_date DATET NULL ,
+  description VARCHAR(200) NULL ,
+  PRIMARY KEY (task_id) ,
+  UNIQUE INDEX task_id_UNIQUE (task_id ASC) 
+ );
+ 
+ALTER TABLE table_name action1[,action2,…]
+
+ALTER TABLE tasks
+CHANGE COLUMN task_id task_id INT(11) NOT NULL AUTO_INCREMENT;
+
+
+Using MySQL ALTER TABLE statement to add a new column into a table
+
+ALTER TABLE tasks 
+ADD COLUMN complete DECIMAL(2,1) NULL
+AFTER description;
+
+Using MySQL ALTER TABLE to drop a column from a table
+
+ALTER TABLE tasks
+DROP COLUMN description;
+
+Renaming table using MySQL ALTER TABLE statement
+
+ALTER TABLE tasks
+RENAME TO work_items;

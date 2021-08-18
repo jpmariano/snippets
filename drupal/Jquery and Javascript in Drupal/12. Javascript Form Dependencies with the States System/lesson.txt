@@ -1,0 +1,13 @@
+Possible States for Listener Elements (Listens to the Caller)
+(all are boolean)
+- disabled/enabled
+- required/optional
+- visible/invisible
+- checked/unchecked
+- collapsed/expanded
+
+Possible States for Caller Fields
+- empthy/filled(boolean)
+- checked/unchecked(boolean)
+- collapsed/expanded(boolean)
+- value (string)

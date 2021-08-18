@@ -1,0 +1,5 @@
+name = "Registration Validation"
+description = "Validates username and email address during registration"
+core = 7.x
+package = Example
+files[] = regval.module

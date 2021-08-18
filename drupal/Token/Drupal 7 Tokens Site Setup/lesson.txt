@@ -1,0 +1,3 @@
+- Drupal 7 Setup
+- Download and install databasics
+- Preview the Final Product

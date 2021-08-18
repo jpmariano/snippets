@@ -1,0 +1,47 @@
+What are entities?
+https://www.drupal.org/node/1261744
+
+Entity types 
+-Nodes (content)
+-Comments
+-Taxonomy terms
+-User profiles
+-File
+- Bean 
+
+Bundles - implementation of an entity type to which fields can be attached
+generate bundles (subtypes) like: articles, blog posts, or products
+
+Properties: what is shared commonly amongs the bundle
+
+Fields: what differentiate between bundles
+
+User (entity type) - 1 user bundle
+
+File- are just entity type without bundles
+
+An entity type is a base class
+A bundle is an extended class
+A field is a class member, property, variable or field instance (depending on your naming preference)
+An entity is an object or instance of a base or extended class
+
+Bean module
+Allows you to use block using entity system
+
+Bean Entity
+go to structure > block types 
+
+Create a new block type - creates a new bundle
+
+Create content > blocks - creates a new entity
+
+File Entity Module
+File entity provides interfaces for managing files. It also extends the core file entity, allowing files
+to be fieldable, grouped into types, viewed (using display modes) and formatted using field formatters.
+
+
+Recurly module
+a subscription billing service that lets you attached to any entity type
+
+
+

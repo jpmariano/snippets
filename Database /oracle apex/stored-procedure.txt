@@ -1,0 +1,26 @@
+
+//delimiter $$ //replaces the ; to $$
+//select * from books$$
+
+use <databasename>;
+CREATE PROCEDURE <procedurename> (employee_id NUMBER) AS
+   tot_emps NUMBER;
+   BEGIN
+    //Statements goes here
+        DELETE FROM employees
+        WHERE employees.employee_id = remove_emp.employee_id;
+        tot_emps := tot_emps - 1;
+   //Statements ends here
+   END;
+
+DROP PROCEDURE <procedurename>;
+
+CALL <procedurename()>;
+
+
+//To find out all stored procedures
+SHOW DATABASES;
+SELECT * from <databasename>.PROCEDURE;
+SELECT body from <databasename>.PROCEDURE;
+SELECT cast(body as char) from <databasename>.PROCEDURE;
+

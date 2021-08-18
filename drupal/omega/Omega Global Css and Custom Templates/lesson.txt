@@ -1,0 +1,9 @@
+- Review Theme Files
+- Move main.css into (Your old theme) the global.css (Omega Subtheme) file
+- Begin Converting the page.tpl.php
+	- compare the old theme page.tpl.php with the view source of the Omega Sub Theme
+	- Rename the CSS targeting Element to match the Omega sub theme elements or
+	- In Omega Themes, Copy the templates (under the Omega) that needs to be change into your omega subtheme
+		- Edit html changes in your tpl.php
+		
+- Create a custom region template

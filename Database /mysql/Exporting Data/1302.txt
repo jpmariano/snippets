@@ -1,0 +1,21 @@
+1302
+
+1. Export the CountryLanguage data to a tab-delimited text file.
+
+Solution:
+SELECT * FROM CountryLanguage INTO OUTFILE 'CountryLanguage.txt';
+
+2. Export continental population figures into a text file.
+
+Solution:
+SELECT Continent, SUM(Population) FROM Country INTO OUTFILE 'ContinentPopulation.txt';
+
+3. Export population density data for all countries.
+
+Solution:
+SELECT Name, ROUND(Population / SurfaceArea) from Country INTO OUTFILE 'PopulationDensity.txt';
+
+4. Export all the Country data, but in CSV format (commas and carriage returns) - and change the escape character that goes with the NULLs to '@'.
+
+Solution:
+SELECT * FROM Country INTO OUTFILE 'CountryData.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' ESCAPED BY '@' LINES TERMINATED BY '\r';

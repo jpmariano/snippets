@@ -1,0 +1,45 @@
+Multisite
+What's the problem?
+- Multiple sites that have the same structure and features
+- Wanting to keep editorial access and control locked down per area
+- Multiple sites where you need to share content and/or users, but also have different themes and content
+
+Question to Ask?
+- Will you be sharing any content between sites?
+- Will you need to control user access differently on sites?
+- Do they need to share domain name and/or infastracture?
+
+Points to Consider
+- Content storage/sharing and canonical location
+- Users, profiles, and permission management
+- Feature and and style standarization
+- Site Administration and code/server management
+- performance
+
+Three Infastractures
+- Separate Sites
+- Multiple Sites on the same codebase
+- Single Site with Restrictive Access
+
+Separate Sites
+- Full autonomy/no central management
+- Features, Installation profiles, drush, and/or AEgir for consistency
+- Feeds, Services, Migrate for content and data sharing
+- SSO for user access
+
+Multiplse Sites, Same Codebase
+- Core Multisite
+-- Separate databases (Content, Config, and Users)
+-- no SSO
+- Domain Access 
+-- Only 1 database
+-- Share content or not
+-- SSO
+
+Signle Site with Restricted Access
+- Content viewing and/or editing access
+- Domain Access
+- Organic Groups
+- Workbench
+
+
