@@ -1,0 +1,10 @@
+stripe/vendor
+Docker/drupal/drupal/*
+Docker/drupal/data/*
+Docker/drupal89/*
+Docker/drupal9/*
+Docker/drupal91/*
+Docker/drupal912/*
+Docker/drupaldockfile/files/*
+Docker/drupaldrush/*
+Docker/drupal9.zip
