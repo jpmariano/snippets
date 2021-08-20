@@ -12,3 +12,5 @@ Docker/drupal9.zip
 */node_modules
 */*/node_modules
 */*/*/.settings
+*/*/.idea
+*/.vscode
