@@ -1,0 +1,6 @@
+<div class="block block-cart-header">
+	<span class="button-show">
+		<a href="<?php echo $this->getUrl('checkout/cart')?>"><?php echo $this->__('Cart')?>
+		<span class="cart-count"><?php echo Mage::helper('checkout/cart')->getItemsQty(); ?></span></a> 
+	</span>
+</div>

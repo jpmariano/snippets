@@ -1,0 +1,736 @@
+******************************************************************************
+Springboot security basics
+******************************************************************************
+Dispacher Servelet - Where all request go in, and this delegates to another controller
+
+Filters  
+
+Delegating filter poxy
+
+Filter Chain proxy
+    - One per login type (For example: google or facebook)
+    - Filter Chains: Authentication, Authorization,
+    - Filter Chaings: 
+
+
+Principal - objects that represent user, device, or application (Where autorization happens)
+    - Authorities - One Pricipal can have multiple authorities called roles
+    - Authentication - populated by princial and authorities 
+        - Http basic, digest, x509, and form based authentication
+        - LDAP and Active Directory
+        - OpenID, Jasig CAS (Central Authentication Service), and JAAS
+        - Kerberos, and SAML
+    - security context - populated by Authentication
+    - http session - populated by security context
+
+Adding to POM
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+The user will be the username and password will be generated in console
+
+Scenario: User login
+SecurityContext Persistence Filter 
+    - security context filter
+    - sc->security context holder
+Logout filter
+Authentication Filter
+    - AuthenticationManager takes Authentication obj 
+        - https://docs.spring.io/spring-security/site/docs/4.2.15.RELEASE/apidocs/org/springframework/security/authentication/AuthenticationManager.html
+        - https://stackoverflow.com/questions/9787409/what-is-the-default-authenticationmanager-in-spring-security-how-does-it-authen
+        - Creates Authentication request
+            - Authenticated: False
+            - username
+            - password
+            - Authorities
+        - Sends this Request to Authentication Provider - does the authentication which delegates (loadbyusername) to userdetail service  and returns the userdetails to authentication provider 
+            - OpenIDAuthenticationProvider
+            - DapAuthenticatinProvider
+            - LDAPAuthenticatinProvider
+        Returns Authenticated Principal
+        - If authentication is succesful,  it populates the security context which is populated with authentication object such as principal and authorities
+
+Remember me Filter
+    - is there a Remember me cookie
+Exception Translation Filter
+Filter Secutity Interceptor 
+Resource
+
+Scenario: User hit a securred resource without logging
+SecurityContext Persistence Filter 
+    - security context filter
+    - sc->security context holder
+Logout filter
+Authentication Filter
+Remember me Filter
+    - is there a Remember me cookie
+Exception Translation Filter - > forward to Authentication Entry point
+Filter Secutity Interceptor - is theses a securred resouce - AuthenticationException 
+Resource
+
+Scenario: User hit a securred resource and is login
+SecurityContext Persistence Filter 
+    - security context filter
+    - sc->security context holder - populate the securitycontext 
+Logout filter
+Authentication Filter
+Remember me Filter
+    - is there a Remember me cookie
+Exception Translation Filter - > translate error
+Filter Secutity Interceptor - is theses a securred resouce - AuthenticationException 
+    - Access Decession manager
+        - Access Denied Exception
+Resource
+
+Eclipse quick shortcut commands list - https://dzone.com/articles/effective-eclipse-shortcut-key
+sping-boot-autoconfigure -> MATA-INF -> spring.factories -> org.springframework.boot.autoconfigure.security
+- CTRL+SHIFT+T
+- 1. search for SecurityAutoConfiguration
+
+@Configuration
+@ConditionalOnClass({ AuthenticationManager.class,
+		GlobalAuthenticationConfigurerAdapter.class })
+@EnableConfigurationProperties
+@Import({ SpringBootWebSecurityConfiguration.class,
+		AuthenticationManagerConfiguration.class,
+		BootGlobalAuthenticationConfiguration.class })
+public class SecurityAutoConfiguration {
+
+	@Bean
+	@ConditionalOnMissingBean
+	public AuthenticationEventPublisher authenticationEventPublisher(
+			ApplicationEventPublisher publisher) {
+		return new DefaultAuthenticationEventPublisher(publisher);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public SecurityProperties securityProperties() {
+		return new SecurityProperties();
+	}
+
+}
+
+- 2. search for SpringBootWebSecurityConfiguration
+    - WebSecurityConfiguration - if mssing, SpringBootWebSecurityConfiguration os applied
+- 3. search for WebSecurityConfiguration ( org.springframework.security.config.annotation.web.configuration)
+    - setFilterChainProxySecurityConfigurer
+- 4. search for SecurityFilterAutoConfiguration
+    - DelegatingFilterProxyRegistrationBean - no need to configure 
+- 5. UserDetailsServiceAutoConfiguration - creates a username and password
+    - @ConditionalOnMissingBean({ AuthenticationManager.class, AuthenticationProvider.class, UserDetailsService.class })
+public class UserDetailsServiceAutoConfiguration {}
+
+- 3. search for EnableWebSecurity
+- 4. search for WebSecurityConfiguration
+- search for WebSecurityConfigurerAdapter
+- search for SecurityAutoConfiguration
+- search for SpringBootWebSecurityConfiguration
+- search for EnableWebSecurity
+- search for WebSecurityConfiguration
+
+- AbstractSecurityWebApplicationInitializer
+
+You can see all the filter 
+DelegatingFilterProxy
+- https://www.marcobehler.com/guides/spring-security#_filterchain_security_configuration_dsl
+You can see these in maven dependency
+org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.servlet.SecurityRequestMatcherProviderAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration,\
+org.springframework.boot.autoconfigure.sendgrid.SendGridAutoConfiguration,\
+org.springframework.boot.autoconfigure.session.SessionAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration,\
+org.springframework.boot.autoconfigure.security.oauth2.resource.reactive.ReactiveOAuth2ResourceServerAutoConfiguration,\
+
+******************************************************************************
+Extend WebSecurityConfigurerAdapter
+******************************************************************************
+
+1 . Extend WebSecurityConfigurerAdapter, as per SpringBootWebSecurityConfiguration
+    @EnableWebSecurity
+    @EnableGlobalMethodSecurity(securedEnabled = true)
+    @Order(2)
+    public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter { 
+
+        //copy from WebSecurityConfigurerAdapter and do your override
+        protected void configure(HttpSecurity http) throws Exception {
+            logger.debug("Using default configure(HttpSecurity). If subclassed this will potentially override subclass configure(HttpSecurity).");
+
+            http
+                .authorizeRequests()
+                    .anyRequest().authenticated()
+                    .and()
+                .formLogin().and()
+                .httpBasic();
+        }
+        //If you check the network tab of your browser in response headers, you will see WWW-Authenticate: Basic ream="Realm" 
+        //This means you are using basic authentication 
+        //If succesful, it will send authorization header which is bse64 endoded. If you decode it, it will show your username and password 
+        protected void configure(HttpSecurity http) throws Exception {
+            http.authorizeRequest()
+                .antMatchers("/<myloginurl>","<anotherurl>).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("<myloginurl>").defaultSuccessUrl("/<customurl>", true)
+                .and().csrf().disable();
+
+        }
+
+        //Ignore security for static files
+        @Override
+        public void configure(Websecurity web) throws Exception {
+            web.ignorig().antMatchers("/css/**","/webjars/**");
+        }
+        
+
+    }
+
+    DelegatingFilterProxyRegistrationBean
+        - DefaultSecurityFilter
+        - Arraylist<E>
+        - WebAsyncManagerIntegrationFilter
+        - SecurityContextPersistenceFilter
+        - HeaderWriterFilter
+        - CsrfFilter
+        - LogoutFIlter
+        - BasicAuthenticationFilter
+        - RequestCacheAwareFilter
+        - SecurityContextHolderAwareRequestFilter
+        - AnonymouseAuthenticationFilter
+        - SessionManagentFilter
+        - ExceptionTranslationFilter
+        - FilterSecurityInterceptor
+    FilterChainProxy 
+        - 
+     @Configuration
+     @Order(1)
+     public class AdminSecurityConfiguration extends WebSecurityConfigurerAdapter {
+            @Override
+            protected void configure(AuthenticationManagerBuilder auth) throws Exception
+            {
+                auth.jdbcAuthentication().dataSource(datasource)
+                    .usersByUsernameQuery("SELECT ID_USER, PASSWORD, ACTIVE FROM USERS WHERE ID_USER = ?;")
+                    .authoritiesByUsernameQuery("SELECT ID_USER, ID_ROLE FROM USER_ROLES WHERE ID_USER = ?");
+            }
+
+            @Bean
+            public DigestAuthenticationEntryPoint digestEntryPoint ()
+            {
+                DigestAuthenticationEntryPoint digestAuthenticationEntryPoint = new DigestAuthenticationEntryPoint();
+                digestAuthenticationEntryPoint.setKey("<yourkey>");
+                digestAuthenticationEntryPoint.setRealmName("<yourcustomrealname>");
+                return digestAuthenticationEntryPoint;
+            }
+
+            @Bean
+            public PasswordEncoder passwordEncoder(){
+                return NoOpPasswordEncoder.getInstance();
+            }
+
+            @Override
+            @Bean
+            public UserDetailsService userDetailsServiceBean() {
+                return super.userDetailsServiceBean();
+            }
+
+            @Bean
+            public DigestAuthenticationFilter getDigestAuthFilter(DigestAuthenticationEntryPoint entryPoint,
+                                                            UserDetailsService userDetailsService) throws Exception {
+                DigestAuthenticationFilter filter = new DigestAuthenticationFilter();
+                filter.setUserDetailsService(userDetailsServiceBean());
+                filter.setAuthenticationEntryPoint(digestEntryPoint());
+                return filter;
+            }
+            }
+
+            @Override
+            protected void configure(HttpSecurity http) throws Exception {
+                http.headers().disable().antMatcher("/admin/**").
+                addFilter(getDigestAuthFilter()).exceptionHandling()
+                .authenticationEntryPoint(digestEntryPoint())
+                .and().authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN");
+            }
+      }
+
+      //When using digest, see the network response authorization 
+
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${}"_csrf.token />
+
+******************************************************************************
+Enabling Https 
+******************************************************************************
+
+keytool - create jks
+symmetric encryption
+ssl handshake steps 
+Client send a request to Server 
+Server will respond with public key 
+Client recieves the public key and sends it back the data to server with session key and public key 
+Server will decrypt the data using the private key and sends back a response with session key and public key 
+Client will decrypt using the session key  
+
+        - Property based
+            - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#web-properties
+            - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#server-properties
+        - keytool -genkey -keyalg RSA alias <youralia> -keystore keystore.jks -storepass <yourpassword> -validity 4000 -keysize <2048|4096>
+            - add the generated keystore.jks  into your resources folder
+            - you can add this to your application.properties
+                server:
+                port: 8080
+                ssl:
+                    key-store: classpath:keystore.jks 
+                    key-store-password: <password>
+                    key-store-type: JKS 
+                    key-alias: <youralias>
+                    key-password: <password>
+            - http --verify=no https:localhost:8080/api/greeting
+            - http https:localhost:8080/api/rooms Accept:application.xml
+
+
+            //Inside Application.java - https://www.programcreek.com/java-api-examples/index.php?api=org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
+            @Bean
+            public ServletWebServerFactory servletContainer() throws Exception {
+                TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+                    @Override
+                    protected void postProcessContext(Context context) {
+                        SecurityConstraint securityConstraint = new SecurityConstraint();
+                        securityConstraint.setUserConstraint("CONFIDENTIAL");
+                        SecurityCollection collection = new SecurityCollection();
+                        collection.addPattern("/*");
+                        securityConstraint.addCollection(collection);
+                        context.addConstraint(securityConstraint);
+                    }
+                tomcat.addAdditionalTomcatConnectors(redirectConnector());
+	            return tomcat;
+            }
+            //https://docs.spring.io/spring-boot/docs/1.0.x/reference/html/howto-embedded-servlet-containers.html
+            private Connector getConnector() {
+                Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+                connector.setScheme("http");
+                connector.setPort(8080);
+                connector.setRedirectPort(8443);
+                return connector;
+            }
+******************************************************************************
+Spring Cloud Vault
+******************************************************************************
+
+https://www.vaultproject.io/downloads
+But I have given you the downloaded zip file to you in micro-lab-docs folder. Extract it.
+https://www.vaultproject.io/docs/configuration
+
+vault
+vault.hcl 
+    storage "file" {
+        path = "./vault-data"
+    }
+
+    listener "tcp" {
+        address = "127.0.0.1:8200"
+        tls_disable=1
+    }
+
+    disable_mlock=true
+
+create a folder add vault app, and vault.hcl inside: then run the command, vault server -config ./vault.hcl
+Our Vault server now is running, but since this is its first run, we need to initialize it.
+
+Our Vault server now is running, but since this is its first run, we need to initialize it.
+run command:
+Set VAULT_ADDR=http://localhost:8200
+vault operator init
+
+After issuing the above command, we should see a message like this:
+Unseal Key 1: randomstring
+Unseal Key 2: randomstring
+Unseal Key 3: randomstring
+Unseal Key 4: randomstring
+Unseal Key 5: randomstring
+
+The five first lines are the master key shares that we will later use to unseal Vault's storage. Please note that Vault only displays the master key shares will during initialization – and never more. Take note and store them safely or we'll lose access to our secrets upon server restart!
+
+Now execute the below command:
+
+Set VAULT_TOKEN= <root token value>
+
+Let's see our server status now that we have initialized it, with the following command:
+
+Execute the following command:
+
+ vault status 
+
+you should see vault_seal.png
+
+ Observe that the vault is sealed
+
+Observe the unseal progress: “0/3” means that Vault needs three shares, but got none so far. Let's move ahead and provide it with our shares.
+
+We now unseal Vault so we can start using its secret services. We need to provide any three of the five key shares in order to complete the unseal process:
+
+vault operator unseal <key share 1 value>
+vault operator unseal <key share 2 value>
+vault operator unseal <key share 3 value>
+
+
+After executing all the 3 commands, value should be unsealed 
+
+Now You need to enable the KV secrets engine at path secret
+
+Execute the following commands
+
+vault secrets enable -path=secret/ kv
+
+Now put a key value pair into vault using below command:
+
+vault kv put secret/myapp keystorepassword=tomcat 
+
+
+Till now, we have started valut and stored keystorepassword=tomcat in vault
+
+Now we want out spring boot app to read secrets from valut.
+
+Open pom.xml and complete 
+Now create a file with name bootstrap.yml under src/main/resources and configure it will following:
+
+spring:
+  application:
+    name: myapp
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+     # authentication: token
+      token: s.yZPi3ogu1BI585ZHw9Dqh2EZ
+      
+Now Replace the key token in bootstrap.yml with the root token which you got when you initialized vault
+
+
+In application.yml replace the value of server.ssl.key-store-password with ${keystorepassword}
+
+ Now start your application and give a request to http://localhost:8080/hello?name=siva
+
+Everything should work fine and you should be redirected to login page which uses https
+
+This means that the keystore password is retrieved from the vault successfully.
+
+******************************************************************************
+Remember Me
+******************************************************************************
+
+We want to enable remember me functionality for my app.
+Open login.html and uncomment the check box code for remember me check box
+
+
+http
+    .authorizeRequests()
+    .antMatchers("/register","/mylogin","/h2/console/**).permitAll()
+        .anyRequest().authenticated()
+        .and()
+    .formLogin().loinPage("/mylogin").defaultSuccessUrl("/hello",true).and().csrf().disable().rememberMe().key("mykey");
+
+    http.headers().frameOptions().disable();
+
+Now, give a request to http://localhost:8080/hello?name=Siva
+
+You should be redirected to login page and now you should see remember me check box.
+
+Press F12 on your firefox browser and click on storage tab to see cookies. You should see only jsessionid cookie.
+
+Now submit your credentials and login.
+After logging in, you should see remember-me cookie also.
+
+rememberme: <randombase64> 
+If you decode this base 64: <username>:expirationtime:md5Hex(username:expirationtime:password:key)
+
+This cookie will be red by the server. It will automatically unhashed and check if the hashed has the same username and password from database 
+
+******************************************************************************
+Logging in With Google OAUTH2
+******************************************************************************
+Step 1: Add this in pom.xml
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-oauth2-client</artifactId>
+    <version>5.3.3.RELEASE</version>
+</dependency>
+
+Step 2: visit https://console.developers.google.com/
+Click on Credentials link in the left menu
+Click on Create credentials ,select “Oauth Client Id”
+
+Select Application type as “Web Application”
+
+Give Some Name ,  and redirect uri as https://localhost:8443/myapp/login/oauth2/code/google and create.
+
+Note down the client-id and client-secret shown
+
+Step 3: Now configure following in application.yml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          <google>:
+            client-id: <<client-id>>
+            client-secret: <<client-secret>> 
+            scope: openid,profile,email
+            client-name: <<client-name>>
+
+
+Step 4: 
+
+@Configuration
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+	@Qualifier("oauth2authSuccessHandler")
+	private AuthenticationSuccessHandler oauth2authSuccessHandler;
+
+    protected void configure(HttpSecurity http) throws Exception {		
+		/*http
+		.authorizeRequests()
+			.anyRequest().authenticated()
+			.and()
+			.httpBasic();    */
+		
+		http
+		.authorizeRequests()
+		.antMatchers("/register","/login","/h2-console/**","/mylogin","/verify/**").permitAll()
+			.anyRequest().authenticated()
+			.and()			
+			.formLogin().loginPage("/login")		
+			.and().csrf().disable().rememberMe().key("myremembermekey")			
+			.and().logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("remember-me")
+			//oauth2Login and a handler 
+			.and().oauth2Login().loginPage("/login").successHandler(oauth2authSuccessHandler);
+		
+		http.headers().frameOptions().disable();
+	}
+}
+
+
+Step 5: Create a login link
+<a class="btn btn-primary" href="oauth2/authorization/<google>">Login with Google</a><br><br>
+
+Google Login flow see Oauth2google1.png and Oauth2google2.png
+1. User click the link sign in to google 
+2. OAuth2AuthorizationRequestRedirectFilter - what this do is create a redirect link to google: ?client_id=<client_id>&redirect_uri=<REDIRECT_URI>&scope=openid&response_type=code&state=<STATE_TOKEN>
+3. User login to google. Google redirects the user to /login/oauth2/code/<google>?code=AUTH_CODE&state=STATE_TOKEN (you can see this in your google app  https://console.developers.google.com/)
+4. OAuth2LoginAuthenticationFilter uses the AUTH_CODE and then delegates the work to AuthenticationManager.
+5. AuthenticationManager authenticate and delegates to Authentication Provider
+5. AuthenticationProvider
+- OidcAuthorizationCodeAuthenticationProvider -> sends authorization code to Identityprovider 
+- OAuth2LoginAuthenticationProvider <- Gets token from identity provider
+6. AuthenticationManager will return authentication object with the token to  OAuth2LoginAuthenticationToken
+7. OAuth2LoginAuthenticationToken will secure the token to SecurityContextHolder and store the token to OAuth2AuthorizedClientRepository using saveAuthorizedClient
+
+
+******************************************************************************
+Logging in With Springcloud OAUTH2
+******************************************************************************
+Step 1: pom.xml
+<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-oauth2 -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-oauth2</artifactId>
+    <version>2.2.2.RELEASE</version>
+</dependency>
+
+Step 2: AuthorizationServerConfiguration.java
+See springcloudoauth2/AuthorizationServerConfiguration.java
+
+By Enabling: @EnableAuthorizationServer this imports:
+@Import({AuthorizationServerEndpointsConfiguration.class, AuthorizationServerSecurityConfiguration.class})
+- AuthorizationServerEndpointsConfiguration imports a lot of Beans 
+- AuthorizationServerSecurityConfiguration extens from WebSecurityConfigurerAdapter - this secures the endpoints, /oauth/token,/oauth/token_key,/oauth/check_token  
+- To customize these default security: public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter 
+- configure client details: Configure Client Details 
+
+Step 3: In application.yml
+server:
+  port: 8081
+  servlet:
+    context-path: /auth
+    session:
+      cookie:
+        path: /auth
+
+
+
+Step 4: Test with Postman
+POST: localhost:8080/auth/oauth/token
+Header: Authorization - with base64clientid
+Body: x-www-form-urlencoded: grant_type - client_credentials
+Authorization: BasicAuth: username: <microclient>, password: <secret>
+
+Step 5:  see WebSecurityConfiguration - to allow password credentials 
+
+Step 6: See springcloudoauth2/AuthorizationServerConfiguration.java - to allow password credentials 
+
+@Autowired
+	private AuthenticationManager authenticationManager;
+	
+@Override
+public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    endpoints.authenticationManager(authenticationManager)
+    
+    // TODO-7 uncomment the below to inject tokenstore() and accessTokenConverter() into AuthorizationServerEndpointsConfigurer
+    
+        .tokenStore(tokenStore()).accessTokenConverter(accessTokenConverter());
+    ;
+}
+
+Step 7:
+POST: localhost:8080/auth/oauth/token
+Header: Authorization - with base64clientid
+Body: x-www-form-urlencoded: grant_type - password, username - siva, password - secret
+Authorization: BasicAuth: username: <wy2learnappclientid>, password: <secret>
+
+Step 8: See springcloudoauth2/AuthorizationServerConfiguration.java 
+//The code below check if user is authenticated and if access is good
+@Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+       
+		oauthServer.tokenKeyAccess("isAuthenticated()");
+        
+}
+
+Step 9:
+Get: localhost:8080/auth/oauth/check_token?token=<tokenvalue>
+Authorization: BasicAuth: username: <microclient>, password: <secret>
+
+You will get an authorization header value
+
+
+******************************************************************************
+JWT - Jason Web Token
+******************************************************************************
+//Encoded Json
+Header(algorithm) - Payload - Signature
+
+Client Server request a token from Auth Server
+
+Auth server return -> //Encoded Json (Header(algorithm) - Payload - ClientPrivateKeySignature -> Client Server
+
+Client Server Sends Request -> //Encoded Json (Header(algorithm) - Payload - ClientPrivateKeySignature -> to Resource Server 
+
+Resource Server Recieves - //Encoded Json (Header(algorithm) - Payload - ClientPrivateKeySignature
+unlocks using publicAkey
+
+Step 1:
+- keytool -genkey -keyalg RSA alias <youralia> -keystore keystore.jks -storepass <yourpassword> -validity 4000 -keysize <2048|4096>
+            - add the generated keystore.jks  into your resources folder
+            - you can add this to your application.properties
+                server:
+                port: 8080
+                ssl:
+                    key-store: classpath:keystore.jks 
+                    key-store-password: <password>
+                    key-store-type: JKS 
+                    key-alias: <tomcat>
+                    key-password: <password>
+
+Step 2:  See springcloudoauth2/AuthorizationServerConfiguration.java
+
+        @Bean
+	    public TokenStore tokenStore() {
+	        return new JwtTokenStore(accessTokenConverter());
+	    }
+
+	    @Bean
+	    public JwtAccessTokenConverter accessTokenConverter() {
+	        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+	        //converter.setSigningKey("123");
+	        final KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
+	        		new ClassPathResource("mykeystore.jks"), "password".toCharArray());
+	         converter.setKeyPair(keyStoreKeyFactory.getKeyPair("tomcat"));
+	        return converter;
+	    }
+
+Step 3: See springcloudoauth2/AuthorizationServerConfiguration.java
+@Override
+public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    endpoints.authenticationManager(authenticationManager)
+    
+    // TODO-7 uncomment the below to inject tokenstore() and accessTokenConverter() into AuthorizationServerEndpointsConfigurer
+    
+        .tokenStore(tokenStore()).accessTokenConverter(accessTokenConverter());
+    ;
+}
+
+Step 4:
+POST: localhost:8080/auth/oauth/token
+Header: Authorization - with base64clientid
+Body: x-www-form-urlencoded: grant_type - password, username - siva, password - secret
+Authorization: BasicAuth: username: <wy2learnappclientid>, password: <secret>
+
+You should get the encoded json web token 
+
+Step 5: Copy the token from 4 and do the postman request and you can also try to use the jwt.io decoder
+Get: localhost:8080/auth/oauth/check_token?token=<tokenvalue>
+Authorization: BasicAuth: username: <microclient>, password: <secret>
+
+******************************************************************************
+Auth Code Grant
+******************************************************************************
+
+Client -> /oauth/autorize to Auth Server 
+Auth server sends back Auth code
+Client uses the Auth code to get the token from Auth Server 
+Client uses the token to the userinfo from auth server - see springboot/springcloudoauth2/UserInfoController.java
+See springcloudoauth2/MyResourceServerConfiguration.java -  @EnableResourceServer to enable all filters required for a resource server 
+
+In Application.yml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: <ClientID>
+            client-secret: <client-secret>
+            scope: openid,profile,email
+            client-name: <client-name>
+          way2learnclient:
+            client-id: <ClientID>
+            client-secret: <client-secret>
+            client-name: <client-name>
+            scope: user_info
+            redirect-uri: https://localhost:8443/myapp/login/oauth2/code/way2learnappclient
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code
+            provider: way2learn-authserver-provider
+        provider:
+            way2learn-authserver-provider:
+              token-uri: http://localhost:8081/auth/oauth/token
+              authorization-uri: http://localhost:8081/auth/oauth/authorize
+              user-info-uri: http://localhost:8081/auth/userinfo
+              user-name-attribute: username
+******************************************************************************
+Create Resource Server 
+******************************************************************************
+Step 1: Resource server will hit Auth server to get the public key key-uri: http://localhost:1234/auth/oauth/token_key
+server:
+  port: 8084
+  
+security:
+  oauth2:
+    client:
+      clientId: microclient
+      clientSecret: secret
+    resource:
+#      tokenInfoUri: http://localhost:8081/auth/oauth/check_token
+#      user-info-uri:  http://localhost:8081/auth/userinfo
+      jwt:
+        key-uri: http://localhost:1234/auth/oauth/token_key
+     

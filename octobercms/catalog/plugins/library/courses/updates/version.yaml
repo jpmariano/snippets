@@ -1,0 +1,29 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table library_courses_'
+    - builder_table_create_library_courses_.php
+1.0.3:
+    - 'Updated table library_courses_'
+    - builder_table_update_library_courses_.php
+1.0.4:
+    - 'Updated table library_courses_'
+    - builder_table_update_library_courses__2.php
+1.0.5:
+    - 'Created table library_courses_category'
+    - builder_table_create_library_courses_category.php
+1.0.6:
+    - 'Updated table library_courses_category'
+    - builder_table_update_library_courses_categories.php
+1.0.7:
+    - 'Drop table library_courses_relation_categories'
+    - builder_table_delete_library_courses_relation_categories.php
+1.0.8:
+    - 'Created table library_courses_relation_cat'
+    - builder_table_create_library_courses_relation_cat.php
+1.0.9:
+    - 'Drop table library_courses_relation_cat'
+    - builder_table_delete_library_courses_relation_cat.php
+1.0.10:
+    - 'Created table library_courses_relation_catgs'
+    - builder_table_create_library_courses_relation_catgs.php

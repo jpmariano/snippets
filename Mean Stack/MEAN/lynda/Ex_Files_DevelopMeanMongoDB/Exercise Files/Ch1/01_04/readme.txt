@@ -1,0 +1,1 @@
+npm rm serve-favicon --save

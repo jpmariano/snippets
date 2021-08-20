@@ -1,0 +1,190 @@
+Indexing - Pages the Search Engine can see 
+    Search Engine Result Page 
+    - how many pages the google indexes in your page 
+    - it must be unique
+    - it must be very important 
+
+    Paste in search box: 
+        site:<sitename.com> 
+        site:<sitename.com> -<www.sitename.com> //to check if subdomain or development site is index 
+
+    <google.com/search>&filter=0 
+
+    Check For Duplicate Content - Remove Duplicate
+    Check which pages is scrawled 
+    Check all the way down for google message - Google will not display duplicates 
+
+    <google.com/search>&filter=0 
+
+HTTP Status Codes and Redirects 
+    - Make sure no error status code 
+    - Make sure to use 301 Redirects if the move is permanent
+    - 302 Redirects for temporary moves
+    - Best for SEO use 301 Redirects 
+
+    - Canonical Redirects 301 should only redirect to www or none www 
+
+Check the Status of URL 
+    http://httpstatus.io/ 
+        - enter your <site.com> 
+        - enter your <www.site.com> 
+
+Fixing Redirects 
+    - www is better 
+    - Easy fix: Cpanel Interface
+    - Harder: Fix htaccess 
+        - askapache.com for code examples
+    - or from your registrar (not prefered)
+        - Do not forward with masking 
+
+
+Robots.txt 
+    - Make sure to allow it 
+    - <www.yoursite.com>/robots.txt 
+    - Do not block Javascript and CSS
+
+Mobile Friendly
+    - Must be responsive
+        - Responsive Web Design using media queries (SEO Better)
+        - Separate URLs for Example: www.webupps.com and m.webupps.com 
+        - Dynamic serving based on user agent (Firefox, Iphone, etc...)
+    - Readable and easy to tap 
+    - https://developers.google.com/search/mobile-sites/mobile-seo/ 
+
+AMP
+- https://www.ampproject.org/ 
+- 15-85% improvements 
+- subset of html 
+
+Google Penalty
+- January 10, 2017 - Mobile Interstatial Penalty 
+    - https://searchengineland.com/google-confirms-rolling-mobile-intrusive-interstitials-penalty-yesterday-267408
+- Mobile Indexing 
+
+Mobile friendly test 
+    - https://search.google.com/test/mobile-friendly
+    - Chrome Plugin: Mobile Friendly Checker 
+    - Chrome Plugin: User Agent Switcher 
+    - https://developers.google.com/search/mobile-sites/mobile-seo/dynamic-serving 
+        - Chrome Plugin: Live http headers 
+        - Header Check - http://tools.seobook.com/server-header-checker/
+
+What Search Engines See 
+- Crawler 
+    - screaming from - https://www.screamingfrog.co.uk/seo-spider/ 
+        - Check inlinks for broken links 
+        - site:<sitename.com> inurl:<sitepath> 
+            - If no results:
+                Change the internal links on the site to directly point to /checkout/cart and the affiliate account login page (eliminating the need for a redirect)
+                Instead of blocking /checkout/cart in the robots.txt file add the meta robots noindex tag instead to the page (We will cover noindex in the advanced section.)
+                We could also noindex the affiliate account login page.
+
+- Meta Data and Anatoymy of Search Snippet 
+    - Title Tag - the blue link in google search and browser tab, most important in ranking, Left side of the tag gets more priority 
+    - Meta Description  - goes to the content of the results 
+    - Look for missing tags and duplicates 
+        - Each Page should have a unique title and meta description 
+    - Informative and contain keywords 
+    - Take advantage of lengths (must be between 30-65 )
+    - Not too long 
+    - use screaming frog 
+        - for page title, and use the dropdown 
+    - Check for H1 - but the page title weights more priority, but it is still good for ranking factor 
+
+Meta Description  - google now shows longer snippets (Sales Pitch)
+ - 50-322 
+ - use screaming frog 
+
+H1 and H2 Tags 
+    - Ideally for SEO one unique h1 per page 
+    - remove duplicating pages
+    - H2 should be in the main content and not in sidebar 
+
+More Meta Tags and Link Depth 
+    - Img Missing Alt Text 
+        - use screaming frog and add alt tags to those missing tags and caption
+    - Site Structure 
+        - Depth Click From start of URL -  tells you how many clicks the user has to take to get to that page 
+    - Response Time - shows you how long the site response 
+    - You can do a bulk exports from screaming frogs 
+
+Directives tab - How I find?
+- word count
+- Response Time
+- Crawl Depth
+- A list of pages with the noindex/Canonical (master copy) - see dropdown 
+
+- Internal tab 
+
+Page By Page Review
+- Browse the site page by page as a search bot would 
+    - Set up a browser to mimic a search bot - Chorme Plugin: User Agent Switcher 
+    - Review the source code 
+    - Feth page as google bot (in Googgle Search Console) or use the cache:command 
+    - Use browseo.net 
+
+Page by Page 
+- What are you looking for?
+    - Text is really Text   
+        - Avoid really thin pages
+    - Missing or Hidden Elements 
+    - Links are not obfuscated, with descriptive anchors
+    - Proper use of tags 
+
+W3C Markup Validation Service 
+- Meta should be at the head 
+- https://www.redclayinteractive.com/what-are-open-graph-tags/
+
+Chrome Extension
+SEO META in 1 Click 
+
+Traffic
+- Google Analytics use to analyze Traffic
+- Diffenent Types of Traffic 
+    - Organic - google analytics 
+        - Tracking conversions
+        - Engagement Metrics
+            - Time on Site, Bounce Rate, Pages per Visit 
+        - Content Performance
+        - Demographics and Interest (If enabled)
+        - % mobile
+        - location
+        - Social Referrals
+        - Is organic traffic rising or falling or flat?
+        - What are the top landing pages?
+        - how is the site performing with users?
+        - how well is the site optimized for speed?
+    - Referral - backlinks
+    - Direct - typein 
+    - Paid 
+
+Site Speed 
+- Conversion
+
+Power Tags and Advanced Tecgbucak SEO 
+- rel canonical - to tell google to point all duplicates to one url - to control indexation 
+    - Point url to /red/red-tennies-shoes - <link rel canonical=https://red/red-tennies-shoes />  and must be in the head 
+    - /red/red-tennies-shoes
+    - /red/red-tennies-shoes?price
+    - /red/red-tennies-shoes?cost
+    - look at the duplicate page title 
+    - Reserve Rel Canonical For pages that are duplicate, almost duplicate or a subset 
+    
+- meta robots noindex  - https://developers.google.com/search/reference/robots_meta_tag
+    - Noindex/index: Tells the search bot whether to index the page 
+    - Follow/nofollow: Tells the search bot wheter to follow the links on the page 
+        - <meta name="robots" content="index, follow" />
+        - <meta name="robots" content="noindex" />
+        - <meta name="robots" content="noindex, follow" />
+        - <meta name="robots" content="noindex, nofollow" />
+        - mainly used for indexation, unlike robots.txt is about crawling 
+- rel prev and rel next 
+
+Google Webmaster  - Google Search Console
+- Messages - look for google message 
+- Search Appearance - look at your structured data 
+- Search Traffic - Search analytics 
+- Google Indexing
+- Crawl - reads the sitemap.xml 
+
+

@@ -1,0 +1,72 @@
+Installing Laravel: 
+$ composer.phar create-project laravel/laravel=5.3 foldernameifany --prefer-dist
+
+To Create a MiddleWare from Terminal: php artisan make:middleware MyMiddleware
+
+composer.json
+//https://laravelcollective.com/docs/5.3/html - $  composer.phar update
+
+php artisan make:migration create_memberinfo
+php artisan migrate 
+php artisan migrate:rollback
+
+
+php artisan
+php artisan app:name NewNameofAppNamespace
+php artisan  make:model MemberInfo
+
+---------------
+composer
+$ composer
+--------------
+$ sudo nano  ~/.bash_profile
+
+$ sudo nano /Applications/XAMPP/xamppfiles/etc/httpd.conf 
+    # Enable Virtual hosts 
+    Include etc/extra/httpd-vhosts.conf
+$ sudo nano /etc/hosts 
+    127.0.0.1       laravelapi.local
+$ sudo nano /Applications/XAMPP/etc/extra/httpd-vhosts.conf
+
+    NameVirtualHost *:80
+    #
+    # VirtualHost example:
+    # Almost any Apache directive may go into a VirtualHost container.
+    # The first VirtualHost section is used for all requests that do not
+    # match a ServerName or ServerAlias in any <VirtualHost> block.
+    #
+    <VirtualHost *:80>
+        ServerAdmin webmaster@dummy-host.example.com
+        DocumentRoot "/Applications/XAMPP/xamppfiles/htdocs"
+        ServerName localhost             
+        ServerAlias www.localhost             
+    </VirtualHost>
+
+    <VirtualHost *:80>
+        ServerAdmin webmaster@dummy-host2.example.com
+        DocumentRoot "/Applications/XAMPP/xamppfiles/htdocs/laravelapi/public"
+        ServerName laravelapi.local       
+        ErrorLog "logs/laravelapi.local-error_log"
+        CustomLog "logs/laravelapi.local-access_log" common
+    </VirtualHost>
+
+
+URL: http://laravelapi.local/
+
+$ chmod -R o+w laravlapi/storage //Run this if the url doesn't work
+
+
+
+https://www.youtube.com/watch?v=CqHWhaPOfos&t=41s
+https://www.jetbrains.com/phpstorm/marklets/
+PHPSTORM
+127.0.0.1:10137
+
+https://www.youtube.com/watch?v=jDbF3UmV8jQ
+brew unlink <xdebug Version>
+brew install php56-xdebug
+sudo find /usr  -name "xdebug.so"
+/usr/local/Cellar/php56-xdebug/2.5.1/xdebug.so
+sudo nano /etc/php5/apache2/php.ini
+
+/Applications/XAMPP/xamppfiles/etc/php.ini

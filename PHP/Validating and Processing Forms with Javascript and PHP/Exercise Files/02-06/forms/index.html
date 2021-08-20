@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Forms</title>
+	<link rel="stylesheet" href="normalize.css" />
+	<link rel="stylesheet" href="mystyle.css" />	
+</head>
+<body>
+<form class="group" action="#">
+	<ol>
+
+		<li class="group">
+			<label for="countyfield">County</label>
+			<input name="county" id="countyfield" list="counties" />
+
+			<datalist id="counties">
+			  <option value="Orange">
+			  <option value="Seminole">
+			  <option value="Volusia">
+			  <option value="Brevard">
+			</datalist>
+
+		</li>
+
+	</ol>
+<button type="submit">send</button>
+</form>
+</body>
+</html>

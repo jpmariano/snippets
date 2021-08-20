@@ -1,0 +1,27 @@
+<meta property="og:site_name" content="<?php echo Mage::app()->getStore()->getGroup()->getName(); ?>" />
+
+<?php if($this->getRequest()->getControllerName() == 'product'):		
+	$ogDescription = Mage::registry('current_product')->getMetaDescription();
+elseif($this->getRequest()->getControllerName() == 'category'):
+	$ogDescription = Mage::registry('current_category')->getMetaDescription();
+else:
+	$ogDescription = Mage::getStoreConfig('design/head/default_description');
+endif;
+?>
+<meta property="og:description" content="<?php echo strip_tags(htmlspecialchars($ogDescription)) ?>" />
+
+<?php if (!in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(), array('cms_index_noRoute', 'cms_index_defaultNoRoute'))): 
+    $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+ endif; ?> 
+<meta property="og:url" content="<?php echo $currentUrl ?>" />
+
+<?php if (Mage::registry('current_product')) : ?>
+	<?php if (Mage::registry('current_product')->getMetaTitle() == ""):
+			$ogTitle = Mage::registry('current_product')->getName();
+		else:
+			$ogTitle = Mage::registry('current_product')->getMetaTitle();
+		endif; ?> 
+<meta property="og:title" content="<?php echo $ogTitle ?>" />  
+<meta property="og:image" content="<?php echo Mage::helper('catalog/image')->init(Mage::registry('current_product'), 'small_image')->resize(200,200);?>" />
+
+<?php endif; ?>

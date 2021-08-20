@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="jquery.placeholder.min.js"></script>
+
+    <title>Chapter06-Forms</title>
+    <style type="text/css">
+        .active {
+            border: 5px solid red;
+            /*background-color: yellow;*/
+        }
+
+        input[type="submit"]:disabled {
+            background: #ccc;
+        }
+
+        input:required:invalid {
+            /*}, input:focus:invalid {*/
+            background-color: yellow;
+        }
+
+        input:required:valid {
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <form>
+        <fieldset id="names">
+            <legend>Personal Info</legend>
+            <select id="title" name="title" autofocus>
+                <option>Mr.</option>
+                <option>Miss</option>
+                <option>Mrs.</option>
+                <option>Dr.</option>
+            </select>
+            <label for="first-name">First Name:</label>
+            <input id="first-name" type="text"/>
+            <label for="last-name">Last Name:</label>
+            <input id="last-name" type="text"/>
+        </fieldset>
+        <fieldset>
+            <legend>Comments</legend>
+            <textarea style="width: 100%;" placeholder="Enter your comments"></textarea>
+        </fieldset>
+        <fieldset>
+            <legend>Account</legend>
+            <label for="user-name" title="bobcat">User Name:</label>
+            <input id="user-name" type="text" title="alpha cat"/>
+            <label for="password">Password:</label>
+            <input id="password" type="password"/>
+            <label for="confirm">Confirm Password:</label>
+            <input id="confirm" type="password"/>
+        </fieldset>
+        <fieldset id="fiOne">
+            <legend id="leOne">Buttons</legend>
+            <input id="radio1" type="radio" name="choice">Choice 1</input>
+            <input id="radio2" type="radio" name="choice">Choice 2</input>
+            <input id="radio3" type="radio" name="choice">Choice 3</input>
+            <input id="radio4" type="radio" name="choice">Choice 4</input>
+        </fieldset>
+        <fieldset>
+            <legend>Inputs</legend>
+            <input id="weekIn" type="week"/>
+            <input type="tel" id="phoneNumber" name="phoneNumber"
+                   pattern="\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})" required/>
+            <input type="number" id="numberIn" name="numberIn"/>
+            <input type="email" id="emailIn" name="emailIn" placeholder="name@company.com"
+                   pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                   required/>
+        </fieldset>
+        <fieldset id="inputMomma">
+        </fieldset>
+        <fieldset>
+            <label for="alphaNumOnly" title="Only a-z,A-Z, & 0-9">AlphaNum Only:</label>
+            <input id="alphaNumOnly" type="text"/>
+        </fieldset>
+        <button id="addAnother" type="button">Add Another</button>
+        <button id="selectText" type="button">Select Some Text</button>
+        <button id="disableEnable" type="button">Disable Them</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<script type="text/javascript">
+    (function () {
+        "use strict";
+
+        // Hook the document ready event and
+        $(document).ready(function () {
+            // bind the tooltip plugin to the document
+            $(document).tooltip({
+                show: {
+                    effect: "slideDown",
+                    delay: 150
+                }
+            });
+        });
+
+        // Hook the document ready event and
+        $(document).ready(function () {
+            // bind the placeholder attribute to the input and textarea elements
+            $('input, textarea').placeholder();
+        });
+
+        // Hook the document ready event and
+        $(document).ready(function () {
+            // give the title select element the focus
+            $('#title').focus();
+        });
+
+
+        $('form').submit(function (event) {
+            alert('submit');
+            return false;
+        });
+
+//        $('form').on('submit', function (event) {
+//            alert('submit');
+//            return false;
+//        });
+
+        $("input, textarea").focus(function (event) {
+            $(this).addClass('active');
+        });
+        $("input, textarea").blur(function (event) {
+            $(this).removeClass('active');
+        });
+
+        // only called once focus is lost and contents have changed
+        $("input, textarea").change(function (event) {
+            console.info('Change is good:' + this.id);
+        });
+
+        // these events will never be triggered
+        $('#fiOne').focus(function (event) {
+            console.info('Focus: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).addClass('active');
+        });
+
+        $('#fiOne').blur(function (event) {
+            console.info('Blur: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).removeClass('active');
+        });
+
+        // these event use the
+        $('#fiOne').focusin(function (event) {
+            console.info('Focusin: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).addClass('active');
+        });
+
+        $('#fiOne').focusout(function (event) {
+            console.info('Focusout: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).removeClass('active');
+        });
+
+        // Adds an input tag dynamically by clicking the "Add Another" button
+        var inputCounter = 0;
+        $('#addAnother').click(function (event) {
+            console.info("Adding another");
+            $('#inputMomma').append($("<input>").attr({'type': 'text', 'id': 'newInput' + inputCounter++}));
+        });
+
+        // Makes the parent element the active class
+        $('#inputMomma').focusin(function (event) {
+            console.info('Focusin: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).addClass('active');
+        });
+
+        // Removes the active class from the parent
+        $('#inputMomma').focusout(function (event) {
+            console.info('FocusOut: ' + this.id + ', triggered by: ' + event.target.id);
+            $(this).removeClass('active');
+        });
+
+        // Triggered when some text is selected
+        $('textarea').select(function (event) {
+            console.info("Something was selected: " + this.tagName);
+        });
+
+        // Selects all of the textarea text
+        $('#selectText').click(function (event) {
+            console.info("Adding another");
+            $('textarea').select();
+        });
+
+        // disables/enable elements
+        $('#disableEnable').click(function (event) {
+            var $ptr = $('#names > *');
+            if ($ptr.prop('disabled')) {
+                $ptr.prop('disabled', false);
+                $(this).text('Disable Them');
+            } else {
+                $ptr.prop('disabled', true);
+                $(this).text('Enable Them');
+            }
+        });
+
+        // filters out unwanted characters
+        $('#alphaNumOnly').on('keypress paste', function (event) {
+            // convert the keycode into a character
+            var nextChar = String.fromCharCode(event.which);
+            if(event.type === 'keypress'){
+                // add it to the current input text string, the remove any bad chars via regex
+                this.value = (this.value + nextChar).replace(/[^0-9|a-z|A-Z]+/g, '');
+            }
+            // let the browser know we've handled this event
+            event.preventDefault();
+            return false;
+        });
+
+    }());
+
+</script>
+</body>
+</html>

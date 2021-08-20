@@ -1,0 +1,157 @@
+<?php
+$_product    	 = $this->getProduct();
+$_attributes 	 = Mage::helper('core')->decorateArray($this->getAllowAttributes());
+$images 		 = Array();
+$state_images 	 = Array();
+
+$children = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $_product);
+
+foreach($children as $child) {
+
+    $_childProduct = Mage::getModel('catalog/product')->load($child->getId());
+    $imageUrl = $_childProduct->getImageUrl();
+
+    if ($imageUrl != 'no_selection' && !is_null($imageUrl) ){
+
+        $images[$_childProduct->getColor()]['small'] = (string)Mage::helper('catalog/image')->init($_childProduct, 'image')->resize(458);
+        $images[$_childProduct->getColor()]['large'] = (string)Mage::helper('catalog/image')->init($_childProduct, 'image')->resize(658);
+
+    } else {
+
+        /*
+                if ($child->getMediaGallery() != 'no_selection' && !is_null($child->getMediaGallery()) ){
+
+                    $newImg = ltrim($child->getMediaGallery(), '/');
+                    $images[$child->getColor()] = $this->getUrl('media/catalog/product').$newImg;
+
+                } else {
+        */
+        $images[$child->getColor()] =  $this->getUrl('media/catalog/product/placeholder/default').'placeholder.jpg';
+
+//		}
+
+    }
+
+    $state_imageUrl = $child->getImage();
+    if ($state_imageUrl != 'no_selection' && !is_null($state_imageUrl) ){
+        $new_state_Img = ltrim($child->getImage(), '/');
+        $state_images[$child->getState()] = $this->getUrl('media/catalog/product').$new_state_Img;
+    } else {
+        if ($child->getMediaGallery() != 'no_selection' && !is_null($child->getMediaGallery()) ){
+
+            $state_images[$child->getState()] =  $this->getUrl('media/catalog/product/placeholder/default').'placeholder.jpg';
+        }
+    }
+
+}
+
+$numbered = 0;
+?>
+<script type="text/javascript">
+    var stateImages = <?php echo json_encode($state_images); ?>;
+</script>
+<?php if ($_product->isSaleable() && count($_attributes)):?>
+    <dl>
+        <?php foreach($_attributes as $_attribute): ?>
+            <?php if($_attribute->getLabel() == 'Color'): $numbered++ ?>
+                <dt class="color-label"><label class="required"><?php echo $this->__('%s:',$_attribute->getLabel()) ?> <em>*</em></label></dt>
+                <?php $attrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product); ?>
+                <dd class="color-input<?php if ($_attribute->decoratedIsLast){?> last<?php }?>">
+                    <div class="input-box">
+                        <?php foreach($attrs as $attr): ?>
+                            <?php if($attr['label'] == 'Color'): ?>
+                                <ul class="swatch-list">
+                                    <?php foreach($attr['values'] as $option): ?>
+                                        <?php $filename = preg_replace('[^A-Za-z0-9-]','',strtolower(str_replace(' ', '-', $option['label'])).'.png'); ?>
+                                        <?php $path = Mage::getBaseDir('media').'/swatches/'; ?>
+                                        <li class="swatch-item">
+                                            <a href="#" title="<?php echo $option['label'] ?>" data-zoom="<?php echo $images[$option['value_index']]['small'];?>" data-zoom-image="<?php echo $images[$option['value_index']]['large'];?>" >
+                                                <span class="hidden option-value"><?php echo $option['value_index'] ?></span>
+                                                <!-- 					        				<span class="hidden option-image"><?php if($swapImage = $images[$option['value_index']]){ echo $swapImage; } ?></span> -->
+                                                <?php if(file_exists($path.$filename)): ?>
+                                                    <img class="aui rounded-4" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'swatches/'.$filename ?>" alt="<?php echo $option['label'] ?>" height="30" width="30" />
+                                                <?php else: ?>
+                                                    <span class="option-title"><?php echo $option['label'] ?></span>
+                                                <?php endif ?>
+                                                <!-- 						        			<span class="active-overlay"></span> -->
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif ?>
+                        <?php endforeach; ?>
+                        <input name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" type="hidden" value="" class="required-entry" />
+                        <script type="text/javascript">
+                            jQuery(document).ready( function(){
+                                jQuery('.swatch-item a').each(function(){
+                                    jQuery(this).click(function(){
+                                        event.preventDefault();
+                                        jQuery(this).parent().siblings().removeClass('active');
+                                        jQuery(this).parent().parent().removeClass('validation-failed').siblings('.validation-advice').fadeOut(1000);
+                                        jQuery(this).parent().addClass('active');
+
+                                        optionValue = jQuery(this).children('.option-value').text();
+                                        jQuery('#attribute<?php echo $_attribute->getAttributeId() ?>').val(optionValue);
+
+                                        smallImage = jQuery(this).attr('data-zoom');
+                                        largeImage = jQuery(this).attr('data-zoom-image');
+
+                                        var ez = jQuery('#product_zoom_image').data('elevateZoom');
+                                        ez.swaptheimage(smallImage, largeImage);
+
+                                    });
+                                });
+                                jQuery('.add-to-cart .btn-cart').click(function(){
+                                    if( jQuery('.swatch-item.active').length == 1 ){
+                                        return true;
+                                    } else {
+                                        jQuery('.swatch-list').addClass('validation-failed');
+                                        return false;
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                </dd>
+
+
+            <?php else: $numbered++ ?>
+                <dt><label class="required"><?php echo $this->__('%s:', $_attribute->getLabel()) ?><em>*</em></label></dt>
+                <dd>
+                    <div class="input-box attribute-<?php echo strtolower($this->__( $_attribute->getLabel() )) ?>">
+                        <select data-choose-text="<?php echo $this->__( $_attribute->getLabel() ) ?>" name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
+                            <option><?php echo $this->__('%s', $_attribute->getLabel()) ?></option>
+                        </select>
+                        <?php if( $_attribute->getLabel() == 'Size' && $_product->getSizeChart() ): ?>
+                            <div class="size-chart">
+                                <a href="<?php echo $_product->getSizeChart() ?>" class="iframe lightbox"><?php echo $this->__('Size Chart') ?></a>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </dd>
+            <?php endif ?>
+
+        <?php endforeach; $numbered++ ?>
+        <p class="short_description hidden-tablet visible-phone"><?php echo $_product->getShortDescription() ?></p>
+        <dt class="qty-label <?php echo $this->__('label-%s', $numbered ) ?>"><label class="required"><?php echo $this->__('Quantity:', $numbered ) ?> <em>*</em></label></dt>
+        <dd class="qty-input last <?php echo $this->__('input-%s', $numbered ) ?>">
+            <div class="input-box">
+                <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Quantity" class="input-text required-entry qty aui" placeholder="QTY">
+            </div>
+        </dd>
+    </dl>
+    <script type="text/javascript">
+
+        Product.ConfigDefaultText = new Class.create(Product.Config, {
+            fillSelect: function($super, element) {
+                $super(element);
+                var chooseDefaultText = element.getAttribute('data-choose-text');
+                $(element).options[0] = new Option(chooseDefaultText, '');
+            }
+        });
+
+        var spConfig = new Product.ConfigDefaultText(<?php echo $this->getJsonConfig() ?>);
+
+    </script>
+
+<?php endif;?>

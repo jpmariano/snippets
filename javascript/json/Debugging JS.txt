@@ -1,0 +1,9 @@
+Use the Console when inspecting the Elements
+Type: The Variable that you want to access
+- Objects may not be in order in the debugger, except the objects inside
+the array
+- You can use javascript inside the console
+variable.elements
+variable.elements[1].key
+variable.elements = "value"
+delete(variable.elements)

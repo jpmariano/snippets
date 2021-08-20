@@ -1,0 +1,11 @@
+name: Courses
+modelClass: Library\Courses\Models\Course
+form: $/library/courses/models/course/fields.yaml
+defaultRedirect: library/courses/courses
+create:
+    redirect: 'library/courses/courses/update/:id'
+    redirectClose: library/courses/courses
+update:
+    redirect: library/courses/courses
+    redirectClose: library/courses/courses
+preview: {  }

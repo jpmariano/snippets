@@ -1,0 +1,27 @@
+certainly, here you go:
+
+1) Please go to "My Downloads" on xtento.com and download the three modules for order export/tracking import/stock import.
+2) Install the modules as explained here: http://support.xtento.com/wiki/Installing_and_setting_up_a_Magento_extension
+3) Go to System > XTENTO and enter the license keys and enable the three modules
+4) Please make sure the Magento cronjob has been set up: http://support.xtento.com/wiki/Setting_up_the_Magento_cronjob
+
+Order Export:
+1) Copy the file app/code/local/Xtento/OrderExport/Model/Destination/Http.php from a live store (NRSC for example) into the app/code/local/Xtento/OrderExport/Model/Destination/ folder on the new site.
+2) Open the Http.php file on the new site using an editor and if required, adjust the "Authorization" key for the API
+3) Go to Sales > Sales Export > Tools in the Magento admin of a live store (NRSC for example) and export the "profile" and "destination" there. Then, go to Sales > Sales Export > Tools on the new site and import the downloaded JSON file there to upload the configuration.
+4) On the new site, go to Sales > Sales Export > Export Profiles, open the only existing export profile ("Edit Profile"), and open the "Output Format" tab. Please make sure to adjust the order# prefix there:
+<xsl:value-of select="concat($sepstart, 'xref', $sepmid, php:functionString('json_encode', concat('NR', increment_id)), $sepend)"/>
+In this case the prefix is NR. Replace it with whatever you want. Then, click on "Save Profile".
+
+Stock Import: 
+1) Copy the file app/code/local/Xtento/StockImport/Model/Source/Http.php from a live store (NRSC for example) into the app/code/local/Xtento/StockImport/Model/Source/ folder on the new site.
+2) Open the Http.php file using an editor and if required adjust, the "Authorization" key for the API
+3) Go to Catalog > Stock Import > Tools in the Magento admin of a live store (NRSC for example) and export the "profile" and "source" there. Then, go to Catalog > Stock Import > Tools on the new site and import the downloaded JSON file there to upload the configuration.
+
+Tracking Import:
+1) Copy the file app/code/local/Xtento/OrderStatusImport/Model/Connection/Custom.php from a live store (NRSC for example) into the app/code/local/Xtento/OrderStatusImport/Model/Connection/ folder on the new site
+2) Open the Custom.php file using an editor and if required adjust, the "Authorization" key for the API. Also, please adjust the order# prefix (set up in order export step 4) in this file:
+
+$prefix = 'NR';
+
+3) Go to System > XTENTO > Tracking Number Import in a live store (NRSC for example) to see the configuration and apply exactly the same configuration at System > XTENTO > Tracking Number Import on the new site.

@@ -1,0 +1,16 @@
+plugin:
+    name: 'library.courses::lang.plugin.name'
+    description: 'library.courses::lang.plugin.description'
+    author: Library
+    icon: oc-icon-book
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: Courses
+        url: library/courses/courses
+        icon: icon-book
+        sideMenu:
+            side-menu-item:
+                label: Categories
+                url: library/courses/categories
+                icon: icon-tag

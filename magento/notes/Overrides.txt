@@ -1,0 +1,101 @@
+Simple Overrides:
+1. Copy from app|code|core (include the subfolders)|filename.extension
+2. Re-create the file inside the app|code|local|...
+
+Module Overrides
+STEP 1: Declarations
+1. Register the Modules app|etc
+2. Copy existing module declarations and past it in the same location
+3. Rename the file to Namespace_modulename.xml
+4. Change the text declarations appropriately
+
+<config>
+	<global>
+		<router>
+			<catalog>
+				<args>
+					<module>
+						<demo before="Mage_Catalog">TutPlus_Demo</demo>
+					</module>
+				</args>
+			</catalog>
+		</router>
+	</global>
+</config>
+
+
+<?php 
+require_once(Mage::getModuleDir('controllers', 'Mage_catalog').DS.'ProductController.php);
+class Tutsplus_Demo_ProductController extends Mage_Catalog_ProductController {
+
+}
+
+
+Step 2: The Module
+Tutsplus
+- Block
+- controllers
+- etc - register module's Block, controllers, Helper, Model, sql
+Create config.xml
+<config>
+	<global>
+		<models>
+			<catalog>
+				<rewrite>
+					<category>TutPlus_Catalog_Model_Category</category>
+				</rewrite>
+			</catalog>
+		</models>
+	</global>
+</config>
+- Helper - class namespace_modulename_clastype_filename extends Mage_Core_Helper_Abstract or Mage::helper("demo/customer");
+- Model - Create Category.php 
+	<?php
+	class TutsPlus_Catalog_Model_Category extends Mage_Catalog_Model_Category {
+		public function originalclassnametooveride() {
+		  //your changes
+		 }
+		}
+- sql 
+
+
+Event Overrides
+Look for DispatchEvent inside the code for example: session.php
+
+inside config.xml
+config>
+	<global>
+		<models>
+			<catalog>
+				<rewrite>
+					<category>TutPlus_Catalog_Model_Category</category>
+				</rewrite>
+			</catalog>
+		</models>
+		<events>
+			<customer_login> --- eventname to overrride
+				<observers> --- it is plural because you can make multiple observer
+					<demo> --- module name
+						<type>model</type> --- model or singleton call
+						<class>demo/observer</class> --- modulename/observer
+						<method>logCustomer</method>
+					</demo>
+				</observers>
+			</customer_login>
+		</evetns>
+	</global>
+</config>
+
+
+Since the type is a model, create an Observer.php inside the model's folder
+<?php 
+class Tutsplus_Demo_Model_Observer {
+	public function logCustomer($observer) --- class name (variable name)
+	{
+		$customer = $observer->getCustomer(); --- the observer will recieved the info though getCustomer or getProduct
+		Mage::log($customer->getName() . "has login!", null, "customer.log");
+	}
+}
+
+
+when program is ran - you should see a file inside var|log|customer

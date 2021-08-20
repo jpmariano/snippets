@@ -1,0 +1,16 @@
+<?php
+/**
+ * Top menu for store
+ *
+ * @see Mage_Page_Block_Html_Topmenu
+ */
+?>
+<?php $_menu = $this->getHtml('level-top') ?>
+<?php if($_menu): ?>
+<div class="nav-container">
+    <ul id="nav">
+        <?php /* <li class="level0 nav-0 level-top <?php if (trim(Mage::helper('core/url')->getCurrentUrl(), '/') == trim(Mage::getUrl(), '/')):?> active<?php endif;?>"><a href="<?php echo $this->getBaseUrl()?>" class="level-top"><span><?php echo $this->__('Home') ?></span></a></li> */ ?>
+        <?php echo $_menu ?>
+    </ul>
+</div>
+<?php endif ?>

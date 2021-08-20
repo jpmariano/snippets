@@ -1,0 +1,42 @@
+<?php
+$subTotal = Mage::getModel('checkout/cart')->getQuote()->getSubtotal(); 
+$grandTotal = Mage::getModel('checkout/cart')->getQuote()->getGrandTotal(); 
+$discountTotal = $subTotal - Mage::getModel('checkout/cart')->getQuote()->getsubtotal_with_discount(); 
+$donationTotal = number_format(($grandTotal + $discountTotal) - $subTotal, 2);
+?>
+<div class="order-summary block">
+	<div class="block-title">
+		<h3>Order Summary</h3>
+	</div>
+	<div class="block-content">
+		<ul>
+			<li>
+				<label class="shipping-label f-left a-left"><?php echo $this->__('Order Subtotal:') ?></label>
+				<label class="shipping-price f-right a-right"><?php echo '$' . $subTotal ?></label>
+			</li>
+			<li>
+				<label class="shipping-label f-left a-left"><?php echo $this->__('Shipping:') ?></label>
+				<label class="shipping-price f-right a-right"><?php echo $this->__('&#36;0') ?></label>
+			</li>
+			<?php if ($donationTotal > 0) : ?>
+			<li>
+				<label class="donation-label f-left a-left"><?php echo $this->__('Additional Donation:') ?></label>
+				<label class="donation-price f-right a-right"><?php echo '$' . $donationTotal ?></label>
+			</li>
+			<?php endif; ?>
+			<?php if ($discountTotal > 0) : ?>
+			<li>
+				<label class="discount-label f-left a-left"><?php echo $this->__('Discount:') ?></label>
+				<label class="discount-price f-right a-right"><?php echo '- $' . $discountTotal ?></label>
+			</li>
+			<?php endif; ?>
+			<li>
+				<label class="total-label f-left a-left"><?php echo $this->__('Grand Total:') ?></label>
+				<label class="total-price f-right a-right"><?php echo '$' . $grandTotal ?></label>
+			</li>
+		</ul>
+	</div>
+	<div class="buttons-set">
+		<button class="button" onclick="setLocation('<?php echo $this->getUrl('checkout/cart') ?>')"><span><span><?php echo $this->__('Edit') ?></span></span></button>
+	</div>
+</div>

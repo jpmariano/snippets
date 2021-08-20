@@ -1,0 +1,11 @@
+
+<div class="page-title">
+    <h1><?php echo $this->__('Shopping Cart is Empty') ?></h1>
+</div>
+<div class="cart-empty">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('checkout_cart_empty_widget'); ?>
+
+    <?php echo $this->__('<a href="%s" class="button"><span><span>Continue Shopping</span></span></a>', $this->getContinueShoppingUrl()) ?>
+    <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
+</div>

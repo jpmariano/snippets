@@ -1,0 +1,48 @@
+fields:
+    title:
+        label: 'Course Title'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    number:
+        label: 'Course Number'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    slug:
+        label: Slug
+        span: full
+        oc.commentPosition: ''
+        preset:
+            field: title
+            type: slug
+        type: text
+    thumbnail:
+        label: 'Thumbnail Image'
+        span: auto
+        oc.commentPosition: ''
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        imageWidth: '100'
+        imageHeight: '100'
+        type: fileupload
+    resource:
+        label: 'File Upload'
+        span: auto
+        oc.commentPosition: ''
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        mimeTypes: 'pdf, mov'
+        type: fileupload
+    categories:
+        label: Categories
+        span: auto
+        oc.commentPosition: ''
+        nameFrom: title
+        type: relation

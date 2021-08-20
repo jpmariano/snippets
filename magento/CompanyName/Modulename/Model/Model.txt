@@ -1,0 +1,272 @@
+Model: This folder contains models that support the controllers in the module
+for interacting with data
+
+• Simple models: This model implementations are a simple mapping of one
+	object to one table, meaning our object attributes match each field and our
+	table structure
+• Entity Attribute Value (EAV) models: This type of models are used to
+	describe entities with a dynamic number of attributes
+	
+model layer up into two parts: 
+• a model handling the business logic 
+• a resource handling the database interaction
+
+
+Observer Sample this is tied to events through config.xml
+    
+class Namespace_Modulename_Model_Observer {
+		public function methodName(Varien_Event_Observer $observer)
+	{
+		//some code
+	}
+}
+
+- One interesting thing about observer models is that they don't extend any other Magento class.
+
+Magento implements an Object Relational Mapping (ORM) system
+Object-relational mapping (ORM, O/RM, and O/R mapping) in computer
+software is a programming technique for converting data between incompatible
+type systems in object-oriented programming languages.
+
+• Model class: Here is where most of our business logic resides. Models are
+used to manipulate the data, but they don't access it directly.
+• Resource Model class: Resource Models are used to interact with
+the database on behalf of our models. They are in charge of the actual
+CRUD operations.
+• Model Collection class: Each Data Model has a collection class; collections
+are objects that hold a number of individual Magento Model instances.
+
+EAV
+• Entity: The entity represents the data items (objects) inside Magento
+products, customers, categories, and orders. Each entity is stored in the
+database with a unique ID.
+• Attribute: These are our object properties. Instead of having one column per
+attribute on the product table, attributes are stored on separates sets of tables.
+• Value: As the name implies, it is simply the value link to a particular attribute.
+
+Magento Community Edition currently has eight different types of EAV objects:
+• Customer
+• Customer address
+• Products
+• Product categories
+• Orders
+• Invoices
+• Credit memos
+• Shipments
+
+SQL
+
+SELECT * FROM `catalog_product_entity`;
+
+The table contains the following fields:
+• entity_id: This is our product unique identifier and is used internally by Magento.
+• entity_type_id: Magento has several different types of EAV models, products, customers, and orders, and these are just some of them. 
+• attribute_set_id: Products attributes can be grouped locally into attribute sets. Attribute sets allow even further flexibility.
+• type_id: Types of products in Magento: simple, configurable, bundled, downloadable, and grouped products, each with unique settings and functionality.
+• sku: Stock Keeping Unit (SKU) is a number or code used to identify each unique product or item for sale in a store. This is a user-defined value.
+• has_options: This is used to identify if a product has custom options.
+• required_options: This is used to identify if any of the custom options are required.
+• created_at: This is a row creation date.
+• updated_at: This shows the last time the row was modified.
+
+So, where are the attributes stored? And how does Magento know the difference between a product attribute and a customer attribute?
+For that, we need to take a look at the eav_attribute table by running the following
+SQL query:
+SELECT * FROM `eav_attribute`;
+WHERE entity_type_id = 4; 
+
+Note: entity_type_id (4) = catalog_product_entity table
+
+other data attributes are located in other tables
+• catalog_product_entity
+• catalog_product_entity_datetime
+• catalog_product_entity_decimal
+• catalog_product_entity_int
+• catalog_product_entity_text
+• catalog_product_entity_varchar
+• catalog_product_entity_gallery
+• catalog_product_entity_media_gallery
+• catalog_product_entity_tier_price
+
+SELECT * FROM `eav_attribute`
+WHERE `entity_type_id` =4 AND `attribute_code` = 'name';
+
+The result will show the backend type and tells you which table
+
+• attribute_id: This is the unique identifier for each attribute and primary key of the table.
+• entity_type_id: This field relates each attribute to a specific EAV model type.
+• attribute_code: This field is the name or key of our attribute and is used to generate the getters and setters for our magic methods.
+  setData($parameters), getData($parameters), unsetData($parameters), isset($parameters) - pg 63
+• backend_model: The backend model manages loading and storing data into the database.
+• backend_type: This field specifies the type of value stored into the backend. For example, varchar, int, static, datetime, text, decimal
+• backend_table: This field is used to specify if the attribute should be stored on a special table instead of the default EAV tables.
+• frontend_model: The frontend model handles the rendering of the attribute element into a web browser.
+• frontend_input: Similar to the frontend model, the frontend input specifies the type of input field the web browser should render.
+• frontend_label: This field is the label/name of the attribute as it should be rendered by the browser.
+• source_model: The source models are used to populate an attribute with possible values. Magento comes with several predefined source models for countries, yes or no values, regions, and so on.
+
+
+SELECT p.entity_id AS product_id, var.value AS product_name, p.sku AS product_sku
+FROM catalog_product_entity p, eav_attribute eav, catalog_product_entity_varchar var
+WHERE p.entity_type_id = eav.entity_type_id
+AND var.entity_id = p.entity_id
+AND eav.attribute_code = 'name'
+AND eav.attribute_id = var.attribute_id;
+
+
+That said, let's see how can we retrieve the same product information by using the Magento ORM:
+1. Our first step is going to instantiate a product collection:
+	$collection = Mage::getModel('catalog/product')->getCollection();
+2. Then, we will specifically tell Magento to select the name attribute:
+	$collection->addAttributeToSelect('name');
+3. Now sort the collection by name:
+	$collection->setOrder('name', 'asc');
+4. And, finally, we will tell Magento to load the collection:
+	$collection->load();
+5. The end result is a collection of all products in the store sorted by name; we can inspect the actual SQL query by running:
+	echo $collection->getSelect()->__toString();
+	Note: allows us to see the actual query that Magento is executing on our behalf.
+	
+	SELECT `e`.*. IF( at_name.value_id >0, at_name.value, at_name_default.
+	value ) AS `name`
+	FROM `catalog_product_entity` AS `e`
+	LEFT JOIN `catalog_product_entity_varchar` AS `at_name_default` ON
+	(`at_name_default`.`entity_id` = `e`.`entity_id`)
+	AND (`at_name_default`.`attribute_id` = '65')
+	AND `at_name_default`.`store_id` =0
+	LEFT JOIN `catalog_product_entity_varchar` AS `at_name` ON ( `at_
+	name`.`entity_id` = `e`.`entity_id` )
+	AND (`at_name`.`attribute_id` = '65')
+	AND (`at_name`.`store_id` =1)
+	ORDER BY `name` ASC
+	
+
+Magento ORM
+
+1. Our first step is going to instantiate a product collection:
+	$collection = Mage::getModel('catalog/product')->getCollection();
+2. Then, we will specifically tell Magento to select the name attribute:
+	$collection->addAttributeToSelect('name');
+3. Now sort the collection by name:
+	$collection->setOrder('name', 'asc');
+4. And, finally, we will tell Magento to load the collection:
+	$collection->load();
+5. The end result is a collection of all products in the store sorted by name; we
+can inspect the actual SQL query by running:
+	echo $collection->getSelect()->__toString();
+	
+Working with Magento collections
+Collections not only provide a convenient data structure for grouping
+models but also provide special methods that we can use to manipulate and work
+with collection of entities.
+
+useful collection methods are:
+• addAttributeToSelect: To add an attribute to entities in a collection, * can
+	be used as a wildcard to add all available attributes 
+	( Example: addAttributeToSelect('sku') - these are fields in the table. 
+	Use http://freegento.com/doc/ to search easily )
+• addFieldToFilter: To add an attribute filter to a collection, this function is
+	used on regular, non-EAV models
+	( Example: addFieldToFilter('from_date', array('date'=>true, 'to' => $now)) - these are fields in the table. 
+	Use http://freegento.com/doc/ to search easily )
+• addAttributeToFilter: This method is used to filter a collection of
+	EAV entities
+• addAttributeToSort: This method is used to add an attribute to sort order
+• addStoreFilter: This method is used to store an availability filter; it
+	includes the availability product
+	(example:
+	Simple Example:
+		addStoreFilter($storeIds);
+	Complex Example: 
+		addStoreFilter(Mage::app()->getStore()->getId()); 
+	)
+• addWebsiteFilter: This method is used to add a website filter to a collection
+• addCategoryFilter: This method is used to specify a category filter for a
+	product collection
+• addUrlRewrite: This method is used to add URL rewrites data to a product
+• setOrder: This method is used to set the sorting order of a collection
+	Exmaple Code: setOrder($this)->setParentId($this->getId());
+
+
+Creating a database connection in Magento
+
+1. Paste the following code in the indexAction method:
+
+$resource = Mage::getSingleton('core/resource');
+$connection = $resource->getConnection('core_read');
+$results = $connection->query('SELECT * FROM core_store')->fetchAll();
+Zend_Debug::dump($results);
+
+This query will return an array of the values in the core_store table.
+
+If you have a second connection, you can paste it in indexAction from above.
+	$dbConfig = array(
+		'host' => 'localhost',
+		'dbname' => 'drupal',
+		'username' => 'drupal_web',
+		'password' => 'drupal_pwd',
+	);
+	$_resource = Mage::getSingleton('core/resource');
+//Create the connection
+	$connection = $_resource->createConnection('drupalConnection',
+	'pdo_mysql', $dbConfig);
+	$results = $connection->query('SELECT * FROM node')->fetchAll();
+Zend_Debug::dump($results);
+
+Mage_Core_Model_Resource - Manages Database Connection
+
+using the singleton pattern to load the class, the connection is made once per process
+
+To get an instance of a model, you can use the Mage::getModel() function, which returns a new instance of the object.
+
+By using the Mage::getSingleton() function, an instance of the object given in the first parameter is returned. 
+However, once the model is declared, Magento doesn't create a new instance but returns the existing instance of the object.
+
+Working with flat tables
+
+	Place this inside the controllers method. In this example, we use review_detail .
+	
+	SQL Way
+	$resource = Mage::getSingleton('core/resource');
+	$connection = $resource->getConnection('core_read');
+	$results = $connection->query('SELECT * FROM review_detail')->fetchAll();
+	Zend_Debug::dump($results);
+	
+	Magento Way - The purpose of this is that we can directly call functions on the object.
+	$reviews = Mage::getModel('review/review')->getCollection();
+	foreach ($reviews as $_review) { Zend_Debug::dump($_review->debug()); }
+	echo $_review->getReviewUrl().'<br/>';
+	
+	Mage_Review_Model_Review class, which represents a review entity.
+	
+	The database table: The database table is used to store the information of the entity.
+	This database table can have relations to different tables in the Magento database,
+	such as a relation with a product.
+	
+	The model object: The model object is a class where an instance is returned while
+	loading a row from the database table. This class can have methods with business
+	logic, such as the getReviewUrl() function in this recipe.
+	
+	The resource model object: The resource model is a class that connects the model
+	with the database table. This class will handle, for example, the save() method.
+	
+	The resource collection object: The resource collection object is a class that makes
+	it possible to work with Magento collections for an entity.
+	
+Working with EAV model
+
+SELECT * FROM eav_entity_type; //to see which EAV entities/tables ID:
+
+SELECT * FROM eav_attribute WHERE entity_type_id = 10; //To see which attributes are related to a product
+
+SELECT * FROM catalog_product_entity WHERE entity_id = 166; //only return the entity information of this product. Look for the attribute ID from the results
+
+UPDATE catalog_product_entity_varchar SET value = 'HTC Touch Diamond sql' WHERE value_id = 1131; //To update the name of the product
+
+EAV entities in Magento are declared in the eav_entity_type table and the attributes are declared in the eav_attribute table.
+magento 1.8 pg 102
+Like every entity, each EAV entity has its own base table.
+In this base table, the primary fields are declared as columns in this table. 
+All the other fields are declared as attributes in theeav_attribute table.
+Every attribute is of a specific type such as int, varchar, date, time, decimal, and text.
+

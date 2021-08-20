@@ -1,0 +1,6 @@
+Helper: This folder contains auxiliary classes that encapsulate a
+common-module functionality and make it available to a class of
+the same module and to other modules' classes as well;
+
+Helpers are used to contain utility methods that are used to perform common tasks and can be shared
+among different classes.

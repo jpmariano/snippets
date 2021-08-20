@@ -1,0 +1,7 @@
+development/widgets/custom/<module_name>/<ClassName>/view.php - Widget HTML 
+    - <rn:meta controller_path="custom/<module_name>/<ClassName>"  base_css="custom/<module_name>/<ClassName>"  js_path="custom/<module_name>/<ClassName>" presentation_css="widgetCss/<ClassName>.css" compatibility_set="November '09+"/>
+
+base_css customer/development/widgets/custom/<module_name>/<ClassName>/base.css
+js_path = customer/development/widgets/custom/<module_name>/<ClassName>/logic.js
+controller_path = customer/development/widgets/custom/<module_name>/<ClassName>
+presentation_css cp/core/widgets/standard/<module_name>/<ClassName>/themesPackageSource/standard/<ClassName>.css

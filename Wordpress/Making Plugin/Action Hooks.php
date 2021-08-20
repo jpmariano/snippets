@@ -1,0 +1,1 @@
+<?phpadd_action ( 'hook_name', 'your_function_name', [priority], [accepted_args] );

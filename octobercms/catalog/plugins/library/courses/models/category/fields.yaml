@@ -1,0 +1,14 @@
+fields:
+    title:
+        label: 'Category Title'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    slug:
+        label: Slug
+        span: full
+        oc.commentPosition: ''
+        preset:
+            field: title
+            type: slug
+        type: text

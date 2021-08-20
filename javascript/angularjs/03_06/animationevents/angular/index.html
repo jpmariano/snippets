@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- invokes your angular myApp which is inside app.js-->
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Demo</title>
+  <!-- Insert the angular library -->
+  <script src="lib/angular/angular.min.js"></script>
+  <!-- Step 1 deeplinking: angular-route/ngRoute module provides routing and deeplinking services and directives for angular apps -->
+  <script src="lib/angular/angular-route.min.js"></script>
+  <!-- Step 1 Animation: angular-animate/ngAnimate module provides animation services and directives for angular apps; This needs to be added as a dependencies to the controller (controller.js) -->
+  <script src="lib/angular/angular-animate.min.js"></script>
+  <!-- Starts when ng-app="myApp" is called -->
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="main" ng-view></div>
+</body>
+</html>

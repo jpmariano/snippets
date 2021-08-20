@@ -1,0 +1,92 @@
+<?php
+    $_product = $this->getProduct();
+    $_helper = $this->helper('catalog/output');
+?>
+<p class="product-image">
+    <?php
+        $_img = '<img id="product_zoom_image" src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(458).'" data-zoom-image="'.$this->helper('catalog/image')->init($_product, 'image')->resize(658).'" alt="'.$_helper->productAttribute($_product, $_product->getName(), 'name').'" title="'.$this->htmlEscape($this->getImageLabel()).'" width="458" />';
+
+        echo $_helper->productAttribute($_product, $_img, 'image');
+    ?>
+</p>
+<?php if (count($this->getGalleryImages()) > 0): ?>
+<div class="more-views" id="more_views_gallery">
+    <ul>
+    <?php foreach ($this->getGalleryImages() as $_image): ?>
+        <li class="thumbnail-wrapper">
+            <a href="#" class="thumbnail" data-zoom="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(458); ?>" data-zoom-image="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(658); ?>">
+            	<img class="gallery_image" src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(78); ?>" width="78" height="78" alt="<?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>" /></a>
+
+            </a>
+	    </li>
+    <?php endforeach; ?>
+    </ul>
+    <script type="text/javascript">
+
+        <?php if( Mage::helper('mobiledetect')->isMobile() && !Mage::helper('mobiledetect')->isTablet()) : ?>
+
+        jQuery('#more_views_gallery .gallery_image').on('click',function(){
+            smallImage = jQuery(this).parents('a').attr('data-zoom');
+            jQuery('#product_zoom_image').attr('src', smallImage);
+        });
+
+        <?php else: ?>
+
+        jQuery("#product_zoom_image").elevateZoom({
+            zoomType : "inner",
+            cursor: "crosshair",
+            gallery: "more_views_gallery",
+            galleryActiveClass: 'active'
+        });
+
+        var ez = jQuery('#product_zoom_image').data('elevateZoom');
+
+        jQuery("#more_views_gallery .gallery_image").on('click',function(){
+            smallImage = jQuery(this).parents('a').attr('data-zoom');
+            largeImage = jQuery(this).parents('a').attr('data-zoom-image');
+            // alert("small: " + smallImage + " and large: " + largeImage);
+            jQuery('#product_zoom_image').attr('src', smallImage);
+            ez.swaptheimage(smallImage, largeImage);
+        });
+
+        <?php endif; ?>
+
+	(function($,sr){
+
+	  // debouncing function from John Hann
+	  // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+	  var debounce = function (func, threshold, execAsap) {
+	      var timeout;
+
+	      return function debounced () {
+	          var obj = this, args = arguments;
+	          function delayed () {
+	              if (!execAsap)
+	                  func.apply(obj, args);
+	              timeout = null;
+	          };
+
+	          if (timeout)
+	              clearTimeout(timeout);
+	          else if (execAsap)
+	              func.apply(obj, args);
+
+	          timeout = setTimeout(delayed, threshold || 200);
+	      };
+	  }
+	  // smartresize
+	  jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
+
+	})(jQuery,'smartresize');
+
+	jQuery(window).smartresize(function(){
+		jQuery('.zoomContainer').remove();
+		ez.refresh(1);
+	});
+
+	</script>
+
+
+
+</div>
+<?php endif; ?>

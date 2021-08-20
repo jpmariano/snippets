@@ -1,0 +1,21 @@
+brew install node
+node -v
+npm install -g yo
+npm install -g yo gulp bower
+npm install -g generator-gulp-angular
+cd /Users/infinamac6/Documents/nodejs/front-end
+yo gulp-angular my-message-front
+git init
+git commit -m "first commit"
+git remote add origin https://github.com/jpmariano/MEANSTACK.git
+git commit -m "first commit"
+git push origin master
+
+
+which npm - How to Find Node JS install location:
+Node Modules Locations: node_modules is /usr/local/lib/node_module
+Node JS Install Toturial: https://www.youtube.com/watch?v=xDCKcNBFsuI
+Create a folder
+npm init
+edit the package.json
+npm install express

@@ -1,0 +1,378 @@
+<?php //$regionsCollection = Mage::getResourceModel('directory/region_collection')->addCountryFilter('US')->load(); ?>
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<div class="bkg-wrapper aui box-shadow-light">
+	<div class="container_12 grid_12 breadcrumbs-wrapper">
+		<div class="breadcrumbs"><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->__('Home') ?>"><?php echo $this->__('Home') ?></a> &#47; <?php echo $this->__('Donate') ?></div> 
+			<div class="main container_12 grid_12">
+				<div class="col2-set donate-form">
+					<div class="col-1">
+						<img src="<?php echo($this->getSkinUrl('images/Romney-2012-DonationPage.jpg')) ?>" alt="Make A Difference by Donating to Mitt Romney" />
+						<h2><?php echo $this->__('Make a Difference') ?></h2>
+						<p><?php echo $this->__('You can help Mitt Romney turn around America by contributing to his campaign.') ?></p>
+						<p><?php echo $this->__('Donate today.') ?></p>
+					</div>
+					<div class="col-2">
+						<form action="/donate/submit" method="post" id="donation-form">
+							<input type="hidden" name="" id="" value="">
+							<div id="">
+								<fieldset>
+									<legend class="hidden"><?php echo $this->__('Select Amount') ?></legend>
+									<p><?php echo $this->__('By law, the maximum amount an individual may contribute is $2,500 for the primary and $2,500 for the general election.') ?></p>
+									<p><label><?php echo $this->__('Donation Amount') ?></label></p>
+									<div class="donate-amount">
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$15</label>
+										</div>
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$25</label>
+										</div>
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$100</label>
+										</div>
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$250</label>
+										</div>
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$1000</label>
+										</div>
+										<div class="form-item" id="">
+											<input type="radio" id="" name="" value="" class="">
+											<label class="" for="">$2500</label>
+										</div>
+										<div class="form-item other" id="">
+											<input type="text" maxlength="128" name="" id="" size="4" value="" class="">
+											<label for="">$ Other</label>
+										</div>
+										<div class="clearer"></div>
+									</div>
+								</fieldset>
+							</div>
+							<div id="" class="personal-form-data">
+								<fieldset>
+									<p><legend>Personal Information</legend></p>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address[firstname]" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
+											<input type="text" maxlength="128" name="address[firstname]" id="" size="30" value="" class="input-text required-entry">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address[lastname]" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
+											<input type="text" maxlength="128" name="address[lastname]" id="" size="30" value="" class="input-text required-entry">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+											<input type="text" maxlength="60" name="email" id="" size="30" value="" class="input-text validate-email required-entry">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address:telephone" class="required"><?php echo $this->__('Phone') ?></label>
+											<input type="text" maxlength="14" name="address[telephone]" id="address:telephone" size="14" value="" class="input-text validate-phoneStrict required-entry">
+											<div class="phone-instructions"><?php echo $this->__('Must be in format 555-555-5555 or (555) 555-5555.') ?></div>
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address:street1" class="required"><?php echo $this->__('Address') ?></label>
+											<input type="text" maxlength="128" name="address[street][]" id="address:street1" size="30" value="" class="input-text validate-street required-entry">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address:street2" class="required"><?php echo $this->__('Address 2') ?></label>
+											<input type="text" maxlength="128" name="address[street][]" id="address:street2" size="30" value="" class="input-text validate-street">
+										</div>
+									</div>
+									<div class="form-item ">
+										<div class="textfield" id="">
+											<label for="address:city" class="required"><?php echo $this->__('City') ?></label>
+											<input type="text" maxlength="128" name="address[city]" id="address:city" size="30" value="" class="input-text required-entry">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="select state" id="">
+											<label for="address:region_id" class="required"><?php echo $this->__('State') ?></label>
+											<select name="address[region_id]" class="" id="address:region_id" class="validate-select">
+												<option value="" selected="selected"><?php echo $this->__('State') ?></option>
+												<?php /* foreach ($regionsCollection as $region): ?> 
+													<option value="<?php echo $region->getRegionId(); ?>"><?php echo $region->getCode(); ?></option>
+												<?php endforeach; */?>
+											</select>
+											<script type="text/javascript">
+												$('address:region_id').setAttribute('defaultValue', "0");
+											</script>
+											<input type="text" id="address:region" name="address[region]" value="" title="State" class="input-text" style="display:none;" />
+											<input type="hidden" id="address:country_id" name="address[country_id]" value="US" />
+										</div>
+										<div class="textfield zip" id="">
+											<label for="address:postcode" class="required"><?php echo $this->__('Zip') ?></label>
+											<input type="text" maxlength="128" name="address[postcode]" id="address:postcode" size="5" value="" class="">
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div id="" class="payment-form-data">
+								<fieldset>
+									<p><legend><?php echo $this->__('Payment Information') ?></legend></p>
+									<ul class="" style="display: none;">
+										<li class=""><?php echo $this->__('Visa') ?></li>
+										<li class=""><?php echo $this->__('MasterCard') ?></li>
+										<li class=""><?php echo $this->__('Amex') ?></li>
+										<li class=""><?php echo $this->__('Discover') ?></li>
+									</ul>
+									<div id="" style="display: none;">
+										<label for="" class="required"><?php echo $this->__('Payment Type') ?></label>
+										<select name="" class="" id="">
+											<option value=""><?php echo $this->__('Visa') ?></option>
+											<option value=""><?php echo $this->__('MasterCard') ?></option>
+											<option value=""><?php echo $this->__('American Express') ?></option>
+											<option value=""><?php echo $this->__('Discover') ?></option>
+										</select>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="payment:cc_number" class="required"><?php echo $this->__('Card Number') ?></label>
+											<input type="text" maxlength="16" name="payment[cc_number]" id="payment:cc_number" size="16" value="" class="input-text validate-cc-number">
+										</div>
+									</div>
+									<div class="form-item">
+										<p style="display:none;"><label for=""><?php echo $this->__('Year and Month') ?></label></p>
+										<div>
+											<div class="select month" id="">
+												<label for="payment_expiration" class="required"><?php echo $this->__('Month') ?></label>
+												<select id="payment_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
+													<option value="" selected="selected">Select</option>
+													<?php $months = $this->getMonths();
+														foreach ($months as $id => $m) {
+															echo "<option value=\"$id\">$m</option>\n";
+														}
+													?>
+												</select>
+											</div>
+										</div>
+										<div>
+											<div class="select year" id="">
+												<label for="payment_expiration_yr" class="required"><?php echo $this->__('Year') ?></label>
+												<select id="payment_expiration_yr" name="payment[cc_exp_year]" class="year validate-cc-exp required-entry" id="">
+													<option value="" selected="selected">Select</option>
+													<?php $years = $this->getYears();
+														foreach ($years as $id => $y) {
+															echo "<option value=\"$id\">$y</option>\n";
+														}
+													?>
+												</select>
+											</div>
+										</div>
+										<div style="display:none;"><?php echo $this->__('Card expiration year.') ?></div>
+									</div>
+									<div class="form-item">
+										<div class="textfield cvv" id="">
+											<label for="payment:cc_cid" class="required"><?php echo $this->__('CVV') ?></label>
+											<input type="text" maxlength="4" name="payment[cc_cid]" id="payment:cc_cid" size="4" value="" class="input-text cvv required-entry validate-cc-cvn">
+											<div style="display:none;"><?php echo $this->__('3 digit security code on back of card.') ?></div>
+										</div>
+									</div>
+									<div class="form-item cards">
+										<div class="card-holder">
+											<img src="<?php echo($this->getSkinUrl('images/gui/element_cart-cc-icons.png')) ?>" alt="Visa, Mastercard, Amex, Discover" />
+										</div>
+									</div>
+									<div class="clearer"></div>
+									<div class="recurring-donation" id="">
+										<fieldset class="">
+											<p><legend class=""><a href="#"><?php echo $this->__('Recurring Donation') ?></a></legend></p>
+											<div class="form-item">
+												<div class="select recurring-item" id="">
+													<p style="display:none;"><label for=""><span class=""></span><?php echo $this->__('Billing Period:') ?>/label></p>
+													<label for=""><?php echo $this->__('Billing Period') ?></label>
+													<select name="" class="" id="">
+														<option value=""><?php echo $this->__('One Time') ?></option>
+														<option value=""><?php echo $this->__('Monthly') ?></option>
+													</select>
+													<div style="display:none;"><?php echo $this->__('Select how often the recurring donation will occur.') ?></div>
+												</div>
+												<div class="textfield recurring-item" id="">
+													<label for=""><?php echo $this->__('Total Payments') ?></label>
+													<input type="text" maxlength="3" name="" id="" size="3" value="" class="">
+												</div>
+											</div>
+											<div class="form-item">
+												<div class="recurring-instructions"><?php echo $this->__('Select the number of recurring payments.<br />If 0, the payment will recur until explicitly cancelled.') ?></div>
+											</div>
+											<div class="clearer"></div>
+										</fieldset>
+									<div id="">
+										<div class="form-item" id="">
+											<div class="checkbox">
+												<input type="checkbox" name="" id="" value="" class="form-checkbox monthly">
+												<label for=""><?php echo $this->__('Make this a monthly recurring donation') ?><a class="info_popup_link recurring-payment-information">?</a></label>
+											</div>
+											<div style="display:none;" id="recurring-payment-information">
+												<p><?php echo $this->__('If you were referred by another individual, check the box to enter his or her Fundraiser ID and/or a Source Code. If not, skip this step.') ?></p>
+												<p><a href="#" class="close-popup">Close</a></p>
+											</div>
+										</div>
+										<div class="form-item" id="">
+											<div class="checkbox no-border">
+												<input type="checkbox" name="" id="" value="" class="form-checkbox referrel">
+												<label for=""><?php echo $this->__("I know my referrer's information") ?><a class="info_popup_link referrel-information">?</a></label>
+											</div>
+											<div style="display:none;" id="referrer-information">
+												<p><?php echo $this->__('After your initial contribution, which will be processed immediately, your recurring contribution will be charged on the 15th day of each month. You may cancel at any time by emailing <a href="mailto:donate@mittromney.com">Donate@MittRomney.com</a>') ?></p>
+												<p><a href="#" class="close-popup">Close</a></p>											
+											</div>
+										</div>
+										<div class="clearer"></div>
+										<div class="form-item">&nbsp;</div>
+										<div class="form-item referrer-form-items" id="" style="display:none;">
+											<div class="textfield sourcecode">
+												<label for="" style="display:none;"><span class=""></span>Source Code</label>
+												<input type="text" maxlength="128" name="" id="" size="30" value="" class="" placeholder="<?php echo $this->__('Source Code') ?>">
+											</div>
+											<div class="textfield fid">
+												<label for="" style="display:none;"><span class=""></span>FID</label>
+												<input type="text" maxlength="128" name="" id="" size="30" value="" class="" placeholder="<?php echo $this->__('FID') ?>">
+											</div>
+										</div>
+
+										<script type="text/javascript">
+											J('.form-checkbox.referrel').click(
+											function(){
+												J('.referrer-form-items').slideToggle(400);
+											});											
+											J('.recurring-payment-information').click(
+											function(){
+												J('#recurring-payment-information').slideToggle(400);
+											});
+											J('.referrel-information').click(
+											function(){
+												J('#referrer-information').slideToggle(400);
+											});
+
+											J('.close-popup').click(
+											function(){
+												J(this).parent().parent().slideToggle(-400);
+												return false;
+											});
+										</script>
+
+										<div class="clearer"></div>
+									</div>
+								</fieldset>
+							</div>
+							<div id="" class="employment-form-data">
+								<fieldset>
+									<p><legend><?php echo $this->__('Employment Information') ?></legend></p>
+									<p><?php echo $this->__('Federal law requires us to obtain and report your occupation and the name of your employer. If you are not employed, please enter None.') ?></p>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="custom:occupation" class="required"><?php echo $this->__('Occupation') ?></label>
+											<input type="text" maxlength="60" name="custom[occupation]" id="custom:occupation" size="30" value="" class="">
+										</div>
+									</div>
+									<div class="form-item">
+										<div class="textfield" id="">
+											<label for="address:company" class="required"><?php echo $this->__('Employer Name') ?></label>
+											<input type="text" maxlength="60" name="address[company]" id="address:company" size="30" value="" class="">
+										</div>
+									</div>
+									<div class="clearer"></div>
+								</fieldset>
+							</div><!--End Employment Form Data-->							
+							<div id="" class="actions">
+								<div id=""><p><?php echo $this->__('By clicking "Contribute," I agree that the following statements are true and accurate') ?>:</p></div>
+								<p><input type="submit" class="button"><span><span></span>Contribute</span></input></p>
+								<ol style="margin-left: 21px; clear:both;">
+									<li><?php echo $this->__('This contribution is made from my personal funds and is not drawn on an account maintained by a corporation, labor union, or national bank; and') ?></li>
+									<li><?php echo $this->__('I am a U.S. citizen or lawfully admitted permanent resident and this contribution will not be reimbursed by another person.') ?></li>
+								</ol>
+								<div class=""><p><?php echo $this->__('Processing, please wait.') ?></p></div>
+								<div class="">
+									<p><?php echo $this->__('Contributions are not tax deductible as charitable contributions for federal income tax purposes. Federal law requires us to obtain and report the name, mailing address, occupation and name of employer for each individual whose contributions aggregate in excess of $200 per election cycle. Contributions by corporations, foreign nationals (non-green card holders), labor unions, federal government contractors, and minors under the age of 18 are prohibited.') ?></p>
+									<p><strong><?php echo $this->__('Already hit your limit?') ?></strong> <?php echo $this->__('If you’ve given the maximum of $2,500 for the primary and $2,500 for the general election to Romney for President, you can still give to the Romney Victory fund, our joint fundraising committee with the Republican National Committee by clicking <a href="https://secure.mittromney.com/donate/victory">here</a>.') ?></p>
+								</div>
+								<div class="">
+									<p><?php echo $this->__('To make a contribution by mail, <a href="https://mittromney.com/sites/default/files/rfp_donation_form.pdf" style="line-height: 20px; " target="_blank">download the form</a> and send to:<br>
+										Romney for President, Inc.,<br>
+										PO Box 149756,<br>
+										Boston, MA 02114-9756') ?></p>
+								</div>
+							</div><!-- End Actions-->							
+							<?php /*
+							<div id="" class="billing-form-data">
+								<fieldset class="">
+									<p><legend class=""><a href="#"><?php echo $this->__('Billing Address') ?></a></legend></p>
+									<div class="">
+										<h4 style="display:none;"><?php echo $this->__('Billing Address') ?></h4>
+										<p><?php echo $this->__('Check this box if your billing address is the same as your street address above.') ?></p>
+										<div class="form-item billing-information-checkbox" id="">
+											<div class="checkbox">
+												<input type="checkbox" name="" id="" value="" checked="checked" class="">
+												<label class="" for=""><?php echo $this->__('Same as street address') ?></label>
+											</div>
+										</div>
+										<div class="clearer"></div>
+										<div style="display:none;" id="billing-form-popup">
+											<div class="form-item" id="">
+												<div class="textfield">
+													<label for=""><span class=""></span><?php echo $this->__('Address 1') ?></label>
+													<input type="text" maxlength="128" name="" id="" size="30" value="" class="">
+												</div>
+											</div>
+											<div class="form-item" id="">
+												<div class="textfield">
+													<label for=""><span class=""></span><?php echo $this->__('Address 2') ?></label>
+													<input type="text" maxlength="128" name="" id="" size="30" value="" class="">
+												</div>
+											</div>
+											<div class="form-item" id="">
+												<div class="textfield">
+													<label for=""><span class=""></span><?php echo $this->__('City') ?></label>
+													<input type="text" maxlength="128" name="" id="" size="30" value="" class="">
+												</div>
+											</div>
+											<div class="form-item" id="">
+												<div class="select state">
+													<label for=""><span class=""></span><?php echo $this->__('State') ?></label>
+													<select name="" class="" id=""></select>
+												</div>
+												<div class="textfield zip">
+													<label for=""><span class=""></span><?php echo $this->__('Zip') ?></label>
+													<input type="text" maxlength="128" name="" id="" size="5" value="" class="">
+												</div>
+											</div>
+											<div class="clearer"></div>
+										</div>
+									</div>
+									<script type="text/javascript">
+										J('.billing-information-checkbox').click(
+										function(){
+											J('#billing-form-popup').slideToggle(400);
+										});
+									</script>
+								</fieldset>
+							</div><!-- End Billing Form Data-->
+							<?php */ ?>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var dataForm = new VarienForm('donation-form');
+	Form.getElements('donation-form').each(function(element) {
+		//element.setAttribute('autocomplete', 'off');
+	});
+    var shippingRegionUpdater = new RegionUpdater('address:country_id', 'address:region', 'address:region_id', countryRegions, undefined, 'address:postcode');
+</script>

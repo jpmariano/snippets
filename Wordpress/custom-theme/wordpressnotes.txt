@@ -1,0 +1,40 @@
+wp-content - 775
+wp-admin - 755
+wp-includes - 755
+
+find . -type d -exec chmod 755 {} \;  # Change directory permissions rwxr-xr-x
+find wp-content -type d -exec chmod 775 {} \;
+find . -type f -exec chmod 644 {} \;  # Change file permissions rw-r--r--
+
+
+All files -  644
+htaccess - 666
+<!-- Inside htaccess -->
+<files wp-config.php>
+order allow,deny
+deny from all
+</files>
+
+RewriteEngine on
+<IfModule mod_rewrite.c>
+RewriteBase /
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+
+RewriteRule ^index\.php$ - [L]
+
+# add a trailing slash to /wp-admin
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+RewriteRule . index.php [L]
+</IfModule>
+<!-- End Inside htaccess -->
+

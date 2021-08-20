@@ -1,0 +1,9 @@
+Command Line Tools
+cmd+shift+A
+
+cmd +  //opens toolbar 
+
+.idea //contains php storm metadata of the project
+Ide 
+    - Directories // Specify where the project folder
+    -

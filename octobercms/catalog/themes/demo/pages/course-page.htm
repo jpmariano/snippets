@@ -1,0 +1,30 @@
+title = "Course Page"
+url = "/course/:slug"
+layout = "default"
+is_hidden = 0
+
+[builderDetails courseDetails]
+modelClass = "Library\Courses\Models\Course"
+identifierValue = "{{ :slug }}"
+modelKeyColumn = "slug"
+displayColumn = "title"
+notFoundMessage = "Record not found"
+==
+{% set record = courseDetails.record %}
+{% set displayColumn = courseDetails.displayColumn %}
+{% set notFoundMessage = courseDetails.notFoundMessage %}
+
+{% if record %}
+   <h3> {{ attribute(record, displayColumn) }} </h3>
+   <h4> {{ record.number }} </h4>
+   <img src="{{ record.thumbnail.path }}" alt="Course Image" style="width:100px;height:100px;">
+   {% for resource in record.resource %}
+       <a href="{{ resource.path }}" download="{{record.title}}">Download the pdf</a>
+   {% endfor %}
+   {% for category in record.categories %}
+      <a href="/catalog/categories/{{ category.slug }}"> {{ category.title}} </a></br> 
+   {% endfor %}
+
+{% else %}
+    {{ notFoundMessage }}
+{% endif %}

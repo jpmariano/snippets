@@ -1,0 +1,48 @@
+ 
+<?php if($this->getItems()->getSize()): ?>
+<div class="related-products">
+    <div class="related-products-title">
+       <h3><?php echo $this->__('You Might Also Like') ?></h3>
+    </div>
+    <ol class="row block-related">
+		<?php $i = 0; ?>
+		<?php foreach($this->getItems() as $_item): ?>
+	        <?php if($i++ == 3) break; ?>
+            <li class="span4 item <?php if($i==1){echo 'first';} if($i == $this->getItems()->getSize()){echo 'last';} ?>">
+                <div class="product">
+					<a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>" class="product-image">
+                        <span class="view-overlay">View</span>
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(218); ?>" width="218" height="218" alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>" />
+					</a>
+                    <?php
+                    $price_html = "<span class=\"price\">";
+                    if($_item->getSpecialPrice()):
+                        $price_html .= Mage::helper('core')->currency($_item->getPrice(), true, false);
+                        $price_html .= "<span class=\"special-price\">";
+                        $price_html .= Mage::helper('core')->currency($_item->getSpecialPrice(), true, false);
+                        $price_html .= "</span>";
+                    else:
+                        $price_html .= Mage::helper('core')->currency($_item->getPrice(), true, false);
+                    endif;
+                    $price_html .= "</span>";
+                    ?>
+
+                    <?php $product_name = strip_tags($_item->getName()) ?>
+
+                    <?php if(strlen($product_name)>45) : ?>
+                        <?php $product_name = substr($product_name,0,90); ?>
+                        <a href="<?php echo $_item->getProductUrl() ?>" class="product-name"><?php echo $product_name; ?>&#133; </a>
+                        <?php echo $price_html; ?>
+                    <?php else : ?>
+                        <a href="<?php echo $_item->getProductUrl() ?>" class="product-name"><?php echo $product_name ?> </a>
+                        <?php echo $price_html; ?>
+
+                    <?php endif; ?>
+                </div>
+            </li>
+        <?php endforeach ?>
+    </ol>
+    <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
+
+ </div>
+<?php endif ?>

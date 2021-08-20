@@ -1,0 +1,29 @@
+controllers: controllers folders are formed by actions that process web
+server requests
+
+Magento comes with the following routers:
+• Mage_Core_Controller_Varien_Router_Admin
+• Mage_Core_Controller_Varien_Router_Standard
+• Mage_Core_Controller_Varien_Router_Default
+
+The action controller will then load and render the layout, which in turn will load the
+corresponding blocks, models, and templates.
+
+Example:
+http://localhost/catalog/category/view/id/10
+URIs are comprised of three parts – /FrontName/ControllerName/ActionName
+• FrontName: catalog
+• ControllerName: category
+• ActionName: view
+
+
+In Magento, MVC controllers are designed to be thin controllers; thin controllers
+have little business logic and are mostly used for driving the application requests.
+A basic Magento controller action would just load and render the layout:
+	public function viewAction()
+		{
+			$this->loadLayout();
+			$this->renderLayout();
+		}
+From here it is the job of the blocks to handle the display logic, get the data from our
+models, prepare the data, and send it to the views.

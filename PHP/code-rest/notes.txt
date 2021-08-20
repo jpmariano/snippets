@@ -1,0 +1,50 @@
+HTTP Basics
+
+GET /api/programmers HTTP/1.1       
+Host: CodeBattles.io
+Accept: application/json,text/html
+
+    HTTP Verb , URI: Uniform Resource Identifier
+    HTTP Header Information
+
+Example Request Format:
+POST /api/programmers HTTP/1.1
+Host: CodeBattles.io
+Authorization: Bearer b2gG66D1Tx6d89f3bM6oacHLPSz55j19DEC83x3GkY
+Content-Type: application/json
+
+{
+    "nickname": "Namespacinator"
+}
+    Data is sent through the body of the request
+    Authorization: Bearer b2gG66D1Tx6d89f3bM6oacHLPSz55j19DEC83x3GkY is for authentication
+    Content-Type: application/json - tells the server that it has json 
+
+Example Response Format:
+HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-cache, private
+
+{
+    "nickname": "Namespacinator",
+    "avatarNumber": 5,
+    "tagLine": "",
+    "powerLevel": 25
+}
+    The headers tell the client that the response is JSON and that the response shouldn’t be cached. And of course, the JSON body is at the end.
+----------------------------------
+REST: Resources and Representations 
+
+Resources - think of url 
+            /programmers/Namespacinator is probably the address to a single programmer resource and /programmers is probably the address to a collection resource of programmers
+Representation - think of data; A representation is a machine readable explanation of the current state of a resource.
+    {
+        "nickname": "Namespacinator",
+        "powerLevel": 5
+    }
+-------------------------------
+Transitions and Client State
+Application state is kept in our browser, but the server helps guide us by sending us links, in the form of a tags, HTML forms, or even redirect responses. 
+HTML is called a hypermedia format, because it supports having links along with its data.
+-----------------
+Project Routing

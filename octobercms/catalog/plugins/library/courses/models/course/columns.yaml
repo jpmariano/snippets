@@ -1,0 +1,11 @@
+columns:
+    title:
+        label: Title
+        type: text
+        searchable: true
+        sortable: true
+    number:
+        label: Course
+        type: text
+        searchable: true
+        sortable: true

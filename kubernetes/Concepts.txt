@@ -1,0 +1,316 @@
+Kubernetes = popular container orchestrator. Itr runs on top of docker as a set of APIs in containers
+Container orchestrator - make many servers act like one 
+
+Pods - Pods are the smallest deployable units in Kubernetes. A pod consists of one or more Docker containers that
+together perform a single task.
+
+Cluster Concepts
+Control Plane 
+    - Actions
+        - Cluster Management
+        - Scheduler
+    - Master Node / Control Plane
+        - responsible for maintaining the desired state for your cluster
+        - kubectl - command-line interface, you're communicating with your cluster's Kubernetes master
+        - refers to a collection of processes managing the cluster state
+        - master can also be replicated for availability and redundancy
+        - Components
+            - API Server - Rest operation and front end where user interact
+            - Controller Management - Application Controller, endpoint Controller and namespace Controller
+                - Namespce: Filtered group of objects in cluster
+                - Controller: For creatin/updating pods and other objects
+                    - Many types of Controllers inc. Deployment, replicaSet, statefulset, daemonset, job, cronjob, etc. 
+            - Scheduler - Policy and Topology aware and schedule containers 
+            - Etcd
+                - etcd is a consistent and highly-available key value store used as Kubernetes' backing store for all cluster data. It stores configuration data
+            - Cloud Controller 
+            - Core DNS
+            - Addons - extends functionality of master node
+        - $ kubectl create -f pod.yaml
+    - node: single server in the kubernetes cluster
+    - Worker node
+        - Kubelet - kubernetes agent running on node. It is also a primary node communicates with master api server, creates Pods, reports status of each pods to api server
+        - Kube-proxy - communicates with master api server and network proxy on each node, filtering and traffic redirection using ip tables
+        - Pod - one or more containers running together on one node; Basic unit of deployment. Containers are always in pods   
+            - Service: network endpoint to connect to a pod 
+        - Addons - extends functionality of workers
+    
+CNI network - Common network for weavenet, calico, etc.
+Data Plane
+    - Run containers and applications
+    - Rare user interaction
+
+Kubernets in a browser
+- https://playwith-k8s.com, katakoda.com
+
+Docker dashboard - includes kubernetes
+Toolbox - minikube 
+Linux - microk8s 
+
+
+$ kubetcrl run  (changing to be only for pod creation - works like docker run)
+$ kubectl create (create some resources via CLI or YAML)
+$ Kubectl apply (create/update anything via YAML)
+
+//Running First pod 
+- $ kubectl version
+- Two ways to deploy pods 
+    - Via Command
+        - $ kubectl run <deploymentname> --image=<imagename>  //Deploys a pod ,  create a pod, and a replica set (So, you can scale (duplicate) the pod)
+        - $ kubectl get pods //list the pods
+        - $ kubectl get all // list all the objects 
+        - $ kubectl delete deployment <deploymentname> - deletes the pods a the replica sets of the that deployment 
+        - $ kubectl scale deploy/<deploymentname> --replicas 2 // scaling replica 
+            - $ kubectl scale deployment <deploymentname> --replicas 2 //another way of writing scaling replica 
+            - The control Plane
+                - Just Deployed 2 replicas
+                - Replicasets controller sets pod count to 2
+                - controle plane assigns node to pod
+                - kubelet sees pod is need starts container 
+        - Inspecting kubernetes objects
+            - $ kubectl get pods
+            - $ kubectl logs deployment/<deploymentname> // you'll see your deployment log 
+                - - $ kubectl logs deployment/<deploymentname>  --follow --tail 1
+            - $ kubectl logs - l run=<deploymentname> // specify which label of log to check 
+            - $ kubectl describe pod/<exactpodname> // to check the status of the pod
+            - $ kubectl get pods -w // so, you can watch the pods in a separate terminal 
+                - $ kubectl describe pod/<exactpodname> //This is run in a separate terminal and you see the -w commands deleting the pods 
+            - $ kubectl delete deployment/<deploymentname>  //To delete the deployment      
+
+    - YAML 
+
+Exposing Kubernetes Ports
+- $ kubectl expose // creates a Service for existing pods
+    - a service is a stable address for pod(s)
+    - if we want to connect to pod(s), we need a service 
+    - CoreDNS allows us to resolve services by name 
+    - There are different types of services
+        - ClusterIP (default) 
+            - Single, internal vitrual IP allocated
+            - Only reachable from within clustr(nodes, and pods)
+            - pods can reach service on apps port number
+            - $ kubectl get pods -w // so, you can watch the pods in a separate terminal 
+            - $ kubectl run httpeenv --image=bretfisher/httpenv 
+            - $ kubcetl scale deployment/httpenv --replicas=5
+            - $ kubcetl expose deployment/httpenv --port 8888
+            - $ kubectl get service //You'll see the cluster IP and Ports
+            - $ kubectl run --generator=run-pod/V1 tmp-shell --rm -it --image bretfisher/netshoot -- bash //create a pod for curling 
+                - curl httpenv:8888 or curl <ip>:<port> 
+        - NodePort
+            - High port allocated each node
+            - Port is open on every node's IP
+            - Anyone can connect (if they can reach node)
+            - Other pods need to be updated to this port
+            //Creating a NodePort Service
+            - $ kubectl get all 
+            - $ kubectl expose deployment/httpenv --port 8888 --name httpenv-np --type NodePort //So, you can access cluster by IP - notice httpenv-np it is a <deplymentname>-np 
+                - $ kubectl get services 
+                    - you'll notice NodePort got created <internalport>:<extenalport> which is opposite of how docker port is displayed. These ports are higher ports and are generated automatically
+                - $ curl localhost:32334 // Your host can now access the pods 
+        - LoadBalancer
+            - Control a LN endpoint external to the cluster 
+            - Only available when infra provider gives you a LB(AWS ELB, etc)
+            - Create NodePort+ClusterIP services, tells BL to send to NodePort
+            - $ kubectl expose deployment/httpenv --port 8888 --name httpenv-lb --type LoadBalancer
+                - $ kubectl get services
+                - $ curl localhost:8888 //what's weird is that the LoadBalancer will still show random port
+        - ExternalName 
+            - Adds CNAME CNS record to CoreDNS only 
+            - Not used for pods, but for giving pods a DNS name to use for something outside kubernetes
+        - Ingress 
+    
+    - These 3 service types are additive, each one create the onse above it:
+        - ClusterIP
+        - NodePort
+        - LoadBalancer 
+Cleanup
+- $ kubectl get all
+- $ kubectl delete <resouce type><resoucrce name>
+- $ Kubectl delete service/httpenv service/httpenv-np 
+- $ Kubectl delete service/httpenv-lb deployment/httpenv
+
+Kubernetes DNS 
+CoreDNS - like swarm, this is DNS-Baed service discovery
+- $ kubectl get namespaces 
+// You can curl services FQDN 
+- $ curl <hostname>.<namespace>.scv.cluster.local 
+- $ kubectl get namespaces 
+
+Kubernetes Management Technique 
+//Run, create, and Expose Generators(Helper Templates)
+- Every resouce in Kubernetes has a psicification or "spec" 
+    - $ kubectl create deployment sample --image nginx --dry-run -o yaml //it dry runs and create a yaml file
+    - $ kubectl create job test --mage nginx --dry-run -o yaml
+    - $ kubectl expose deployment/test --port 80 --dry-run -o yaml //This will error out if no deployment exist 
+    //Using Dry-run so we can see which generators are used 
+    - $ kubectl run test --image nginx --dry-run
+    - $ kubectl run test --image nginx --port 80 --expose --dry-run 
+    - $ kubectl run test --image nginx --restart OnFaulure --dry-run 
+    - $ kubectl run test --image nginx --restart Never --dry-run 
+    - $ kubectl run test --image nginx --schedule "*/1 * * * *" --dry-run 
+- More YAML templates https://github.com/dennyzhang/kubernetes-yaml-templates 
+
+//Imperative vs Declarative (Don't mix these approaches)
+Impereative: Focus on how a program operates; You make it. Best way when learning or testing
+    - $ kubectl run
+    - $ kubect create deployment,
+    - $ kubectl update 
+    - It is easier when you know the state, it is easiser to get started, it is easier for cli, it is hard to automate
+    - Impreative commands: run, expose, scale, edit, create deployment
+Imperative Objects: Good for prod of small environments, single file per command, store your changes in git-based yaml files, still hard to automate
+    - $ create -f file.yml
+    - $ replace -f file.yml 
+    - $ delete -f file.yml 
+Declarative: Focus on what a program should accomplish; You just order. Best for production
+    -- $ kubectl apply -f my-resources.yaml 
+    - Best for prod, easier to automate
+    - Harder to undestand and predict changes 
+    - YAML way
+    - $ kubectl apply -f filename.yml 
+    - Create/update resources in a file 
+        - $ kubectl apply -f myfile.yaml
+    - Create/update a whole directory of ymal 
+        - $kubectl apply -f ymalfolder/
+    - Create update from a URL
+        - $ kubectl apply -f https://bret.run/pod.yml 
+    - Be careful, lets look at first (browser or curl)
+        - curl -L https://bret.run/pod 
+    //Kubernetes Configuration YAML
+    - kubernetes configuration file (YAML or JSON)
+    - Each file contains one or more manifests 
+    - Each manifest describes an API object (deployment, job, secret)
+    - Required Fields
+        In the .yaml file for the Kubernetes object you want to create, you'll need to set values for the following fields:
+        apiVersion - Which version of the Kubernetes API you're using to create this object
+            - $ kubectl api-versions //This gives the list of all api versions
+        kind - What kind of object you want to create
+            - $ kubectl api-resources //This is where you can see the kind which you can use as a parameter
+        metadata - Data that helps uniquely identify the object, including a name string, UID, and optional namespace
+        spec - What state you desire for the object; where all the action is at 
+            - $ kubectl explain services --recursive //show all the keys each kind  supports by the yml file 
+            - $ kubectl explain services.spec //shows more detail about the keys for services spec
+            - $ kubectl explain services.spec.type //you can drill down
+            - $ kubectl explain deployment.spect.template.spec.volumes.nfs.server //spec can have sub spec
+https://kubernetes.io/docs/reference/#api-reference
+dry-run a create (client side only)
+- $ kubectl apply -f app.yml --dry-run 
+• dry-run a create/update on server 
+    - $ kubectl apply -f app.yml --server-dry-run //you can see if there's a change
+• see a diff visually
+    - $ kubectl diff -f app.yml // you can see changes in details
+
+//Labels
+    • Labels goes under metadata: in your YAML; meant to discribe resouce 
+    • Simple list of key: value for identifying your resource later by
+    selecting, grouping, or filtering for it
+    • Common examples include tier: frontend, app: api, env: prod,
+    customer: acme.co
+    • Not meant to hold complex, large, or non- identifying info
+//Annotations
+    • Meant to hold complex, large, or identifying info, more for configuration
+    • filter a get command
+     - $ kubectl get pods -l app=nginx 
+    • apply only matching labels
+     - $ kubectl apply -f myfile.yaml -l app=nginx //only apply changes on specific label
+
+Label Selectors https://dzone.com/articles/setting-kubernetes-labels-and-annotations
+• The "glue" telling Services and Deployments which pods are theirs
+• Many resources use Label Selectors to "link" resource dependencies • You'll see these match up in the Service and Deployment YAML
+    kind: Deployment
+    metadata:
+        name: nginx-deployment
+    spec:
+    selector:
+        matchLabels:
+        app: nginx
+
+• Use Labels and Selectors to control which pods go to which nodes
+• Taints and Tolerations also control node placement
+
+Storage in Kubernetes
+    • Storage and stateful workloads are harder in all systems
+    • Containers make it both harder and easier than before
+    • StatefulSets is a new resource type, making Pods more sticky
+    • Bret's recommendation: avoid stateful workloads for first few deployments until you're good at the basics
+        • Use db-as-a-service whenever you can
+
+Volumes in Kubernetes
+    • Creating and connecting Volumes: 2 types 
+    • Volumes
+        • Tied to lifecycle of a Pod
+        • All containers in a single Pod can share them 
+    • PersistentVolumes
+        • Created at the cluster level, outlives a Pod 
+        • Separates storage config from Pod using it 
+        • Multiple Pods can share them
+    • CSI plugins are the new way to connect to storage
+
+Ingress
+    • None of our Service types work at OSI Layer 7 (HTTP)
+    • How do we route outside connections based on hostname or URL? 
+    • Ingress Controllers (optional) do this with 3rd party proxies
+    • Nginx is popular, but Traefik, HAProxy, F5, Envoy, Istio, etc.
+    • Note this is still beta (in 1.15) and becoming popular
+    • Implementation is specific to Controller chosen
+
+CRD's and The Operator Pattern
+    • You can add 3rd party Resources and Controllers
+    • This extends Kubernetes API and CLI
+    • A pattern is starting to emerge of using these together
+    • Operator: automate deployment and management of complex apps 
+    • e.g. Databases, monitoring tools, backups, and custom ingresses
+
+Higher Deployment Abstractions
+    • All our kubectl commands just talk to the Kubernetes API
+    • Kubernetes has limited built-in templating, versioning, tracking, and management of your apps
+    • There are now over 60 3rd party tools to do that, but many are defunct
+    • Helm is the most popular
+    • "Compose on Kubernetes" comes with Docker Desktop
+    • Remember these are optional, and your distro may have a preference
+    • Most distros support Helm
+
+Templating YAML
+    • Many of the deployment tools have templating options
+    • You'll need a solution as the number of environments/apps grow 
+    • Helm was the first "winner" in this space, but can be complex
+    • Official Kustomize feature works out-of-the-box (as of 1.14)
+    • docker app and compose-on-kubernetes are Docker's way
+
+Kubernetes Dashboard
+    • Default GUI for "upstream" Kubernetes 
+    • github.com/kubernetes/dashboard
+    • Some distributions have their own GUI (Rancher, Docker Ent, OpenShift)
+    • Clouds don't have it by default
+    • Let's you view resources and upload YAML
+    • Safety first!
+
+Kubectl Namespaces and Context
+    • Namespaces limit scope, aka "virtual clusters"
+    • Not related to Docker/Linux namespaces
+    • Won't need them in small clusters
+    • There are some built-in, to hide system stuff from kubectl "users"
+        > kubectl get namespaces
+        > kubectl get all --all-namespaces
+    • Context changes kubectl cluster and namespace
+    • See ~/.kube/config file 
+        >kubectl config get-contexts 
+        >kubectl config set*
+
+Future of Kubernetes
+    • More focus on stability and security
+        • 1.14, 1.15, largely dull releases (a good thing!) 
+        • Recent security audit has created backlog
+    • Clearing away deprecated features like kubectl run generators
+    • Improving features like server-side dry-run
+    • More and improved Operators
+    • Helm 3.0 (easier deployment, chart repos, libs)
+    • More declarative-style features
+    • Better Windows Server support
+    • More edge cases, kubeadm HA clusters
+
+Related Projects
+• Kubernetes has become the "differencing and scheduling engine backbone" for so many new projects
+• Knative - Serverless workloads on Kubernetes
+• k3s - mini, simple Kubernetes
+• k3OS - Minimal Linux OS for k3s
+• Service Mesh - New layer in distributed app traffic for better control, security, and monitoring

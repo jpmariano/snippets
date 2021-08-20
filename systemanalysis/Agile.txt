@@ -1,0 +1,28 @@
+User Stories
+Who: Online Shopper
+What: Pay for the items in cart
+Why: Proceed to get items shipped to me 
+
+    INVEST Model
+    Independent - stories can stand on it's own
+    Negotiable - Just enough detail and flexibility 
+    Valuable - from a customer perspective
+    Estimable 
+    Small 
+    Testable 
+
+Story Slicing or Splitting
+    - breaks the pieces of value so they can complete the story in a sprint
+        - ways to breakdown
+            - User Role or Persona
+            - Business Rules
+            - Scenarios
+            - Process or Workflow Steps
+            - A piece of data entered by a user 
+
+            
+Acceptance Criteria
+Statements are from the user point of view and how they would describe success 
+---------------
+vsts
+work item - Release - Sprint - backlog - task 

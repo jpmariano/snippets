@@ -1,0 +1,44 @@
+Installation:
+$ curl -s https://getcomposer.org/installer | php
+$ php composer.phar
+
+Creating the composer.json File by using composer.phar or you can manually edit composer.json
+$ php composer.phar init
+//note: you can install vendor package during init just by entering a vendor name: finder 
+    //composer.json 
+    {
+        "name": "weaverryan/drupal",
+        "require": {
+            "symfony/finder": "v2.1.2"
+        },
+        "authors": [
+            {
+                "name": "Ryan Weaver",
+                "email": "ryan@thatsquality.com"
+            }
+        ]
+    }
+
+If there's a composer.json generated from composer.phar init, then you can now run: $ php composer.phar install
+    - install will create composer.lock - record what was installed at the time you ran the composer.phar install
+    - you cannot run composer.phar install after the composer.lock is generated, you have to run:
+         - composer.phar update or 
+         - composer.phar update symfony/filesystem   //symfony/filesystem is the specific package you want to update
+
+
+Ignore the vendor folder in git
+# .gitignore
+/vendor/
+
+
+
+Installing a new vendor package
+For Example:
+    Documentation(this will show you how to use the package): https://symfony.com/doc/current/components/finder.html#content_wrapper
+    Repository Location: https://packagist.org/packages/symfony/finder
+    Installation:  $ composer require symfony/finder 
+
+To install and search just run: $ composer require 
+
+//Autoloader
+require <path>/vendor/autoload.php

@@ -1,0 +1,47 @@
+<div class="footer">
+   
+    <div class="container">
+        <div class="row">
+            <div class="span7">
+                <!-- <iframe id="signup-footer" src="https://secure.prosperitypac.com/magento-signup/" style="display: block; width:100%; border:none; "> </iframe>-->
+                <div id="signup-footer"> 
+                     <?php echo $this->getChildHtml('newsletter') ?>
+                </div>
+               
+            </div>
+             <div class="span3">
+                    <p class="free-shipping-text">Free Shipping | Made in USA </p> 
+            </div>
+            <div class="span2">
+                    <div class="site_social_share">
+                    <span class='st_facebook_custom' st_title="<?php echo Mage::app()->getStore()->getFrontendName(); ?>" st_url="<?php echo Mage::getBaseUrl();?>" displayText='Share with Facebook'><strong>Facebook</strong></span>
+                    <span class='st_twitter_custom' st_title="<?php echo Mage::app()->getStore()->getFrontendName(); ?>" st_url="<?php echo Mage::getBaseUrl();?>" displayText='Share with Twitter'><strong>Twitter</strong></span>
+                    <span class='st_googleplus_custom' st_title="<?php echo Mage::app()->getStore()->getFrontendName(); ?>" st_url="<?php echo Mage::getBaseUrl();?>" displayText='Google +'><strong>Google +</strong></span>
+                    </div>
+            </div>
+            <hr>
+            <div class="copyright">
+                <address><?php echo $this->getCopyright(); ?></address>
+                <a class="privacy-policy" href="http://www.prosperitypac.com/privacy-policy/" target="_blank">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Various tracking codes -->
+
+<div style="background: #161616;">
+ <script type="text/javascript">
+  (function () {
+    var tagjs = document.createElement("script");
+    var s = document.getElementsByTagName("script")[0];
+    tagjs.async = true;
+    tagjs.src = "//s.btstatic.com/tag.js#site=nDzuApx";
+    s.parentNode.insertBefore(tagjs, s);
+  }());
+</script>
+<noscript>
+  <iframe src="//s.thebrighttag.com/iframe?c=nDzuApx" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+
+</div>

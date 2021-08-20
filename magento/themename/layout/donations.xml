@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!-- 
+/**
+ * MageWorx
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MageWorx EULA that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.mageworx.com/LICENSE-1.0.html
+ *
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@mageworx.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade the extension
+ * to newer versions in the future. If you wish to customize the extension
+ * for your needs please refer to http://www.mageworx.com/ for more information
+ * or send an email to sales@mageworx.com
+ *
+ * @category   design_default
+ * @package    MageWorx_Donations
+ * @copyright  Copyright (c) 2009 MageWorx (http://www.mageworx.com/)
+ * @license    http://www.mageworx.com/LICENSE-1.0.html
+ */
+
+/**
+ * Donations extension
+ *
+ * @category   design_default
+ * @package    MageWorx_Donations
+ * @author     MageWorx Dev Team <dev@mageworx.com>
+ */
+-->
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/mageworx/donations.css</stylesheet></action>
+            <action method="addJs"><script>mageworx/donations.js</script></action>
+        </reference>
+        <reference name="after_body_start">
+            <block type="donations/wrapper" name="donations.init" template="donations/init.phtml" />
+        </reference>
+        <reference name="before_body_end">
+            <block type="donations/wrapper" name="donations.popup" template="donations/popup.phtml" />
+        </reference>
+    </default>
+
+<!--
+    <catalog_product_view>
+        <reference name="product.info">
+            <action method="setTemplate"><template>donations/catalog-product-view.phtml</template></action>
+            <block type="donations/donation" name="product.donation" as="donation" template="donations/product_donation.phtml" />
+        </reference>
+    </catalog_product_view>
+-->
+
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <block type="donations/donation" name="checkout.cart.donation" as="donation" template="donations/cart_donation.phtml" />
+        </reference>
+    </checkout_cart_index>
+    
+    <checkout_onepage_review>
+        <reference name="root">
+            <action method="setTemplate"><template>donations/checkout/onepage/review/info.phtml</template></action>
+            <block type="donations/roundupamount" name="donations.roundupamount" as="roundupamount" template="donations/roundupamount.phtml" />
+        </reference>
+    </checkout_onepage_review>
+    
+<!--
+    <checkout_onepage_index>
+        <reference name="checkout.onepage">
+            <action method="setTemplate"><template>donations/checkout/onepage.phtml</template></action>
+        </reference>
+    </checkout_onepage_index>
+-->
+    
+    <donations_cart_index>
+        <block type="donations/donation" name="root" as="donation" output="toHtml" template="donations/cart_donation.phtml" >
+            <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+        </block>
+    </donations_cart_index>
+    
+    <donations_cart_remove>
+        <block type="donations/donation" name="root" as="donation" output="toHtml" template="donations/cart_donation.phtml">
+            <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+        </block>
+    </donations_cart_remove>
+    
+    <donations_cart_roundamount>
+        <block type="checkout/cart_totals" name="root" as="totals" output="toHtml" template="checkout/onepage/review/totals.phtml"/>
+    </donations_cart_roundamount>
+</layout>

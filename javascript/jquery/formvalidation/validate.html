@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="jquery.validate.min.js"></script>
+    <script src="jquery.placeholder.min.js"></script>
+    <title>Chapter06-Forms</title>
+    <!-- Youtube URL: https://www.youtube.com/watch?v=Qf6o3MIcAtA -->
+    <style type="text/css">
+        .wider {
+            display: inline-block;
+            width: 125px;
+            margin-right: 8px;
+        }
+        select {
+            margin-right: 8px;
+        }
+        .error{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form id="personalInfo">
+        <fieldset>
+            <legend>Personal Info</legend>
+            <p>
+            <label for="title" class="wider">Greeting</label>
+            <select id="title" name="title" class="wider" autofocus required>
+                <option selected></option>
+                <option>Mr.</option>
+                <option>Ms.</option>
+                <option>Miss</option>
+                <option>Mrs.</option>
+                <option>Dr.</option>
+            </select>
+            </p>
+            <p>
+            <label for="firstName" class="wider">First Name:</label>
+            <input id="firstName" name="firstName" class="wider" type="text" title="Your first name"/>
+            </p>
+            <p>
+            <label for="lastName" class="wider">Last Name:</label>
+            <input id="lastName" name="lastName" class="wider" type="text" title="Your last name"/>
+            </p>
+            <p>
+            <label for="password" class="wider">Password:</label>
+            <input id="password" name="password" class="wider" type="password"  title="Your password" title="Your password"/>
+            </p>
+            <p>
+            <label for="confirmPassword" class="wider">Confirm Password</label>
+            <input id="confirmPassword" name="confirmPassword" class="wider" type="password"  title="Confirm your password"/>
+            </p>
+            <p>
+            <label for="email" class="wider">E-Mail:</label>
+            <input id="email" name="email" class="wider" type="email" title="Your email address" placeholder="yourname@email.com" />
+            </p>
+        </fieldset>
+        <input type="reset" value="Reset" class="wider"/>
+        <input type="submit" value="Submit" class="wider"/>
+    </form>
+</div>
+<script type="text/javascript">
+    (function () {
+        "use strict";
+
+        // Hook the document ready event and
+        $(document).ready(function () {
+            // bind the placeholder polyfill to the input + textarea elements
+            $('input, textarea').placeholder();
+            // bind the tooltip plugin to the document
+            $(document).tooltip({
+                show: {
+                    effect: "slideDown",
+                    delay: 150
+                }
+            });
+
+            $.validator.setDefaults({
+                errorClass: 'form_error',
+                errorElement: 'div'
+            });
+            
+
+            // bind validation to the personalInfo form
+            //More Example: https://github.com/jmariano13/pro-jquery/blob/master/Part%20III/Listing%2016-09.html
+            function init(){
+             /*
+               var rulesList = new Object();
+                for (var i = 0; i < data.length; i++) {
+                    rulesList[data[i].product] = {
+                    min: 0,
+                    max: data[i].stocklevel,
+                }
+               }
+
+               var customMessages = new Object();
+                for (var i = 0; i < data.length; i++) {
+                    customMessages[data[i].product] = {
+                    max: "We only have " + data[i].stocklevel + " in stock"
+                }
+                }
+                //Creating a Custom Check - you can add this now to the rules
+                //https://stackoverflow.com/questions/241145/jquery-validate-plugin-how-to-create-a-simple-custom-rule
+                $.validator.addMethod(
+                    "stock", //name
+                    function(value, elem, args) { //function to check
+                    return Number(value) < Number(args); 
+                }, "We don't have that many in stock"); //message
+
+               */
+                var v = $('#personalInfo').validate({
+                    /*onKeyup : true,
+                    //Formatting the Validation Error Display
+                    highlight: function(element, errorClass) { //Setting the Highlighting for Invalid Elements
+                    $(element).add($(element).parent()).addClass("invalidElem");
+                    },
+                    unhighlight: function(element, errorClass) { //Setting the Unhighlighting for Invalid Elements
+                    $(element).add($(element).parent()).removeClass("invalidElem");
+                    },
+                    errorElement: "div",
+                    errorClass: "errorMsg", 
+                    
+                    //<style type="text/css">
+                    //div.errorMsg {color: red} 
+                    //.invalidElem {border: medium solid red} 
+                    //</style>
+
+                    rules: rulesList, 
+                    messages: customMessages */
+                    rules: {
+                        title: {
+                            /*
+                            creditcard: true //The value must contain a credit card number.
+                            date: true //The value must be a valid JavaScript date.
+                            digits: true //The value must contain only digits.
+                            email: true //The value must be a valid e-mail address.
+                            max: maxVal //The value must be at least as large as maxVal.
+                            maxlength: //length The value must contain no more than length characters.
+                            min: minVal //The value must be at least as large as minVal.
+                            minlength: length; //The value must contain at least length characters.
+                            number: true //The value must be a decimal number.
+                            range: [minVal, //maxVal] The value must be between minVal and maxVal.
+                            rangelength: [minLen, maxLen] //The value must contain at least minLen and no more than maxLen
+                            characters.
+                            required: true; //A value is required.
+                            url: true //The value must be a URL.
+                            stock: true //custom rules*/
+                            required: true
+                        },
+                        firstName: {
+                            required: true,
+                            minlength: 5,
+                            //maxlegnth: 10
+                        },
+                        lastName: {
+                            required: true,
+                            minlength: 5
+                        },
+                        password: {
+                            required: true,
+                            minlength: 5
+                        },
+                        confirmPassword: {
+                            required: true,
+                            minlength: 5,
+                            equalTo: '#password'
+                        },
+                        email: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        title: "Please choose a title.",
+                        firstName: {
+                            required: "Please enter your first name.",
+                            minlength: $.validator.format("Your minlength of {0} is not right!")
+                            //maxlegnth: $.validator.format("Your maxlegnth of {0} is not right!")
+                        }, 
+                        lastName: "Please enter your last name.",
+                        password: "Please create a password.",
+                        confirmPassword: {
+                            required: "Please confirm your password.",
+                            equalTo: "Your passwords must match."
+                        },
+                        email: "Please enter a valid email."
+                    },
+                    /*
+                    submitHandler: function(form) {
+                        //alert('submit');
+                        //var isValid = $("#personalInfo").valid();
+                    
+                        var data = $("#personalInfo").serialize();
+                        $.post(file.php, data, function(o){
+                            console.log(o);
+                        }, 'json');
+                    },*/
+                    success: function(element){
+                    
+                        element.remove();
+                    }
+                });
+            }
+            init();
+            
+
+           /*$('#personalInfo').submit(function(){
+                //$(this).removeData();
+                //alert('test');
+                
+            });
+
+            $.validator.addClassRules({ //define a set of rules and associate them with a class, and when the form is validated, the rules are applied to any form element that is a member of the specified class
+                    flowerValidation: { 
+                        min: 0 //rule is that the value should be equal to or greater than 0
+                        digits: true,
+                        max: 100,
+                        required: true
+
+                }
+            });
+            
+            $('input').addClass("flowerValidation").change(function(e) {
+                $('form').validate().element($(e.target)); //change event to explicitly validate the element whose value has changed
+            });
+            //Specifying Rules for Per-Element Validation
+            $('#row1 input').each(function(index, elem) {
+                $(elem).rules("add", { //Add rules to specific element
+                    min: 10,
+                    max: 20
+                });
+            });
+
+            $('input').each(function(index, elem) {
+            var rules = {
+                required: true,
+                min: 0,
+                max: data[index].stocklevel,
+                digits: true
+            }
+            if (Number(data[index].price) > 3.00) {
+                rules.max--;
+            }
+            $(elem).rules("add", rules); //A more flexible way to add rules
+            });
+            //Specifying Messages for Per-Element Validation
+            $('input').each(function(index, elem) {
+                $(elem).rules("add", {
+                    min: 10,
+                    max: 20,
+                    messages: {
+                    max: "You only have " + data[index].stocklevel + " in stock"
+                }
+                })
+                }).change(function(e) {
+                $('form').validate().element($(e.target));
+            });
+            
+            
+            */
+            $('#personalInfo').submit(function(){
+                //$(this).removeData();
+                //alert('test');
+                var isValid = $("#personalInfo").valid();
+                //alert(isValid);
+                if(isValid){
+                    //success code
+                    alert(isValid);
+                    var data = $("#personalInfo").serialize();
+                    $.post(save.php, data, function(o){
+                        if(o.error == false){
+                            window.location.href = "success.php";
+                        } else {
+
+                        }
+                    }, 'json');
+                } else {
+                    //failure code
+                    $("#personalInfo").data('validator', null);
+                    init();
+                    alert('invalid form');
+                }
+                return false;
+                
+            });
+            
+
+        });
+    }());
+</script>
+</body>
+</html>

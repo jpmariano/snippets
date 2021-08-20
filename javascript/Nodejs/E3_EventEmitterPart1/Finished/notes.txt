@@ -1,0 +1,8 @@
+Two Types of Events:
+    - System Events (C++ Core - libuv)
+        - events coming from computer
+            - finished reading a file
+            - received computer from the internet
+        - When events happen in libuv, it will call Custom Events 
+    - Custom Events (Javascript Core)
+        - Event Emitter 

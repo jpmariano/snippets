@@ -1,0 +1,12 @@
+To see all of the records associated with the limit login plugin, run the following:
+
+SELECT * FROM wp_options WHERE option_name LIKE '%limit%' 
+
+Change wp_options to the correct table name for your install. 
+
+
+To clear the lockouts, run the following:
+
+UPDATE wp_options SET option_value = '' WHERE option_name = 'limit_login_lockouts'
+
+Again, change wp_options to the correct table name for your install.

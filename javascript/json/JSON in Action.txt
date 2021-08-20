@@ -1,0 +1,177 @@
+//data.json
+{ "speakers" : [
+  {
+    "name":"Barot Bellingham",
+    "shortname":"Barot_Bellingham",
+    "reknown":"Royal Academy of Painting and Sculpture",
+    "bio":"Barot has just finished his final year at The Royal Academy of Painting and Sculpture, where he excelled in glass etching paintings and portraiture. Hailed as one of the most diverse artists of his generation, Barot is equally as skilled with watercolors as he is with oils, and is just as well-balanced in different subject areas. Barot's collection entitled \"The Un-Collection\" will adorn the walls of Gilbert Hall, depicting his range of skills and sensibilities - all of them, uniquely Barot, yet undeniably different"
+  },
+  {
+    "name":"Jonathan G. Ferrar II",
+    "shortname":"Jonathan_Ferrar",
+    "reknown":"Artist to Watch in 2012",
+    "bio":"The Artist to Watch in 2012 by the London Review, Johnathan has already sold one of the highest priced-commissions paid to an art student, ever on record. The piece, entitled Gratitude Resort, a work in oil and mixed media, was sold for $750,000 and Jonathan donated all the proceeds to Art for Peace, an organization that provides college art scholarships for creative children in developing nations"
+  },
+  {
+    "name":"Hillary Hewitt Goldwynn-Post",
+    "shortname":"Hillary_Goldwynn",
+    "reknown":"New York University",
+    "bio":"Hillary is a sophomore art sculpture student at New York University, and has already won all the major international prizes for new sculptors, including the Divinity Circle, the International Sculptor's Medal, and the Academy of Paris Award. Hillary's CAC exhibit features 25 abstract watercolor paintings that contain only water images including waves, deep sea, and river."
+  },
+  {
+    "name":"Hassum Harrod",
+    "shortname":"Hassum_Harrod",
+    "reknown":"Art College in New Dehli",
+    "bio":"The Art College in New Dehli has sponsored Hassum on scholarship for his entire undergraduate career at the university, seeing great promise in his contemporary paintings of landscapes - that use equal parts muted and vibrant tones, and are almost a contradiction in art. Hassum will be speaking on \"The use and absence of color in modern art\" during Thursday's agenda."
+  },
+  {
+    "name":"Jennifer Jerome",
+    "shortname":"Jennifer_Jerome",
+    "reknown":"New Orleans, LA",
+    "bio":"A native of New Orleans, much of Jennifer's work has centered around abstract images that depict flooding and rebuilding, having grown up as a teenager in the post-flood years. Despite the sadness of devastation and lives lost, Jennifer's work also depicts the hope and togetherness of a community that has persevered. Jennifer's exhibit will be discussed during Tuesday's Water in Art theme."
+  },
+  {
+    "name":"LaVonne L. LaRue",
+    "shortname":"LaVonne_LaRue",
+    "reknown":"Chicago, IL",
+    "bio":"LaVonne's giant-sized paintings all around Chicago tell the story of love, nature, and conservation - themes that are central to her heart. LaVonne will share her love and skill of graffiti art on Monday's schedule, as she starts the painting of a 20-foot high wall in the Rousseau Room of Hotel Contempo in front of a standing-room only audience in Art in Unexpected Places."
+  },
+  {
+    "name":"Constance Olivia Smith",
+    "shortname":"Constance_Smith",
+    "reknown":"Fullerton-Brighton-Norwell Award",
+    "bio":"Constance received the Fullerton-Brighton-Norwell Award for Modern Art for her mixed-media image of a tree of life, with jewel-adorned branches depicting the arms of humanity, and precious gemstone-decorated leaves representing the spouting buds of togetherness. The daughter of a New York jeweler, Constance has been salvaging the discarded remnants of her father's jewelry-making since she was five years old, and won the New York State Fair grand prize at the age of 8 years old for a gem-adorned painting of the Manhattan Bridge."
+  },
+  {
+    "name":"Riley Rudolph Rewington",
+    "shortname":"Riley_Rewington",
+    "reknown":"Roux Academy of Art, Media, and Design",
+    "bio":"A first-year student at the Roux Academy of Art, Media, and Design, Riley is already changing the face of modern art at the university. Riley's exquisite abstract pieces have no intention of ever being understood, but instead beg the viewer to dream, create, pretend, and envision with their mind's eye. Riley will be speaking on the \"Art of Abstract\" during Thursday's schedule"
+  },
+  {
+    "name":"Xhou Ta",
+    "shortname":"Xhou_Ta",
+    "reknown":"China International Art University",
+    "bio":"A senior at the China International Art University, Xhou has become well-known for his miniature sculptures, often the size of a rice granule, that are displayed by rear projection of microscope images on canvas. Xhou will discuss the art and science behind his incredibly detailed works of art."
+  }
+]}
+//index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+  <title>JSON Carousel</title>
+	<link href='http://fonts.googleapis.com/css?family=Wendy+One|Libre+Baskerville' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="mystyle.css" />
+</head>
+<body>
+
+<div id="speakerbox">
+	<a href="#" id="prev_btn">&laquo;</a>
+	<a href="#" id="next_btn">&raquo;</a>
+	<div id="carousel"></div>
+</div>
+
+<script id="speakerstpl" type="text/template">
+	{{#speakers}}
+		<div class="speaker">
+			<img src="images/{{shortname}}_tn.jpg" alt="Photo of {{name}}" />
+			<h3>{{name}}</h3>
+			<h4>{{reknown}}</h4>
+			<p>{{bio}}</p>
+		</div>
+	{{/speakers}}
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.cycle/2.9999.8/jquery.cycle.all.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.0/mustache.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+$(function() {
+
+	$.getJSON('data.json', function(data) {
+		var template = $('#speakerstpl').html();
+		var html = Mustache.to_html(template, data);
+		$('#carousel').html(html);
+		
+		$('#carousel').cycle({
+			fx: 'fade',
+			pause: 1,
+			next: '#next_btn',
+			prev: '#prev_btn',
+			speed: 500,
+			timeout: 10000
+		});
+	}); //getJSON
+	
+}); //function
+
+</script>
+</body>
+</html>
+//mystyle.css
+/* @override 
+  http://iviewsource.com/exercises/json/mystyle.css */
+	
+body {
+	background: EEE7D5;
+	font-family: 'Libre Baskerville';
+}
+
+#speakerbox {
+	width: 300px;
+	margin: 0 auto;
+	background: #93A1A1;
+	padding: 1px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#speakerbox h3, #speakerbox h4 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+} 
+
+#speakerbox h3 {
+	font-size: 2em;
+	line-height: .9em;
+	font-family: 'Wendy One';
+	color: #115F79;
+}
+
+#speakerbox h4 {
+	color: #973C26;
+	font-weight: bold;
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}
+
+#speakerbox img {
+	float: right;
+	margin-left: 10px;
+	border-radius: 10px;
+	width: 100px;
+}
+
+#speakerbox p {
+	color: #1E3A40;
+	font-size: .9em;
+}
+
+#speakerbox #next_btn, #speakerbox #prev_btn {
+	background: #d33682;
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin: 10px 0;
+	display: inline-block;
+}
+
+#speakerbox a#next_btn, #speakerbox a#prev_btn {
+	text-decoration: none;
+	color: #FFF;
+}
+
+

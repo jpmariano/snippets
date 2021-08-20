@@ -1,0 +1,14 @@
+install nodejs
+sudo mkdir /usr/local
+sudo chown -R $USER /usr/local
+npm install -g grunt-cli
+sudo -i
+npm install -g grunt-cli
+ruby -v
+sudo gem install sass
+
+npm init
+npm install grunt-contrib-sass --save-dev
+npm install grunt-contrib-watch --save-dev
+
+grunt

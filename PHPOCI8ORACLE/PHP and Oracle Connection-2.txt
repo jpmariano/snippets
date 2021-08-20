@@ -1,0 +1,166 @@
+http://php.net/manual/en/ref.oci8.php
+
+Why Use OCI8 Extension
+- OCI8 was developed exclusively for interacting with Oracle
+- connection cache
+- bind PHP variables to Oracle placeholders 
+- access and manipulate Oracle collections
+- handle transactions, and deal with LOBs
+- control all phases of SQL statement execution
+    -- fine-grained control over script execution itself
+
+Processing SQL Statements with OCI8
+ - Pattern: always perform the parsing and executing operations
+ - Not in Pattern: between DML (INSERT, UPDATE, or DELETE) operation and Select(retrieved)
+
+Processing Select Statements
+- Step 1 (required) oci_parse : Prepare the SQL statement for execution by using the oci_parse function. It doesn't validate the SQL statement you pass to it
+- Step 2 (optional) oci_bind_by_name : allows you to create an association between a PHP script variable and an Oracle placeholder.
+- Step 3 (optional) oci_define_by_name: You can define PHP variables to fetch SQL columns presented in the SELECT list. 
+- Step 4 (optional) oci_set_prefetch: to set the number of records to be prefetched after a successful call to oci_execute. 
+    By default, this number is set to 1. By setting it to a larger number, you can reduce the overhead associated with moving the data over the network, at the cost of increased memory usage.
+- Step 5 (required) oci_execute: Execute the parsed statement. check to see if statement is valid
+- Step 6 (optional) oci_error: allows you to retrieve the error description and the Oracle error code.
+- Step 7 (required) oci_fetch_all: to fetch all rows from the retrieved result set into a user-defined array. 
+    - oci_fetch: fetch the retrieved data into the internal result buffer 
+        -  oci_result: and then employ the oci_result function to read the fetched results. If you defined variables to fetch SQL columns, you can use these variables to access the retrieved results.
+
+Processing a DML statement:
+- Step 1 (required) oci_parse : Prepare the SQL statement for execution.
+- Step 2 (optional) oci_bind_by_name: If the statement contains placeholders.
+- Step 3 (required) oci_execute: Execute the parsed statement. By default, an executed statement is committed automatically. 
+    - OCI_DEFAULT (oci_commit and oci_rollback): However, setting the mode parameter to OCI_DEFAULT allows you to create a transaction that can be committed later by explicitly calling oci_commit or rolled back by oci_rollback.
+- Step 4 (optional): Make sure to check what the oci_execute function returns.
+- Step 5 (optional) oci_num_rows : to know the number of rows affected during statement execution
+- Step 6 (optional): If you have set the mode parameter of oci_execute to OCI_DEFAULT, you should take care to explicitly commit or roll back the transaction. Not doing so will result in rolling back the transaction when the script ends or you close the connection.
+
+Connecting to Oracle with OCI8
+    - TCP/IP and easy connect naming method  or tnsnames.ora
+
+- TCP/IP and easy connect
+    - oci_connect('username', 'password', 'url:1521/orcl or IPaddress')) //Port number can be ignored if database port is 1521
+        - Returns a database connection so OCI8 APIs can be used
+        - uses a database connection cache 
+        - assumes that commits and rollbacks are applied to all open transactions in the page
+            - return the identifier of the already opened connection
+        - DO NOT USE oci_connect
+            - When you need to maintain transactional isolation when dealing with more than one transaction, opened concurrently in your script
+            - When you need to establish a persistent database connection, which can be reused between requests.
+    - oci_pconnect 
+        - uses a connection cache to reuse connections between requests, thus reducing overhead on each subsequent page load.
+        - Returns a handle that refers to a persistent connection
+        - A persistent connection is not closed when the script execution ends
+    - oci_new_connect
+        - Returns a handle that refers to a new connection 
+        - doesn't use a connetion cache and establishes a distinctly new connection each time you call it.
+        - used in situations where you need to separate transactions
+        - can apply commits and rollbacks to the specified connection only
+
+- tnsnames.ora
+    (DESCRIPTION=
+    (ADDRESS=(PROTOCOL=TCP)(HOST=dbserverhost)(PORT=1521))
+    (CONNECT_DATA=
+    (SERVICE_NAME=orcl)))
+
+Using Bind Variables
+ - using bind variables, you can parse an SQL statement once and then execute it many times.
+ - parsed statement is shared within the shared pool so that the parse tree and execution plan for the statement can be reused by multiple applications
+ - allows you to avoid concatenating SQL statements, thus preventing SQL injection attacks
+
+ Executing SQL Statements
+    - oci_execute
+        - oci_execute  query results are held in memory and not available to you immediately.To make use of this data, you must fetch 
+        - returns a true on success or false on failures
+
+Handling Errors
+    - oci_error
+        - When oci_connect returns false/failure, use oci_error to obtain information about the error that occurred
+        - Uses appropriate resource handle as a parameter (optional)
+        - returns an associative array containing information relating to the error
+        - trigger_error works in conjuction with oci_error
+
+        $err = oci_error($stmt);
+        trigger_error($err['message']);
+
+    - trigger_error
+        - handling run-time errors
+        - Constants
+            - E_USER_ERROR 
+                - instructs trigger_error to trigger a fatal error
+                - Terminates the execution of the rest of the script
+            - E_USER_WARNING 
+                - Instructs trigger_error to trigger a warning (non-fatal error)
+                - allows your code to continue execution
+                -  warning is usually issued
+            -  E_USER_NOTICE 
+                - instructs trigger_error to trigger a notice
+                - allow the script to continue execution
+                - notice is normally issued
+
+        if(!$dbConn = oci_connect('hr', 'hr'))
+        {
+            $err = oci_error(); //(optional)
+            trigger_error('Failed to obtain a connection: ' .$err['message'], E_USER_ERROR); //(optional)
+        }
+
+    - Using Exceptions in php 
+        try {
+            if(!$dbConn = oci_connect('hr', 'hr')) {
+            $err = oci_error();
+            throw new Exception('Failed to obtain a connection:
+            '.$err['message']);
+        }
+            // If an exception is thrown this code is not executed.
+        } catch (Exception $e) {
+            print $e->getMessage()."n";
+        }
+
+Fetching Results with OCI8
+    - OCI8 fetching function
+        - To fetch the next row from the result data into a user-defined array (Slow)
+            - oci_fetch_assoc 
+                - Returns the next row from a query as an associative array
+                - array oci_fetch_assoc ( resource $statement )
+            - oci_fetch_row
+                — Returns the next row from a query as a numeric array
+                - array oci_fetch_row ( resource $statement )
+            - oci_fetch_array 
+                — Returns the next row from a query as an associative or numeric array
+                - array oci_fetch_array ( resource $statement [, int $mode ])
+        - oci_fetch 
+            - Fetches the next row from a query into internal buffers
+            - oci_result is used to retrieve the data from the buffer.
+            - bool oci_fetch ( resource $statement )
+        - oci_fetch_all 
+            — Fetches multiple rows from a query into a two-dimensional array
+            - int oci_fetch_all ( resource $statement , array &$output [, int $skip = 0 [, int $maxrows = -1 [, int $flags = OCI_FETCHSTATEMENT_BY_COLUMN + OCI_ASSOC ]]] )
+        - oci_fetch_object 
+            — Returns the next row from a query as an object
+            - object oci_fetch_object ( resource $statement )
+
+        - oci_fetch_array 
+            /**** Example 1 ****/
+            $query = 'SELECT employee_id, first_name, last_name FROM employees';
+            print '<table border="1">';
+            while ($emp = oci_fetch_array($stmt, OCI_ASSOC)) //OCI_ASSOC tells oci_fetch_array to return the next row from the result data as an associative array
+            {
+                print '<tr>';
+                print '<td>'.$emp['EMPLOYEE_ID'].'</td>';
+                print '<td>'.$emp['FIRST_NAME'].'&nbsp;'.$emp['LAST_NAME'].'</td>';
+                print '</tr>';
+            }
+            print '</table>';
+            /**** Example 1 ****/
+            $query = 'SELECT * FROM employees';
+            print '<table border="1">';
+            while ($emp = oci_fetch_array($stmt, OCI_RETURN_NULLS+OCI_NUM)) { //OCI_RETURN_NULLS+OCI_NUM tells the function to return the next row as a numeric array, creating empty elements for the NULL fields
+                print '<tr>';
+                foreach ($emp as $item) {
+                    print '<td>'.($item?htmlentities($item):'&nbsp;').'</td>';
+                }
+                print '</tr>';
+            }
+            print '</table>';
+    - Fetching All the Rows
+        - see fetching-all-rows.php
+        - PEAR::Cache_Lite to cache results retrieved from the database

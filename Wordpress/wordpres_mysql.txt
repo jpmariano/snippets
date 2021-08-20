@@ -1,0 +1,62 @@
+http://www.tutorialspoint.com/mysql/index.htm
+CREATE DATABASE wordpressdb;
+SHOW DATABASES;
+SHOW VARIABLES LIKE "%version%";
+DROP DATABASE wordpressdb;
+USE wordpressdb;
+SHOW TABLES;
+SELECT * from wp_users;
+SELECT * from  wp_usermeta;
+SELECT wp_users.*, wp_usermeta.* FROM wp_users,wp_usermeta WHERE wp_users.ID=wp_usermeta.user_id ORDER BY wp_users.ID;
+SELECT wp_users.*, wp_usermeta.* FROM wp_users LEFT OUTER JOIN wp_usermeta ON wp_users.ID=wp_usermeta.user_id ORDER BY wp_users.ID;
+SELECT wp_users.*, wp_usermeta.* FROM wp_users RIGHT OUTER JOIN wp_usermeta ON wp_users.ID=wp_usermeta.user_id ORDER BY wp_users.ID;
+SELECT wp_users.user_email, REVERSE(wp_users.user_email) AS Revers_Email From wp_users;
+SELECT wp_posts.post_date, YEAR(wp_posts.post_date) FROM wp_posts;
+
+Exporting Table;
+/Applications/xampp/xamppfiles/bin/mysqldump -u root -p  wordpress  > /Applications/xampp/htdocs/wordpress.sql
+/Applications/xampp/xamppfiles/bin/mysqldump -u root -p  wordpress wp_posts > /Applications/xampp/htdocs/wp_posts.sql
+Importing Table;
+SOURCE /Users/admin/Sites/devdesktop/wordpress.sql;
+
+Exporting Column;
+SELECT title from node INTO OUTFILE '/tmp/node_title.sql';
+
+Services Installation and Setup
+https://www.drupal.org/node/783236
+
+
+click on sturcture, click on services, and click add
+Minimum Installation:
+Machine-readable name of the endpoint - add the name of your endpoint(no spaces)
+
+Select dropdown and select the type of service to use:
+Server - Rest 
+
+Path to Endpoint - api/v1
+Operations - edit server
+
+Debug: if checked register some debug message to watchdog
+
+What format for reponse and request?
+Response Formater (outgoing)- uncheck bencode and php
+Request parsing (incoming) - uncheck application/vnd.php.serialized
+
+
+Authentication - what's your authentication
+Resources - which resources you wants to share
+Export - export the definition of your service
+
+https://www.youtube.com/watch?v=a2nHIWlCXSw
+
+POSTMAN:
+//To Get X-CRSF-Token
+/api/v1/user/token
+Headers: Content-Type: application/json
+
+Should Return a Token: iQ2n8Pcj-E6rwfsgJd-02wLUh6Ool_wDg4B9iL8Ig_E
+
+acquia-drupal-7-38-44-6261.dd:8083/api/v1/system/connect 
+Headers: X-CSRF-Token:iQ2n8Pcj-E6rwfsgJd-02wLUh6Ool_wDg4B9iL8Ig_E  
+	 Content-Type: application/json
+

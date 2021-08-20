@@ -1,0 +1,39 @@
+https://stripe.com/docs/testing#cards
+https://stripe.com/docs/libraries#php
+Step 1: Install library manually or via composer
+- $ composer require stripe/stripe-php 
+Step 2: Include the library in your project config.php 
+    https://stripe.com/docs/checkout/php
+        require_once('vendor/autoload.php');
+
+        $stripe = array(
+        "secret_key"      => "",
+        "publishable_key" => ""
+        );
+
+        \Stripe\Stripe::setApiKey($stripe['secret_key']);
+Step 3: Create the Payment form in index.php | 
+    | To customize checkout read:
+        https://stripe.com/docs/checkout#integration-simple | 
+        https://stripe.com/docs/checkout#tokens | 
+        https://stripe.com/docs/stripe-js | 
+        https://github.com/jmariano13/stripe-payments-demo
+        https://stripe.github.io/elements-examples/
+        https://github.com/stripe/elements-examples/#example-5
+        
+    <?php require_once('./config.php'); ?>
+
+    <form action="charge.php" method="post">
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="<?php echo $stripe['publishable_key']; ?>"
+            data-description="Access for a year"
+            data-amount="5000"
+            data-currency="EUR"
+            data-label="$50 Subscription" 
+            data-name="Test stripe payment"
+            data-image="img/stripe.jpeg"
+            data-locale="auto"></script>
+    </form>
+
+Step 4: for Subscription create a plan inside your stripe account 
+Step 5

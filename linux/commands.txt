@@ -1,0 +1,46 @@
+sudo useradd -m username
+sudo groupadd superusers
+usermod -a -G superusers username
+su - username
+
+Installing Drush 10 https://www.linode.com/docs/guides/how-to-install-drush-on-debian-10/
+
+apt update
+apt install sudo
+
+/usr/local/etc/php/7.4
+
+https://stackoverflow.com/questions/45049601/php-the-requested-php-extension-bcmath-is-missing-from-your-system
+docker-php-ext-install bcmath
+
+sudo apt install wget
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.17-1_all.deb
+
+export PATH=$PATH:/Applications/MySQLWorkbench.app/Contents/MacOS
+open ~/.bashrc  
+open ~/.bash_profile
+
+grep ".*\.zip$"
+grep ".*\.conf$"
+
+brew install mysql
+export PATH="$HOME/.composer/vendor/bin:$PATH"
+curl -OL https://github.com/drush-ops/drush-launcher/releases/tag/0.9.0/drush.phar
+chmod +x drush.phar
+
+../vendor/bin/drush --version
+../vendor/bin/drush sql-drop 
+../vendor/bin/drush sql-cli < <filelocation>
+drush eval "var_dump(Drupal\Component\Utility\Crypt::randomBytesBase64(55))" - creating hashsalt
+composer show -a drupal/tweet_feed 
+
+https://www.php.net/manual/en/features.commandline.webserver.php
+php -S localhost:8000 .ht.router.php
+php -S localhost:8080 .ht.router.php
+.ht.router.php
+
+source ~/.bashrc
+
+https://getgrav.org/blog/macos-bigsur-apache-multiple-php-versions
+brew unlink php && brew link --overwrite --force php@5.6
+

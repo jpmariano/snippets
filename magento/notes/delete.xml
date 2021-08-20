@@ -1,0 +1,8 @@
+	<layout>
+		//show's only in that router example.com/demo/index/sayhello
+		<tutsplus_demo_index_sayhello>
+			<reference name="content">
+				<block type="demo/configurable" name="demo" template="tutsplus/configurable.phtml" />
+			</refrence>
+		</tutsplus_demo_index_sayhello>
+	</layout>

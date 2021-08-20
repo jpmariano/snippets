@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category   MagePsycho
+ * @package    MagePsycho_Easypathhints
+ * @author     magepsycho@gmail.com
+ * @website    http://www.magepsycho.com
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config>
+    <acl><!--Access Control List -->
+		<resources>
+			<admin> <!--Access by Admin -->
+				<children>
+					<system> <!-- login to admin-->
+						<children>
+							<config> <!-- login to admin -> System Configuration -->
+								<children>
+									<sectionname1>
+										<title>MagePsycho - All</title>
+									</sectionname1>
+									<sectionname2>
+										<title>Easy Path Hints Area</title>
+									</sectionname2>
+								</children>
+							</config> <!-- login to admin -> System Configuration -->
+						</children>
+					</system>
+				</children>
+			</admin> <!--Access by Admin -->
+		</resources>
+	</acl> <!--Access Control List -->
+</config>

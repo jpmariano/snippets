@@ -1,0 +1,4 @@
+***** Making Dynamic Templates Using Jquery Template *****
+https://www.youtube.com/watch?v=M3SflTYEDV0
+https://github.com/BorisMoore/jquery-tmpl
+

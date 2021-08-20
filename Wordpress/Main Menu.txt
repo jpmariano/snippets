@@ -1,0 +1,14 @@
+Main Menu
+
+
+//You should be able to add menu in the dashboard
+functions.php
+	// Declare sidebar widget zone
+    if (function_exists('register_na_menus')) {
+    	register_na_menus(array(
+    		'main_nav' => 'Main Navigation Menu'
+    	));
+    }
+
+//
+<?php wp_nav_menu('menu' => 'name from dashboard' );?>

@@ -1,0 +1,37 @@
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="span1 pull-right mini-cart-top">
+               <!-- <?php echo $this->getChildHtml('mini_cart_top') ?> --> 
+                <?php echo $this->getChildHtml('cartview_link') ?>
+                <?php echo $this->getChildHtml('cartheader') ?>
+            </div>
+
+
+            <div class="span4 logo-wrapper">
+               <?php if ($this->getIsHomePage()):?>
+                    <h1 class="logo"><a href="<?php echo $this->getUrl() ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+               <?php else:?>
+                    <a href="<?php echo $this->getUrl() ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+               <?php endif; ?>
+            </div>
+
+
+            <div class="span7 top-menu">
+                   
+                    <?php echo $this->getChildHtml('cartview_mobile_link') ?>
+                    <?php echo $this->getChildHtml('cartheader') ?> 
+                
+                 <div class="nav-mobile"> 
+                <?php echo $this->getChildHtml('topMenu') ?>
+                <script>selectnav('nav'); </script>
+                </div>
+               
+            </div>
+
+            <?php echo $this->getChildHtml('topContainer'); ?>
+
+        </div>
+    </div>
+</div>
+

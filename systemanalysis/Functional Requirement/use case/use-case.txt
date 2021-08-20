@@ -1,0 +1,14 @@
+http://www.usability.gov/how-to-and-tools/methods/use-cases.html
+
+
+FORM
+Number: UC-1 (Not important during the interview, Group use case when done.) 
+Actor: Identify who is going to be using the website.
+Name: what that user wants to do on the site
+Brief Description: what the user does and what the system does in response that the user should be aware of.
+Pre-Conditions: What has to be true before the task can begin?
+Basic Flow: What are the steps in this user task
+Alternate Flow: Along the steps in basic flow. If one of the steps fail, what's the alternate course of action?
+Post Conditions: The outcome of this user task
+
+Basic and Alternate flow if combine is like a psuedocode.

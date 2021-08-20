@@ -1,0 +1,99 @@
+<?php
+
+	$storeId 		= $this->helper('core')->getStoreId();
+	$limit 			= 8;
+	$visibility 	= array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH, Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG);	
+	$_collection 	= Mage::getResourceModel('reports/product_collection')
+ //                       ->addOrderedQty()
+						->addAttributeToSelect('*')
+						->setStoreId($storeId)
+						->addAttributeToFilter('visibility', $visibility)
+                        ->addFieldToFilter('status',Mage_Catalog_Model_Product_Status::STATUS_ENABLED)
+                        
+						->addStoreFilter($storeId);
+                       // ->setOrder('ordered_qty', 'desc');
+
+	$_collection->getSelect()->limit($limit);
+	
+	$_collection->addFieldToFilter(array(
+	    array('attribute' => 'featured_product', 'eq' => '1'),
+	));		
+	
+	$columnCount 	= 3;
+	$_collectionSize = $_collection->count();
+?>
+
+<div class="featured-products-wrapper">
+
+	<div class="row">
+		
+		<div class="span12 featured-product-heading">
+			
+		</div>
+		
+	</div>
+	
+	<?php $i=0; $position=0; foreach($_collection as $_product): ?>
+	        
+		<?php if ($i++%$columnCount==0): ?>
+		<ul class="row featured-products">
+		<?php endif; ?>
+					
+				<li class="span4 item <?php if($i==1){echo 'first';} if($i==count($_collection)){echo 'last';} ?>">
+
+					<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true) ?>" class="product-image">
+                        <span class="view-overlay">View</span>
+                        <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail')->resize(300); ?>" width="300" height="300" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'thumbnail'), null, true) ?>" />
+					</a>
+                    
+                    
+                    
+                    <?php if($_product->isSaleable()): ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>     
+                    
+                    
+                    <?php
+                    $price_html = "<span class=\"price\">";
+                    if($_product->getSpecialPrice()):
+                        $price_html .= Mage::helper('core')->currency($_product->getPrice(), true, false);
+                        $price_html .= "<span class=\"special-price\">";
+                        $price_html .= Mage::helper('core')->currency($_product->getSpecialPrice(), true, false);
+                        $price_html .= "</span>";
+                    else:
+                        $price_html .= Mage::helper('core')->currency($_product->getPrice(), true, false);
+                    endif;
+                    $price_html .= "</span>";
+                    ?>
+
+					<?php $product_name = strip_tags($_product->getName()) ?>
+
+					<?php if(strlen($product_name)>45) : ?>
+					<?php $product_name = substr($product_name,0,90); ?>
+						<a href="<?php echo $_product->getProductUrl() ?>" class="product-name"><?php echo $product_name; ?>&#133; </a>
+						<?php echo $price_html; ?>
+					<?php else : ?>
+						<a href="<?php echo $_product->getProductUrl() ?>" class="product-name"><?php echo $product_name ?></a>
+						<?php echo $price_html; ?>
+
+					<?php endif; ?>		
+					
+					 
+                    		
+					
+
+				</li>
+				
+		<?php if ($i%$columnCount==0 || $i==$_collectionSize): ?>
+			</ul>
+		<?php endif; ?>
+	
+	<?php endforeach; ?>
+		
+</div>
+
+
+
+

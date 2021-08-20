@@ -1,0 +1,46 @@
+<?php
+/**
+ * Cart cross sell items template
+ *
+ * @see Mage_Checkout_Block_Cart_Crosssell
+ */
+?>
+<?php if($this->getItemCount()): ?>
+<div class="crosssell">
+    <h2><?php echo $this->__('You May Also Like') ?></h2>
+    <ul id="crosssell-products-list">
+		<?php $i = 0; ?>
+		<?php foreach($this->getItems() as $_item): ?>
+	        <?php if($i++ == 2) break; ?>
+        <li class="item">
+
+            <a class="product-image" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>">
+            	<img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(173); ?>" width="173" height="173" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+            </a>
+
+            <div class="product-details">
+               
+               <a title="<?php echo $this->__('Add to Cart') ?>" class="crosssell_add_to_cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>')"><?php echo $this->__('Add to Cart') ?></a>
+
+                <h3 class="product-name"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a></h3>
+
+				<p class="price">
+					<?php if($_item->getSpecialPrice()): ?>
+						WAS <?php echo Mage::helper('core')->currency($_item->getPrice(), true, false) ?>
+						<span class="special-price">
+						NOW <?php echo Mage::helper('core')->currency($_item->getSpecialPrice(), true, false); ?>
+						</span>
+					<?php else: ?>
+						<?php echo Mage::helper('core')->currency($_item->getPrice(), true, false) ?>
+					<?php endif; ?>
+				</p>
+
+
+            </div>
+            
+        </li>
+    <?php endforeach; ?>
+    </ul>
+    <script type="text/javascript">decorateList('crosssell-products-list', 'none-recursive')</script>
+</div>
+<?php endif; ?>

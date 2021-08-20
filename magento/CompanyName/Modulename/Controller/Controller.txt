@@ -1,0 +1,2 @@
+Controller: The classes in this folder are meant to be abstract classes and
+extended by the controller class under the the controllers folder

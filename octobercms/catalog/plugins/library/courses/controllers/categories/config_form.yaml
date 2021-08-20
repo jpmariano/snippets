@@ -1,0 +1,10 @@
+name: Categories
+form: $/library/courses/models/category/fields.yaml
+modelClass: Library\Courses\Models\Category
+defaultRedirect: library/courses/categories
+create:
+    redirect: 'library/courses/categories/update/:id'
+    redirectClose: library/courses/categories
+update:
+    redirect: library/courses/categories
+    redirectClose: library/courses/categories

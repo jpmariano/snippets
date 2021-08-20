@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <default>
+
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+			 <!--<block type="page/html" name="footer" as="footer">
+        	 	<action method="setTemplate"><template>page/html/footer.phtml</template></action>
+ 	            <block type="newsletter/subscribe" name="newsletter" template="newsletter/subscribe.phtml"/>
+			</block>-->
+            <!--<block type="cms/block" name="before_content_end">-->
+                <!--<action method="setBlockId"><block_id>before_content_end</block_id></action>-->
+            <!--</block>-->
+            <remove name="breadcrumbs" />
+		</reference>
+
+		<reference name="head">
+            <action method="removeItem"><type>skin_js</type><name>js/iehover-fix.js</name></action>
+            <action method="removeItem"><type>skin_css</type><name>css/styles-ie.css</name></action>
+            <action method="removeItem"><type>js</type><name>lib/ds-sleight.js</name></action>
+            <action method="removeItem"><type>skin_css</type><name>css/print.css</name></action>
+			<action method="addCss"><stylesheet>css/responsive.css</stylesheet></action>
+			<action method="addCss"><stylesheet>css/override.css</stylesheet></action>
+            <action method="addItem"><type>skin_css</type><name>css/override-ie.css</name><params/><if>IE</if></action>
+            <action method="addItem"><type>skin_js</type><name>js/jquery.1.10.2.min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/jquery.no.conflict.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/modernizr.production.js</name></action>
+            <!--<action method="addItem"><type>skin_js</type><name>js/respond.min.js</name></action> -->
+            <action method="addItem"><type>skin_js</type><name>js/prototype.formalize.min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/selectNav.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
+            <block type="core/template" name="facebook.open.graph" as="facebook_open_graph" template="custom/facebook_open_graph.phtml" />
+		</reference>
+
+        <reference name="header">
+			<action method="unsetChild"><name>topSearch</name></action>
+			<action method="unsetChild"><name>store_language</name></action>
+           <block type="checkout/cart_sidebar" name="mini_cart_top" template="checkout/cart/mini_cart_top.phtml" before="-" />
+              <reference name="top.links">
+                <remove name="checkout_cart_link"/>
+                <block type="cartview/view" name="cartview_toplink" template="cartview/toplink.phtml" >
+                   <block type="customizer/cart" name="cart_sidebar" as="topcarts" template="custom/customizer_cart_header.phtml"/> 
+                </block>
+                <action method="addLinkBlock"><blockName>cartview_toplink</blockName></action>
+                <block type="checkout/links" name="checkout_cart_link_cartview">
+                    <action method="addCheckoutLink"></action>
+                </block>
+            </reference>
+            
+            <block type="cartview/view" name="cartview_link" template="cartview/link.phtml" >
+              <block type="customizer/cart" name="cart" as="topcart" template="custom/customizer_cart_header.phtml">
+              </block>  
+            </block>
+            
+            <block type="cartview/view" name="cartview_mobile_link" template="cartview/mobile-link.phtml" >
+              <block type="customizer/cart" name="cart" as="topcart" template="custom/customizer_cart_header.phtml">
+              </block>  
+            </block>
+           
+        </reference>
+
+        <reference name="after_body_start">
+            <block type="core/template" name="facebook_sdk" template="custom/facebook_sdk.phtml" />
+            <block type="core/template" name="google_universal_analytics" as="google_universal_analytics" template="custom/google-ua-tracking.phtml" />
+        </reference>
+
+		<reference name="footer">
+			<action method="unsetChild"><name>store_switcher</name></action>
+			<block type="newsletter/subscribe" name="newsletter" template="newsletter/subscribe.phtml"/>
+		</reference>
+
+	</default>
+	
+	<cms_index_index>
+
+		<reference name="content">
+			<block type="core/template" name="home" template="page/home.phtml">
+				<block type="cms/block" name="home.promos.full">
+					<action method="setBlockId"><block_id>home_promo_full</block_id></action>
+				</block>
+			</block>
+			<block type="catalog/product_list" name="bestsellers" template="custom/bestsellers.phtml" /> 
+		</reference>
+		
+	</cms_index_index>
+
+    <catalog_category_default translate="label">
+
+    	<reference name="product_list">
+			<action method="setColumnCount"><count>3</count></action>
+    	</reference>
+
+    </catalog_category_default>
+
+	<catalog_product_view>
+        
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><script>js/jquery.elevatezoom.js</script></action>
+        </reference>
+        
+		<reference name="product.info">
+			<block type="catalog/product_list_related" name="catalog.product.related" as="products_related" before="-" template="catalog/product/list/related.phtml"/>
+		</reference>
+		
+        <reference name="product_options_wrapper_bottom">
+        	<remove name="product.clone_prices" />
+        	<remove name="product.info.addto" />
+        </reference>
+
+		<remove name="product.description" />
+		<remove name="product.attributes" />
+		<remove name="product.info.additional" />
+
+	</catalog_product_view>
+
+    <checkout_cart_index>
+		<!--<reference name="breadcrumbs">-->
+           <!--<action method="addCrumb">-->
+                <!--<crumbName>Home</crumbName>-->
+                <!--<crumbInfo><label>Home</label><title>Home</title><link>/</link></crumbInfo>-->
+           <!--</action>-->
+           <!--<action method="addCrumb">-->
+                <!--<crumbName>Shopping Cart</crumbName>-->
+                <!--<crumbInfo><label>Shopping Cart</label><title>Shopping Cart</title><link>/checkout/cart</link></crumbInfo>-->
+           <!--</action>-->
+		<!--</reference>-->
+		<reference name="crosssell">
+			<action method="setItemLimit"><type>crosssell</type><limit>2</limit></action>
+		</reference>
+        <reference name="checkout.cart.methods">
+	        <action method="unsetChild"><name>checkout.cart.methods.multishipping</name></action>
+        </reference>
+		<remove name="checkout.cart.shipping" />
+	</checkout_cart_index>
+
+	<checkout_onepage_index>
+		<remove name="content_end" />
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="checkout.onepage">
+	        <block type="checkout/onepage" name="checkout.ordersummary" template="checkout/onepage/order-summary.phtml" />
+        </reference>
+
+        <remove name="before_footer" />
+
+
+    </checkout_onepage_index>
+
+    <checkout_onepage_success translate="label">
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="head">
+            <block type="core/template" name="floodlight" as="floodlight" template="custom/floodlight-tag-confirmation.phtml"/>
+        </reference>
+
+        <!--<reference name="after_body_start">-->
+            <!--<block type="core/template" name="google_adwords" as="google_adwords" template="custom/google-adwords-tracking.phtml"/>-->
+        <!--</reference>-->
+
+        <reference name="before_body_end">
+            <block type="core/template" name="twitter_tag" as="twitter_tag" template="custom/twitter-tag.phtml"/>
+        </reference>
+
+        <reference name="google_universal_analytics">
+            <action method="setTemplate">
+                <template>custom/google-ua-conversion-tracking.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_success>
+    	
+</layout>

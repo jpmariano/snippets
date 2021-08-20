@@ -1,0 +1,31 @@
+What causes Queues?
+Queue - Waiting in line
+Variation 
+    - arrival Variation
+    - service Variation
+Modeling Queues
+    - Approaches
+        - Analytic models [differential equations]
+            - simple cases:
+            - your faorite fast food spot 
+        - Simultion [complex systems with simple stations]
+            - Example: low observable [LO] aircraft
+            maintenace systems [f22 & f 35]
+Balance 2 Costs
+    - Service Cost - cost of prividing service 
+    - Waiting Cost - cost of not providing service 
+        - Bulk: leave without buyung becuase the line is too long
+        - buy and never return
+    - Goal Minimize cost
+
+Most Common Arrival Distribution
+    - Poisson Distribution
+        - Given an average arrival rate [lambda], the poisson distrion gives 
+        the probability a certain number of customers [x] 
+        arrive in a given time window
+Most Common Service Distribution
+Kendall's Notation
+Other Arival and Service Distributions
+Queue Assumptions
+Metrics of Queue Performance
+

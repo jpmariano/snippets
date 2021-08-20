@@ -1,0 +1,127 @@
+<div class="page-title checkout-title">
+    <h1><?php echo $this->__('Secure Checkout') ?></h1>
+</div>
+<script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
+<div class="row">
+
+<div class="span3 sidebar-blocks pull-right">
+	<?php echo $this->getChildHtml('checkout.ordersummary') ?>
+</div>
+
+<ol class="opc span9" id="checkoutSteps">
+<li id="opc-login" class="section allow " style="display:none;">
+	<div id="checkout-step-login" class="box a-item" style="display:none;">
+		<input type="hidden" name="checkout_method" id="login:guest" value="guest" checked="checked" />
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() {
+			checkout.setMethod();
+			});
+		</script>
+	</div>
+</li>
+<?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
+<?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++ ?>
+    <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
+        <div class="step-title">
+            <span class="number"><?php echo $i .'.'?></span>
+            <h2><?php echo $_stepInfo['label'] ?></h2>
+            <div class="arrow"></div>
+            <!--a href="#"><?php //echo $this->__('Edit') ?></a-->
+        </div>
+        <div id="checkout-step-<?php echo $_stepId ?>" class="step a-item" style="display:none;">
+            <?php echo $this->getChildHtml($_stepId) ?>
+        </div>
+    </li>
+<?php endforeach ?>
+</ol>
+<script type="text/javascript">
+//<![CDATA[
+    var accordion = new Accordion('checkoutSteps', '.step-title', true);
+    <?php if($this->getActiveStep()): ?>
+    accordion.openSection('opc-<?php echo $this->getActiveStep() ?>');
+    <?php endif ?>
+    var checkout = new Checkout(accordion,{
+        progress: '<?php echo $this->getUrl('checkout/onepage/progress') ?>',
+        review: '<?php echo $this->getUrl('checkout/onepage/review') ?>',
+        saveMethod: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>',
+        failure: '<?php echo $this->getUrl('checkout/cart') ?>'}
+    );
+//]]>
+</script>
+<script>
+    function automaticRoundAmount(checkbox, totalUpdate){
+        // Making Ajax Request
+        //$('donation-round-up').hide();
+        //$('donations-please-wait').show();
+
+        donations.fadeDiv($$('#checkout-review-table tfoot')[0], false);
+        status = 0;
+        if(checkbox && checkbox.checked){
+            status = 1;
+        }
+
+        if(totalUpdate){
+            $('removeDonationLink').show();
+            donation = $('donation_value').value;
+            if($('donation_charity')){
+                charity = $('donation_charity').value;
+            } else {
+                charity = false;
+            }
+            params = {donation: donation, charity: charity, status: 1};
+        } else {
+            if(status > 0){
+                $('donation_value').value = checkbox.value;
+                donations.changeCharity(donations.currentCharity);
+            } else {
+                $('donation_value').value = 0;
+            }
+            params = {donation: checkbox.value, charity: donations.currentCharity, status: status};
+        }
+        var request = new Ajax.Request(
+            '<?php echo $this->getUrl('donations/cart/roundamount'); ?>',
+            {
+                method: 'post',
+                parameters: params,
+                onComplete: function(transport){
+
+                    var jsonResponse=transport.responseText;
+
+                    if(jsonResponse.error){
+                        alert("<?php echo Mage::helper('donations')->__('Error Occured'); ?>");
+                        return false;
+                    }
+                    else{
+                        $$('#checkout-review-table tfoot')[0].replace(jsonResponse);
+                    }
+                }
+            }
+        );
+    }
+</script>
+
+    <?php
+        ///Facebook tracking pixel
+        $order = $this->getQuote();
+        $total = $order->getGrandTotal();
+        $total = number_format($total,2);
+    ?>
+    <!-- Facebook Conversion Code for NRSC Store Checkot -->
+    <script type="text/javascript">
+        var fb_param = {};
+        fb_param.pixel_id = '6014790102580';
+        fb_param.value = '<?php echo $total;?>';
+        fb_param.currency = 'USD';
+        (function(){
+            var fpw = document.createElement('script');
+            fpw.async = true;
+            fpw.src = '//connect.facebook.net/en_US/fp.js';
+            var ref = document.getElementsByTagName('script')[0];
+            ref.parentNode.insertBefore(fpw, ref);
+        })();
+    </script>
+    <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6014790102580&amp;value=<?php echo $total;?>&amp;currency=USD" /></noscript>
+
+
+</div>

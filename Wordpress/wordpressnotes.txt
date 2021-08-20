@@ -1,0 +1,85 @@
+Wordpress
+
+Create Theme
+1. Create a theme folder
+2. Drag the style.css from mockup
+3. Inside the style.css
+/*
+Theme Name: Wordpress Forest
+Theme 
+URI: http://blog.themeforest.net
+
+Description: A test theme fore the video screencast series on ThemeForest.net
+Version:4.0
+
+Author: Drew Douglass
+Author 
+URI: http://dev-tips.com
+
+Tags: boring,  dull, void of life
+
+*/
+4.create an index.php
+copy and paste the index.html to index.php
+5. insert screanshot.jpg or png
+6. Activate the theme
+7. Slowly divide the content from index.php to other files ie.. header.php and sidebar.php
+8. To call Header: <?php get_header(); ?>
+inside header.php
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes();?>>
+	<head>
+		<meta http-equiv="Content-Type" content='<?php bloginfo("html_type");?>;charset=<?php bloginfo("charset");?>'/>
+	
+		<title><?php bloginfo('name') ;?></title>
+	
+		<link rel='stylesheet' href='<?php bloginfo("stylesheet_url");?>' type='text/css' media='screen' />
+	</head>
+		<body>
+	
+			<div id='wrap'>
+			<!--Begin Header-->
+		
+				<div id='header'>
+					<h1><a href="<?php echo get_option('home'); ?>/">
+					<?php bloginfo('name');?></a></h1>//print the blog information name
+			
+					<div class='tagline'><?php bloginfo('description'); ?></div> //Print Tagline
+			
+					<ul id='nav'><?php wp_list_pages('title_li='); ?></ul> //List all Pages title_li= blank removes pages
+							</div>
+<!--End Header-->
+9. To call Sidebar:
+<div id='sidebar'>
+	
+	<ul>
+		
+		<?php /*Lets widgetize up in here!*/
+			
+				if(!function_exists('dynamic_sidebar') || !dynamic_sidebar()) :
+		
+		?>
+		
+				<li><?php get_search_form(); ?></li>
+		
+		
+				<?php wp_list_pages('title_li=<h3>Pages</h3>');?>
+		
+		
+				<li>
+	<h3>Archives </h3>
+			
+					<ul>
+	<?php wp_get_archives('type=monthly'); ?>
+ </ul>
+		
+				</li>
+		
+		
+				<?php wp_list_categories('title_li=<h3>Categories</h3>');?>
+		
+				<?php endif;?>
+	</ul>
+
+	</div>
+	

@@ -1,0 +1,408 @@
+STEP 1: Declarations
+1. Register the Modules app|etc
+2. Copy existing module declarations and past it in the same location
+3. Rename the file to Namespace_modulename.xml
+4. Change the text declarations appropriately
+
+To Check if the module is active:  Go to configuration advance tab
+
+Step 2: The Module
+Tutsplus
+- Block
+- controllers
+- etc - register module's Block, controllers, Helper, Model, sql
+- Helper - class namespace_modulename_clastype_filename 
+					extends Mage_Core_Helper_Abstract 
+           or Mage::helper("demo/customer");
+- Model - namespace_modulename_clastype_filename or 
+		Mage::getModel("demo/product"); 
+        It is used to talked to the database
+- sql 
+
+Models 3 layer approach
+- entity models - business logic and CRUD
+- Resources models - communicates to database (adaptor) 
+    namespace_modulename_model_resource_filename.php (This file
+	is located inside the model resource folder
+	//$model vs $resourceModel
+	$model = entity = Mage_CMS_Model_Page
+	$model = Mage::getModel('cms/page'); 
+	
+	$resourceModel = resource = Mage_Cms_Model_Resource_page
+	$resourceModel = Mage::getResourceModel('cms/page');
+	
+- Collections - 
+
+Types of Models
+- simple
+	-- core config
+	-- url rewrite
+- Complex 
+	-- CMS Page
+	-- Sales Qoutes, Sales Orders
+- EAV (Entity, Attribute, Value)
+	--Entities -  Products, Categories, Customers
+	
+	
+Models inside config.xml
+
+<config>
+	 <global>
+        <models>
+            <cms>
+                <class>Mage_Cms_Model</class>
+                <resourceModel>cms_resource</resourceModel>
+            </cms>
+            <cms_resource>
+                <class>Mage_Cms_Model_Resource</class>
+                <deprecatedNode>cms_mysql4</deprecatedNode>
+                <entities>
+                    <page>
+                        <table>cms_page</table>
+                    </page>
+                    <page_store>
+                        <table>cms_page_store</table>
+                    </page_store>
+                    <block>
+                        <table>cms_block</table>
+                    </block>
+                    <block_store>
+                        <table>cms_block_store</table>
+                    </block_store>
+                </entities>
+            </cms_resource>
+        </models>
+	</global>
+</config>
+
+inside cms|model|page.php
+
+	class Mage_Cms_Model_Page extends Mage_Core_Model_Abstract
+	{
+	 	protected function _construct() 
+	    {
+	        $this->_init('cms/page'); 
+	    }
+	}
+
+	---> Points to the page file inside the model resource
+						
+						<page>
+                        	<table>cms_page</table>
+                    	</page>
+                    	<page_store>
+                        	<table>cms_page_store</table>
+                    	</page_store>
+	
+						class Mage_Cms_Model_Resource_Page extends 
+							  Mage_Core_Model_Resource_Db_Abstract
+						{						
+						    /**
+						     * Initialize resource model
+						     *
+						     */
+						    protected function _construct()
+						    {
+						        $this->_init('cms/page', 'page_id');
+						    }
+
+						    
+						     /**
+						     * Retrieves cms page title from DB by passed id.
+						     *
+						     * @param string $id
+						     * @return string|false
+						     */
+						    public function getCmsPageTitleById($id)
+						    {
+						        $adapter = $this->_getReadAdapter();
+						
+						        $select  = $adapter->select()
+						            ->from($this->getMainTable(), 'title')
+						            ->where('page_id = :page_id');
+						
+						        $binds = array(
+						            'page_id' => (int) $id
+						        );
+						
+						        return $adapter->fetchOne($select, $binds);
+						    }
+						    
+						    
+						    
+						    /**
+						     * Process page data before deleting
+						     *
+						     * @param Mage_Core_Model_Abstract $object
+						     * @return Mage_Cms_Model_Resource_Page
+						     */
+						    protected function _beforeDelete(Mage_Core_Model_Abstract $object)
+						    {
+						        $condition = array(
+						            'page_id = ?'     => (int) $object->getId(),
+						        );
+						
+						        $this->_getWriteAdapter()->delete($this->getTable('cms/page_store'), 
+						        $condition);
+						
+						        return parent::_beforeDelete($object);
+						    }
+						   
+												    
+						}
+						
+						
+						
+						-- using Collections
+						
+						create a Collections.php file inside the Resource|Page|Collection.php
+						
+						/**
+						 * CMS page collection
+						 *
+						 * @category    Mage
+						 * @package     Mage_Cms
+						 * @author      Magento Core Team <core@magentocommerce.com>
+						 */
+						class Mage_Cms_Model_Resource_Page_Collection extends 
+							  Mage_Core_Model_Resource_Db_Collection_Abstract
+						{
+						    /**
+						     * Load data for preview flag
+						     *
+						     * @var bool
+						     */
+						    protected $_previewFlag;
+						
+						
+						    /**
+						     * Define resource model
+						     *
+						     */
+						    protected function _construct()
+						    {
+						        $this->_init('cms/page');
+						        $this->_map['fields']['page_id'] = 'main_table.page_id';
+						        $this->_map['fields']['store']   = 'store_table.store_id';
+						    }
+												
+	
+
+inside cms|model|block.php
+
+	class Mage_Cms_Model_Block extends Mage_Core_Model_Abstract
+	{
+	    protected function _construct()
+	    {
+	        $this->_init('cms/block');
+	    }
+	}
+
+	---> Points the block file inside the model  resource
+	
+
+	
+Controller
+
+create a controllers folder inside your module
+create a controller file controllers/yourfilename.php 
+	yourfilename.php  = UrltitleController.php
+	
+	<?php
+	 
+	 class namespace_modulename_UrltitleController extends Mage_Core_Controller_Front_Action {
+	 
+	 		public function sayHelloAction(){
+	 			$this->loadLayout();
+	 			
+	 			die($this->getLayout->getNode()->asXML());
+	 			
+	 			$this->renderLayout();
+	 		}
+	 		
+	 		public function indexAction(){
+	 		
+	 			echo 'Default action!';
+	 		
+	 		}
+	 
+	 }
+	
+	
+-- Overriding a mage module controller 
+In your module's etc/comfig.xml 
+copy and paste the original module's etc/config's controller xml into your module etc
+<config>
+	<frontend>
+		<routers>
+			//writing a new controller router
+			<use>standard</use>
+			<args>
+				<module>TutsPlus_Demo</module>
+				<frontName>demo</frontName>
+			</args>
+			//overriding a an exiting controller router
+			<catalog>
+				<args>
+					<modules>
+						<demo before="Mage_Catalog">TutsPlus_Demo</demo>
+					</modules>
+				</args>
+			</catalog>
+		</routers>
+	</frontend>
+</config>
+	
+inside the module's controller folder create ProductController.php
+to override catalog products controller router
+	
+/ProductController.php
+<?php
+
+//In controller, it's important to get the original file.
+
+//require_once 'Mage/Catalog/controllers/ProductController.php';
+require_Once(Mage::getModueDir('controllers', 'Mage_Catalog').DS.'ProductController.php');
+class TutsPlus_Demo_ProductController extends Mage_Catalog_ProductController { 
+	
+	public function viewAction(){
+		echo 'say hi';
+	}
+}
+	
+	
+--- Layout/page.xml
+	<block type="page/html" name"root" output"toHTML" template="page/3columns.phtml">
+	
+	type = page block folder/html.php
+	 Translate to = mage_page_block_html
+	name = unique identifier
+	output = automatically render 
+	template = connects block to template
+
+	
+inside module|Demo|Bock|configurable.php
+<?php
+	
+	class TutspPlus_Demo_Block_Configurable extends Mage_Core_Block_Template { 
+		
+		public function getConfigurableProducts() { 
+			return 'it works';
+		}
+	}
+	
+	
+frontend|default|tutsplus|template|tutsplus|configurable.phtml
+
+<?php
+
+echo $this->getConfigurableProducts();
+	
+	
+
+
+add a code inside your module's config.xml
+
+<config>
+	<frontend>
+		<routers>
+		
+		</routers>
+		//Copy and paste code from mage|page|etc|config.xml and look for layout
+		<layout>
+			<updates>
+				<demo>
+					<file>tutsplus.xml</file>
+				</demo>
+			</updates>
+		</layuout>
+	</frontend>
+</config>
+	
+Create a file insude the module's layout folder
+frontend|default|tutsplus|layout|tutsplus.xml 
+
+	<layout>
+		//show's only in that router example.com/demo/index/sayhello
+		<tutsplus_demo_index_sayhello>
+			<reference name="content">
+				<block type="demo/configurable" name="demo" template="tutsplus/configurable.phtml" />
+			</refrence>
+		</tutsplus_demo_index_sayhello>
+	</layout>
+
+
+inside module|Demo|Bock|configurable.php
+<?php
+	
+	class TutspPlus_Demo_Block_Configurable extends Mage_Core_Block_Template { 
+		
+		public function getConfigurableProducts() { 
+			$products = Mage::getModel('catalog/products')
+						->getCollection()
+						->addAttributeToSelect(array('name, 'price, 'url_key'))
+						->addAttributeToFileter('type_id', 'array('eq' => 'configurable'));
+			return $products;
+		}
+	}
+	
+
+	
+	
+frontend|default|tutsplus|template|tutsplus|configurable.phtml
+
+<?php $products = $this->getConfigurableProducts(); ?>
+
+<h3>Products</h3>
+<?php if ($products-count() > 0 ): ?>
+	<ul>
+		<?php foreach($products as $product): ?>
+			<li>
+				<a href="<?php echo $product->getProductURL(); ?>" 
+				<?php echo $product->getName(); ?></a>
+				<span><?php echo $product->getPrice(); ?></span>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+<?php else: ?>
+	<p>No products are available!</p>
+<?php endif; ?>
+	
+	
+Helper folder
+Create a fie called data.php
+<?php
+class Tutsplus_Demo_Helper_Data extends Mage_Core_Helper_Abstract {
+	public function sayHi() { 
+		echo "hi";
+	}
+	public function beautifyPrice() { 
+		if(!isset($price))
+			return 'unknown price';
+		return number_format($price, 2, '.', ',');
+	}
+}
+	
+
+	
+frontend|default|tutsplus|template|tutsplus|configurable.phtml
+
+<?php $products = $this->getConfigurableProducts(); ?>
+
+<?php $helper = Mage:helper('demo'); ?>
+
+<h3>Products</h3>
+<?php if ($products-count() > 0 ): ?>
+	<ul>
+		<?php foreach($products as $product): ?>
+			<li>
+				<a href="<?php echo $product->getProductURL(); ?>" 
+				<?php echo $product->getName(); ?></a>
+				<span><?php echo $helper->beautifyPrice($product->getPrice()); ?></span>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+<?php else: ?>
+	<p>No products are available!</p>
+<?php endif; ?>
+	

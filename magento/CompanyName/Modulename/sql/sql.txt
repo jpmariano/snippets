@@ -1,0 +1,2 @@
+sql: This folder contains the installation and upgrade files for each
+specific module

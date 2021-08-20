@@ -1,0 +1,4 @@
+1. Install like any other CMS
+2. https://www.magentocommerce.com/wiki/groups/227/resetting_file_permissions
+3. Turn off cache while developing
+4. turn on Error Reporting - ini_set('display_errors', 1); (located in index.php)

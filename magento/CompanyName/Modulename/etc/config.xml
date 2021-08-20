@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category   MagePsycho
+ * @package    CompanyName_Modulename
+ * @author     info@magepsycho.com
+ * @website    http://www.magepsycho.com
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+ -->
+<config> // All module configurations are contained
+    <modules>
+        <CompanyName_Modulename> //to specify the current module version, which is later used to decide which installation and upgrade files to run.
+            <version>0.2.0</version>
+        </CompanyName_Modulename>
+    </modules>
+    <global> //Makes it available for frontend and backend; 
+    		Configuration node to specify the configuration scope (most common: global, adminhtml, and frontend)
+        <models>
+            <modulename>//node is used by the factory methods, such as Mage::getModel(), Mage::getHelper(), and etc
+                <class>CompanyName_Modulename_Model</class>
+                //How it's used Mage::getModel('CompanyName_Modulename/folder1_folder2_folder3_classname'); --folders if there's any
+            </modulename>
+        </models>
+        <blocks>
+            <modulename>
+                <class>CompanyName_Modulename_Block</class>
+            </modulename>
+        </blocks>
+        <helpers>
+            <modulename>
+                <class>CompanyName_Modulename_Helper</class>
+            </modulename>
+        </helpers>
+		<events> <!--
+			Event: 
+			We can consider an event as a kind of flag that rises when a specific situation happens 
+			for example when the user presses the « pay » button of your website, it is an event. 
+			Your order has been registered? Here it is an event too.-->
+			<core_block_abstract_to_html_after> <!-- app/code/core/Mage/Core/Block/Abstract.php -->
+				<observers> <!-- Model -> observer.php -->
+					<modulename_core_block_abstract_to_html_after> <!-- Connects events and observer -->
+						<class>modulename/observer</class> <!-- S classname inside  model/observer.php Companyname_Modulename_Model_Observer -->
+						<method>setTemplatePathHints</method>  <!-- function inside the observer.php -->
+					</modulename_core_block_abstract_to_html_after>
+				</observers>
+			</core_block_abstract_to_html_after>
+		</events>
+    </global>
+    <frontend>
+        <routers><!-- Works with controllers folder-->
+            <modulename>
+                <use>standard</use>
+                <args>
+                    <module>CompanyName_Modulename</module>
+                    <frontName>modulename</frontName>
+                </args>
+            </modulename>
+        </routers> <!-- Works with controllers folder-->
+    </frontend>
+    <adminhtml> <!-- This shows inside the admin control panel-->
+        <acl> <!--Access Control List -->
+            <resources>
+                <admin> <!--Access by Admin -->
+                    <children>
+                        <system> <!-- login to admin-->
+                            <children>
+                                <config> <!-- Goes Inside  System -> Configuration-->
+                                    <children>
+                                        <sectionname1>
+											<title>MagePsycho - All</title>
+										</sectionname1>
+                                        <sectionname2>
+                                            <title>Easy Path Hints Area</title>
+                                        </sectionname2>
+                                    </children>
+                                </config> <!-- Goes Inside  System -> Configuration-->
+                            </children>
+                        </system><!-- login to admin-->
+                    </children>
+                </admin> <!--Access by Admin -->
+            </resources>
+        </acl> <!--Access Control List -->
+    </adminhtml>
+    <default>
+        <modulename>
+            <option>
+                <active>1</active>
+                <code>magento</code>
+            </option>
+        </modulename>
+    </default>
+</config>

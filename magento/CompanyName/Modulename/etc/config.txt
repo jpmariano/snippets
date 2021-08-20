@@ -1,0 +1,50 @@
+Views
+• Layouts: 
+	Layouts are XML files that define the block structure and properties
+	such as name and the template file we can use. Each Magento module has its
+	own set of layout files.
+• Blocks: Blocks are used in Magento to reduce the burden on the controller by
+	moving most of the logic into blocks.
+• Templates: Templates are PHTML files that contain the required HTML code
+	and PHP tags.
+	
+Configuration Scopes
+• Global: As the name implies, this applies across all scopes.
+• Website: These are defined by a domain name and are composed by
+one or more stores. Websites can be set up to share customer data or
+be completely isolated.
+• Store: Stores are used to manage products and categories, and to group
+store views. Stores also have a root category that allows us to have separated
+catalogs per store.
+• Store view: By using store views we can set up multiple languages on our
+store frontend.
+
+Events and observers (http://www.nicksays.co.uk/magento-events-cheat-sheet-1-7/)
+There are two parts of this system:
+• an event dispatch with the object and event information
+• an observer listening to a particular event.
+
+Mage::dispatchEvent() method takes two parameters:  (http://www.nicksays.co.uk/magento-events-cheat-sheet-1-7/)
+• the first is the event name 
+• the second is an array of data that is received by the observer.
+
+observers files are inside model folder which are connected to certain events through config.xml
+
+<validate>
+	• validate-email
+	• validate-length
+	• validate-url
+	• validate-select
+	• validate-password
+we can extend the source_model, frontend_type, and validator functions and even create new ones.
+
+
+• config.xml
+• system.xml
+• api.xml
+• adminhtml.xml
+• cache.xml
+• widget.xml
+• wsdl.xml
+• wsi.xml
+• convert.xml

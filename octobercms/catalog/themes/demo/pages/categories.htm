@@ -1,0 +1,25 @@
+title = "Categories"
+url = "/categories/:slug"
+layout = "default"
+is_hidden = 0
+
+[builderDetails]
+modelClass = "Library\Courses\Models\Category"
+identifierValue = "{{ :slug }}"
+modelKeyColumn = "slug"
+displayColumn = "title"
+notFoundMessage = "Record not found"
+==
+{% set record = builderDetails.record %}
+{% set displayColumn = builderDetails.displayColumn %}
+{% set notFoundMessage = builderDetails.notFoundMessage %}
+
+{% if record %}
+    <h2>{{ attribute(record, displayColumn) }} </h2>
+    {% for course in record.courses %}
+      {{ course.title}} </br>
+   {% endfor %}
+
+{% else %}
+    {{ notFoundMessage }}
+{% endif %}

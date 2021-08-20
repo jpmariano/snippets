@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="HDI Explorer">
+    <meta name="author" content="Pablo Navarro Castillo">
+    <!-- <link rel="shortcut icon" href="../../assets/ico/favicon.ico"> -->
+
+    <title>HDI Explorer</title>
+
+    <!-- Styles -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/hdi.css" rel="stylesheet">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:title" content="HDI Explorer" />
+    <meta property="og:site_name" content="HDI Explorer"/>
+    <meta property="og:url" content="http://pnavarrc.github.io/hdi-explorer/share/"/>
+    <meta property="og:description" content="Explore Human Development Index Trends by Country."/>
+    <meta property="og:image" content="http://pnavarrc.github.io/hdi-explorer/img/screenshot.png"/>
+  </head>
+
+  <body>
+    <div id="fb-root"></div>
+
+    <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Human Development Index Explorer</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group" id="search-country">
+          <input type="text" class="form-control typeahead" placeholder="Search country" id="search-country-input">
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">About</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+    <!-- Content -->
+    <div class="container-fluid">
+      <!-- Country Information Template -->
+
+
+<script type="text/template" id="country-summary-template">
+
+    <div class="row country-summary-title">
+        <div class="col-xs-8"><%= name %></div>
+        <div class="col-xs-4 text-right">#<%= hdi_rank %></div>
+    </div>
+
+    <div class="row country-summary-box">
+        <div class="country-summary-box-header">
+            <i class="fa fa-bar-chart-o fa-fw"></i> human development index
+        </div>
+        <div class="row">
+            <div class="col-xs-9">human development index</div>
+            <div class="col-xs-3 text-right"><%= hdi_value %></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-9">hdi rank</div>
+            <div class="col-xs-3 text-right"><%= hdi_rank %></div>
+        </div>
+    </div>
+
+    <div class="row country-summary-box">
+        <div class="country-summary-box-header">
+            <i class="fa fa-heart fa-fw"></i> life and health
+        </div>
+        <div class="row">
+            <div class="col-xs-9">life expectancy at birth</div>
+            <div class="col-xs-3 text-right"><%= life_expectancy_at_birth %></div>
+        </div>
+    </div>
+
+    <div class="row country-summary-box">
+        <div class="country-summary-box-header">
+            <i class="fa fa-book fa-fw"></i> education
+        </div>
+        <div class="row">
+            <div class="col-xs-9">mean years of schooling</div>
+            <div class="col-xs-3 text-right"><%= mean_years_of_schooling %></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-9">expected years of schooling</div>
+            <div class="col-xs-3 text-right"><%= expected_years_of_schooling %></div>
+        </div>
+    </div>
+
+    <div class="row country-summary-box">
+        <div class="country-summary-box-header">
+            <i class="fa fa-money fa-fw"></i> income
+        </div>
+        <div class="row">
+            <div class="col-xs-9">gni per capita</div>
+            <div class="col-xs-3 text-right">$<%= gross_national_income_gni_per_capita %></div>
+        </div>
+    </div>
+</script>
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- HDI Chart -->
+        <div class="col-md-8" id="chart"></div>
+
+        <div class="col-md-4">
+
+            <!-- Country Summary Table -->
+            <div class="country-summary container-fluid" id="table"></div>
+
+            <!-- Sharing Buttons -->
+            <div class="sharing">
+                <span class="sharing-title">share</span>
+
+                <!-- Twitter Share Button -->
+                <a href="https://twitter.com/share"
+                    class="twitter-share-button"
+                    data-url="http://pnavarrc.github.io/hdi-explorer/share"
+                    data-text="Explore Human Development Index trends by country."
+                    data-via="pnavarrc"
+                    data-related="pnavarrc"
+                    data-count="none"
+                    data-hashtags="masteringd3js">Tweet</a>
+
+                <!-- Facebook Share Button -->
+                <div class="fb-share-button"
+                    data-href="http://pnavarrc.github.io/hdi-explorer/share/"
+                    data-type="button"></div>
+
+                <!-- Google Plus Button -->
+                <div class="g-plusone"
+                    data-size="medium"
+                    data-annotation="none"
+                    data-href="http://pnavarrc.github.io/hdi-explorer/share/"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div id="comments-section">
+                <div id="disqus_thread"></div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+</div>
+
+
+
+
+<script src="/dependencies.min.js"></script>
+
+
+<script src="/hdi.min.js"></script>
+
+
+
+
+<!-- Twitter -->
+
+
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+</script>
+
+
+
+
+<!-- Facebook -->
+
+
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+<!-- Google Plus -->
+
+
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+
+
+
+<script type="text/javascript">
+    // Disqus Configuration Variables
+    var disqus_shortname = 'hdi-explorer';
+
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+
+<p><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a></p>
+
+<script>
+  // Connect to the Firebase application and retrieve the data reference
+  var dataref = new Firebase('https://hdi-explorer.firebaseio.com/');
+
+  // Update the application state when the value of the data changes in Firebase
+  dataref.on('value', function(snapshot) {
+    app.state.set('code', snapshot.val().code);
+  });
+
+  // The model will update the object with the selected country code.
+  app.state.on('change:code', function(model) {
+    dataref.set({code: model.get('code')});
+  });
+
+</script>
+
+
+    </div>
+
+  </body>
+</html>

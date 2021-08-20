@@ -1,0 +1,1425 @@
+mvn clean package - to package application to jar
+mvn spring-boot:run 
+
+application.yml
+    spring:
+        profiles: dev
+    management:
+        security:
+            enabled: false
+    server:
+        port: 8000
+        ssl:
+            key-store: classpath:keystore.jks 
+            key-store-password: <password>
+            key-store-type: JKS 
+            key-alias: <youralias>
+            key-password: <password>
+    ---
+    spring:
+        profiles: stage
+    server:
+        port: 9000
+
+$java -jar -Dspring.properties.active=dev <folderpath>/<filename.jar>
+-----------------------
+Springboot server default:
+Tomcat: you can use Undertow or Jetty
+JSON Marshaller: marshalling and unmarshalling in web flows
+Logging Frameworks: Slf4j default, logback, and JBoss Logging
+Spring Libraries
+    - Spring boot auto configure
+    - Spring libraries include core, AOP, beans, context, expression
+    - Spring Web and Webmvc 
+    - Snake YAML
+    - Validators(javax and hibernate)
+https://mvnrepository.com/
+Configuring Embeded Tomcat
+    - Servlets 
+        - using beans
+        - Property based
+            - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#web-properties
+            - https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#server-properties
+        - keytool -genkey -keyalg RSA -alias <youralia> -keystore keystore.jsk -storepass <yourpassword> -validity 4000 -keysize <2048|4096>
+            - you can add this to your application.properties
+                server:
+                port: 8080
+                ssl:
+                    key-store: classpath:keystore.jks 
+                    key-store-password: <password>
+                    key-store-type: JKS 
+                    key-alias: <youralias>
+                    key-password: <password>
+            - http --verify=no https:localhost:8080/api/greeting
+            - http https:localhost:8080/api/rooms Accept:application.xml
+
+    - Filters
+    - Listeners
+
+pom.xml - https://mvnrepository.com/
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-xml</artifactId>
+    </dependency>
+
+Packaging a Springboot application
+    - Default behavior is packaging in jar
+    - Produces a "fat jar"
+    - Executable
+    - Registrable with systemd or init.d
+    - It supports to war files 
+        - Remove tomcat if you use war
+
+https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology
+
+Running a Springboot application
+- java -jar
+- java -jar app.jar  --file.upload-dir=<folderpath>
+- java -jar app.jar --spring.profiles.active=mac
+- Shell scripts
+- *nic sstemd or init.d
+- Cloud ecosystem (Pivotal Cloud Foundry)
+
+https://www.tutorialspoint.com/spring_boot/spring_boot_runners.htm
+Spring Boot: ApplicationRunner and CommandLineRunner
+
+Version: Neon.3 Release (4.6.3)
+java version "1.8.0_241"
+
+Validation
+
+    model or entity level
+    @NotNull
+    @Sixe(min=3, max=15)
+    @Email
+    @NotNull, @NotEmpty and @NotBlank
+    https://www.youtube.com/watch?v=pjA9Pc7aTic
+    https://www.appsdeveloperblog.com/validate-request-body-in-restful-web-service/
+    https://lmonkiewicz.com/programming/get-noticed-2017/spring-boot-rest-request-validation/
+
+    Controller
+    (@Valid Model modelname, Errors errors) {
+        if(errors.hasErrors()){
+
+        }
+    }
+
+    https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+    validate - validate the project is correct and all necessary information is available
+    compile - compile the source code of the project
+    test - test the compiled source code using a suitable unit testing framework. These tests should not require the code be packaged or deployed
+    package - take the compiled code and package it in its distributable format, such as a JAR.
+    verify - run any checks on results of integration tests to ensure quality criteria are met
+    install - install the package into the local repository, for use as a dependency in other projects locally
+    deploy - done in the build environment, copies the final package to the remote repository for sharing with other developers and projects.
+
+Database Derby; https://medium.com/ctrl-alt-kaveet/tutorial-installing-apache-derby-4cbf03c4aaba
+Step: Download the same version as your java https://db.apache.org/derby/derby_downloads.html
+Step 2: unzip the folder and put it inside the /Applications and name the folder derby
+Step 3: configure the global path 
+cat ~/.bash_profile
+vi ~/.bash_profile
+export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH=$PATH:$JAVA_HOME/bin
+export DERBY_HOME=/Applications/derby
+export PATH=$PATH:$DERBY_HOME:$DERBY_HOME/lib/derby.jar:$DERBY_HOME/lib/derbytools.jar:$DERBY_HOME/lib/derbyoptionaltools.jar:$DERBY_HOME/bin
+export M2_HOME=/Applications/apache-maven-3.6.3
+setEmbeddedCP
+Step 4: Refresh Terminal or source .bash_profile
+Step 5: Try connecting from any terminal- java org.apache.derby.tools.ij
+if it fails, double check the path, refresh terminal, or try again;
+ASO3UJG5HMAC:bin mariano$ source setEmbeddedCP
+ASO3UJG5HMAC:bin mariano$ java org.apache.derby.tools.ij
+$ java org.apache.derby.tools.ij
+ij > connect 'jdbc:derby:/Users/mariano/Downloads/springboilerplate/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/springscorm/app/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Downloads/springbootboilerplate/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/p3nextscan/p3scandesktop/database' create 'true' user 'todo' password 'todo' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/pfp/p3scandesktop/database' create 'true' user 'adminuser' password 'yourpass' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > connect 'jdbc:derby:/Users/family/Documents/maven/pfpp3desktopbackend/pfp-p3desktop-backend/database' create 'true' user 'app' password 'yourpass' driver 'org.apache.derby.jdbc.EmbeddedDriver';
+ij > run 'pathto.sql';
+ij> select * from tablename;
+
+********************************************************************************************************
+******************************************************************************
+Creating Bean Configuration
+******************************************************************************
+    ******************************************************************************
+    Creating Bean Configuration through Class
+    ******************************************************************************
+    1. Create a class
+
+    @Configuration
+    public class <ClassName>{
+        @Bean
+        public List<String> animals(){
+            return Arrays.asList("Tiger", "Lion");
+        }
+    }
+
+    2. Go to the Class where you want to import the Bean
+    @Import(<ClassName>.class)
+    public class <ClassThatWillConsumeYourBean>{
+
+        @Autowired
+        @Resource(name="animals")
+        public List<String> list;
+    }
+    ******************************************************************************
+    Creating Bean Configuration through XML
+    ******************************************************************************
+    Step 1: Create a file /src/main/resources/<filename-example>.xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"> <!-- bean definitions here -->
+
+        <util:list id="farmanimal">
+            <value>Rabit</value>
+            <value>Chicken</value>
+        </util:list>
+
+    </beans>
+
+    2. Go to the Class where you want to import the Bean
+    @ImportResource(/<<filename-example>.xml)
+    public class <ClassThatWillConsumeYourBean>{
+
+        @Autowired
+        @Resource(name="farmanimal")
+        public List<String> list;
+    }
+
+    // More example of creating Beans: https://docs.spring.io/spring/docs/4.2.x/spring-framework-reference/html/xsd-configuration.html
+******************************************************************************
+Overriding Springboot Deafault Bean Configuration 
+******************************************************************************
+1. Go to Maven dependency and find the class you want to Override
+    package org.springframework.boot.autoconfigure.web.servlet;
+        @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+        @Configuration(proxyBeanMethods = false)
+        @ConditionalOnWebApplication(type = Type.SERVLET)
+        @ConditionalOnClass(DispatcherServlet.class)
+        @AutoConfigureAfter(ServletWebServerFactoryAutoConfiguration.class)
+        public class DispatcherServletAutoConfiguration { 
+            //look for @Bean to override
+            @Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
+            public DispatcherServlet dispatcherServlet(WebMvcProperties webMvcProperties) {
+                DispatcherServlet dispatcherServlet = new DispatcherServlet();
+                dispatcherServlet.setDispatchOptionsRequest(webMvcProperties.isDispatchOptionsRequest());
+                dispatcherServlet.setDispatchTraceRequest(webMvcProperties.isDispatchTraceRequest());
+                dispatcherServlet.setThrowExceptionIfNoHandlerFound(webMvcProperties.isThrowExceptionIfNoHandlerFound());
+                dispatcherServlet.setPublishEvents(webMvcProperties.isPublishRequestHandledEvents());
+                dispatcherServlet.setEnableLoggingRequestDetails(webMvcProperties.isLogRequestDetails());
+                return dispatcherServlet;
+            }
+        }
+    
+2.   In your main application, create a bean
+@SpringBootApplication
+public class RoomServicesApplication {
+
+    @Bean
+    public DispatcherServlet dispatcherServlet(){
+        return new DispatcherServlet();
+    }
+
+    @Bean
+    public DispatcherServletRegistrationBean registration(){
+        DispatcherServletRegistrationBean registration = new DispatcherServletRegistrationBean(dispatcherServlet(). "/servelet/*");
+        registration.setName(DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);
+        return registration;
+    }
+
+	public static void main(String[] args) {
+		SpringApplication.run(RoomServicesApplication.class, args);
+	}
+}
+
+
+
+******************************************************************************
+Microservices Config Server
+******************************************************************************
+Step 1. Create a git repository folder name it: config
+    inside - <filename>.properties
+        - forexample: roomservices.properties 
+            - inside: server.port=8101
+            - inside:<variablename>=<value> | for example: message=hello world
+    
+Step 2: Create a Springboot Project - call it: config-server
+dependency: Cloud Config - Config Server
+
+Step 3: config-server/src/main/resources/application.properties
+server.port=9000
+spring.cloud.config.server.git.uri=file://<folderdirectorypath>/config
+
+Step 4: Enable Config Server config-server/src/main/java/com/webupps/services/config/ConfigServerApplication.java
+    import org.springframework.boot.SpringApplication;
+    import org.springframework.boot.autoconfigure.SpringBootApplication;
+    import org.springframework.cloud.config.server.EnableConfigServer;
+
+    @SpringBootApplication
+    @EnableConfigServer
+    public class ConfigServerApplication {
+
+        public static void main(String[] args) {
+            SpringApplication.run(ConfigServerApplication.class, args);
+        }
+
+    }
+
+Step 5. creating encyrpted variable (optional)
+    a. search in google: jce java 8 
+    b. download the zip file
+    c. extract, and copy all the jar to your java 8 installation lib/security folder (makesure you do a backacup before modifying)
+    d. config-server/src/main/resources/application.properties 
+    - add s encryption key: encrypt.key = secret 
+    e. restart config server
+    f. curl http://localhost:8888/encrypt -d <datayouwanttoencrypt>
+    g. copy the generated encrypted value make sure not to copy the speed 
+    h. curl http://localhost:8888/decrypt --daa-urlencode
+    i: using the encyrption in <filename>.properties of your git repo config 
+        message={cipher}<yourencyrptedvalue>
+    j: restart the config client and config server
+    i: from your client test it: http://localhost:8080/message 
+        - the display message should be decrypted
+
+
+******************************************************************************
+Config Client One way
+******************************************************************************
+Step 1. Create Springboot with following dependency: Config Client, Actuator, Web
+Step 2. Consume the variable from the server @Value(${message})
+    @SpringBootApplication
+    @RefreshScope
+    @RestController
+    public class ReservationBusinessServicesApplication {
+        
+        @Value(${message})
+        private String message;
+
+        @RequestMapping("/message)
+        public String message(){
+            return this.message;
+        }
+
+        public static void main(String[] args) {
+            SpringApplication.run(ReservationBusinessServicesApplication.class, args);
+        }
+
+    }
+3. Add file: app/src/main/resources/bootstrap.properties
+- This point to your config location
+spring.profiles.active=development
+spring.application.name=<filename>
+spring.cloud.config.uri=http://localhost:9000
+
+4. $curl --data '' http://localhost:8080/refresh - target your config client, because of @RefreshScope, your server will now consume 
+******************************************************************************
+Config Client another way
+******************************************************************************
+1. Create a new Springboot project with rest api
+2. Add a dependency to you working springboot api
+	<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR6</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+3. Add file: room-services/src/main/resources/bootstrap.properties
+- This point to your config location
+spring.profiles.active=development
+spring.application.name=roomservices
+spring.cloud.config.uri=http://localhost:9000
+
+******************************************************************************
+Creating Eureka Server
+******************************************************************************
+Step 1: in pom.xml
+    <properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Hoxton.SR6</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+Step 2: @EnableEurekaServer 
+
+    @SpringBootApplication
+    @EnableEurekaServer
+    public class EurekaServerApplication {
+
+        public static void main(String[] args) {
+            SpringApplication.run(EurekaServerApplication.class, args);
+        }
+
+    }
+Step 3: application.properties
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+Step 4:
+http://localhost:8761
+
+Step 5: Create a 2nd Eureka Server
+a. In your computer localhost file
+    add: 127.0.0.1 eureka1
+         127.0.0.1 eureka2
+b. rename the current eureka server application.properties to application-eureka1.properties
+    server.port=8761
+    eureka.client.register-with-eureka=false
+    eureka.client.fetch-registry=false
+    eureka.instance.hostname=eureka1
+    eureka.client.serviceUrl.defaultZone=http://eureka2:8762/eureka
+c. add another file application-eureka2.properties
+    application-eureka2.properties
+    server.port=8762
+    eureka.client.register-with-eureka=false
+    eureka.client.fetch-registry=false
+    eureka.instance.hostname=eureka2
+    eureka.client.serviceUrl.defaultZone=http://eureka1:8761/eureka
+
+d. create eureka1 run configuration profile
+    Arugments Tab
+        - VM Arugments
+        - Dspring.profiles.active=eureka1
+e. duplicate the run configuration profile
+    Arugments Tab
+        - VM Arugments
+        - Dspring.profiles.active=eureka2
+******************************************************************************
+Eureka Client
+******************************************************************************
+Step 1 - Create a new Service Project
+- pom.xml - requirements
+Springboot Actuator
+Config client
+Eureka Discovery Client
+Ribbon
+Spring Web
+
+Step 2:
+//For Eureka Client
+application.properties
+spring.application.name=reservationbusinessservices | eureka will pickup this name
+add unique port in application.properties
+server.port=8500
+
+//for consuming config
+Add file: app/src/main/resources/bootstrap.properties
+- This point to your config location
+spring.profiles.active=development
+spring.application.name=<filename>
+spring.cloud.config.uri=http://localhost:9000
+
+
+
+Step 3:
+Main class - add @EnableDiscoveryClient 
+    Example:
+    @SpringBootApplication
+    @EnableDiscoveryClient
+    public class ReservationBusinessServicesApplication {
+
+        @Autowired
+        private Eureka Client
+
+        @RequestMapping("/serviceinfo")
+        public String serviceInfo(){
+            InstanceInfo instance = client.getNextServerFromEureka(")
+        }
+        
+        //for service discovery by other client see package com.webupps.business.reservation; how this is used
+        @LoadBalanced
+        @Bean
+        public RestTemplate restTemplate(){
+            return new RestTemplate();
+        }
+
+        public static void main(String[] args) {
+            SpringApplication.run(ReservationBusinessServicesApplication.class, args);
+        }
+
+    }
+
+Step 4:  In your application.properties for your current client
+    eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka 
+Step 5:
+Copy The entity you want to consume without the jpa into your new service
+ - where you copy from - room-services/src/main/java/com/webupps/services/room/Room.java
+ - where you copy to - reservation-business-services/src/main/java/com/webupps/business/reservation/domain/Room.java
+
+Step 6:
+Add a controller to your new service
+reservation-business-services/src/main/java/com/webupps/business/reservation/RoomReservationController.java
+Sample code:
+    import com.frankmoley.business.reservation.domain.Room;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.core.ParameterizedTypeReference;
+    import org.springframework.http.HttpMethod;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RequestMethod;
+    import org.springframework.web.bind.annotation.RestController;
+    import org.springframework.web.client.RestTemplate;
+
+    import java.util.List;
+
+    @RestController
+    public class RoomReservationController {
+        @Autowired
+        private RestTemplate restTemplate;
+
+        @RequestMapping(value = "/rooms", method = RequestMethod.GET)
+        public List<Room> getAllRooms(){
+            ResponseEntity<List<Room>> roomsResponse = this.restTemplate.exchange(
+                   //ROOMSERVICES is from the eureka server registered application - http://localhost:8761/
+                    "http://ROOMSERVICES/rooms", HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<Room>>() {
+                    });
+            return roomsResponse.getBody();
+        }
+
+    }
+
+Step 7: create a run configuration and start your new service
+Step 8: check if eureka discovers your application
+
+Step 9: optional getting infromation about other Eureka Eureka client
+Main class - add @EnableDiscoveryClient 
+    Example:
+    @SpringBootApplication
+    @EnableDiscoveryClient
+    public class EurekaClient2ServicesApplication {
+
+        @Autowired
+        private Eureka Client
+
+        @RequestMapping("/serviceinfo")
+        public String serviceInfo(){
+            InstanceInfo instance = client.getNextServerFromEureka("EurekaClient1name", false);
+            return instance.getHomePageUrl();
+        }
+        
+
+        public static void main(String[] args) {
+            SpringApplication.run(EurekaClient2ServicesApplication.class, args);
+        }
+
+    }
+
+******************************************************************************
+Consuming services using Hystrix with Request Mapping
+******************************************************************************
+Step 1: Add Hystrix to your spingboot service api pom.xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix</artifactId>
+</dependency>
+Step 2: In your @RestController, autowire the RestTemplate 
+@RestController
+public class RoomReservationController {
+	
+	@Autowired
+	private RestTemplate restTemplate;
+
+    //I dont think this part is needed
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate()
+    } 
+
+    @RequestMapping("/startClient")
+    public List<String> startClient(){
+        return this.restTemplate.getForObject(http://localhost:<anotherserviceport>", List.class);
+    }
+
+  
+}
+
+
+******************************************************************************
+Consuming services with Feign in your service
+******************************************************************************
+Step 1: add feign in pom
+<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign -->
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-feign</artifactId>
+</dependency>
+
+Step 2: Create Interface
+    reservation-business-services/src/main/java/com/webupps/business/reservation/client/RoomService.java
+        import com.frankmoley.business.reservation.domain.Room;
+        import org.springframework.cloud.netflix.feign.FeignClient;
+        import org.springframework.web.bind.annotation.RequestMapping;
+        import org.springframework.web.bind.annotation.RequestMethod;
+        import org.springframework.web.bind.annotation.RequestParam;
+
+        import java.util.List;
+
+        @FeignClient(value="ROOMSERVICES")
+        public interface RoomService {
+
+            @RequestMapping(value="/rooms", method= RequestMethod.GET)
+            List<Room> findAll(@RequestParam(name="roomNumber", required=false)String roomNumber);
+        }
+   The code above is somewhat a copy of the controller of the service you want to consume
+        - copied from here: room-services/src/main/java/com/webupps/services/room/RoomController.java
+
+Step 3: In your controller
+reservation-business-services/src/main/java/com/webupps/business/reservation/RoomReservationController.java
+    @Autowired
+    private RoomService roomService;
+
+    @RequestMapping(value = "/rooms", method = RequestMethod.GET)
+    public List<Room> getAllRooms(){
+    	return this.roomService.findAll(null);
+    }
+
+Step 4: In your main
+    @SpringBootApplication
+    @EnableDiscoveryClient
+    @EnableFeignClients
+    public class ReservationBusinessServicesApplication {
+
+        @LoadBalanced
+        @Bean
+        public RestTemplate restTemplate(){
+            return new RestTemplate();
+        }
+
+        public static void main(String[] args) {
+            SpringApplication.run(ReservationBusinessServicesApplication.class, args);
+        }
+    }
+
+
+Step 5: Restart reservation-business-services
+******************************************************************************
+Isolating from Failures using Hystrix via @HystrixCommand
+******************************************************************************
+Step 1: Add Hystrix to your spingboot service api pom.xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix</artifactId>
+</dependency>
+
+Step 2: @SpringBootApplication in your controller
+@EnableCircuitBreaker
+
+Step 3.
+@RestController
+public class YourController {
+	
+	@Autowired
+	private RestTemplate restTemplate;
+
+    //I dont think this part is needed
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate()
+    } 
+
+    @RequestMapping("/startClient")
+    @HystrixCommand(fallbackMethod="failover")
+    public List<String> startClient(){
+        return this.restTemplate.getForObject(http://localhost:<anotherserviceport>", List.class);
+    }
+
+    public List<String> failover(){
+        return Arrays.asList("Default", "Default2");
+    }
+  
+}
+
+******************************************************************************
+Configuring Hystrix Failover time threshold 
+******************************************************************************
+Step 1: Add Hystrix to your spingboot service api pom.xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix</artifactId>
+</dependency>
+
+Step 2: @SpringBootApplication in your controller
+@EnableCircuitBreaker
+
+Step 3.
+@RestController
+public class YourController {
+	
+	@Autowired
+	private RestTemplate restTemplate;
+
+    //I dont think this part is needed
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate()
+    } 
+
+    @RequestMapping("/startClient")
+    @HystrixCommand(fallbackMethod="failover", commandProperties={
+        @hystrixProperty(name="execution.isolation.thread.timeOutInMilliseconds". value="500"){
+
+        }
+    })
+    public List<String> startClient(@RequestParam, long time) throws InterruptedException{
+        Thread.sleep(time);
+        return this.restTemplate.getForObject(http://localhost:<anotherserviceport>", List.class);
+    }
+
+    public List<String> failover(long time){
+        return Arrays.asList("Default", "Default2");
+    }
+  
+}
+
+4. Test your api
+localhost:8080/startClient=600 
+Since, the value is higher than 500 it will failover
+
+
+******************************************************************************
+Isolating from Failures using Hystrix via @FeignClient
+******************************************************************************
+
+Step 1: Add Hystrix to your spingboot service api pom.xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix</artifactId>
+</dependency>
+
+Step 2: @SpringBootApplication in your main add
+@EnableCircuitBreaker
+
+Step 3: reservation-business-services/src/main/resources/bootstrap.properties
+feign.hystrix.enabled=true
+
+Step 4: Create a fallback service implementation reservation-business-services/src/main/java/com/webupps/business/reservation/client/GuestServiceFallbackImpl.java
+    @Component
+    public class GuestServiceFallbackImpl implements GuestService {
+        @Override
+        public List<Guest> findAll(String emailAddress) {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public Guest findOne(long id) {
+            Guest guest = new Guest();
+            guest.setFirstName("Guest");
+            guest.setLastName("Occupied");
+            return guest;
+        }
+    }
+
+Step 5: In your service interface reservation-business-services/src/main/java/com/webupps/business/reservation/client/GuestService.java
+    @FeignClient(value = "GUESTSERVICES", fallback = GuestServiceFallbackImpl.class)
+    public interface GuestService {
+
+        @RequestMapping(value="/guests", method= RequestMethod.GET)
+        List<Guest> findAll(@RequestParam(name="emailAddress", required = false)String emailAddress);
+
+        @RequestMapping(value = "/guests/{id}", method = RequestMethod.GET)
+        Guest findOne(@PathVariable(name="id")long id);
+    }
+
+    //you can now test your fallback
+
+******************************************************************************
+Enable Hystrix Dashboard
+******************************************************************************
+a. In pom.xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+    </dependency>
+b. In your controller 
+@SpringBootApplication
+@EnableHystrix
+@EnableHystrixDashboard
+
+c. visit http://localhost:<port>/hystrix.html 
+in the inbox enter: http://localhost:<port>/hystrix.stream
+You can now view your feign and circuitbreaker
+
+******************************************************************************
+Ribbon 
+******************************************************************************
+
+Step 1. Create your 3 Microservices
+@RestController
+public class Computer1Controller {
+	@Value("${server.port}")
+    public String port;
+
+    @RequestMapping("/execute")
+    public String execute(){
+        return "hello world" + this.port;
+    }
+
+    @RequestMapping("/execute")
+    public String status(){
+        return "up";
+    }
+
+}
+
+Step 2. Create a Ribbon Server
+Depencies: Ribbon 
+
+Step 3. 
+@RestController
+public class RibbonController {
+	
+	@Autowired
+	private RestTemplate restTemplate;
+
+    //I dont think this part is needed
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate()
+    } 
+
+    @RequestMapping("/startClient")
+    public List<String> startClient(){
+        return this.restTemplate.getForObject(http://localhost:<pointstoanymicroservices>/execute", string.class);
+    }
+  
+}
+
+Step 4. Create a configuration class
+
+public class RibbonConfiguration {
+    @Autowired
+    public IClientConfig ribbonClientConfig;
+
+    @Bean
+    public IPing ping(IClientConfig config){
+        return new PingUrl();
+    }
+
+    @Bean
+    public IRule rule(IclientConfig config){
+        return new AvailabilityFilteringRule();
+    }
+}
+
+Step 5. application.properties
+<yourribbonservicename>.ribbon.eureka.enable=false
+<yourribbonservicename>.ribbon.ServerListRefreshInterval=1500
+<yourribbonservicename>.ribbon.listOfServers=localhost:<computer1>,localhost:<computer2>, localhost:<computer3>
+
+Step 6. 
+@RestController
+@RibbonClient(name="<yourribbonservicename>", configuration=RibbonConfiguration.class)
+public class RibbonController {
+	
+	@Autowired
+	private RestTemplate restTemplate;
+
+    //I dont think this part is needed
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate()
+    } 
+
+    @RequestMapping("/startClient")
+    public List<String> startClient(){
+        return this.restTemplate.getForObject(http://<yourribbonservicename>/execute", string.class);
+    }
+  
+}
+
+Step 7. Test
+- start all microservices then start the ribbon server
+visit -  localhost:8080/startClient 
+
+you should see diffrent port outputted
+
+******************************************************************************
+Zuul - routing or gateway for microservices 
+******************************************************************************
+Step 1: Create your 3 Microservices
+    @RestController
+    public class Computer1Controller {
+        @Value("${server.port}")
+        public String port;
+
+        @RequestMapping("/execute")
+        public String execute(){
+            return "hello world" + this.port;
+        }
+
+        @RequestMapping("/execute")
+        public String status(){
+            return "up";
+        }
+
+    }
+
+    In application.properties, add serport and name
+    server.port=777
+    spring.application.name=simple-service-1
+Step 2: Create a Zuul server
+    In your pom.xml, add zuul as dependency
+
+Step 3: Proxying
+    In your main of springboot application add @EnableZuulProxy
+    In your application.properties, 
+        ribbon.erureka.enabled=false
+        ser.port=8080
+        zuul.routes.somePath.url=http://localhost:7777
+    now test: http://localhost:8080/execute
+Step 4: Zuul configuration
+    In your application.properties, 
+        ribbon.erureka.enabled=false
+        ser.port=8080
+        zuul.routes.somePath.url=http://localhost:7777
+        zuul.routes.somePath.path=/otherPath/**
+        zuul.prefix=/api/v1
+    Now test: http://localhost:8080/api/v1/otherPath/execute
+Step 5: Zuul Filters
+create a zuul filter class
+
+public class <filtername>Filter extends ZuulFilter {
+    @Override
+    public String filterType() {
+        return "pre";
+    }
+
+    @Override
+    public int filterOrder() {
+        return 1;
+    }
+
+    @Override
+    public boolean shouldFilter() {
+        //optional RequestContext
+        return true;
+    }
+
+    @Override
+    public Object run() {
+        //RequestContext ctx = RequestContext.getCurrentContext();
+        //HttpServletRequest request = ctx.getRequest();
+        //log.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
+        System.out.println("This request has passed throught the custom Zuul Filter...");
+        return null;
+    }
+}
+
+Step 6: 
+
+@EnableZuulProxy
+@SpringBootApplication
+public class RoutingAndFilteringGatewayApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(RoutingAndFilteringGatewayApplication.class, args);
+  }
+
+  @Bean
+  public <FilterName>Filter filter() {
+    return new <FilterName>Filter();
+  }
+
+}
+
+Step 7: Test
+Now test: http://localhost:8080/api/v1/otherPath/execute
+Note: filter currently doesn't do anything, but if you look at the console you should see that the request passes through filter
+
+******************************************************************************
+Authorization Server
+******************************************************************************
+Oauth Concepts
+- Resource Owner - data owner
+- Resource Server - Rest API who can grant access to the data
+- Client Application - third party you want to five access to the data
+- Authorization - conductor exchanges of credentials and tokens
+
+Oauth Grant Types
+- Authorization code
+- Implicit Grant
+- Resource owner credentials grant password
+- coient credentials grant
+
+Steps 1: Set up Authorization Server
+<properties>
+    <java.version>1.8</java.version>
+    <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+</properties>
+<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-oauth2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+		     <groupId>org.springframework.boot</groupId>
+		     <artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+	</dependencies>
+
+Step 2: 
+@SpringBootApplication
+@EnableResourceServer
+@EnableDiscoveryClient
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SpringMicroservicesOauthServerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringMicroservicesOauthServerApplication.class, args);
+	}
+
+}
+
+
+Step 3: Create Authorization Server
+
+@Configuration
+@EnableAuthorizationServer
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+	@Autowired
+	private AuthenticationManager authMessage;
+	
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		endpoints.authenticationManager(authMessage);
+	}
+ 
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.inMemory().withClient("webapp").secret("websecret").authorizedGrantTypes("password").scopes("read,write,trust");
+	}
+}
+
+
+Step 4: create WebSecurityConfigurerAdapter
+@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("user1").password("password1").roles("USER");
+	}
+ 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+ 
+	@SuppressWarnings("deprecation")
+	@Bean
+	public static NoOpPasswordEncoder passwordEncoder() {
+		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	}
+	
+	
+}
+
+Step 5: application.properties | Do not run application on 8080
+server.port=9090
+
+Step 6: Create a post request in postman
+http://localhost:9090/oauth/token
+Type: post
+Type: Basic Auth 
+username: webapp
+password: websecret
+
+click post: It will add authorization header like this: Basic d2ViYXBwOndlYnNlY3JldA==
+
+add aquery param to post
+grant_type password
+username user1
+password password1
+
+******************************************************************************
+Authorized Resource Server
+******************************************************************************
+Step 1:
+@SpringBootApplication
+@EnableResourceServer
+@EnableDiscoveryClient
+@RestController
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SpringMicroservicesOauthServerApplication {
+	
+	@RequestMapping("/resource/endpoint")
+    @PreAuthorize("hasRole('ADMIN')")
+	public String endpoint() {
+		return "This message is protected by the resource server";
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringMicroservicesOauthServerApplication.class, args);
+	}
+
+}
+
+Step 2: Add a user with role ADMIN
+@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("user1").password("password1").roles("USER").and()
+		.withUser("user2").password("password2").roles("ADMIN");
+	}
+ 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+ 
+	@SuppressWarnings("deprecation")
+	@Bean
+	public static NoOpPasswordEncoder passwordEncoder() {
+		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	}
+	
+	
+}
+
+
+Step 3: Test with postman get request
+http://localhost:9090/resource/endpoint?access_token=<yourtoken>
+
+
+******************************************************************************
+Oauth Client
+******************************************************************************
+Step 1. Create a new project
+<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Hoxton.SR6</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-oauth2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+		     <groupId>org.springframework.boot</groupId>
+		     <artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Hoxton.SR1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+Step 2: Create WebSecurityConfigurerAdapter
+
+@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("user1").password("password1").roles("USER").and()
+		.withUser("user2").password("password2").roles("ADMIN");
+	}
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+	}
+	@SuppressWarnings("deprecation")
+	@Bean
+	public static NoOpPasswordEncoder passwordEncoder() {
+		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	}
+}
+
+Step 3. In your main or RestController
+@SpringBootApplication
+@EnableOAuth2Client
+@RestController
+public class SpringMicroservicesOauthClient1Application {
+	
+	@Autowired
+	private OAuth2RestTemplate restTemplate;
+	
+	@Bean
+	public OAuth2RestTemplate restTemplate() {
+		return new OAuth2RestTemplate(resource(), new DefaultOAuth2ClientContext());
+	}
+	
+	@Bean
+	protected OAuth2ProtectedResourceDetails resource() {
+		ResourceOwnerPasswordResourceDetails details = new ResourceOwnerPasswordResourceDetails();
+		details.setAccessTokenUri("http://localhost:9090/oauth/token");
+		details.setClientId("webapp");
+		details.setClientSecret("websecret");
+		details.setGrantType("password");
+		return details;
+	}
+	
+	@RequestMapping("/execute")
+	public String execute(Principal principal) throws URISyntaxException {
+		User user = (User) ((Authentication)principal).getPrincipal();
+		URI uri = new URI("http:localhost:9090/resource/endpoint");
+		RequestEntity<String> request = new RequestEntity<String>(HttpMethod.POST, uri);
+		AccessTokenRequest accessTokenRequest = this.restTemplate.getOAuth2ClientContext().getAccessTokenRequest();
+		accessTokenRequest.set("username", user.getUsername());
+		accessTokenRequest.set("password", user.getPassword());
+		return restTemplate.exchange(request, String.class).getBody();
+		
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication.run(SpringMicroservicesOauthClient1Application.class, args);
+	}
+
+}
+
+Step 4. add auth.eraseCredentials(false);
+@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("user1").password("password1").roles("USER").and()
+		.withUser("user2").password("password2").roles("ADMIN");
+		auth.eraseCredentials(false);
+	}
+ 
+	
+ 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+	}
+
+
+
+	@SuppressWarnings("deprecation")
+	@Bean
+	public static NoOpPasswordEncoder passwordEncoder() {
+		return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+	}
+}
+
+5. Create Database to store token
+lets use hsql for example:
+/Applications/hsqldb/hsqldb
+create a file:
+    server.properties
+        server.database.0=file:hsqldb/microserver
+        server.dbname.0=tokendb
+
+$ java -cp lib/hsqldb.jar org.hsqldb.server.Server
+
+when done, ctrl + C 
+
+$ java -cp lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:hsqldb/microserver --dbname.0 tokendb
+
+on a serparate terminal, /Applications/hsqldb/hsqldb
+ java -cp ../lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing
+ When the GUI is up, Type HsqL Database Engine Server 
+ URL: jdbc:hsqldb:hsql://localhost/tokendb
+
+
+Step 6: Create Database Token schema In your Oauth Server
+create schema.sql under resources
+ https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
+
+Step 7: Modify Auth server AuthorizationServerConfigurerAdapter
+@Configuration
+@EnableAuthorizationServer
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+	@Autowired
+	private AuthenticationManager authManager;
+	
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		endpoints.authenticationManager(authManager);
+	}
+	/*//In Memory user
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.inMemory().withClient("webapp").secret("websecret").authorizedGrantTypes("password").scopes("read,write,trust");
+	}
+	*/
+
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+		security.checkTokenAccess("permitAll()");
+	}
+	
+	@Bean
+	public TokenStore tokenStore(){
+		return new JdbcTokenStore((javax.sql.DataSource) dataSource());
+	}
+	
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.jdbc((javax.sql.DataSource) dataSource());
+	}
+
+	@Bean
+	public DataSource dataSource() {
+		DriverManagerDataSource datasource = new DriverManagerDataSource();
+		datasource.setDriverClassName("org.hsqldb.jdbcDriver");
+		datasource.setUrl("jdbc;hsqldb:hsql://localhost/tokendb");
+		datasource.setUsername("SA");
+		datasource.setPassword("");
+		return (DataSource) datasource;
+	}
+
+}
+
+
+******************************************************************************
+Spring Cloud Netflix (OSS)
+******************************************************************************
+1. Eureka (Service Registry and Discovery)
+2. Hystrix (Latency and Fault Tolerance)
+3. Ribbon(Load Balancing)
+4. Zuul (Edge Service and Routing)
+
+
+******************************************************************************
+Spring Common Projects
+******************************************************************************
+spring-security-core
+spring-security-config
+spring-security-web
+spring-security-test
+spring-security-ldap
+spring-security-oauth2-core
+spring-security-oauth2-client
+spring-security-openid
+spring-security-oauth2-jose 
+spring-security-remoting
+spring-security-cas 
+spring-security-acl
+
+******************************************************************************
+Grant Types
+******************************************************************************
+Authorization code grant most Common
+Implicit is common in web apps and mobile apps
+Client grant credentials is useful in system-to-system comms

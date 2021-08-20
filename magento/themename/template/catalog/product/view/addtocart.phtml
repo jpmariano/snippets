@@ -1,0 +1,14 @@
+<?php $_product = $this->getProduct(); ?>
+<?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if($_product->isSaleable()): ?>
+    <div class="add-to-cart">
+      <?php if($_product->getTypeId() == 'simple'): ?>
+        <label for="qty" class="required"><?php echo $this->__('Quantity') ?>: <em>*</em></label>
+        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="Quantity" placeholder="QTY" class="required-entry input-text qty" />
+        <?php endif; ?>
+        <div class="button-wrapper">
+	        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+        </div>
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+<?php endif; ?>

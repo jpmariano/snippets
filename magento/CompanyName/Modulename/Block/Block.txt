@@ -1,0 +1,36 @@
+Block: This folder contains blocks in Magento that form an additional layer
+of logic between the controllers and views (app/design/frontend/default/themename)
+
+Blocks: Blocks are used in Magento to reduce the burden on the controller by
+moving most of the logic into blocks.
+
+Factory Methods (Class Alias)  
+//http://freegento.com/doc/d8/dcb/class_mage.html
+//http://blog.magestore.com/2013/09/18/call-methods-to-create-class-objects/
+• Mage::getModel($modelClass, $arguments)
+• Mage::getResourceModel($modelClass,$ arguments = array())
+• Mage::helper($name)
+• Mage::getSingleton($modelClass = ”,array $arguments = array())
+• Mage::getResourceSingleton()
+• Mage::getResourceHelper()
+• Mage::getResourceModel($modelClass,$ arguments = array())
+• Mage::getModuleDir($type,$moduleName)
+• Mage::getStoreConfig ($path,$id = null)
+• Mage::getUrl ($route = ”, $params = array())
+• Mage::register($key,$value,$graceful = false) )
+• Mage::registry ($key )
+
+
+Mage::getModel($modelClass, $arguments)
+Example Code:
+$product = Mage::getModel('catalog/product')->load(2); //gets the table as well as loading the 2nd product
+$name = $product->getName() . '-TEST'; //getName(), and getPrice() are available functions inside the Mage_Catalog_Model_Product
+$price = $product->getPrice();
+$product->setPrice($price + 15); //are inherited functions (see class heirarchy http://freegento.com/doc/hierarchy.html)
+$product->setName($name);
+$product->save();
+
+• setData($parameters)
+• getData($parameters)
+• unsetData($parameters)
+• isset($parameters)

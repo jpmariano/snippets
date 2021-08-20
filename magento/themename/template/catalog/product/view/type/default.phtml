@@ -1,0 +1,19 @@
+<?php /* @var $this Mage_Catalog_Block_Product_View_Abstract */?>
+<?php $_product = $this->getProduct() ?>
+<!---->
+<!--<p class="price">-->
+<!--	--><?php //if($_product->getSpecialPrice()): ?>
+<!--		WAS --><?php //echo Mage::helper('core')->currency($_product->getPrice(), true, false) ?>
+<!--		<span class="special-price">-->
+<!--		NOW --><?php //echo Mage::helper('core')->currency($_product->getSpecialPrice(), true, false); ?>
+<!--		</span>-->
+<!--	--><?php //else: ?>
+<!--		--><?php //echo Mage::helper('core')->currency($_product->getPrice(), true, false) ?>
+<!--	--><?php //endif; ?>
+<!--</p>-->
+
+<p class="short_description visible-desktop visible-tablet"><?php echo $_product->getShortDescription() ?></p>
+
+<?php echo $this->getChildHtml('product_type_data_extra') ?>
+
+

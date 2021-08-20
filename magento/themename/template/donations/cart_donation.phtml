@@ -1,0 +1,158 @@
+<?php
+/**
+ * MageWorx
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MageWorx EULA that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.mageworx.com/LICENSE-1.0.html
+ *
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@mageworx.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade the extension
+ * to newer versions in the future. If you wish to customize the extension
+ * for your needs please refer to http://www.mageworx.com/ for more information
+ * or send an email to sales@mageworx.com
+ *
+ * @category   design_default
+ * @package    MageWorx_Donations
+ * @copyright  Copyright (c) 2009 MageWorx (http://www.mageworx.com/)
+ * @license    http://www.mageworx.com/LICENSE-1.0.html
+ */
+
+/**
+ * Donations extension
+ *
+ * @category   design_default
+ * @package    MageWorx_Donations
+ * @author     MageWorx Dev Team <dev@mageworx.com>
+ */
+?>
+<?php
+$defaultCharity = Mage::helper('donations')->getDefaultCharity();
+?>
+<?php if ($this->isCartEnabled()): ?>
+<div id="donations-block" class="span6 pull-right">
+    <form method="post" action="<?php echo $this->getUrl('donations/cart/') ?>" id="donation-form">
+        <div class="donations-cart-donation box cf">
+           	<h4 class="hidden-phone"><?php echo $this->__('Additional Donation') ?></h4>
+            <h4 class="visible-phone"><?php echo $this->__('Additional Donation') ?></h4>
+            <div class="donations-form">
+                <?php if ($this->hasDonation()): ?>
+                <div class="donation-active">
+                    <?php $char = ''; if($this->getSelectCharityName()) $char = 'for "'.$this->getSelectCharityName().'"';?>
+                    <?php echo $this->__('Donation of %s %s added to your order total.', $this->getDonation(), $char) ?> &nbsp;
+                    <a id="donations-button" onclick="donations.removeCartDonation(); return false;" href="#"><?php echo $this->__('Remove')?></a>
+                </div>
+                <?php else: ?>
+                <?php echo $this->getDonationHtml() ?>
+                <div class="donation-list-wrapper">
+					<ul id="donation-list">
+						<input type="hidden" name="donation" id="donation" />
+                        <li><label class="amount-label" data-donation-value="5.00" for="donate-5">$5</label></li>
+						<li><label class="amount-label" data-donation-value="10.00" for="donate-10">$10</label></li>
+						<li><label class="amount-label" data-donation-value="25.00" for="donate-25">$25</label></li>
+						<li><label class="amount-label" data-donation-value="50.00" for="donate-50">$50</label></li>						
+						<li class="last"><input name="donation-other" id="donation-other" placeholder="Other" class="input-text" /></li>
+					</ul>
+					<script type="text/javascript">
+
+                        function sendDonation(donationValue){
+                            if( donationValue.length != 0 ){
+                                jQuery('#donation').val(donationValue);
+                                donations.addCartDonation(true);
+                            }
+                        }
+
+						jQuery('.amount-label').on('click blur', function(){
+                            event.preventDefault();
+							jQuery('.amount-label').removeClass('active');
+							jQuery(this).addClass('active');
+                            var donationValue = "";
+							if(jQuery(this).attr('data-donation-value')){
+								donationValue = jQuery(this).attr('data-donation-value');
+							} else {
+								donationValue = jQuery(this).val();
+							}
+                            sendDonation( donationValue );
+                            return false;
+					    });
+
+                        jQuery('#donation-other').on('blur', function(){
+                            event.preventDefault();
+                            jQuery('.amount-label').removeClass('active');
+                            sendDonation( jQuery(this).val() );
+                            return false;
+                        });
+
+                        jQuery('#donation-other').keydown(function(event){
+                            if( (event.keyCode == 13) || (event.which == 13) ) {
+                                event.preventDefault();
+                                sendDonation( jQuery(this).val() );
+                                return false;
+                            }
+                        });
+
+                        jQuery(".btn-checkout").on('click', function(){
+                            if(jQuery('#donation-other').val() != ''){
+                                sendDonation( jQuery('#donation-other').val() );
+                            }
+                        });
+
+                        jQuery(document).ready(function(){
+                            jQuery('#donation-other').blur();
+                        });
+
+					</script>
+                </div>
+
+                <?php if (0 < $this->getMinDonationAmount()): ?>
+                    <div style="padding-bottom: 5px;" ><?php echo $this->__('Minimum donation %s', $this->getMinDonation()) ?></div>
+                <?php endif ?>
+                <?php if($this->isCharityEnabled()): ?>
+                    <select name="charity" id="charity-select" onchange="donations.getCharityInfo(this);">
+                        <option value="0" ><?php echo Mage::helper('donations')->__('Choose Charity'); ?></option>
+                        <?php foreach($this->getCharities() as $charity): ?>
+                        <option value="<?php echo $charity->getId(); ?>" <?php if($charity->getId() == $defaultCharity){ ?>selected="selected"<?php } ?>><?php echo $charity->getName(); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div id="charity-images" style="margin: 2px; min-height: <?php echo Mage::helper('donations')->getImageSize() ?>px;">
+                        <?php foreach($this->getCharities() as $charity): ?>
+                        <div style="display: none;" id="charity-<?php echo $charity->getId(); ?>">
+                            <?php if($charity->getLogo()): ?>
+                                <img style="float: left; padding: 0 10px 2px 0; max-width: <?php echo Mage::helper('donations')->getImageSize() ?>px; max-height: <?php echo Mage::helper('donations')->getImageSize() ?>;" src="<?php echo Mage::getBaseUrl('media'); echo $charity->getLogo(); ?>" alt="<?php echo $charity->getName(); ?>" />
+                            <?php endif; ?>
+                            <p><?php echo $charity->getDescription(); ?></p>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                <?php endif ?>
+            </div>
+            <script type="text/javascript">
+                <!--
+                var donationForm = new VarienForm('donation-form', true);
+                <?php if($defaultCharity): ?>
+                $('charity-<?php echo $defaultCharity ?>').show();
+                <?php endif; ?>
+                //-->
+            </script>
+        </div>
+    </form>
+</div>
+
+<div id="donations-totals">
+    <?php
+    echo $this->getChildHtml('totals');
+    $totals = $this->getChild('totals');
+    ?>
+</div>
+<?php endif ?>
+
+

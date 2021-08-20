@@ -1,0 +1,29 @@
+1. Install wordpress
+2. Change permalinks settings
+3. Delete Default Pages and Post
+4. Create new Pages and Post
+5. Move all pix (make sure pictures paths are correct in style.css 
+6. Edit style.css, header.php, sidebar.php, footer.php, and page.php
+7. Delete style.css content
+	Style.css - Change Theme name, URI, Desription, Version, and Author
+8. Replace - screenshot.png
+9. Edit - header.php
+   delete header.php inline CSS
+   delete specific body class
+   delete all div 
+10. Link external style.css file 
+<link rel="stylesheet" type="text/css" href="<?php bloginfo('template_url'); ?>style.css" />
+10.Delete Entire Sidebar.php content except comments (edit comments as you may like)
+11. Delete footer.php except <?php wp_footer(); ?>
+12. copy files from index.html to header.php, sidebar.php, footer.php, and page.php apporiately
+13. Use default wordpress functions to automate
+	<?php bloginfo ('name'); ?> --> this is wordpress default blogname
+	<?php wp_list_pages ('include=3,5,7&title_li='); ?> --> list all wordpress pages 
+	(for Main Nav, footer, or sidebar,  3,5,7 are page id, &title_li= is to make page invisible)
+	<?php wp_list_pages ('exclude=3,5,7&title_li=&depth=1'); ?> --> list all pages excluding 3,5,7 &depth=1 list only top pages
+	<?php echo date('Y'); ?> grab the latest year use for copyright
+	example: <li> Copyright  <?php bloginfo ('name'); ?> &copy; <?php echo date('Y'); ?></li> -- footer example
+	<?php 
+		if ($post->post_parent);{ wp_list_pages ('title_li= &depth=1 &child_of'.$post->post_parent);} ?>
+
+hr@bradfordscott.com

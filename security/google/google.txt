@@ -1,0 +1,39 @@
+Use this script for the google search engine
+
+<text> OR <text> 
+<text>  ( <text>  OR < "text to search">)
+<text>  ( <text>  | < "text to search">)
+<text>  <text>  -"<text you dont want to search>"
+
+Ignored words: I, a, the, of
++the <text>
+"the <text>" 
+~<synonym>
+
+Range operator: ..
+shoes 5..6
+digital camer 5..6 megapixel $800..1000
+raincoat ..$30
+
+google is case insensitive
+wildcard: *
+<text>*
+
+site:<domainname.com>
+related:<domainname.com>
+info:<domainname.com>
+inurl:<domainname.com>
+allinurl:<domainname.com>
+link:<domainname.com>
+cache:<domainname.com>
+intitle:< "text to search">
+allintitle:< "text to search">
+intext:< "text to search">
+inanchor:< "text to search">
+
+<text to search> filetype:<file extension>
+phonebook:<person name or phone number>
+
+define:<word to define>
+movie:<movie title, zipcode, city or state>
+music:<music title, zipcode, city or state>
