@@ -35,8 +35,11 @@ SET GLOBAL innodb_file_format=Barracuda;
 SET GLOBAL innodb_file_per_table=on;
 SET GLOBAL innodb_large_prefix = ON;
 
-drush upwd --password="SOMEPASSWORD" hprc.admin
-
+drush upwd --password="T0psecret" admin
+php -S localhost:8081 .ht.router.php 
+../vendor/bin/drush upwd --password="T0psecret" admin
+../vendor/bin/drush sql-drop 
+../vendor/bin/drush sql-cli --extra=--force < 
 drush sql-dump --result-file=/home/username/Repositories/opss-site/databases/opsstage.sql
 rsync -avr --delete /var/www/opss/sites/default/files/ /home/username/Repositories/opss-site/opss/files/
 Then:
