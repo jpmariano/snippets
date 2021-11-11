@@ -44,3 +44,53 @@ When the browser sees this response with an appropriate Access-Control-Allow-Ori
 Try the Command from Console: 
 fetch('https://cors-demo.glitch.me/', {mode:'cors'}) - This get the CORS error because the server did not send the - access-control-allow-origin: *
 fetch('https://cors-demo.glitch.me/allow-cors', {mode:'cors'}) - This request is successfule because it received from response header - access-control-allow-origin: * 
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+
+HTTP Authentication Types
+Basic Authentication - https://www.youtube.com/watch?v=rhi1eIjSbvk
+    - Client send a user name and password (Base 64 encoded) 
+    - Server will decode the username and password
+    - How Jquery send Basic Authentication to the server - https://stackoverflow.com/questions/5507234/use-basic-authentication-with-jquery-and-ajax
+
+Bearer token
+    - How jquery send bearer token to the server - https://stackoverflow.com/questions/35861012/how-to-send-a-token-with-an-ajax-request-from-jquery
+
+API key
+    - https://stackoverflow.com/questions/46629211/how-to-post-api-key-to-api-gateway-as-a-request-header-using-jquery-ajax
+
+Digest Authentication - https://en.wikipedia.org/wiki/Digest_access_authentication
+
+var settings = {
+  "url": "<url>",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Authorization": "Digest username=\"test\", realm=\"jtest@test.com\", nonce=\"test\", uri=\"/\", algorithm=\"MD5-sess\", qop=auth-int, nc=.00001, cnonce=\"0aasdfF1\", response=\"<encodedpassword>\", opaque=\"asdfasdf\""
+  },
+};
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+
+Auth 1.0 - https://docs.akana.com/cm/api_oauth/oauth_oauth10/m_oauth10_generateAccessTokenGET.htm
+var settings = {
+  "url": "https://www.instagram.com/",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Authorization": "OAuth oauth_consumer_key=\"consomerkey\",oauth_token=\"accesstoken\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1636668890\",oauth_nonce=\"L3pfB7GuOtw\",oauth_version=\"1.0\",oauth_signature=\"oFAjx7LO%2B%2FppDiqylf4d7hOirfw%3D\"",
+    "Cookie": "csrftoken=8qgtt0aklrUFrveQafXVF16t21YhaueI; ig_did=2EA102E6-E15A-41ED-92BD-138219D26587; ig_nrcb=1; mid=YY2RigAEAAHTIEGbsk12nJanrt-R"
+  },
+};
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+
+
+OAUTH 2.0 
+https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/
+https://aaronparecki.com/oauth-2-simplified/
