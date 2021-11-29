@@ -94,3 +94,481 @@ $.ajax(settings).done(function (response) {
 OAUTH 2.0 
 https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/
 https://aaronparecki.com/oauth-2-simplified/
+
+Roles in oauth
+User - Resource owner
+  - Consent Screen 
+    - Presented by the authorization server to the user
+    - Optional you can add MFA
+Device - User Agent 
+The Aplication - client
+  - 3 Client Types
+    - Confidential 
+      - ok to have api key, client secret on environment variables
+    - Credentialed
+      - Has credetiales but identiy is not confirmed by the server 
+      - App request for a client secret, in future request it uses the client secret 
+    - Public
+      - Do not include api key, or secret on single page app or mobile app
+Authorization Server
+The API - Resource server
+
+Token Types 
+  - WS-security & saml
+  - custom 
+    - home grown
+    - oracle access manager
+    - SiteMinder
+  - CBOR - web tokens (CWT)
+  - JWT
+
+Front Channel
+  - use's the browser bar to deliver the data to the recipient 
+  - sender doesn't know if the package is truly delivered
+  - receiver is not sure if the package delivered by the actual sender 
+  - app tells the authorization what it needs to do 
+    - app redirects to authorization server - authorization redirects the user to the app along with the token
+    - Implicit flow
+    - no longer recommended 
+Back Channel 
+  - https 
+    - recipeint can clearly see where it is coming from 
+    - using ajax request (Which is encrypted)
+
+Application identity
+  - Client ID - app uses it to identify themselves to authorization server 
+  - App doing an request to authorization server via url - scope, redirect uri, client id
+    - user logs to authorization server, authorization server redirect to the app with the authorization code (a one time coupon code)
+      - once time coupon - needs the back channel to redeam it 
+        - How will the backend or authorization server knows that that's the coupon is valid for that user? By having the authorization having check the client sercret 
+          - not ideal for public apps 
+        - PKCE (Prove key code exchange) extension as a solution
+        - Before the app does the first request (creates a unique sercret when it starts the flow and when it redeems the code)
+
+https://www.rfc-editor.org/rfc/rfc6749
+Oauth2 Flow 
+Client displays the button that links to the Authorization server website
+Within the Authorization Server the user chooses to authorize or not authorize the sharing data to the Client Server 
+Oauth Confusion 
+- Access tokens do not represent the user
+- The client is not the token's intended audience
+- Client cannot reliably verify the token
+- Access token innodb_file_format
+- Access token validation
+- User authentication 
+Oauth 
+- Delegated access
+- API Access control
+- Separation of User and Client Credentials
+
+Oauth 2 is a framework - is a delagation not authentication
+Protocol Endpoints 
+  - authorization - handled by browser
+  - token - handled by the machine
+  - both must use tls
+  - see: protocol-endpoints.jpg
+
+
+Oauth scope
+- A permission to do something within a protected resource on behalf of the resource owner 
+- For example:
+  - which api endpoint
+  - what can they do with the endpoint (CRUD) 
+- Authorization Code Grant Types
+  - Confidential Clients
+    - best for websites with a server backend 
+    - Explicit user and client authentication 
+/*********************************************************************/
+Confidential Client OAuth2 Flow //OAuth 2.1
+1. Authorization request
+  - https://authserver.example.com/authorize 
+  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html)
+  - &client_id - asdfasdfasdf 
+  - &redicrect_uri = https://client.example.com/callback 
+  - &state=xyz (ungessable) - https://stackoverflow.com/questions/26132066/what-is-the-purpose-of-the-state-parameter-in-oauth-authorization-request
+    - The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter. If both state are the same => OK. If state parameters are differents, someone else has initiated the request.
+  - &scope=api1 api2.read  (text with space or comma delimiter)
+  - &response_mode: query (tells the server you want the response in query string - https://auth0.com/docs/authorization/protocols/protocol-oauth2)
+
+2. Authorization Response 
+  https://client.example.com/connext/authorization?client_id=value&scope=value&redirect_uri=value&response_type=code
+    - &code=asdfasdfasdfasdfsadfskdjkn (short lifetime, represent user consent, bound to client ID, Redirect URI, resource owner, and Scope)
+    - &state=xyz (This should match the state from the request)
+
+
+3. Token Request 
+  Post /token http/1.1
+  Host: server.example.com 
+  Content-TYPE: application/x-www-form-urlencoded 
+  Authorization: Basic dfasdfdd (user name and password (Base 64 encoded)  - this prove who they say they are)
+  grant_type=authorization_code (tells the token endpoint what to give you)
+    - https://oauth.net/2/grant-types/
+    - https://athiththan11.medium.com/oauth-2-grant-types-a-story-guide-582580a3c4c2
+  &code=asdfasdfasdfasdfsadfskdjkn
+  &redirect_uri=https://client.example.com/callback 
+  //if you are not using Authorization, you have to add these below to your parameter
+  &client_id=asdfasdfasdf
+  &client_secret=whatever
+
+  Basic Authentication Style (RFC 7617)
+  Base64(client_id + ":" + client_secret) = this is username and password
+
+  Oauth style (RFC 6749)
+  Base64(urlformencode(client_id) + urlformencode(client_secret) )
+
+4. Token Response 
+  http:1.1 200 ok
+    Content-Type: application/json
+    {
+      "access_token": access_token_value,
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "api2.read",
+      "refresh_token":
+    }
+
+5. Client Calls the API with the Authorization header
+  Authorization  =  Bearer Token string
+/*********************************************************************/
+Public Client Flow
+The implicit Grant Type - implicit-flow.jpg
+  - Designt for public client
+  - Best for clients accessing resources directly from the browser
+  - No explicit client authentication 
+  - Security Concerns
+    - Access Tokens exposed to resource owner
+      - limit the user access
+    - Access tokens accesible to 3rd party javascript 
+      - be careful of adding 3rd party library on your site
+    - No validation that access token are intended for client
+    - Open ID Connect to fix these issues
+1. Authorization request
+  - https://authserver.example.com/authorize 
+  - ?response_type=token
+  - &client_id=
+  - &redirect_uri = https://client.example.com/callback (this is registered in authorize server)
+  - &response_mode = fragment
+  - &state=xyz (ungessable)
+  - &scope=api1 api2.read  (text with space or comma delimiter)
+
+  header
+  Authorization: Basic dfasdfdd (user name and password (Base 64 encoded)  - this prove who they say they are)
+
+2. Authorization Response
+https://client.example.com/callback#access_token=value&token_type=value&expires_in=3600&state=xyz
+token_type - https://stackoverflow.com/questions/5925954/what-are-bearer-tokens-and-token-type-in-oauth-2
+(this will be stored on client local storage)
+
+By default the web browser blocks request from a different domain name
+- CORS - Cross Origin Resource Sharing 
+  - allow the auth server to create a whitelist of permitted origin, http verbs and headers + proof key for code exchange (PKCE)
+/*********************************************************************/
+//OAuth 2.1
+The Client Credentials Grant Type - client-credentials-flow.jpg
+- Designed for client applications who are the resource owner 
+- Best for machine to machine communications
+- Requires Client Authentication
+
+1. Token Post Request
+  Host: server.example.com/connect/token
+  Content-TYPE: application/x-www-form-urlencoded 
+  Authorization: Basic dfasdfdd (client_id and client_secret (Base 64 encoded)  - this prove who they say they are)
+    -  //if you are not using Authorization, you have to add these to your body
+    client_id=asdfasdfasdf
+    client_secret=whatever
+  grant_type=client_credentials (tells the token endpoint what to give you)
+  scope=api1 api2.read  (text with space or comma delimiter)
+
+2. Token Response 
+  http:1.1 200 ok
+    Content-Type: application/json
+    {
+      "access_token": access_token_value,
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "api2.read",
+      "refresh_token":
+    }
+
+Differences with API Keys/HTTP Basic Authentication
+- not Sending the credentials with every request 
+- access tokens
+- Timed access without manual input 
+/*********************************************************************/
+The ROPC Grant Type (Deprecated)
+- Designed as a stop-gap for legacy applications
+- Negates most of the benefits of Oauth
+- Should no longer be used 
+1. Token Post Request
+  Host: server.example.com/connect/token
+  Content-TYPE: application/x-www-form-urlencoded 
+  Authorization: Basic dfasdfdd (client_id and client_secret (Base 64 encoded)  - this prove who they say they are)
+    -  //if you are not using Authorization, you have to add these to your body
+    client_id=asdfasdfasdf
+    client_secret=whatever
+  grant_type=password (tells the token endpoint what to give you)
+  scope=api1 api2.read  (text with space or comma delimiter)
+  username=
+  password=
+/*********************************************************************/
+Refresh Tokens 
+- swap for new tokens
+- allows for long lived access
+- Highly Confidential (top secret)
+- user should be informed that your application is requesting a refresh_token 
+
+1. Authorization request
+  - https://authserver.example.com/authorize 
+  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html)
+  - &client_id - asdfasdfasdf 
+  - &redicrect_uri = https://client.example.com/callback 
+  - &state=xyz (ungessable) - https://stackoverflow.com/questions/26132066/what-is-the-purpose-of-the-state-parameter-in-oauth-authorization-request
+    - The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter. If both state are the same => OK. If state parameters are differents, someone else has initiated the request.
+  - &scope=api1 api2.read offline_access  (offline_access - standardize by open id connect - user's must continously be asked for authorization scope)
+  - &response_mode: query (tells the server you want the response in query string - https://auth0.com/docs/authorization/protocols/protocol-oauth2)
+
+
+2. Token Response 
+  http:1.1 200 ok
+    Content-Type: application/json
+    {
+      "access_token": access_token_value,
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "api1 api2.read offline_access",
+      "refresh_token": "asdfasdf"
+    }
+
+    - you can trigger the swap by getting 401 unauthoride or by token expiration
+
+3. Token Post Request
+  Host: server.example.com/connect/token
+  Content-TYPE: application/x-www-form-urlencoded 
+  Authorization: Basic dfasdfdd (client_id and client_secret (Base 64 encoded)  - this prove who they say they are)
+    -  //if you are not using Authorization, you have to add these to your body
+    client_id=asdfasdfasdf
+    client_secret=whatever
+  grant_type=refresh_token (tells the token endpoint what to give you)
+  refresh_token=access_token_value,
+  "scope": "api1 api2.read offline_access" (optional - mandatory for the initial request only)
+
+4. Token Response 
+  http:1.1 200 ok
+    Content-Type: application/json
+    {
+      "access_token": access_token_value,
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "scope": "api1 api2.read offline_access",
+      "refresh_token": "new_refresh_token_value"
+    }
+
+Who can use refresh tokens (offline_access)?
+  Authorization Code - Confidential Client
+  ROPC 
+Who can't Use refresh tokens?
+  implicit (no backend server, everything is happening on user agent)
+  client credentials (no need because it can request token anytime)
+
+response_mode 
+  - query - query string
+  - fragment - hash fragment - recommended if you are using saml 
+  - form post 
+
+<form method="post" action="/callback.php" method="get">
+  <input type="hidden" id="state" name="state" value="xyz"/>
+  <input type="hidden" id="code" name="code" value="asdasdf" />
+  <input type="submit" value="Submit">
+</form>
+
+When things go wrong
+- error
+- error_description
+- error_uri 
+- state 
+
+When request is made through authorization endpoint uses it uses query string mode 
+- https://authserver.example.com/authorize?error=invalid_request
+When request is made through token endpoint
+- http:1.1 400 bad request
+    Content-Type: application/json; charset=UTF-8
+    Cache-Control: no-store
+    {
+      "error": "invalid_request
+    }
+- Error types
+  - 400 status code
+    - invalid_request
+    - invalid_grant
+    - unauthorzied_client
+    - unsupprted_grant_type
+    - invalid_scope
+  - 401
+    - invalid_client
+/*********************************************************************/
+Oauth 2.1
+Many best practices and extensions
+22 Oauth specifications
+~ 15 OAuth draft specifications
+- No more ROPC
+- No more implicit
+- Single use refresh tokens 
+- PKCE across the board
+- no tokens in the query string
+
+see oauth2_recommendation.jpg and oauth21.jpg 
+authorization_code_pkce.jpg 
+/*********************************************************************/
+SameSite cookies
+  Set-Cookie: id=dsasdf; Secure; HttpOnly; SameSite=Strict (This make sure your cookie is only used within the domain)
+  examplesight.com --> cookie --> examplesight.com
+  examplesightfakesight.com --> stolencookie --> examplesight.com (SameSite=Strict if on, 401 unauthorized)
+  - limitations
+    - 3rd Party applications
+    - Many apps, and many APIs 
+    - User authentication and session management
+/*********************************************************************/
+Backend for Frontend 
+backend_for_frontend.jpg
+Hybrid solution for having using a session cookie to the backend server. The backend server will communicate to auth server. 
+
+Extending Oauth with OpenID Connect 1.0 
+openid.jpg 
+Identity Access
+- Userinfo endpoint 
+- User Identity Scopes
+
+Identity Token (JWT)
+- describes the authentication event 
+- Intended for the client application
+- Verifiable signature
+- JWT base64(Header.payload.sinature)
+  - header
+    - {
+      "alg": "RS256",
+      "kid": "af245sdfgsdf", (kid should match with the entity provider)
+      "typ": "JWT"
+    }
+    - payload
+    - {
+      "nbf": 1535215761,
+      "exp": 1535215761,
+      "iat": 1535215761,
+      "auth_time": 1535215761,
+      "iss": https://example:5000,
+      "aud": "oidc_client",
+      "nonce": "qwerqsdzx2qq43q345",(acts like the state)
+      "at_hash": "asdfasdf-asdfasdf-asdfasdf", (Provided by entity provider - this tells the user that the token is intended for them)
+      "sub": "werqwer", (unique user identifier)
+      "idp": "local", (identy provider)
+      "amr": ["pwd] (authentication methods)
+    }
+  
+  Hybrid Flow
+  - code id_token
+  - code token
+  - code id_token token 
+
+  1. Authorization Request 
+  {
+    client_id: oidc_client
+    redirect_uri: http://example.com:5000/signin-oidc 
+    scope: openid profile email webapi.read
+    response_mode: form_post
+    nonce: asdfasdfasdf
+    state: sadfasdfasdfsdf 
+  }
+
+  2. User receives a consent Screen
+  3. Client recieves code, identity and access token
+   {
+    sub: asdasdfasdf,
+    idp: local,
+    given_name: John
+    family_name: Doe,
+    email: jdoe@example.com
+    Access Token: asdfasdfasdf,
+    Identity Token: asdfasdfasdfasdfasdf
+  }
+
+  Oauth 2.0 Authorization Server Metadata (RFC 8414)
+  ./well-known/oauth-authorization-server
+  {
+    "issuer": "https://server.example.com",
+    "authorization_endpoint": "https://server.example.com/authorize",
+    "token_endpoint": "https://server.example.com/token",
+    "token_endpoint_auth_methods_supported": "["api1.read", "api2.write", "offline_access"]",
+    "response_types_suppored": "["code", "code token"]"
+  }
+/*********************************************************************/
+  Oauth Device Flow - RFC 8628
+  Browserless devices (IOT devices)
+  Input Constraint Devices (remotes)
+  oauth_device_flow.jpg
+
+  1. Device Authorization Request 
+  Post /device_authorization http/1.1
+  Host: server.example.com 
+  Content-Type: application/x-www-form-urlencoded 
+  client_id=45234523453
+  
+  2. Device Authorization Response 
+  {
+    "device_code": "asdasdfasdfasdfjqrter",
+    "user_code": "WDJB-MJHT", (this could be qr code, nfc, bluetooth)
+    "verification_uri": "https://www.example.com/device,
+    "verification_uri_comple": 
+      "https://www.example.com/device?user_code=WDJB-MJHT,
+    "expires_in": 1800,
+    "interval": 5 (default)
+  }
+
+  3. user interaction
+  - using the browser on another device, user visits https://example.com/device 
+  - user then enters the code WDJB-MJHT
+
+4. Device Token Request - Request 
+  Post /device_authorization http/1.1
+  Host: server.example.com 
+  Content-Type: application/x-www-form-urlencoded 
+  grant_type=urn:ietf:parmans:oauth:grant-type:device_code 
+  &device_code=asdfasdfasdf&client_id=21453453245345
+
+5. Token Request - response
+{
+  "error": "authorization_pending"
+}
+
+{
+  "access_token": "asdfasdfart3sdsdfgs",
+  "token_type": "example",
+  "expires_in: 3600
+}
+/*********************************************************************/
+SAML & OAUTH RFC 8414 -  see smal.jpg
+  Token Request - Request 
+    Post /token http/1.1
+    Host: server.example.com 
+    Content-Type: application/x-www-form-urlencoded 
+    grant_type=urn:ietf:parmans:oauth:grant-type:saml2-bearer 
+    &assertion=asdfasdfasdf
+/*********************************************************************/
+API-API delegation
+Client Application 
+API Gateway - api_api_delagation.jpg
+
+Token Exchange -request by api1 to authorization server
+  Token Post Request
+  Host: server.example.com
+  Content-TYPE: application/x-www-form-urlencoded 
+  Authorization: Basic dfasdfdd (client_id and client_secret (Base 64 encoded)  - this prove who they say they are)
+    -  //if you are not using Authorization, you have to add these to your body
+    client_id=asdfasdfasdf
+    client_secret=whatever
+  grant_type=urnietf:params:oauth:grant-type:token-exchange (tells the token endpoint what to give you)
+  scope=api2  (text with space or comma delimiter)
+  subject_token=asdasdfasdf (generictoken, sml, jwq, opendid)
+  subject_token_type:urn:ietf:params:oauth:oauth:token-type:access_token
+  /*********************************************************************/
+  UMA 2 -user manage access (oauth extensions)
+  JWT Client Authentication (RFC 75 7523) - remove client_id on applications
