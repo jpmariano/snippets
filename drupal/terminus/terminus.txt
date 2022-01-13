@@ -1,0 +1,49 @@
+https://www.youtube.com/watch?v=0Tom0jZtwLw
+https://pantheon.io/docs/terminus
+terminus command:subcommand site.env
+terminus command:subcommand -h 
+terminus list
+terminus site:list 
+terminus site:info -h 
+terminus site:info <sitename>
+terminus site:info --field=FRAMEWORK <sitename> 
+https://pantheon.io/docs/terminus/commands
+https://pantheon.io/docs/terminus/commands/site-create
+terminus site:create <site> <label> <upstream>
+
+https://pantheon.io/docs/wp-cli
+https://pantheon.io/docs/terminus/commands/multidev-create
+
+terminus drush <sitename>.<environment> <some drush operation>
+terminus drush mysite.dev cr
+terminus drush mysite.dev -- config-import
+terminus env:clear-cache mysite.dev
+terminus backup:get mysite.dev --element=db 
+
+https://www.mediacurrent.com/blog/leveling-up-with-pantheons-terminus
+terminus deploy mysite.test --note="somenote" --updatedb --cc --sync-Content
+
+https://pantheon.io/docs/terminus/plugins/directory
+
+https://pantheon.io/docs/terminus/install#standalone-terminus-phar
+brew install pantheon-systems/external/terminus
+
+Terminus on MAC i9
+terminus auth:login --machine-token=<your_token>
+terminus auth:login --email=<your_login_email>
+terminus auth:logout
+
+ terminus self:plugin:install pantheon-systems/terminus-rsync-plugin
+ terminus self:plugin:install terminus-build-tools-plugin
+
+ terminus help remote:rsync
+ terminus rsync <sitename>.<env>:files .
+ terminus rsync ustma-main-d9.dev:files .
+ terminus rsync settings.pantheon.php   fwv.dev:<filename>
+
+terminus drush fwv.dev cr
+terminus backup:get fwv.dev  --element=db --to=./db.sql.gz 
+terminus backup:get mysite.dev --element=db 
+
+https://www.mediacurrent.com/blog/leveling-up-with-pantheons-terminus
+

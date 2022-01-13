@@ -156,7 +156,7 @@ Oauth Confusion
 - Access token innodb_file_format
 - Access token validation
 - User authentication 
-Oauth 
+Oauth ƒ
 - Delegated access
 - API Access control
 - Separation of User and Client Credentials
@@ -465,8 +465,8 @@ Identity Token (JWT)
     }
   
   Hybrid Flow
-  - code id_token
-  - code token
+  - code id_token (id_token - used by frontend - openid connect, no micro service to consume id_token)
+  - code token (used by microservices)
   - code id_token token 
 
   1. Authorization Request 

@@ -1,5 +1,5 @@
-http://<host>/jsonapi/node/<nodetype>/uuid 
-params: _format, api_json 
+Install json api module - https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module
+
 
 https://jsonapi.org/format/#document-resource-object-relationships
 {
@@ -37,15 +37,21 @@ How to get UUID?
 http://<host>/jsonapi/node/article?_format=api_json 
     - This is how you get the UUID from postman
 
-Sorting Collection
+Get a Single Item
+http://<host>/jsonapi/node/<nodetype>/uuid 
+params: _format, api_json 
+
+Sorting Collection - https://jsonapi.org/format/#fetching-sorting
 http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=title
 multiple sort
 http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=created,title
-Sort Desc
+Sort Desc - This returns the latest item
 http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=-created&page[limit]=1
-Page Offset 
+Page Offset - https://jsonapi.org/format/#fetching-pagination
 http://<host>/jsonapi/node/article?_format=api_json&fields[node--article]=title&sort=-created&page[limit]=1&page[offset]=0
 
+https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module/filtering
+http://<host>/jsonapi/node/article?_format=api_json&filter[field_name]=value&filter[field_other]=value
 
 JSON API Includes
 http://<host>/jsonapi/node/article/<UUID>?_format=api_json&fields[node--article]=status,title,uid&fields[user--user]=name&include=uid,uid.user_picture&sort=-created&page[limit]=1&page[offset]=0
@@ -54,12 +60,13 @@ JSON Sparse Fieldsets: see fields[node--article]=status,title,uid
 http://<host>/jsonapi/node/article/<UUID>?_format=api_json&fields[node--article]=status,title,uid&fields[user--user]=name&include=uid,uid.user_picture&sort=-created&page[limit]=1&page[offset]=0
 
 Filtering Collection
+Search by title
 http://<host>/jsonapi/node/article/<UUID>?_format=api_json&filter[titleFilter][condition][path]=title&filter[titleFilter][condition][value]=yourtitletosearch
 
 Filters and Nested Relationships
 http://<host>/jsonapi/node/article?_format=api_json&filter[ourAuthor][condition][path]=uid.name&filter[ourAuthor][condition][value]=authorname&fields[node--article]=title,uid&fields[user--user]=name&include=uid,uid.user_picture
 
-
+https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module/fetching-resources-get
 Simple Auth module and library
 Install Simple OAuth
     -  composer require drupal/simple_oauth
@@ -171,3 +178,13 @@ sites/default/default.services.yml
     http DELETE https://www.example.org/jsonapi/node/article/c0a07ee4-157f-4404-a64f-4f8797703867 'Authorization:Bearer eyJ0eXAi...dQOQw'
     
 Error objects provide additional information about problems encountered while performing an operation. Error objects MUST be returned as an array keyed by errors in the top level of a JSON:API document.
+
+
+Main Menu - https://dev-fwv.pantheonsite.io/jsonapi/menu_items/main
+To see list of available api: https://dev-fwv.pantheonsite.io/jsonapi
+To get list of Basic Page: https://dev-fwv.pantheonsite.io/jsonapi/node/page
+To get basic Page:https://dev-fwv.pantheonsite.io/jsonapi/node/page/id - Content Type Title, and Body
+To get basic Page paragraphs:https://dev-fwv.pantheonsite.io/jsonapi/node/page/id/field_basic_paragraph
+To get basic Page paragraphs:https://dev-fwv.pantheonsite.io/jsonapi/node/page/id?include=field_basic_paragraph
+To get basic Page paragraph - https://dev-fwv.pantheonsite.io/jsonapi/paragraph/home_hero_banner/id?include=field_single_image&fields[file--file]=uri,url
+To get basic Page paragraph - https://dev-fwv.pantheonsite.io/jsonapi/paragraph/home_hero_banner/id/field_single_image

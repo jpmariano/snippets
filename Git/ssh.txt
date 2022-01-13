@@ -25,9 +25,10 @@ vi ~/.ssh/config
 
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
-git@github-test:<gh_username>/<gh_reponame>.git
-
+git@<gh_username>:<gh_reponame>.git
+git@<gh_username>::production/wfoundationdev.git
 Step 4:
 ls ~/.ssh/*.pub 
+ls ~/.ssh/config
 cat ~/.ssh/id_rsa.pub
 paste the token to github

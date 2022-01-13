@@ -104,3 +104,10 @@ console.log(encodestring);
 
 let decodestring = eng.decode(encodestring);
 console.log(decodestring);
+
+source ~/.bashrc
+
+-------------------
+npm install -g yarn
+yarn add [package-name]
+yarn remove [package-name]

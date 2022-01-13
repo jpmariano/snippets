@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.29/browser.js"></script>
+	<script type="text/babel">
+		
+        let color_lawn = { title: "lawn",
+            color: "#00FF00",
+            rating: 0 
+        }
+        //-----------------------------------------------------	
+            //bad because it changes or mutates the original color object
+            function rateColor(color, rating) { 
+                color.rating = rating
+                return color
+            }       
+            console.log(rateColor(color_lawn, 5).rating) //5
+            console.log(color_lawn.rating) //5
+            //-----------------------------------------------------	
+            //Object.assign is the copy machine 
+            var rateColor = function(color, rating) {
+                return Object.assign({}, color, {rating:rating})
+            }
+            console.log(rateColor(color_lawn, 5).rating) // 5
+            console.log(color_lawn.rating) // 4
+            //-----------------------------------------------------	
+            //uses the spread operator to copy the color into a new object and then overwrite its rating
+            const rateColor = (color, rating) => ({
+                ...color,
+                rating
+            })
+        //-----------------------------------------------------	
+        let list = [
+            { title: "Rad Red"}, 
+            { title: "Lawn"},
+            { title: "Party Pink"}
+        ]
+            //Array.push is not an immutable function
+            var addColor = function(title, colors) { 
+                colors.push({ title: title })
+                return colors;
+            }
+            console.log(addColor("Glam Green", list).length) //4
+            console.log(list.length) //4
+            //Concat is immutable
+            const addColor = (title, array) => array.concat({title}) 
+            console.log(addColor("Glam Green", list).length) // 4
+            console.log(list.length) // 3
+            //Using Spread Operator
+            const addColor = (title, list) => [...list, {title}]
+            
+
+        
+	</script>
+	<title>Immutability</title>
+</head>
+<body>
+</body>	
+</html>
+
+
+
+

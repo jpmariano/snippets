@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.29/browser.js"></script>
+	<script type="text/babel">
+		
+        var log = function(message) { console.log(message)};
+        log("In JavaScript functions are variables") // In JavaScript, functions are variables
+        //-----------------------------------------------------	
+        const log = message => console.log(message) //written as arrow functions
+        //-----------------------------------------------------	
+        const obj = {
+            message: "They can be added to objects like variables", 
+            log(message) { //can be added to objects like variables
+                console.log(message) 
+            }
+        }
+        obj.log(obj.message)
+        //-----------------------------------------------------	
+        const messages = [
+            "They can be inserted into arrays", message => console.log(message), "like variables",
+            message => console.log(message)
+        ]
+        messages[1](messages[0]) // They can be inserted into arrays 
+        messages[3](messages[2]) // like variables
+        //-----------------------------------------------------	
+        const insideFn = logger => logger("They can be sent to other functions as arguments");
+        insideFn(message => console.log(message))
+        // They can be sent to other functions as arguments
+        //-----------------------------------------------------	
+        //higher-order functions, functions that either take or return other
+        var createScream = function(logger) { 
+            return function(message) { logger(message.toUpperCase() + "!!!") }
+        }
+        const scream = createScream(message => console.log(message))
+        scream('functions can be returned from other functions') 
+        scream('createScream returns a function') 
+        scream('scream invokes that returned function')
+        // FUNCTIONS CAN BE RETURNED FROM OTHER FUNCTIONS!!! 
+        // CREATESCREAM RETURNS A FUNCTION!!!
+        // SCREAM INVOKES THAT RETURNED FUNCTION!!!
+        //-----------------------------------------------------	
+        //Imperative Versus Declarative
+        //Imperative example
+            var string = "This is the midday show with Cheryl Waters"; var urlFriendly = "";
+            for (var i=0; i<string.length; i++) { 
+                if (string[i] === " ") {
+                    urlFriendly += "-"; } else {
+                    urlFriendly += string[i]; }
+            } 
+            console.log(urlFriendly);
+
+
+        //Declarative Example
+            const string = "This is the mid day show with Cheryl Waters" const urlFriendly = string.replace(/ /g, "-")
+            console.log(urlFriendly)
+
+            const loadAndMapMembers = compose( 
+                combineWith(sessionStorage, "members"), 
+                save(sessionStorage, "members"), 
+                scopeMembers(window), 
+                logMemberInfoToConsole,
+                logFieldsToConsole("name.first"), 
+                countMembersBy("location.state"), 
+                prepStatesForMapping, 
+                save(sessionStorage, "map"), renderUSMap
+            ); 
+            getFakeMembers(100).then(loadAndMapMembers);
+        //-----------------------------------------------------	
+        //Imperative Versus Declarative
+        //Imperative example
+        var target = document.getElementById('target'); 
+        var wrapper = document.createElement('div'); 
+        var headline = document.createElement('h1');
+            wrapper.id = "welcome"; headline.innerText = "Hello World";
+            wrapper.appendChild(headline); target.appendChild(wrapper);
+
+        //Declarative Example
+        const { render } = ReactDOM
+        const Welcome = () => ( 
+            <div id="welcome">
+            <h1>Hello World</h1> </div>
+        )
+        render( <Welcome />,
+        document.getElementById('target') )
+        //-----------------------------------------------------	
+        //impure function (does not take a value, changes a variable outside of its scope, does not return a value)
+        var frederick = {
+            name: "Frederick Douglass", canRead: false,
+            canWrite: false
+        }
+        //Example of Impure function
+        function selfEducate() { 
+            frederick.canRead = true 
+            frederick.canWrite = true 
+            return frederick
+        } 
+        selfEducate()
+        console.log( frederick )
+        // {name: "Frederick Douglass", canRead: true, canWrite: true}
+        //Pure function example - treat the arguments sent to this function as immutable data
+        const selfEducate = person => ({
+            ...person, 
+            canRead: true, 
+            canWrite: true
+        })
+        console.log( selfEducate(frederick) )
+        console.log( frederick )
+        // {name: "Frederick Douglass", canRead: true, canWrite: true}
+        // {name: "Frederick Douglass", canRead: false, canWrite: false}
+
+        //-----------------------------------------------------	
+	</script>
+	<title>Functions</title>
+</head>
+<body>
+</body>	
+</html>
+
+
+
+

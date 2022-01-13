@@ -1,0 +1,1 @@
+const { log, print } = require('./txt-helpers')

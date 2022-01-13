@@ -37,6 +37,7 @@ SET GLOBAL innodb_large_prefix = ON;
 
 drush upwd --password="T0psecret" admin
 php -S localhost:8081 .ht.router.php 
+php -S localhost:8085 .ht.router.php 
 ../vendor/bin/drush upwd --password="T0psecret" admin
 ../vendor/bin/drush sql-drop 
 ../vendor/bin/drush sql-cli --extra=--force < 
@@ -48,3 +49,4 @@ rsync -avr --delete -e ssh remote-drupal:/home/username/Repositories/opss-site/o
 
 http://www.jesox.com/blog/how-install-drush-mac
 
+php -S localhost:8084 .ht.router.php 
