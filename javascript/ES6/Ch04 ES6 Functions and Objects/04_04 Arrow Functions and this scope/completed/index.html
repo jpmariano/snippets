@@ -16,6 +16,24 @@
 		};
 		person.printActions();
 
+		var tahoe = {
+			resorts: ["Kirkwood","Squaw","Alpine","Heavenly","Northstar"], print: function(delay=1000) {
+			setTimeout(() => { console.log(this.resorts.join(","))
+				}, delay) 
+			}
+		}
+		tahoe.print() // Kirkwood, Squaw, Alpine, Heavenly, Northstar
+
+
+		var tahoe = {
+			resorts: ["Kirkwood","Squaw","Alpine","Heavenly","Northstar"], print: (delay=1000) => {
+			setTimeout(() => { 
+				console.log(this.resorts.join(",")) //this referes to window
+				}, delay) 
+			}
+		}
+		tahoe.print() // Cannot read property resorts of undefined
+
 	
 	</script>
 	<title>Arrow Functions and 'this'</title>

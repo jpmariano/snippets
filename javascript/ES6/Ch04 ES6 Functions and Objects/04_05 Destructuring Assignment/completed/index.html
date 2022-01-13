@@ -16,7 +16,29 @@
 		}
 
 		console.log(vacationMarketing(vacation));
-
+		//-----------------------------------------------------
+		var sandwich = {
+				bread: "dutch crunch",
+				meat: "tuna",
+				cheese: "swiss",
+				toppings: ["lettuce", "tomato", "mustard"]
+			}
+		var {bread, meat} = sandwich console.log(bread, meat) // dutch crunch tuna
+		console.log(sandwich.bread, sandwich.meat) // dutch crunch tuna
+		//-----------------------------------------------------
+		var lordify = regularPerson => { console.log(`${regularPerson.firstname} of Canterbury`) }
+		var regularPerson = { firstname: "Bill", lastname: "Wilson" } 
+		lordify(regularPerson) // Bill of Canterbury
+		//-----------------------------------------------------
+		var regularPerson = { firstname: "Bill", lastname: "Wilson" } 
+		var lordify = ({firstname}) => { console.log(`${firstname}`) }
+		lordify(regularPerson) // Bill of Canterbury
+		//-----------------------------------------------------
+		var [firstResort] = ["Kirkwood", "Squaw", "Alpine"] 
+		console.log(firstResort) // Kirkwood
+		//-----------------------------------------------------
+		var [,,thirdResort] = ["Kirkwood", "Squaw", "Alpine"] 
+		console.log(thirdResort) // Alpine
 	</script>
 	<title>Destructuring Assignment</title>
 </head>
