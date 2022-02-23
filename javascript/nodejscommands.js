@@ -111,3 +111,4 @@ source ~/.bashrc
 npm install -g yarn
 yarn add [package-name]
 yarn remove [package-name]
+

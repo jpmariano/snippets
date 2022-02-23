@@ -25,8 +25,8 @@ vi ~/.ssh/config
 
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
-git@<gh_username>:<gh_reponame>.git
-git@<gh_username>::production/wfoundationdev.git
+git@<SSH Host name>:<git@github.com/etc...>.git
+
 Step 4:
 ls ~/.ssh/*.pub 
 ls ~/.ssh/config

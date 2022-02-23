@@ -7,6 +7,7 @@ Indexing - Pages the Search Engine can see
     Paste in search box: 
         site:<sitename.com> 
         site:<sitename.com> -<www.sitename.com> //to check if subdomain or development site is index 
+        site:www.example.org 
 
     <google.com/search>&filter=0 
 
