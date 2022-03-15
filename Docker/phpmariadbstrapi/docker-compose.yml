@@ -1,0 +1,77 @@
+version: '3.7'
+
+
+
+services:
+   strapi:
+      image: strapi/strapi
+      environment:
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mariadbcontainer
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi
+        DATABASE_USERNAME: <username>
+        DATABASE_PASSWORD: <password>
+        DATABASE_SSL: 'false'
+      volumes:
+        - ./app:/srv/app
+      ports:
+        - '1337:1337'
+      depends_on:
+        - mariadb
+   mariadb:
+      image: mariadb
+      restart: always
+      container_name: mariadbcontainer
+      volumes:
+        - ./data:/var/lib/mysql
+      restart: always
+      ports:
+       - '6603:3306'
+      environment:
+        MYSQL_USER: <username>
+        MYSQL_PASSWORD: <password>
+        MYSQL_ROOT_PASSWORD: <password>
+        MYSQL_DATABASE: strapi
+
+   app:
+      depends_on:
+       - mariadb
+      image: phpmyadmin/phpmyadmin
+      container_name: phpmyadminMaria
+      restart: always
+      ports:
+       - '8890:80'
+      environment:
+        PMA_HOST: mariadbcontainer
+
+   #https://github.com/strapi/strapi-docker/tree/master/examples
+   #reference: https://github.com/mariadb-corporation/mariadb-server-docker
+   #https://docs.docker.com/compose/reference/
+   #appserver:
+      # Configuration for building the docker image for the backend service
+      #image: boilerplate:1.0
+      #container_name: springboot
+      #ports:
+        #- "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      #depends_on: 
+        #- db # This service depends on mysql. Start that first.
+      #environment: # Pass environment variables to the service
+        #SPRING_DATASOURCE_URL: jdbc:mysql://db:6603/webupps?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+        #SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:6603/webupps?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        #SPRING_DATASOURCE_USERNAME: webuppsuser
+       # SPRING_DATASOURCE_PASSWORD: T0psecret! 
+      #networks: # Networks to join (Services on the same network can communicate with each other using their name)
+        #- backend
+   #working
+   #appserver:
+      #image: boilerplateinternal:1.0
+      #container_name: springboot
+      #restart: on-failure
+      #depends_on:
+        #- db
+      #ports:
+        #- 8080:8080
+
+        
+   

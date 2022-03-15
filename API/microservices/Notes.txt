@@ -1,0 +1,207 @@
+ Scaling
+    - Horizontal scaling refers to adding additional nodes/computer
+        - Stateful
+        - Stateless
+        - Cap Theorem
+    - Vertical scaling describes adding more power to your current machines
+
+Load Balancer
+    - https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
+    - /snippets/AWS/sysops.txt
+    - https://geekflare.com/open-source-load-balancer/
+
+Design Principles
+    - Dry - Don't repeat yourself
+        - Maintain the code in one place
+    - Kiss - Keep it simple stupid
+        - Avoid unnecessary complexity
+    - YAGNI - You aint't gonna need It
+        - Don't try to think ahead just in case you need it 
+    - SOLID - https://www.youtube.com/watch?v=69sfWNzxTMc
+        - Single Responsibility Principles
+            - A class should have only one reason to change
+        - Open/Closed Principle
+            - A class should be open for extension, but closed for modification
+        - Liscov Substitution Principle
+            - You should be able to change an instance using a subType and your code should still work
+        - Interface Segragation Principle
+            - More interface are better than too little
+            - Allow to split the responsibility of a class without LSP violation
+        - Dependency Inversion Principle
+            - One should depend on abstraction and not concrete instances
+The Scale Cube
+    - X Axis -  Horizontal Duplication and Cloning of Services and Data
+        - This runs behind the load balancer
+    - Y Axis - Functional Decomposition and Segmentation - Microservices
+        - the_api_composition_pattern.jpg
+    - Z Axis - Service and Data partitioning along Customer Bounderies - shards/pods
+    - Vertical Scaling - increase computing/hardware resources
+    - Horizontal Scaling - spliting the load
+        - Stateless - 
+            - like the monolith application, split the application behind the load balancer
+            - split the microservices behind the load balancer
+        - Stateful
+            - Database and message broker are stateful
+            - CAP Theorem - use for choosing database
+                - cap_theorem.jpg
+                - cap_theorem_consistency_availability_partition_tolerance.jpg
+                - cap_theorem_consitency_or_availability.jpg
+                - how_to_choose_database_for_microservices.jpg
+                - Database Types
+                    - relational_databases.jpg
+                    - no_sql_database.jpg
+                        - no_sql_document_databases.jpg
+                        - no_sql_graph_based_databases.jpg
+                        - no-sql_column_based_database.jpg
+                        - no_sql_database_key_value.jpg
+            - Consistency Level
+                - scale_database_in_microservices.jpg
+                    - Strict Consistency
+                        - means that the client should see changes from database right away
+                        - hard to make it scalable, and availability
+                    - Eventual Consistency
+                        - Client will see changes with longer time latency
+                    - Spliting Database Servers 
+                        - Managing Data is hard
+                        - Microservice Data Management
+                            - Database per service its own data
+                                - database_per_service_pattern.png
+                                - database_per_service_pattern.jpg
+                            - Isolating each service's database 
+                            - Polyglot Persistence Principle
+                            - Duplicated or Partitioned Data Challenge
+                            - Microservice Database Management Patterns and Principle
+                                - The Database per Service Pattern
+                                - The API Composition Pattern
+                                - The CQRS Pattern
+                                - The Event Sourcing Pattern
+                                - The SAGA Pattern
+                                    - Choreography
+                                    - Orchestration
+                                - The Shared Database anti-Pattern
+
+                    - Database Sharding
+                        - database_table_sharding_pattern.jpg
+                        - database_table_horizontal_vertical_and_functional_data_partitioning.jpg
+                        - database_table_horizontal_partitioning.jpg
+                        - database_table_vertical_partitioning.jpg
+                        - database_table_functional_partitioning.jpg
+                        - database_table_sharding_pattern_geo_sharding.jpg
+                        - microservice_architecture_database_sharding_pattern.jpg
+
+Design Pattern
+    - Database per service Pattern
+    - the_event_sourcing_pattern.jpg
+    - the_polyglot_persitence.jpg
+    - the_saga_pattern.jpg
+    - the_shared_database_anti_pattern.jpg
+    - the_shared_database_antipattern.jpg
+
+MicroService Data Management Queries
+    - Questions: 
+        - Should SC microservice query product data and price information to another microservices with sync calls ?
+            - Or are there any other way to handle this problem ? 
+        - And also what if we have transactional use cases that need to interact several services with rollback features ?
+    - Patterns
+        - Cross Query Solutions in Microservices
+            - API Gateway Patterns
+            - Service Aggregator Pattern
+        - Materialized View Pattern - https://medium.com/design-microservices-architecture-with-patterns/materialized-view-pattern-f29ea249f8f8
+            - materialized_view_pattern.jpg
+            - materialized_view_pattern_drawback.jpg
+        - CQRS Design Patterns 
+            - https://medium.com/design-microservices-architecture-with-patterns/cqrs-design-pattern-in-microservices-architectures-5d41e359768c
+            - cqrs_design_pattern.jpg
+            - cqrs_design_pattern_1.jpg
+            - cqrs_design_pattern_2.jpg
+            - cqrs_design_pattern_3.jpg
+            - cqrs_design_pattern_4.jpg
+        - Event Sourcing Pattern
+            - event_sourcing_pattern.jpg
+            - event_sourcing_pattern_1.jpg
+            - cassandra
+        - Eventual Consistency
+            - eventual_consistency_principle.jpg
+            - eventual_consistency.jpg - https://github.com/mehmetozkaya/Design-Microservices-Architecture-with-Patterns-Principles/tree/main/S14-Microservices%20Data%20Management-Queries/L118-Design%20CQRS%20Event%20Sourcing
+        - materialize_cqrs_event_eventual.jpg
+        - instagram_system_architechture.jpg
+
+MicroServices Distributed Transactions 
+    - https://medium.com/design-microservices-architecture-with-patterns/microservices-distributed-transactions-a71a996e5db8
+    - SAGA Pattern - https://medium.com/design-microservices-architecture-with-patterns/saga-pattern-for-microservices-distributed-transactions-7e95d0613345
+        - Choreography - https://github.com/mehmetozkaya/Design-Microservices-Architecture-with-Patterns-Principles/tree/main/S15-Microservices%20Distributed%20Transactions/L121-Choreography-Orchestrator%20Saga%20Pattern
+            - saga_choreography.jpg - for simple workflow
+                - steps needs to be minimal. Increase step adds more complexity
+        - Orchestration
+            - saga_orchestration.jpg
+    -Outbox Pattern
+        - https://medium.com/design-microservices-architecture-with-patterns/outbox-pattern-for-microservices-architectures-1b8648dfaa27
+Event Driven MicroService Architecture - https://github.com/mehmetozkaya/Design-Microservices-Architecture-with-Patterns-Principles/tree/main/S16-Event-Driven%20Microservices%20Architecture/L124-Design%20Event-Driven%20Microservices
+    - event_driven_microservice.jpg
+MicroService Distributed Caching - https://medium.com/design-microservices-architecture-with-patterns/microservices-distributed-caching-76828817e41b
+    - microservices_distributed_caching.jpg
+
+Microservice Communication
+    - Syncrhonous Communication
+        - http
+        - gRpc / message broker
+    - Asynchronous
+        - AMQP - message broker
+            - https://blog.containerize.com/2021/07/09/top-5-open-source-message-queue-software-in-2021/
+            - amqp - nodejs
+            - amqplib - nodejs for RabbitMQ
+            - Ampersand - js
+            - NGINX Amplify
+            - AWS Amplify
+            - Microsoft Azure Service Bus
+            - Amperity
+            - Amplitude
+            - Amp
+            - amqp -  by Go
+            - Apache Kafka 
+                - Distributed 
+                - horizontal scallable
+            - RabbitMQ
+            - Celery
+            - Nsq
+            - Redisson
+            - https://stackshare.io/search/q=AMQP
+
+https://geekflare.com/api-gateway/
+- Kong Gateway
+- Ambassador
+- Apache APISIX
+- Tyk
+- Ocelot - .net
+- Goku - GoLang
+- Express Gateway
+- Gloo
+- KrakenD
+- Fusio
+- WSO2
+- Apigee
+- Envoy
+- Cloud Endpoints - Google Cloud
+- Amazon API Gateway
+- Azure
+- Google Cloud Endpoints
+- Serverless - NPM
+
+
+
+
+ https://stackshare.io/service-discovery
+ - Consul
+ - ZooKeeper - Java
+ - Eureka - Springboot
+ - etcd 
+ - Keepalived
+- Serf
+- SmartStack
+- libraries.io
+- SkyDns
+- Baker Street
+- ODD Platform
+- NACOS
+- Vyne
+- zetcd

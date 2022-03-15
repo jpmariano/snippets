@@ -1,0 +1,82 @@
+Identify Existing System 
+    - Ask if there's an existing system?
+        - If yes, are they keeping that system?
+            - what kind of system is it? Content Management System (Like Drupal, Wordpress, or Joomla), Learning Management System, REST or SOAP API
+            - what does the system do? 
+            - what technology is it using?
+                - What type of Database?
+                - What type of Programming language (for frontend or Backend)?
+                    - HTML, CSS, PHP, ASP, .net 
+            - Is it decoupled? (is the the backend and frontend separate)
+            - Is it a microservice (backend is separated into tiny services)
+            - Is it a maintenance project?
+            - Is it an upgrade project?
+                - Are we doing data migration?
+            - Is it system migration project?
+                - Are we doing data migration?
+        - If no: 
+            - Is this a website,  Desktop APP, or Mobile APP?
+                - If website, do you have a framework or system in mind (Drupal, Wordpress, Joomla, etc.. )
+                - If both (website and app), Is SEO important?
+                - Note: Website, Desktop APP, and Mobile App could intails separate development
+                    If So, then build a rest api or graphql backend, and have a react or angular frontend. 
+                    - For desktop APP, just wrap the frontend with electron
+                    - For mobile APP, just wrap the frontend with ionic 
+                
+
+Functional 
+    - who are your users (georgraphically or demographically - young or old, or type of technology user desktop or phone)?
+        - Note: It is better if there existing analytics to support this.
+    - Are most of your users login? 
+    - What would the user want the system to do?
+        - break this to smaller functional components
+    - How would the system fit in with the user's normal workflow or daily activities?
+    - How technically savvy is the user and what similar systems does the user already use?
+    - How much traffic do you expect?
+
+Non Functional
+    - Know your users - who are your users?
+    - What interface look & feel styles appeal to the user?
+        - Required
+            - Typography. Ask for Font type, typeface choices, and font sizes that can be used
+            - Colors - Ask what  Color choices that can be used, include primary, secondary, and tertiary color
+            - Components 
+                - Header 
+                    - Ask for 3 example of headers from other sites 
+                    - Navigation menus
+                        - Ask for navigation design example (mobile and desktop)
+                - Footer 
+                    - Ask for 3 example of footer design from other sites
+                - Content 
+                    - Sidebar left, right, or no sidebar 
+                    - Ask how many templates they want 
+                        - Ask for example per template
+                        - Ask what is the purpose of the template
+                        - Ask what interactions/animations they want
+                            -  direct interactions
+                                - ‍Tapping a button
+                                - Swiping a card
+                                - Dragging and dropping an item with a fingertip
+                            - indirect interactions
+                                - Pointing and clicking with a mouse
+                                - Using key commands/shortcuts
+                                - Typing into a form field
+                                - Drawing on a Wacom tablet
+
+                - Homepage Layout 
+        - Optional
+            - Button - Ask The shape, color, text, radius, size, and behavior for the button
+            - Input & Form. A guide for the shape, size, from the input field
+            - Icon. The icon type and size.
+            - Spacing. A guide for the distance between components and white space.
+            - Interaction & Behavior. A guide that covers actions and user interactions with a component (hover, scroll, click, etc.)
+            - Error & System Status. A guide that includes information if an error occurs and displays the status of an action.
+    - Design
+        - Best Practices for Designing an Interface - https://www.usability.gov/what-and-why/user-interface-design.html
+            - keep interface simple
+            - Create consistency and use common UI elements
+            - Be purposeful in page layout
+            - Strategically use color and texture
+            - Use typography to create hierarchy and clarity
+            - Make sure that the system communicates what’s happening
+            - Think about the defaults 
