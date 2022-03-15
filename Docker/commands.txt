@@ -297,7 +297,7 @@ $docker inspect <containerid> | grep IP
 - $ docker network ls
     - none network - no access to outside world
         - $ docker run -d --net none busybox sleep 100
-        - $ docker exec -it <containerId> /bin/ash
+        - $ docker exec -it <containerId> /bin/bash
         - # ping 8.8.8.8 //cannot connect to google
         - # ifconfig
             - contains only the loopback address 127.0.0.1
