@@ -109,6 +109,10 @@ MicroService Data Management Queries
         - Materialized View Pattern - https://medium.com/design-microservices-architecture-with-patterns/materialized-view-pattern-f29ea249f8f8
             - materialized_view_pattern.jpg
             - materialized_view_pattern_drawback.jpg
+            - Views are generally used when data is to be accessed infrequently and data in table get updated on frequent basis.	
+            - On other hand Materialized Views are used when data is to be accessed frequently and data in table not get updated on frequent basis.
+            - a table on a disk that contains the result set of a query
+            - a query that pulls data from the underlying table
         - CQRS Design Patterns 
             - https://medium.com/design-microservices-architecture-with-patterns/cqrs-design-pattern-in-microservices-architectures-5d41e359768c
             - cqrs_design_pattern.jpg
@@ -116,10 +120,47 @@ MicroService Data Management Queries
             - cqrs_design_pattern_2.jpg
             - cqrs_design_pattern_3.jpg
             - cqrs_design_pattern_4.jpg
+            - https://www.redhat.com/architect/illustrated-cqrs
+            - CQRS separates reads and writes into different models, using commands to update data, and queries to read data. Single Responsibility Principle
+                - Commands should be task-based, rather than data centric. ("Book hotel room", not "set ReservationStatus to Reserved").
+                - Queries never modify the database. A query returns a DTO that does not encapsulate any domain knowledge.
+                - Commands may be placed on a queue for asynchronous processing, rather than being processed synchronously
+            - Pros
+                - Separating write activity from ready activities allows you to use the best database technology for the task at hand, for example, a SQL database for writing and a non-SQL database for reading.
+                - Independent Scaling
+                    - Using separate databases for the read & write models
+                    - Assume you have a website which has more reads than write (something like StackOverflow.com). In such a case, you can scale your read models to get better performance.
+                    - Read activity tends to be more frequent than writing, thus you can reduce response latency by placing read data sources in strategic geolocations for better performance.
+                - Separation of Concern
+                    - Separate the read and write logic
+            - Cons
+                - Supporting the CQRS pattern requires expertise in a variety of database technologies.
+                - More cost since you could be using more than one database and more than one type of database
+                - Ensuring data consistency requires special consideration in terms of Service Level Agreements (see the CAP theorem).
+                - Using a large number of databases means more points of failure, thus companies need to have comprehensive monitoring and fail-safety mechanisms in place to provide adequate operation
+
         - Event Sourcing Pattern
             - event_sourcing_pattern.jpg
             - event_sourcing_pattern_1.jpg
+            - https://dzone.com/articles/microservices-with-cqrs-and-event-sourcing
+            - In event-sourcing, any event triggered will be stored in an event store. 
+                - There is no update or delete operations on the data, and every event generated will be stored as a record in the database. 
+                - If there is a failure in the transaction, the failure event is added as a record in the database. 
+                - Each record entry will be an atomic operation.
+            - advantages
+                - Solves atomicity issues.
+                - Maintains history and audit of records.
+                - Can be integrated with data analytics as historical records are maintained.
+            - limitations
+                - Queries on the latest data or a particular piece of data in the event store involve complex handlings.
+                - To make the data eventually consistent, this involves asynchronous operations because the data flow integrates with messaging systems.
+                - The model that involves inserting and querying the data is the same and might lead to complexity in the model for mapping with the event store.
+                - The event store capacity has to be larger in storing all the history of records.
             - cassandra
+        - Joining data in the user interface
+        - Views between database schemas
+        - https://medium.com/@john_freeman/querying-data-across-microservices-8d7a4667668a
+        - https://www.oreilly.com/library/view/monolith-to-microservices/9781492047834/ch04.html
         - Eventual Consistency
             - eventual_consistency_principle.jpg
             - eventual_consistency.jpg - https://github.com/mehmetozkaya/Design-Microservices-Architecture-with-Patterns-Principles/tree/main/S14-Microservices%20Data%20Management-Queries/L118-Design%20CQRS%20Event%20Sourcing
