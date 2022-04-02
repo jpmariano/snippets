@@ -1,0 +1,62 @@
+https://www.thegeekdiary.com/understanding-basic-file-permissions-and-ownership-in-linux/
+
+Linux File & Folder Permission Management:
+
+To see file list, their crrent permission level and much more, you can run:
+ls -la -lh -lt  
+(To know more on ls commands check tutorial: https://www.youtube.com/watch?v=h6sDtGN5hYs)
+
+chmod <specification> filename : Change the file permissions. Specifications = u user/owner, g group, o other, + add permission, - remove, r read, w write,x execute.
+
+chmod -R <specification> dir-name: Change the permissions of a directory recursively. To change permission of a directory and everything within that directory, use this command.
+
+chmod go=+r myfile - Add read permission for the owner and the group 
+
+chmod a+rwx myfile Allow all users to read, write or execute myfile.
+
+chmod go-r myfile - Remove read permission from the group and others. 
+
+
+You Can do it in Numerical way as well:
+
+chmod 777 sample_file.txt
+Where it means: Everybody can read, write to, or execute sample_file.txt
+Each digit of this code sets permissions for one of these groups as follows. Read is 4. Write is 2. Execute is 1.
+The sums of these numbers give combinations of these permissions:
+
+0 = no permissions whatsoever; this person cannot read, write, or execute the file
+1 = execute only
+2 = write only
+3 = write and execute (1+2)
+4 = read only
+5 = read and execute (4+1)
+6 = read and write (4+2)
+7 = read and write and execute (4+2+1)
+
+Sample combination:
+Command	            Meaning
+chmod 700 sample_file.txt	Only you can read, write to, or execute sample_file.txt
+chmod 777 sample_file.txt	Everybody can read, write to, or execute sample_file.txt
+chmod 744 sample_file.txt	Only you can read, write to, or execute sample_file.txt Everybody can read sample_file.txt;
+chmod 444 sample_file.txt	You can only read sample_file.txt, as everyone else.
+
+let's break it into more simple words:
+e.g. we have a test file as test.txt and we want write access to owner of file only, so now:
+Owner rwx = 4+2+1 = 7
+Group r-x = 4+0+1 = 5
+Other r-x = 4+0+1 = 5
+So the entire command will be:
+chmod 755 test
+
+Other uses & Commands:
+
+chmod owner1 filename - Change ownership of a file to user owner1. 
+
+chgrp grp_owner filename - Change primary group ownership of file filename to group grp_owner. 
+
+chgrp -R grp_owner dir-name - Change primary group ownership of directory dir-name to group grp_owner recursively. To change group ownership of a directory and everything within that directory, use this command.
+
+
+Note: If you want to try above commands without any risk, use Docker, so install docker and use below docker commands to run a Linux cotainer and use the shell, e.g. as in tutorial I have shown:
+docker run -it ubuntu:16.04 /bin/bash 
+But you can use any linux OS , it's your choice. Docker Tutorial Link: https://www.youtube.com/watch?v=Y56FMHC1mb8

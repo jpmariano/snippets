@@ -1,0 +1,8 @@
+sudo cp /path/original_file /path/original_file.back - Creating a file backup
+nano commands
+    caret shortcut = ctrl 
+    m shortcut = alt 
+    CTL + x = exit
+    CTL + w = write
+    CTL + o = save
+sudo nano /etc/nginx/nginx.conf

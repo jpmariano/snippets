@@ -25,7 +25,9 @@ vi ~/.ssh/config
 
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
-git@<SSH Host name>:<git@github.com/etc...>.git
+git@<SSH Host>:<git@github.com/etc...>.git 
+git clone git@git.wpengine.com:production/<sitename>dev.git 
+git@github-j*******o:C****T/<whatever>.git
 
 Step 4:
 ls ~/.ssh/*.pub 
