@@ -42,8 +42,21 @@ terminus auth:logout
  terminus rsync settings.pantheon.php   fwv.dev:<filename>
 
 terminus drush fwv.dev cr
+terminus drush fwv.dev --folder=whatever
 terminus backup:get fwv.dev  --element=db --to=./db.sql.gz 
 terminus backup:get mysite.dev --element=db 
 
 https://www.mediacurrent.com/blog/leveling-up-with-pantheons-terminus
 
+Quicksilver 
+Drupal management module
+
+terminus solr:enable fwv.live
+/admin/reports/status/php
+composer require pantheon-systems/search_api_pantheon:^8@beta --prefer-dist
+terminus drush fwv.live -- pm-enable search_api_pantheon search_api_pantheon_admin
+- add index
+terminus drush fwv.live -- pm-enable jsonapi_search_api
+
+fwv/web/sites/default
+terminus rsync fwv.dev:files .

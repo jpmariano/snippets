@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-US">
+   <head>
+      <title>My first HTML document</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" media="all" href="/path/styles.css" />
+
+   </head>
+   <body>
+      <p>Hello world!<p>
+   </body>
+</html>
+
+Elements - All HTML documents consist of nested HTML elements. <tag> opening and </tag> closing
+    - Each reserve tag has its purpose 
+    - DOCTYPE - tells the browser the version of html you are working on 
+        - The version of html will tell the browser what are the version of css and js it supports 
+    - <link> 
+        - normally css 
+        - https://www.w3schools.com/tags/tag_link.asp
+    - <meta charset="utf-8"> 
+        - meta tags use by servers or other sites for character encoding identifier , SEO, and others custom meta 
+    - <title> - what your see on your browser tab 
+    - <body> -  where most of your custom html content that is viewable by users 
+        - tags inside the body can be group by inline and block level elements 
+            - https://www.w3schools.com/html/html_blocks.asp
+            - Important note: block elements can have other block elements and inline elements. Inline elements can only have other inline elements and not block elements.
+                - expection to the rule is on html 5: <a> tag can have block elements. Though sometimes it breaks on some browers. 
+                - http://web.simmons.edu/~grovesd/comm244/notes/week4/block-inline
+    - you can create your custom tags 
+
+Attributes 
+    - All HTML elements can have attributes 
+    - The attributes depends on type of tags. Check documentation for each tags attributes 
+    - you can create your custom attributes

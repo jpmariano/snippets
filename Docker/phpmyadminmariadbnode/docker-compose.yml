@@ -3,9 +3,27 @@ version: '3.7'
 
 
 services:
-   db:
-      image: mysql:8.0
-      container_name: appsDB
+   strapidemo:
+      image: jmariano/strapidemo:1.0   
+      volumes:
+        - ./app:/home/node/app
+      ports:
+        - '1337:1337'
+      depends_on:
+        - mariadb
+      environment:
+        NODE_ENV: production
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mariadbcontainer
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi
+        DATABASE_USERNAME: <username>
+        DATABASE_PASSWORD: <password>
+        DATABASE_SSL: 'false'
+   mariadb:
+      image: mariadb
+      restart: always
+      container_name: mariadbcontainer
       volumes:
         - ./data:/var/lib/mysql
       restart: always
@@ -15,20 +33,22 @@ services:
         MYSQL_USER: <username>
         MYSQL_PASSWORD: <password>
         MYSQL_ROOT_PASSWORD: <password>
-        MYSQL_DATABASE: default_schema
+        MYSQL_DATABASE: strapi
 
-   app:
+   phpmyadmin:
       depends_on:
-       - db
+       - mariadb
       image: phpmyadmin/phpmyadmin
-      container_name: phpmyadmin
+      container_name: phpmyadminMaria
       restart: always
       ports:
        - '8890:80'
       environment:
-        PMA_HOST: db
+        PMA_HOST: mariadbcontainer
 
-
+   #https://github.com/strapi/strapi-docker/tree/master/examples
+   #reference: https://github.com/mariadb-corporation/mariadb-server-docker
+   #https://docs.docker.com/compose/reference/
    #appserver:
       # Configuration for building the docker image for the backend service
       #image: boilerplate:1.0

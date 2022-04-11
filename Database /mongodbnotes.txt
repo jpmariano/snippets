@@ -1,0 +1,21 @@
+SQL Terms  | Mongo DB Terms
+Database     Database
+Table        Collection
+Row          JSON/BSON Document
+Column       Field
+Index        Index
+
+mongod --version
+brew services start mongodb-community
+
+brew services stop mongodb-community
+
+mongosh
+To display the database you are using, type db: 
+db
+to create or use database
+use <database>
+To access a different database from the current database without switching your current database context, see the db.getSiblingDB() method.
+
+db.getMongo()
+db.collection.explain()

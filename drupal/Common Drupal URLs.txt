@@ -50,3 +50,16 @@ rsync -avr --delete -e ssh remote-drupal:/home/username/Repositories/opss-site/o
 http://www.jesox.com/blog/how-install-drush-mac
 
 php -S localhost:8084 .ht.router.php 
+
+
+Documentations
+Services YML - https://pantheon.io/docs/services-yml
+Multidev - https://pantheon.io/docs/terminus/commands/multidev-create
+Environment config - https://pantheon.io/docs/environment-specific-config-d8
+Environment Indicator - https://pantheon.io/docs/environment-indicator#drupal-environment-indicator
+Drush configuration workflow - https://pantheon.io/docs/drupal-8-configuration-management
+
+composer require 'drupal/colorbutton:8.x-1.3'
+
+composer require 'drupal/panelbutton:8.x-1.4'
+

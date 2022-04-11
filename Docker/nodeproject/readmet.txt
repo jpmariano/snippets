@@ -1,0 +1,2 @@
+docker build -t jmariano/strapidemo:14 . --no-cache=true
+docker run -d -p 1337:1337 -v /Users/family/Documents/github/jpmariano/snippets/Docker/nodeproject/app:/home/node/app --env-file .env jmariano/strapidemo:14    
