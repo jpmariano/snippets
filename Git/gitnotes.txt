@@ -1107,3 +1107,7 @@ git reset --hard origin/master
 
 changing author
 https://stackoverflow.com/questions/3042437/how-to-change-the-commit-author-for-one-specific-commit
+
+capitalization
+git config  --get core.ignorecase //If this returns true. It will not track capitalization on files
+git config  core.ignorecase false

@@ -787,3 +787,6 @@ brew unlink php@7.4
 3) link the php version you want to link install if needed
 brew install php@7.3
 brew link php@7.3
+
+php -S localhost:8083 .ht.router.php 
+brew services restart php@7.2
