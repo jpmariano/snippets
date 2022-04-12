@@ -168,6 +168,9 @@ Protocol Endpoints
   - both must use tls
   - see: protocol-endpoints.jpg
 
+https://site1.com/login?service=https%3A//www.site2.com/service 
+
+
 
 Oauth scope
 - A permission to do something within a protected resource on behalf of the resource owner 
@@ -182,7 +185,7 @@ Oauth scope
 Confidential Client OAuth2 Flow //OAuth 2.1
 1. Authorization request
   - https://authserver.example.com/authorize 
-  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html)
+  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html), https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/
   - &client_id - asdfasdfasdf 
   - &redicrect_uri = https://client.example.com/callback 
   - &state=xyz (ungessable) - https://stackoverflow.com/questions/26132066/what-is-the-purpose-of-the-state-parameter-in-oauth-authorization-request
