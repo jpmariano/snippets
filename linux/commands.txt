@@ -1,3 +1,202 @@
+
+Linux File Directory structure
+https://dev-random.net/linux-directory-structure-explained/
+
+Linux permissions
+https://chmod-calculator.com/
+
+update package list
+sudo yum check-update 
+
+upgrade installed pagckages
+sudo yum update
+
+install package
+sudo yum install <package_name>
+
+remove a package
+sudo yum remove <package_name>
+
+find a package
+sudo yum find <package_name>
+
+clean yum cache
+sudo yum clean all
+------------------------
+cp <file_name> <file_name.bak>
+systemctl restart sshd
+
+-----------------------------------------------------------------------------------------
+firewall
+https://www.cyberciti.biz/faq/linux-web-server-firewall-tutorial/
+iptables - firewall manager 
+firewalld - makes easier to manage iptables 
+
+important ports
+- ssh - 22
+- http - 80
+- https - 443
+
+sudo yum install firewalld 
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
+
+Configure firewalld
+sudo firewalld-cmd --permanent --add-service=ssh
+sudo firewalld-cmd --permanent --add-service=http
+sudo firewalld-cmd --permanent --add-service=https
+sudo firewalld-cmd --permanent --list-all - to view firewall rules
+sudo firewalld-cmd --reload -  to enable firewall changes
+-----------------------------------------------------------------------------------------
+Fail2ban
+Intrusion prevention software
+
+sudo yum install epel-release
+sudo yum install fail2ban
+sudo systemctl start fail2ban
+sudo systemctl enable fail2ban
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+find and enable in jail.local
+[sshd]
+enable true
+sudo systemctl restart fail2ban
+/var/log/fail2ban.log
+
+-----------------------------------------------------------------------------------------
+NGINX
+sudo yum install nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo systemctl reload nginx - reload and enable nginx changes
+test nginx -t - test nginx configuration  
+
+/usr/share/nginx/html 
+
+-----------------------------------------------------------------------------------------
+MariaDB
+sudo yum install mariadb-server mariadb
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+sudo mysql_secure_installation
+
+sudo cp /etc/my.cnf /etc/my.cnf.bak
+sudo cp /user/share/mysql/my-medium.cnf /etc/my.cnf
+
+sudo mysql -u root
+sudo mysql -u root -p
+sudo mysql -u root -p<yourpassword>
+
+UPDATE mysql.user SET Password=PASSWORD('<yourpassword>') WHERE User='root';
+flush privileges;
+-----------------------------------------------------------------------------------------
+PHP
+sudo yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+sudo yum install yum-utils
+sudo yum-config-manager --enable remi-php72
+sudo yum update 
+
+sudo yum install php-<package_name>
+sudo yum install php-fpm
+sudo yum install php-gd
+sudo yum install php-json
+sudo yum install php-mbstring
+sudo yum install php-mysqlnd
+sudo yum install php-xml
+sudo yum install php-xmlrpc
+sudo yum install php-opcache
+sudo yun install php-cli 
+
+sudo systemctl start php-fpm
+sudo systemctl enable php-fpm
+sudo systemctl restart php-fpm
+
+
+sudo cp /etc/php.ini /etc/php.ini.bak
+sudo nano /etc/php.ini 
+/etc/php.ini 
+    cgi.fix_pathinfo = 0
+    allow_url_fopen = Off
+
+sudo systemctl restart php-fpm
+
+/etc/php-fpm.d/www.conf
+sudo cp /etc/php-fpm.d/www.conf /etc/php-fpm.d/www.conf.bak
+sudo nano /etc/php-fpm.d/www.conf
+
+user nginx
+group nginx
+listen.owner nginx
+listed.group nginx
+listen.mode uncomment
+;listen = 127.0.0.1:9000
+Add: listen=/var/run/php-fpm/php-fpm.sock
+-----------------------------------------------------------------------------------------
+Shutting Down
+
+Legacy command
+systemctl poweroff
+systemctl shutdown
+systemctl reboot
+systemctl halt 
+
+Latest version
+shutdown -h now
+shutdown -h +10 - this is in minutes
+shutdown -h +6 "<your custom message>"
+shutdown -h 22:15
+shutdown -c  - stands for cancel 
+shutdown -r - reboot
+shutdown -H - halts shutdown without poweroff
+
+halt - stopping all services and processes, unmounting filesystems, it does not poweroff machine. When done, you can press and hold the power button to shutdown.
+reboot - clean shutdown and reboot
+poweroff - clean shutdown and poweroff the machine
+
+halt and poweroff can reboot using the --reboot
+halt --reboot
+poweroff --reboot
+
+-----------------------------------------------------------------------------------------
+Sleep mode
+
+systemctl suspend  - save what's currently on your ram when computer goes to Sleep
+systemctl suspend  - save what's currently on your ram into the disk when computer poweroff
+systemctl hybrid-sleep
+systemctl suspend-then-hibernate
+
+-----------------------------------------------------------------------------------------
+
+sudo nano /etc/crontab
+or 
+sudo crontab -e 
+# m h dom mon dow user      command
+*   *  *   *   *  someuser  echo 'foo'
+
+Field    Description    Allowed Value
+MIN      Minute field    0 to 59
+HOUR     Hour field      0 to 23
+DOM      Day of Month    1-31
+MON      Month field     1-12
+DOW      Day Of Week     0-7
+USER 
+CMD      Command         Any command to be executed.
+
+10   22  *   *   *  root  sbin/shutdown -h +10
+10   22  *   *   7,0  root  sbin/shutdown -h now
+10   22  *   *   6,7  root  sbin/shutdown -h now
+
+
+@yearly    <your command>
+@annualy   <your command>
+@monthly   <your command>
+@weekly    <your command>
+@daily     <your command>
+@hourly    <your command>
+@reboot    <your command>
+
+-----------------------------------------------------------------------------------------
+
 sudo useradd -m username
 sudo groupadd superusers
 usermod -a -G superusers username

@@ -112,3 +112,11 @@ npm install -g yarn
 yarn add [package-name]
 yarn remove [package-name]
 
+--------
+pubslishing to NPM
+npm run test 
+npm run build
+
+npm login
+npm publish
+

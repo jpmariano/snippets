@@ -192,10 +192,12 @@ Confidential Client OAuth2 Flow //OAuth 2.1
     - The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter. If both state are the same => OK. If state parameters are differents, someone else has initiated the request.
   - &scope=api1 api2.read  (text with space or comma delimiter)
   - &response_mode: query (tells the server you want the response in query string - https://auth0.com/docs/authorization/protocols/protocol-oauth2)
+  More Info: https://docs.developers.optimizely.com/web/docs/authorization-code
+  https://developer.ebay.com/api-docs/static/oauth-auth-code-grant-request.html
 
 2. Authorization Response 
   https://client.example.com/connext/authorization?client_id=value&scope=value&redirect_uri=value&response_type=code
-    - &code=asdfasdfasdfasdfsadfskdjkn (short lifetime, represent user consent, bound to client ID, Redirect URI, resource owner, and Scope)
+    - &code=asdfasdfasdfasdfsadfskdjkn (short lifetime, represent user consent, bound to client ID, Redirect URI, resource owner, and Scope) - normally a hashed of <client_id>:<client_secret> 
     - &state=xyz (This should match the state from the request)
 
 
@@ -440,6 +442,16 @@ openid.jpg
 Identity Access
 - Userinfo endpoint 
 - User Identity Scopes
+
+JWT Token
+https://www.youtube.com/watch?v=KQPuPbaf7vk
+Generate a pair of keys to encrypt the tokens. And store them outside of your document root for security reasons.
+```
+openssl genrsa -out private.pem 3072  -  more secure
+openssl rsa -in private.pem -pubout > public.pem
+openssl genrsa -out private.key 2048 - you can use key or pem
+openssl rsa -in private.key -pubout > public.key
+```
 
 Identity Token (JWT)
 - describes the authentication event 

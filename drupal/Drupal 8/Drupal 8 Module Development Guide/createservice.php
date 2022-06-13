@@ -41,7 +41,7 @@ services:
         class Drupal\modulename\servicefoldername\ServicenameGenerator
 //Display list of services from terminal - your services is now viewable in terminal console 
 //$ drupal container:debug 
-
+https://codimth.com/blog/web/drupal/how-create-drupal-8-custom-service
 
 //4. How to Get a other Services in the ControllerBase - Dependency Injection
 namespace Drupal\modulename\Controller;

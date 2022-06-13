@@ -20,6 +20,8 @@ terminus drush mysite.dev -- config-import
 terminus env:clear-cache mysite.dev
 terminus backup:get mysite.dev --element=db 
 
+terminus rm <sitename>.<environment>:files/<filename>.pdf
+
 https://www.mediacurrent.com/blog/leveling-up-with-pantheons-terminus
 terminus deploy mysite.test --note="somenote" --updatedb --cc --sync-Content
 

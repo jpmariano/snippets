@@ -1,0 +1,14 @@
+System Drive 
+Window - NTFS
+Linux - ext4
+Mac - HFS+/AFPS 
+
+USB Drives under 32GB
+FAT32
+USB Drives for 32GB+ to 4GB+
+exFAT
+
+For Hard Drives 
+Windows - NTFS
+PC/MAC - exFAT/FAT32 
+

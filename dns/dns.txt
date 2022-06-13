@@ -1,0 +1,160 @@
+ To See list of DNS server
+ cat /etc/resolv.conf
+
+ https://gree2.github.io/mac/2015/07/18/mac-network-commands-cheat-sheet
+http://networkwalks.com/wp-content/uploads/2020/03/DNS-part-1-notes-cheatsheet-network-walks.pdf
+https://cheatography.com/janek/cheat-sheets/dns/
+https://chrisachard.com/cheatsheets/dns-cheatsheet.pdf
+
+ local name resolution
+ /etc/host
+
+ Root server
+ TLD 
+ Autoritative Server
+ Domain Resolver
+
+ Zone
+ Forware Lookup (Resource Records RRs)
+ Reverse Lookup (Resource Records RRs)
+
+ Name 
+ Type
+    - A = 1
+    - NS = 2 
+    - SOA    
+ Class(IN Internet, CH Chaos, HS Hesiod)
+ TLL - the lenght of cache
+ RDLenght = Resource Data Lenght - size of data Resource
+ RData = Resource Data
+
+ SOA - 
+ format
+ <domain name> <TTL> <class> SOA <m-name> <r-name>(
+     <serial number>
+     <refresh interval>
+     <retry interval>
+     <expire interval>
+     <minimum>
+ )
+    - <m-name> = primary name server
+    - <r-name> = email of the administrator
+    - <serial number> = gets incremented everytime zone file is Changes
+    - <intervals> - all related to primary and secondary server
+    - <minimum> = ttl value of negative caching
+
+nslookup -type=soa example.com
+dig -t soa example.com
+
+NS Records
+- points the actual Authoritative name server that holds the domain name
+- needs at least 2 Authoritative name server
+- format
+<domain name> <TTL> <class> NS <nameserver's hostname>
+
+nslookup -type=ns example.com
+dig -t ns example.com
+
+A record - Adress Records (forward lookup)
+<domain name> <TTL> <class> A <IPv4 adress>
+nslookup -type=a example.com
+dig -t a example.com
+
+
+AAAA (Quad A record)
+<domain name> to <IPv6>
+
+nslookup -type=aaaa example.com
+dig -t aaaa example.com 
+
+Pointer Record
+<ip address> To <domain name>
+<reverse domain name> <class> PTR <domanin name>
+
+nslookup -type=ptr <ip adress> - nslookup -type=ptr 2600:: 
+nslookup <ip adress>
+dig -x <ip adress>
+
+CName - <domain name> to <domain name> - Canonical Name
+format
+<Alias> <class> CNAME <TTL> <Canonical name>
+www.example.com IN/CH/HS   example.com
+nslookup -type=cname www.example.com
+dig -t cname www.example.com
+
+Txt Record
+Format 
+<domain name> <class> txt <TTL> <Textual Data>
+nslookup -type=txt example.com
+dig -t text www.example.com
+
+--------------------------------------------------
+DNS client Ubuntu linux
+
+set -hostname <computername> 
+
+ifconfig - to see machine interface
+sudo ifconfig <interface id - en0> <192.168.1.10> netmask <255.255.255.0 >
+ifconfig <en0> - to confirm if interface ip changed
+
+sudo vi /etc/resove.conf - this stores the namse server of the client
+nameserver <ip adress 192.168.1.254> - you can define upto 3
+
+--------------------------------------------------
+DNS Server Ubuntu linux
+After Install: 
+$ sudo apt-get update -y && install bind9 bind9utils -y
+$ dpkg -s bind9
+$ sudo ifconfig <interface id - en0> <192.168.1.254> netmask <255.255.255.0 >
+$ cd /etc/bind/
+$ cat named.conf
+$ sudo vi named.conf.options
+    acl "trusted" {
+        192.168.1.10/24;
+    };
+
+    options {
+        recursion: yes;
+
+        allow-query {
+            localhost;
+            trusted;
+        }
+
+        allow-query-cache {
+            localhost;
+            trusted;
+        }
+
+        allow-recursion {
+            localhost;
+            trusted;
+        }
+
+        forwarders {
+            192.168.1.1;
+        }
+
+        forward only;
+    }
+
+$ sudo vi named.conf.local
+    zone "intranet.local" {
+        type forward;
+        forward only;
+        forwarders {
+            192.168.1.100;
+            192.168.1.101;
+        };
+    }
+
+$ sudo named-checkconf named.conf
+$ sudo systemctl restart bind9
+$ status bind9
+$ sudo netstat -tuplen | grep 53
+$ sudo tcpdump -nni any port 53 -  to listen if dns is Working
+$ sudo rndc flush
+
+--------------------------------------------------
+DNS client 
+$ dig example.com
