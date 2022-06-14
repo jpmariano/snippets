@@ -25,7 +25,10 @@ sudo yum clean all
 ------------------------
 cp <file_name> <file_name.bak>
 systemctl restart sshd
+-----------------------------------------------------------------------------------------
+/etc/.bashrc 
 
+  [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \W]\\$ "
 -----------------------------------------------------------------------------------------
 firewall
 https://www.cyberciti.biz/faq/linux-web-server-firewall-tutorial/
