@@ -40,7 +40,7 @@ important ports
 - http - 80
 - https - 443
 
-sudo yum install firewalld 
+sudo yum install firewalld or sudo dnf install firewalld 
 sudo systemctl start firewalld
 sudo systemctl enable firewalld
 
@@ -74,6 +74,9 @@ sudo systemctl enable nginx
 sudo systemctl reload nginx - reload and enable nginx changes
 test nginx -t - test nginx configuration  
 
+nginx.conf - main configuration file
+sudo nginx - t -  to test if configuration is good
+sudo systemctl reload nginx - reload to enable nginx changes 
 /usr/share/nginx/html 
 
 -----------------------------------------------------------------------------------------
