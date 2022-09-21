@@ -23,6 +23,13 @@ vi ~/.ssh/config
         User git
         IdentityFile ~/.ssh/id_rsa_public
 
+        Host <your_alias>
+        HostName <server_url_or_ip_address>
+        User <server_username>
+        IdentityFile <ssh_private_key_location>
+        ServerAliveInterval 60
+        ServerAliveCountMax 120
+
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
 git@<SSH Host>:<git@github.com/etc...>.git 
@@ -33,4 +40,9 @@ Step 4:
 ls ~/.ssh/*.pub 
 ls ~/.ssh/config
 cat ~/.ssh/id_rsa.pub
+pbcopy < ~/.ssh/id_rsa.pub
 paste the token to github
+
+
+
+

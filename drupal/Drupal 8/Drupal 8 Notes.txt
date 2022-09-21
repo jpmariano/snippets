@@ -720,7 +720,7 @@ $('.skip-line', context).on('change', function(){
             }
 });
 
-Updating Drupal 8
+Updating Drupal 8/mail/
 1. Make a backup
 2. Change settings.php 
   - $settings['update_free_access'] = TRUE; //Tells drupal that you can update the site without logging in  
