@@ -27,3 +27,5 @@ Docker/*/.env
 */*/*/.settings
 */*/.idea
 */.vscode
+lando/my-first-drupal9-app/vendor
+lando/my-first-drupal9-app/web
