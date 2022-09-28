@@ -804,3 +804,13 @@ source ~/.zshrc
 
 
 mysql -u root -p <db_name> < .<path to file>
+
+https://www.hashbangcode.com/article/drupal-9-programmatically-creating-and-using-urls-and-links
+
+/******* Displaying Custom block using Twig Tweak **********/
+drush sqlq 'SELECT * FROM block_content_field_data'  -  first get the id
+drush sqlq 'SELECT *  FROM block_content WHERE id = 100' 
+
+in Twig drupalroot/themes/custom/custom_theme/templates/layout/page--taxonomy--term--example.html.twig
+{{ drupal_block('block_content:34534534-435345-4d71-adea-c8f3fa233315') }}
+/******* End Displaying Custom block using Twig Tweak **********/
