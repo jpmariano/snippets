@@ -30,6 +30,14 @@ vi ~/.ssh/config
         ServerAliveInterval 60
         ServerAliveCountMax 120
 
+        Host jm****no-bitbucket__companyname
+        HostName bitbucket.companyname.com
+        User jm****no
+        PreferredAuthentications publickey
+        IdentityFile /Users/mariano/.ssh/jm****no-bitbucket__companyname
+        UseKeychain yes
+        AddKeysToAgent yes
+
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
 git@<SSH Host>:<git@github.com/etc...>.git 
