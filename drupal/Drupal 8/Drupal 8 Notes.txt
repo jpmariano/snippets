@@ -814,3 +814,31 @@ drush sqlq 'SELECT *  FROM block_content WHERE id = 100'
 in Twig drupalroot/themes/custom/custom_theme/templates/layout/page--taxonomy--term--example.html.twig
 {{ drupal_block('block_content:34534534-435345-4d71-adea-c8f3fa233315') }}
 /******* End Displaying Custom block using Twig Tweak **********/
+
+etc/apache2
+cd /Library/WebServer/Documents
+which httpd 
+apachectl -t -D DUMP_INCLUDES
+ sudo apachectl configtest 
+ sudo apachectl start 
+ sudo apachectl stop
+ sudo apachectl restart
+
+ cp httpd.conf{,.backup}
+
+ brew services start httpd 
+  brew services stop httpd 
+  /usr/local/etc/httpd
+  /usr/local/var/www
+  /usr/local/etc/httpd/httpd.conf
+    LoadModule php_module /usr/local/opt/php@8.0/lib/httpd/modules/libphp.so
+    Include /usr/local/etc/httpd/extra/httpd-php.conf
+    DocumentRoot "/usr/local/var/www"
+    <Directory "/usr/local/var/www">
+
+    DocumentRoot "/usr/local/var/www"
+    <Directory "/usr/local/var/www">
+    /usr/local/bin/httpd
+
+    
+    
