@@ -1,0 +1,224 @@
+//creating a typescript react project
+//$npx create-react-app --template typescript <project_name>
+
+//https://www.typescriptlang.org/docs/handbook/basic-types.html
+enum Color {
+  Red,
+  Green,
+  Blue,
+}
+
+interface InterFaceName {
+    variableName?: string;
+    isDone?: boolean;
+    decimal?: number;
+    bigInt?: bigint;
+    list: number[]; 
+    list2: Array<number>;
+    tupleExample: [string, number];
+    usingEnum: Color;
+    notSure: unkown;
+    anyExample: any;
+    undefinedExample: undefined;
+    nullExample: null;
+}
+
+export const Listing: React.FC<InterFaceName> = ({variableName, isDone, decimal, bigInt, etc...}) => {
+
+}
+
+export const sampleVoidReturn: React.FC<> = ({}): void => {
+
+}
+
+function sampleVoidReturn(): void {
+  console.log("This is my warning message");
+}
+
+export const sampleNeverReturn: React.FC<> = ({}): never => {
+
+}
+
+//https://www.codecademy.com/learn/learn-typescript/modules/learn-typescript-advanced-object-types/cheatsheet
+// This is a nested interface
+interface Course {
+  description: {
+    name: string;
+    instructor: {
+      name: string;
+    }
+    prerequisites: {
+      courses: string[];
+    }
+  }
+}
+
+class myCourse implements Course {
+  description = {
+    name: '',
+    instructor: {
+      name: ''
+    },
+    prerequisites: {
+      courses: []
+    }
+  }
+}
+
+/************************************ Creating Classes *************************/
+Confirm.tsx
+import "./Confirm.css";
+interface IProps {
+    title: string;
+    content: string;
+    addStory?: string;
+    addHero?: string;
+    onOKClick:() => void;
+    open: boolean;
+}
+
+
+
+class Confirm extends React.Component<IProps> {
+
+    private handleClick = () => {
+      console.log("click", this.props);
+    }
+
+    public static defaultProps = {
+      addStory: "The Awesome typescript",
+      addHero: "The programmer"
+    }
+
+    private handleOkClick = () => {
+      this.props.onOKClick();
+    }
+
+
+    public render(){
+        return(
+            <>
+                <div>{this.props.title}</div>
+                <div>{this.props.content}</div>
+                <div>{this.props.addStory}</div>
+                <div>{this.props.addHero}</div>
+                <button onClick="this.handleClick">
+                  Click Me
+                </button>
+                 <button onClick="this.handleOkClick">
+                  Click Me
+                </button>
+                <div className={this.props.open ? "open" : "close"}</div>
+            </>
+        );
+    }
+
+}
+export default Confirm;
+
+
+
+App.tsx 
+import Confirm from "./Confirm";
+
+interface IState {
+  confirmOpen: boolean;
+  confirmMessage: string;
+  confirmVisible: boolean;
+  contDown: number;
+}
+class APP extends React.Component<> {
+
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      confirmOpen: true,
+      confirmMessage: "please hit  confirm button",
+      confirmVisible: true,
+      countDown: 10
+    }
+  }
+
+  private timer: number = 0;
+  private renderCount = 0;
+
+  private handleTimerTick(){
+    this.setState(){
+       confirmMessage: `please hit  confirm button ${this.state.countDown} secs to go`,
+       countDown: this.state.countDown - 1;
+    }
+    ()=>{
+      if (this.state.countDown <= 0){
+        clearInterval(this.timer);
+        this.setState(){
+          confirmMessage: `too late to confirm`,
+          confirmVisible: false;
+        }
+      }
+    }
+    
+  }
+  //Invoke Everytime Component is rendered and called before getSnapshotBeforeUpdate and shouldComponentUpdate 
+  //Deprecated on React 17
+  public static getDerivedStateFromProps (props: {}, state: IState) {
+        console.log("getDerivedStateFromProps" , props, state);
+        return null; // No change to state
+  }
+  public shouldComponentUpdate (nextProps: {}, nextState: IState) {
+    console.log("shouldComponentUpdate" , nextProps, nextState);
+    retrun false; //returning false prevents the dom from rendering
+  }
+  //gets called before the DOM is updated which is before componentDidUpdate (as soon as the DOM is updated) 
+  //Deprecated on React 17
+  public getSnapshotBeforeUpdate(prevProps: {}, prevState: IState) {
+    this.renderCount += 1;
+    console.log("getSnapshotBeforeUpdate" , prevProps, prevState, { renderCount: this.renderCount});
+    return this.renderCount;
+  }
+
+  public componentDidUpdate(prevProps: {}, prevState: IState, snapshot: number) {
+    this.renderCount += 1;
+    console.log("componentDidUpdate" , prevProps, prevState, { snapshot: this.renderCount});
+  }
+
+  public componentDidMount(){
+    this.timer = window.setInterval(() => this.handleTimerTick(), 1000);
+  }
+
+  
+  //Deprecated and replace by UNSAFE_componentWillMount 
+   public componentWillMount(){
+    clearInterval(this.timer);
+  }
+
+    //Deprecated and replace by UNSAFE_componentWillReceiveProps
+   public componentWillReceiveProps(){
+    clearInterval(this.timer);
+  }
+
+  public componentWillUnMount(){
+    clearInterval(this.timer);
+  }
+
+  //Deprecated and replace by UNSAFE_componentWillUpdate
+  public componentWillUpdate(){
+    clearInterval(this.timer);
+  }
+
+  //pass to child
+  private handleConfirmOkClick = ({}, IState) => {
+      this.setState({ confirmOpen: true, confirmMessage: "you clicked Open"});
+      clearInterval(this.timer);
+  }
+  private handleConfirmCancelClick = ({}, IState) => {
+      this.setState({ confirmOpen: false, confirmMessage: "you clicked cancel"});
+      clearInterval(this.timer);
+  }
+
+  <p>{this.state.confirmMessage}</p>
+  {this.state.confirmVisible && (<button onClick={this.handleConfirmOkClick}>Confirm </button>)}
+  <button onClick={this.handleConfirmCancelClick} >Cancel </button>
+  <Confirm title="test" content="test content" addStory="The Mad Man" addHero="Project Manager" onOKClick={this.handleConfirmOkClick} open={this.state.confirmOpen}/>
+}
+
+/************************************ End Creating Classes *************************/
