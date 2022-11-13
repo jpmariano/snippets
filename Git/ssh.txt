@@ -1,11 +1,17 @@
 Generating SSH Keys
 Step 1:
 https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/
 New way*
 $ ssh-keygen -t ed25519 -C "your_email@example.com" 
+$ ssh-keygen -t ed25519 -C "name.lastname@example.com" 
 Old way*
-$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+$ ssh-keygen -t rsa -b 4096 -C "firstname.lastname@company.net"
+$ ssh-keygen -t rsa -b 4096 -C "name.lastname@example.com" 
 
+Host git-codecommit.*.amazonaws.com
+  User XXXXXXXXXXXXXXXXXXXXX
+  IdentityFile ~/.ssh/id_rsa
 Step 2:
 Dealing with multiple keys 
 https://stackoverflow.com/questions/21160774/github-error-key-already-in-use
@@ -38,11 +44,27 @@ vi ~/.ssh/config
         UseKeychain yes
         AddKeysToAgent yes
 
+        Host <your_alias>
+        HostName bitbucket.org
+        User <server_username>
+        PreferredAuthentications publickey
+        IdentityFile ~/.ssh/id_ed25519_<alias>
+        UseKeychain yes
+        AddKeysToAgent yes
+
 Step 3:
 you will need to alter your .git/config remote url of your local repository to point to:
 git@<SSH Host>:<git@github.com/etc...>.git 
 git clone git@git.wpengine.com:production/<sitename>dev.git 
+git clone git@bitbucket.org:production/<sitename>dev.git 
 git@github-j*******o:C****T/<whatever>.git
+
+//Bitbucket
+git clone git@server_username:<companyname>/<repo>.git
+
+//AWS codecommit
+git clone git@server_username:ssh://git-codecommit.us-east-<number>.amazonaws.com/v1/repos/<reponame>
+
 
 Step 4:
 ls ~/.ssh/*.pub 
