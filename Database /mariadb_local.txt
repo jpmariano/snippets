@@ -1,0 +1,9 @@
+https://mariadb.com/kb/en/installing-mariadb-on-macos-using-homebrew/
+brew install mariadb
+
+mysql.server start
+
+brew services start mariadb
+brew services stop mariadb
+
+wordpress61;    

@@ -51,3 +51,11 @@ apachectl -t -D DUMP_INCLUDES
     DocumentRoot "/usr/local/var/www"
     <Directory "/usr/local/var/www">
     /usr/local/bin/httpd
+
+mysql.server start
+
+brew services start mariadb
+brew services stop mariadb
+
+MariaDB [(none)]> grant all privileges on wordpress61.* to wpuser@localhost identified by '<password>';
+MariaDB [(none)]> grant all privileges on drupal948.* to drupaluser@localhost identified by '<password>';
