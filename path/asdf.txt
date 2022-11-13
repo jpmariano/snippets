@@ -1,0 +1,36 @@
+https://blog.natterstefan.me/how-to-use-multiple-node-version-with-asdf
+
+# install the package
+asdf plugin add <name>
+# asdf plugin add nodejs
+
+# get a list of installed plugins
+asdf plugin list
+
+# update plugin(s)
+asdf plugin update <name>
+asdf plugin update --all
+
+asdf list all nodejs | wc -l
+
+
+# remove plugin
+asdf plugin remove <name>
+# asdf plugin remove nodejs
+
+# install version for package
+asdf install <name> <version>
+# asdf install nodejs 14.15.4
+# asdf install php 7.4.0
+
+# list installed versions
+asdf list <name>
+
+# list all versions
+asdf list all <name>
+
+asdf global <name> <version> [<version>...]
+asdf shell <name> <version> [<version>...]
+asdf local <name> <version> [<version>...]
+
+https://timnash.co.uk/installing-php-and-other-languages-with-asdf-on-macos-catalina/
