@@ -185,8 +185,8 @@ Oauth scope
 Confidential Client OAuth2 Flow //OAuth 2.1
 1. Authorization request
   - https://authserver.example.com/authorize 
-  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html), https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/
-  - &client_id - asdfasdfasdf 
+  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html), https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/, https://ldapwiki.com/wiki/Response_type, https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#endpoint
+  - &client_id - asdfasdfasdf (is the identifier for your app. You will have received a client_id when first registering your app with the service.)
   - &redicrect_uri = https://client.example.com/callback 
   - &state=xyz (ungessable) - https://stackoverflow.com/questions/26132066/what-is-the-purpose-of-the-state-parameter-in-oauth-authorization-request
     - The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter. If both state are the same => OK. If state parameters are differents, someone else has initiated the request.
