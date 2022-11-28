@@ -1,0 +1,8 @@
+https://github.com/rbenv/rbenv
+brew install rbenv ruby-build
+rbenv init
+echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc
+https://github.com/rbenv/rbenv#installing-ruby-versions
+https://devhints.io/rbenv
+rbenv install -l
+rbenv global 3.1.2

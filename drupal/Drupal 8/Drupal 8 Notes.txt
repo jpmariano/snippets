@@ -840,5 +840,6 @@ apachectl -t -D DUMP_INCLUDES
     <Directory "/usr/local/var/www">
     /usr/local/bin/httpd
 
-    
+    https://<siteurl>dev.wpengine.com
+    http://localhost
     
