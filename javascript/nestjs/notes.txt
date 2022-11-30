@@ -1,0 +1,4 @@
+npm install -g @nestjs/cli
+nest new <projectname>
+nest start 
+nest start --watch
