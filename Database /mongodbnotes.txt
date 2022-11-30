@@ -19,3 +19,7 @@ To access a different database from the current database without switching your 
 
 db.getMongo()
 db.collection.explain()
+use nestjs //use is to use or create database
+db.createCollection("title")
+show dbs
+db.dropDatabase()
