@@ -1,4 +1,5 @@
-import { Controller, Get, Req, Res, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Res, HttpStatus, Param } from '@nestjs/common';
+import express, {Request, Response} from 'express';
 import { AppService } from './app.service';
 
 @Controller('user')
@@ -20,6 +21,18 @@ export class AppController {
     //return this.appService.getHello();
   }
 
+  @Post()
+  postUser(@Res() res:Response, @Body() body) {
+    //return `Created a new post with values of ${JSON.stringify(body)} 🚀`;
+    res.status(HttpStatus.CREATED).json({
+      status: 'success',
+      message: `test`,
+      data:{
+        body
+      }
+  }).send();
+  }
+
   @Get(':id')
   getUser(@Param('id') id: number): string {
     //console.log(req);
@@ -29,16 +42,11 @@ export class AppController {
   }
 
   
+  
   /*
 
   
-  @Post()
-  postUser(@Req() req, @Res() res): string {
-    console.log(req);
-    console.log(res);
-    return `created`;
-    //return this.appService.getHello();
-  }
+  
   @Put(':id')
   putUser(@Req() req, @Res() res): string {
     console.log(req);
