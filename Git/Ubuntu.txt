@@ -35,8 +35,8 @@ r-- = 4
 770 = rwxrwx---
 755 = rwxr-xr-x
 700 = rwx------
-666 = rw-rw-rw644
-= rw-r--r--
+666 = rw-rw-rw
+644 = rw-r--r--
 600 = rw------- 
 
 ls -l

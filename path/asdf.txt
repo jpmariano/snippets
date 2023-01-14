@@ -14,6 +14,7 @@ asdf plugin update --all
 asdf list all nodejs | wc -l
 asdf list all java | wc -l
 asdf list all java
+8.11.1
 
 # remove plugin
 asdf plugin remove <name>

@@ -1,0 +1,53 @@
+7. Applications 
+- End user layer (what user see)
+- Http, Ftp, IRC, SSH, DNS
+6. Presentation Layer 
+- Syntax Layer
+- Encryption and Decryption (Data Conversion, Encryption, and Compression)
+- SSL, SSH, IMAP, FTP, MPEG, JPEG, Mp4, AVI 
+5. Session
+- Synch & Send sends to port 
+- API's, Socket, WinSock 
+- Establishes connection (add session to data)
+- https://osi-model.com/session-layer/
+- https://www.youtube.com/watch?v=kCuyS7ihr_E&t=713s&ab_channel=danscourses
+- https://github.com/facg3/Stateless-vs-stateful-authentication
+- https://zappedia.com/session-layer-protocols/
+4. Transport 
+- End to End Connections
+- TCP, UDP
+- PDU: Segments
+- https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:the-internet/xcae6f4a7ff015e7d:transporting-packets/a/transmission-control-protocol--tcp
+- https://www.javatpoint.com/osi-model  
+3. Network 
+- PDU: Packets
+- IP, ICMP, IPSec, IGMP
+2. Data Link
+- PDU: Frames
+- Ethernet, PPP, Switch, Bridge
+- responsible for transferring information on the same network by using/reading the mac address
+- turns packets received from the network layer into frames
+- responsible for error control and flow to ensure successful transmission
+- Framing 
+    - adds the header(IP address) and trailer  (Error control is achieved by adding a calculated value CRC (Cyclic Redundancy Check)) to the bits (data) from physical layer
+- http://www.highteck.net/EN/DataLink/Data_Link_Layer.html
+- Typical frame header fields include:
+    Start Frame field - Indicates the beginning of the frame
+    Source and Destination address fields - Indicates the source and destination nodes on the media
+    Priority/Quality of Service field - Indicates a particular type of communication service for processing
+    Type field - Indicates the upper layer service contained in the frame
+    Logical connection control field - Used to establish a logical connection between nodes
+    Physical link control field - Used to establish the media link
+    Flow control field - Used to start and stop traffic over the media
+Congestion control field - Indicates congestion in the media
+1. Pysical
+- Physical Structure
+- Coax, Fiber, Wireless, Hubs, Repeaters
+- Topologies Bus, Star, Ring, and Mesh
+- Communication modes/Data Transmission such as Simplex, Half Duplex, and Full Duplex
+- Physical Data Units/PDU: bits
+- How bits are represented data?
+AMI - 1 with volt, 0 no volt
+- Wiring Standards: T568B Standards
+- https://www.javatpoint.com/osi-model
+

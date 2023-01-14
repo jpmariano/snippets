@@ -12,25 +12,142 @@
    </body>
 </html>
 
-Elements - All HTML documents consist of nested HTML elements. <tag> opening and </tag> closing
+HTML element is represented by a start tag and an end tag, with the content of the element placed in between. 
+The start tag typically includes the element's type and any attributes that specify additional information about the element.
+
+Elements - All HTML documents consist of nested HTML elements. Each tag normally have  <div> for opening and </div> for closing.
     - Each reserve tag has its purpose 
-    - DOCTYPE - tells the browser the version of html you are working on 
+    - DOCTYPE - tells the browser the version of html you are working on so it can interpret properly
         - The version of html will tell the browser what are the version of css and js it supports 
+    - Always make sure that html elements or doctype is supported by the target browser and the version of browser.
+    - <html> declared after doctype. It is the root container for an HTML document
+    - <head> - the head container that holds page-level metadata elements
     - <link> 
-        - normally css 
+        - normally css or favicon 
+        - only have attributes
         - https://www.w3schools.com/tags/tag_link.asp
     - <meta charset="utf-8"> 
-        - meta tags use by servers or other sites for character encoding identifier , SEO, and others custom meta 
+        - meta tags are use by servers , search engines, analytics or any third party applications.
     - <title> - what your see on your browser tab 
     - <body> -  where most of your custom html content that is viewable by users 
         - tags inside the body can be group by inline and block level elements 
             - https://www.w3schools.com/html/html_blocks.asp
             - Important note: block elements can have other block elements and inline elements. Inline elements can only have other inline elements and not block elements.
-                - expection to the rule is on html 5: <a> tag can have block elements. Though sometimes it breaks on some browers. 
+                - exception to the rule is on html 5: <a> tag can have block elements. Though sometimes it breaks on some browers. 
                 - http://web.simmons.edu/~grovesd/comm244/notes/week4/block-inline
+            Most elements in html can be categorized into 2 groups. The block elements and the inline elements. 
+            Block elements have default block displays. It can be overriden by css. 
+
+            <address>   <div>       <h1>-<h6>    <form>       
+            <article>   <aside>     <blockquote> <canvas> 
+            <header>    <hr>        <li>         <dd>
+            <main>      <nav>       <noscript>   <video>
+            <ol>        <p>         <pre>        <fieldset> 
+            <section>   <table>     <tfoot>      <figcaption> 
+            <dl>        <dt>         <ul>        <figure>
+            <footer>    
+
+
+            Inline elements have default inline displays. It can also be overriden by css. 
+            <a>     <abbr>      <acronym>   <b>
+            <bdo>   <big>       <br>        <button>
+            <cite>  <code>      <dfn>       <em>
+            <i>     <img>       <input>     <kbd>
+            <label> <map>       <object>    <output>
+            <q>     <samp>      <script>    <select>
+            <small> <span>      <strong>    <sub>
+            <sup>   <textarea>  <time>      <tt>    
+            <var>
+
+
+    - <script> can be add in the head, or body of html. This tag add your custom or third party libraries.
+    - <style>	Adds CSS styling
     - you can create your custom tags 
 
 Attributes 
-    - All HTML elements can have attributes 
-    - The attributes depends on type of tags. Check documentation for each tags attributes 
-    - you can create your custom attributes
+    HTML attributes offer further details about HTML elements. They are used to alter the behavior or look of an element and are described in the start tag.
+    Attributes consist of a name and a value pairs, separated by an equals sign. The value must be contained within quotation marks. All HTML elements can have attributes.
+    The attributes depends on type of tags. Check documentation for each tags attributes. You can add your custom attributes.
+
+Elements are easier to understand if group by their respective purpose.
+    Elements use for text. 
+        - <h> tags are used as headings for titles and subtitles. There can have one h1 per page. But There can have morethan one h2, h3 or h4, etc. 
+        - <p> tags are use for paragarph text. 
+            - Below are list of tags that are used within the <p> tags.
+            <b> - used for bolding text
+            <strong> - use to signify that text is important
+            <i> - use to Italize text
+            <em> - use to Emphasized text
+            <mark> - use to Marked or highlight text
+            <small> - use to make text smaller
+            <del> - adds a line through on text to tell reader that text is Deleted 
+            <ins> - adds a line underneath the text to signify that text is inserted 
+            <sub> - to add a subscript text
+            <sup> - to add a superscript text
+        - <ol>,<ul> - use for listing items. Can be nested
+            - <ol> - make ordered list
+            - <ul> - makes unordered list, can have a type circle, square, or disc
+                    - <ul type="circle">
+            - <li>  - goes inside the ol or ul tag 
+            - Example:
+            - <ul type="square">
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                </ul>
+            - When making a navigation using <nav> tag, <ul> normally goes inside the nav tag 
+        - <a> tags are used for links. It has href and target (optional) attributes. href is where you put the url you care linking to
+            - target have values of _blank, _self, _parent, or _top 
+                - _blank opens page on a new browser tab
+                - _self opens page on the same page frame
+                - _parent opens page on a parent frame
+                - _top opens page on a full body of the window
+            - <a href="https://example.com">example</a>
+            - example of an image link
+            - <a href="https://www.w3docs.com/"><img src="/filepath/image.png" width="100" height="100" alt="example" /></a>
+
+Box Model 
+Most html elements can be styled with css. The box model is how the css control the layout of the html element in a box shape.
+Most elements have corresponding content, padding, border, and margin. The content is where most of the images and text displays. 
+The padding is a space around the content. The background color of padding is transparent and normally inherits from contents background.
+The border is what goes around the outside of padding. Margin is the space the goes around the border. It is normally use for positioning the element.
+When adjusting the height and width of the element using css, 
+the content, padding and border increases the width or height of the element. 
+
+<div class="box"></div>
+
+.box {
+  width: 400px;
+  height: 200px;
+  margin: 10px;
+  padding: 25px;
+  border: 5px solid black;
+}
+
+Total width: width + padding-left + padding-right + border-left + border-right 
+Total width: 400px + 25px         + 25px          + 5px         + 5px          = 460px
+
+Total height: height + padding-top + padding-bottom + border-top + border-bottom 
+Total height: 200px  + 25px         + 25px          + 5px         + 5px          = 260px
+
+Box model other properties
+box-sizing sets the size of the box relative to the parent box. content-box  sets the box size irrespectably to it's parent.
+The border-box sets the maximum width of the box in respective to its parent box. 
+
+display - sets the display relative to the parent. Traditionally there's 2 most common display settings. The block and inline block. 
+block elements expand to fill their parent. inline elements contract the box to be just big enough to hold their children. 
+inline-block is a combination of inline and block. It takes up as much width as necessary of the parent box. 
+Flex displays the element based on flexbox model. It uses a single dimentional layout either as a column or row.    
+Unlike Flex which is single dimentional, Grid uses two dimentional layout at the same time.
+
+float let you put floated block-level elements side-by-side instead of on top of each other. 
+non-floated, block-level elements act as if the floated element is not there, since the floated element is out of flow in relation to other block elements.
+
+line-height normally use for text relative to the containing div. It sets the height spacing of text. 
+
+position property sets how an element is placed in a document. The default value is static. Other position value is either relative, absolute, fixed, or sticky.
+Fixed positioned element are positioned based on the entire html document and not on its parent. The sticky somewhat like the fixed position. The only diffrence is it behaves relatively at first. 
+And as the page scrolls and hits the desired position it behaves like a fixed position. It is best to see this in action.
+position relative and absolute are normally used together. Absolute position element looks for the nearest relative element and position absolutely relatively to it. 
+
+z-index as the name suggest. This controls the z axis of an element. When there's stacking element on top of eachother, the element with highest index goes to the front.
