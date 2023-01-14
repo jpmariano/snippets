@@ -734,6 +734,21 @@ Updating Drupal 8/mail/
 5. Turn maintenance mode off
 6. drush cr all
 
+
+Module Update
+1. backup
+2. create a separate
+3. Get the version of the module you are trying to download
+3. https://www.drupal.org/project/<pastethemodulename> 
+  Example: https://www.drupal.org/project/editor_advanced_link
+4. Download the version of module that you need
+5. Delete the current /web/modules/contrib/<pastethemodulename>  and replace it with the one you just downloaded
+6. drush cr, and then drush updatedb
+7. Do testing. 
+8. Commit your changes. 
+9. push it to production or to environment above your development
+
+
 https://www.drupal.org/forum/support/post-installation/2016-09-22/file-and-directory-permissions-lets-finally-get-this
 To start:
 (site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \;

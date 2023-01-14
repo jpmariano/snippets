@@ -1,0 +1,118 @@
+=============================================================================
+STEP 1 : Construct Authorization Request for grant type = Authorization code
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  => 
+
+https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=<CLIENTID>&scope=openid%20profile%20email%20https://www.googleapis.com/auth/photoslibrary.readonly&state=state123&redirect_uri=http://localhost:8080&access_type=offline&prompt=consent
+
+response_type
+client_id
+scope
+state
+redirect_uri
+access_type
+prompt
+
+
+
+=============================================================================
+STEP 2 : Send Authorization Request and extract Code
+=============================================================================
+
+=> Start the Web Server (Optional) 
+=> Use Google Chrome to send request and capture the Authorization code
+
+
+
+
+=============================================================================
+STEP 3 : Construct a Token Request 
+============================================================================
+
+ENDPOINT   => https://oauth2.googleapis.com/token
+HTTP TYPE  => POST
+
+grant_type
+client_id
+client_secret
+code
+redirect_uri
+
+=============================================================================
+STEP 4 : Send Token Request and extract Token
+=============================================================================
+
+=> Note that Google does not return Access Token as JWT token (ID Token is returned as JWT)
+
+
+=============================================================================
+STEP 5 : Send Google Photos API Request - Get All Albums
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  =>  
+
+
+=============================================================================
+STEP 6 : Send Google Photos API Request - Get one Album
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  =>  
+
+
+=============================================================================
+STEP 7 : Send Google Photos API Request - See Photos of an Album
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  =>  
+
+WAIT for more than 1 hour and demonstrate that the access token is invalid
+
+=============================================================================
+STEP 8 : Get Token Info (should fail because token has expired)
+=============================================================================
+
+*** This is used by the Resource Server 
+
+ENDPOINT   => https://www.googleapis.com/oauth2/v1/tokeninfo
+HTTP TYPE  => POST
+
+access_token=
+
+=============================================================================
+STEP 8 : Refresh Token
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  =>  
+
+grant_type
+client_id
+client_secret
+refresh_token
+
+=> Get a new access token and call the API 
+
+=============================================================================
+STEP 9 : Send User Info Request
+=============================================================================
+
+*** This is used by the Client only if access token has openid scope 
+
+ENDPOINT   => https://openidconnect.googleapis.com/v1/userinfo
+HTTP TYPE  =>  
+
+Auth Header => 
+
+=============================================================================
+STEP 10 : Send request to get JWKS
+=============================================================================
+
+ENDPOINT   => 
+HTTP TYPE  =>  
+
+

@@ -182,7 +182,7 @@ Oauth scope
     - best for websites with a server backend 
     - Explicit user and client authentication 
 /*********************************************************************/
-Confidential Client OAuth2 Flow //OAuth 2.1
+Confidential Client OAuth2 Flow //OAuth 2.1 https://oauth.net/2/
 1. Authorization request
   - https://authserver.example.com/authorize 
   - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html), https://www.oauth.com/oauth2-servers/server-side-apps/authorization-code/, https://ldapwiki.com/wiki/Response_type, https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#endpoint
@@ -324,12 +324,12 @@ Refresh Tokens
 
 1. Authorization request
   - https://authserver.example.com/authorize 
-  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html)
+  - ?response_type=code (code tells the server that you are using the authorization code flow -  https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/endpoint/OAuth2AuthorizationResponseType.html), https://darutk.medium.com/diagrams-of-all-the-openid-connect-flows-6968e3990660
   - &client_id - asdfasdfasdf 
   - &redicrect_uri = https://client.example.com/callback 
   - &state=xyz (ungessable) - https://stackoverflow.com/questions/26132066/what-is-the-purpose-of-the-state-parameter-in-oauth-authorization-request
     - The state parameter is used to protect against XSRF. Your application generates a random string and send it to the authorization server using the state parameter. The authorization server send back the state parameter. If both state are the same => OK. If state parameters are differents, someone else has initiated the request.
-  - &scope=api1 api2.read offline_access  (offline_access - standardize by open id connect - user's must continously be asked for authorization scope)
+  - &scope=api1 api2.read offline_access  (offline_access - standardize by open id connect - user's must continously be asked for authorization scope) - Open ID Scopes: email address profile phone openid
   - &response_mode: query (tells the server you want the response in query string - https://auth0.com/docs/authorization/protocols/protocol-oauth2)
 
 
