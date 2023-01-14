@@ -5,8 +5,8 @@ npm install //reads package.json and installs all modules
 
 //inside package.json dependency
  "devDependencies": {
-    "concurrently": "^1.0.0", //when npm install is executed it automatically updates the module to it's minor updates
-    "lite-server": "~1.3.4", //when npm install is executed it automatically install the module with  patch updates
+    "concurrently": "^1.3.0", //when npm install is executed it automatically updates the module to it's minor updates
+    "lite-server": "~1.3.9", //when npm install is executed it automatically install the module with  patch updates
     "typescript": "1.7.5" //when npm install is executed it just installed that module version
   }
 
@@ -15,6 +15,7 @@ npm install //reads package.json and installs all modules
 const qr = require('<modulename>'); 
 
 //complete_list of Node Default Core module https://nodejs.org/api/index.html 
+
 
 
 
