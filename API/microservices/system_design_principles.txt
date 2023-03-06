@@ -22,3 +22,19 @@ D - Dependency Inversion Principle
 Entities must depend on abstractions, not on concretions. It states that the high-level module must not depend on the low-level module, but they should depend on abstractions.
 For example, insted of instatiating a class directly into another class, pass the class in the constructor. Or create an interface and implement an interface.
 
+
+
+D - Don't
+R - Repeat
+Y - Yourself
+
+K - Keep
+I - It 
+S - Simple
+S - Stupid
+
+Y - You
+A - Ain't
+G - Gonna
+N - Need
+I - It

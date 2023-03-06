@@ -69,6 +69,7 @@ sudo systemctl restart fail2ban
 -----------------------------------------------------------------------------------------
 NGINX
 sudo yum install nginx
+
 sudo systemctl start nginx
 sudo systemctl enable nginx
 sudo systemctl reload nginx - reload and enable nginx changes
@@ -79,6 +80,123 @@ sudo nginx - t -  to test if configuration is good
 sudo systemctl reload nginx - reload to enable nginx changes 
 /usr/share/nginx/html 
 
+https://serverguy.com/comparison/apache-vs-nginx/
+
+ubuntu server
+ubuntu uses apt insted of yum
+apt-get update
+apt-get install nginx
+ps aux | grep nginx - see nginx is installed
+ifconfig - paste ip address to browser to see nginx
+ls -l /etc/nginx
+
+centos server 
+yum install nginx
+yum install epel-release - run if nginx is not found and rerun yum install nginx 
+ls -l /etc/nginx
+service nginx start
+ps aux | grep nginx - see nginx is installed
+
+Installing NGINX from source
+https://nginx.org/ - Documentation
+https://www.nginx.com/ 
+https://nginx.org/en/download.html
+
+wget https://nginx.org/download/nginx-1.23.3.tar.gz
+tar -zxvf nginx-1.23.3.tar.gz
+go inside the nginx-1.23.3
+./configure 
+apt-get install build-essential
+If there's more error, install the dependencies
+apt-get install libprce3 libprce3-dev zlib1g zlib1g-dev libssl-dev
+./configure  --help - https://nginx.org/en/docs/ https://nginx.org/en/docs/configure.html
+
+./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+make - use to compile nginx
+make install  - use to install nginx
+ls -l /etc/nginx
+nginx -V
+nginx - to check if there's error
+ps aux | grep nginx - to check if nginx is running
+nginx -h 
+nginx -s stop - to stop nginx 
+systemd installation: https://www.nginx.com/resources/wiki/start/topics/examples/initscripts/
+touch /lib/systemd/system/nginx.service - https://www.nginx.com/resources/wiki/start/topics/examples/systemd/ 
+    [Unit]
+    Description=The NGINX HTTP and reverse proxy server
+    After=syslog.target network-online.target remote-fs.target nss-lookup.target
+    Wants=network-online.target
+
+    [Service]
+    Type=forking
+    PIDFile=/var/run/nginx.pid
+    ExecStartPre=/usr/bin/nginx -t
+    ExecStart=/usr/bin/nginx
+    ExecReload=/usr/bin/nginx -s reload
+    ExecStop=/bin/kill -s QUIT $MAINPID
+    PrivateTmp=true
+
+    [Install]
+    WantedBy=multi-user.target
+
+systemctl start nginx - to start nginx using stestemd
+systemctl status nginx
+systemctl stop nginx
+stystemctl enable nginx - to enable on reboot
+reboot - to reboot ubuntu
+
+https://www.nginx.com/resources/wiki/start/topics/examples/full/
+Context and Directives
+Context is like a scope that contains Directives which is a key and value pairs
+
+Creating Virtual Host
+/etc/nginx/nginx.conf
+    http {
+      include    <path>/mime.types; //https://www.nginx.com/resources/wiki/start/topics/examples/full/#mime-types
+      server { # php/fastcgi
+        listen       80;
+        server_name  domain1.com www.domain1.com;
+        access_log   logs/domain1.access.log  main;
+        root         /sties/demo;
+        location ~ \.php$ {
+          fastcgi_pass   127.0.0.1:1025;
+        }
+
+        # # Exact match
+        # location = /greet {
+        #   return 200 'Hello from NGINX "/greet" location - EXACT MATCH.';
+        # }
+
+        # Preferential Prefix match
+        location ^~ /Greet2 {
+          return 200 'Hello from NGINX "/greet" location.';
+        }
+
+        # # REGEX match - case sensitive
+        # location ~ /greet[0-9] {
+        #   return 200 'Hello from NGINX "/greet" location - REGEX MATCH.';
+        # }
+
+        # REGEX match - case insensitive
+        location ~* /greet[0-9] {
+          return 200 'Hello from NGINX "/greet" location - REGEX MATCH INSENSITIVE.';
+        }
+
+        #  Prefix match
+        location  /Greet2 {
+          return 200 'Hello from NGINX "/greet" location.';
+        }
+  
+        https://nginx.org/en/docs/varindex.html
+      }
+    }
+ # nginx -t - to check configuration
+ # systemctl reload nginx
+ #  curl -I http://<ipaddress>/styles.css
+
+bundled (comes with nginx) and third party modules
+
+yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel
 -----------------------------------------------------------------------------------------
 MariaDB
 sudo yum install mariadb-server mariadb

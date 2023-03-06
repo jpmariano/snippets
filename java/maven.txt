@@ -1,0 +1,26 @@
+Lifecyle https://www.youtube.com/watch?v=agaZ92wc0gY&list=PLUGYJ2-_m9hmmJRUZEV8szpISoBcuU96b&index=13&t=712s&ab_channel=AJAUTOMATION
+    - Build/Default
+        - Phases - list of phases
+            [validate, initialize, generate-sources, process-sources, 
+
+            generate-resources, process-resources, compile, process-classes, 
+
+            generate-test-sources, process-test-sources, generate-test-resources, 
+
+            process-test-resources, test-compile, process-test-classes, test,
+            
+            prepare-package, package, pre-integration-test, integration-test, 
+
+            post-integration-test, verify, install, deploy]
+            Important Phases
+            1. validate
+            2. compile
+            3. test
+            4. install
+            5. packaging
+
+    - Clean
+    - Site 
+Phases
+Plugin
+Goal
