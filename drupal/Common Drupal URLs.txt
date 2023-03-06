@@ -39,16 +39,24 @@ drush upwd --password="T0psecret" admin
 php -S localhost:8081 .ht.router.php 
 php -S localhost:8085 .ht.router.php 
 php -S localhost:8086 .ht.router.php 
+php -S localhost:8087 .ht.router.php 
 ../vendor/bin/drush upwd --password="T0psecret" admin
 ../vendor/bin/drush sql-drop 
 ../vendor/bin/drush sql-cli --extra=--force < 
 
 View published content
+drush sql-dump --extra-dump='--no-tablespaces --insert-ignore' > /path/file.sql
+drush sql-cli --extra-cli='--no-tablespaces --insert-ignore' < /path/file.sql 
 drush sql-dump --result-file=/home/username/Repositories/opss-site/databases/opsstage.sql
 rsync -avr --delete /var/www/opss/sites/default/files/ /home/username/Repositories/opss-site/opss/files/
 Then:
 rsync -avr --delete -e ssh remote-stage-drupal-centers:/home/username/Repositories/opss-site/opss/files/ /home/username/Repositories/opss-site/opss/files/
 rsync -avr --delete -e ssh remote-drupal:/home/username/Repositories/opss-site/opss/databases/ /home/username/Repositories/usuhs-site/usuhs/databases/
+
+rsync -avzh <username> @<server.com>:<folderpath>
+
+drush user-create <username> --mail="<email>" --password="<password>"; 
+drush user-add-role "administrator" <username>
 
 http://www.jesox.com/blog/how-install-drush-mac
 

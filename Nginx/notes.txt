@@ -1,0 +1,164 @@
+https://ubuntu.com/tutorials/install-and-configure-nginx#2-installing-nginx
+Installing Nginx 
+sudo apt update
+sudo apt install nginx  
+
+Installing from source
+https://nginx.org/en/download.html
+$ wget https://nginx.org/download/nginx-1.23.3.tar.gz
+$ tar -zxvf nginx-1.23.3.tar.gz
+$ cd nginx-1.23.3
+$ ./configure 
+
+Installing the Compiler
+$ apt-get install build-essential
+$ apt-get install libprce3 libprce3-dev zlib1g zlib1g-dev libssl-dev
+$ ./configure  - it should work
+
+Nginx configuration
+$ ./configure --help (List all available modules, https://nginx.org/en/docs/ https://nginx.org/en/docs/configure.html)
+$ ./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+$ make - use to compile nginx
+$ make install  - use to install nginx
+$ ls -l /etc/nginx - configuration files reside
+$ nginx -v - to see the version of nginx and the current configuration 
+
+Adding new dynamic modules
+$ nginx -v - to see the version of nginx and the current configuration  and copy that configuration
+$ ./configure --help | grep dynamic - to see list of dynamic modules
+$ ./configure <paste_current_configuration> <add_dynamic_flag_from_configure_help see sample ->  --with-http_image_filter_module --modules-path=/etc/nginx/modules > 
+    - if it fails, installs any required modules and rerun
+$ make - use to compile nginx
+$ make install  - use to install nginx
+$ systemctl reload ngix
+$ systemctl status ngix
+After module is installed, see documentation how to use the module. 
+See example: http://nginx.org/en/docs/http/ngx_http_image_filter_module.html | 11+Adding+Dynamic+Modules.conf
+
+Compressing files
+See: 13+Compressed+Responses+with+gzip.conf
+$curl <url/styles.css> - outputs uncompressed css
+$curl -I -H "Accept-encoding: gzip, deflate" <url/styles.css> > style.min.css - output compressed version
+
+FastCGI Cache
+see line 13 14+FastCGI+Cache.conf
+See line 45 
+apt-get install apache2-utils
+$ ab -n 100 -c 10 https://websiteorip
+
+HTTPV2
+$nginx -v
+$ ./configure --help | grep http_v2
+$ ./configure <paste_current_configuration> --with-http_v2_module
+$ make 
+$ make install
+$ systemctl restart nginx
+#Nginx/15+HTTP2.conf see line 15
+//Create ssl using openssl
+$ mkdir /etc/nginx/ssl 
+$ openssl req -x509 -days 10 -nodes -newkey rsa:2048 -keyout /etc/nginx/ss/self.key  /etc/nginx/ss/self.crt
+$ ls -l /etc/nginx/ssl
+#Nginx/15+HTTP2.conf see line 22
+
+
+Starting and Stopping Nginx 
+    $ nginx - to start nginx 
+    $ nginx -h 
+    $ nginx -s stop
+
+    https://www.freedesktop.org/wiki/Software/systemd/
+    https://www.nginx.com/resources/wiki/start/topics/examples/initscripts/
+    https://www.nginx.com/resources/wiki/start/topics/examples/systemd/
+
+    Configure systemd to work with nginx service
+    Follow instructions https://www.nginx.com/resources/wiki/start/topics/examples/systemd/ 
+    replace the values from previous ./configure command which can be access or viewed using nginx -v 
+
+    $ systemctl start nginx 
+    $ systemctl status nginx 
+    $ systemctl stop nginx 
+    $ systemctl enable nginx - enable nginx on reboot
+    $ reboot 
+
+
+//3rd party modules
+https://www.nginx.com/resources/wiki/modules/
+
+$ ps aux | grep nginx -  to check if nginx process is running
+
+$ ls -l /etc/nginx - configuration files reside
+
+
+
+https://www.nginx.com/resources/wiki/start/topics/examples/full/
+Context and Directives
+Context is like a scope that contains Directives which is a key and value pairs
+
+https://devhints.io/curl
+
+curl -I <url> - get the headers
+
+
+NGINX Builtin Variables
+http://nginx.org/en/docs/varindex.html
+NGINX Conditional
+https://www.nginx.com/resources/wiki/start/topics/depth/ifisevil/
+
+
+Redirects
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+Logs https://docs.nginx.com/nginx/admin-guide/monitoring/logging/ http://nginx.org/en/docs/ngx_core_module.html#error_log http://nginx.org/en/docs/http/ngx_http_log_module.html
+Error Logs
+Access Logs
+//You can add error loggin in ./configure or nginx.conf 
+./configure --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
+
+
+PHP Processing
+https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx
+$ apt-get install php-fpm
+$ systemctl list-units | grep php
+$ stystemctl status php7.1-fpm
+fastcgi - https://www.nginx.com/nginx-wiki/build/dirhtml/start/topics/examples/full/
+
+If there's error in fastcgi to php, check the log and check the user that it is running
+$ tail -n 1 /var/log/nginx/error.log
+$ ps aux | grep nginx 
+$ ps aux | grep php 
+
+
+Default page is placed in /var/www/html/
+
+Setting up virtual host
+cd /etc/nginx/sites-enabled
+sudo "${EDITOR:-vi}" tutorial
+
+server {
+       listen 81;
+       listen [::]:81;
+
+       server_name example.ubuntu.com;
+
+       root /var/www/tutorial;
+       index index.html;
+
+       location / {
+               try_files $uri $uri/ =404;
+       }
+}
+
+$ sudo service nginx restart
+---------------------------------------------------------
+centos
+yum install nginx - if no package is available yum install epel-release and re-run yum install nginx (https://docs.fedoraproject.org/en-US/epel/)
+
+$ service nginx start 
+$ ps aux | grep nginx -  to check if nginx process is running
+
+yum check-update
+
+Installing the Compiler
+yum groupinstall "Development Tools"
+---------------------------------------------------------
+ssh-keygen -R <servername|server IP>
