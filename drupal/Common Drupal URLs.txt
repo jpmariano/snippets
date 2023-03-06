@@ -1,4 +1,4 @@
-admin/config/development/maintenance - maintenance settings
+admin/config/development/maintenance - maintenance settingsupdating
 admin/config/system/cron - Cron 
 admin/config/development/performance - cache
 admin/reports/status - Site Status report
@@ -68,3 +68,7 @@ composer require 'drupal/colorbutton:8.x-1.3'
 
 composer require 'drupal/panelbutton:8.x-1.4'
 
+# systemctl restart nginx
+# systemctl restart apache2
+# systemctl restart php8.1-fpm
+# systemctl restart varnish

@@ -4,7 +4,8 @@ https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-
 https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/
 New way*
 $ ssh-keygen -t ed25519 -C "your_email@example.com" 
-$ ssh-keygen -t ed25519 -C "name.lastname@example.com" 
+$ ssh-keygen -t ed25519 -C "name.lastname@example.com" -f "<username>"
+
 Old way*
 $ ssh-keygen -t rsa -b 4096 -C "firstname.lastname@company.net"
 $ ssh-keygen -t rsa -b 4096 -C "name.lastname@example.com" 
@@ -15,7 +16,7 @@ Host git-codecommit.*.amazonaws.com
 Step 2:
 Dealing with multiple keys 
 https://stackoverflow.com/questions/21160774/github-error-key-already-in-use
-
+id_rsa
 cat ~/.ssh/config
 vi ~/.ssh/config
         # Default GitHub
