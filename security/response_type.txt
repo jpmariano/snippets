@@ -1,10 +1,67 @@
+Legend:
+Token ID Token  -  is from OPEN ID, and it is in JWT format. It is meant for Authentication.
+    - Not meant for Authorization - Do not send to API
+    JWT format - https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-token-structure / https://supertokens.com/blog/what-is-jwt / https://auth0.com/blog/id-token-access-token-what-is-the-difference/
+        "Header": {
+            "alg": "HS246",
+            "typ": "JWT"
+        }, 
+        "Payload": {
+            "name": <User>,
+            "sub": <UserID>,
+            "aud": <ApplicationID - The Intended Recepient APP>,
+            "iss": <ApplicationID - Who Created the token https://<TENANT-DOMAIN>.eu.auth0.com/>,
+            "iat": <The time (in milliseconds since epoch) the JWT was created>,
+            "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
+           
+        },
+        "Signature": HMACSHA256(
+            base64UrlEncode(header) + "." +
+            base64UrlEncode(payload),
+            secret)
+code Token/Access Token - Is from OAUTH 2. To allow client to access resources. 
+    - Can be in any format. No current standard. Can use JWT
+    - It is meant for Authorization: This token is intended to be sent to resource server to allow access. 
+    - Not meant for Authentication
+    - Does not guarantee the user is login 
+    JWT format - https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-token-structure / https://supertokens.com/blog/what-is-jwt https://www.iana.org/assignments/jwt/jwt.xhtml
+        "Header": {
+            "alg": "HS246",
+            "typ": "JWT"
+        }, 
+        "Payload": {
+            "sub": <UserID>,
+            "aud": <ApplicationID - The Intended Recepient APP string containing a StringOrURI value https://consumer.example.com>,
+            "iss": <ApplicationID - Who Created the token https://issuer.example.com>,
+            "iat": <The time (in milliseconds since epoch) the JWT was created>,
+            "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
+            "hd": <domain example.com>,
+            "azp": <Authorized party - the party to which the ID Token was issued. value is a case sensitive string containing a StringOrURI value.,
+            "scope": "email profile phone address updatethis createthis",
+            "grant_type": <authorization_code | password | client_credentials | refresh_token | URI token endpoint> - https://fusionauth.io/articles/oauth/complete-list-oauth-grants
+            "permissions": ["permission"],
+            "roles": ["Admin", "SuperUser"],
+            "client_id":"Client Identifier s6BhdRkqt3" - https://www.rfc-editor.org/rfc/rfc8693.html,
+            "state": <used to protect against XSRF, Store it in the browser session for later validation>, - https://developers.google.com/identity/openid-connect/openid-connect?hl=en#createxsrftoken server sends this to the client (browser). In the form, a hidden field, add the csrf token. Include, this token in the payload. https://terasolunaorg.github.io/guideline/5.1.0.RELEASE/en/Security/CSRF.html
+            "nonce": <Can be used by the client application to prevent replay attacks, to use by the authorization server. If to check the request is valid, maybe a unix timestamp. If the timestamp is longer than it should, it no longer valid>, - https://www.youtube.com/watch?v=ZeuWpL-7EwY
+            "hd": <domain example.com>,
+        },
+        "Signature": HMACSHA256(
+            base64UrlEncode(header) + "." +
+            base64UrlEncode(payload),
+            secret)
+
+
+
+
 https://darutk.medium.com/diagrams-of-all-the-openid-connect-flows-6968e3990660
 response_type=code
 if openid is included in scope 
 
-Endpoint       | Authorization Code | code Token | Token ID Token
-/authorization      issued                 x              x
+Endpoint       | Authorization Code | code Token | Token ID Token 
+/authorization      issued                 x              x     
 /token                 X                 issued         issued
+Example: https://docs.oracle.com/cd/E50612_01/doc.11122/oauth_guide/content/oauth_flows.html
 
 response_type=code
 if openid is included not in scope 
@@ -13,7 +70,7 @@ Endpoint       | Authorization Code | code Token | Token ID Token
 /authorization      issued                 x              x
 /token                 X                 issued           x
 
-//Implicit Flow
+//Implicit Flow Example: https://docs.oracle.com/cd/E50612_01/doc.11122/oauth_guide/content/oauth_flows.html
 response_type=token
 if openid is included or not in scope 
 no token endpoint

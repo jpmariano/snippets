@@ -25,7 +25,9 @@ source ~/.zshrc
 
 
 mysql -u root -p <db_name> < .<path to file>
-
+utf8mb4_general_ci
+CREATE DATABASE <db_name> CHARACTER SET <charset> COLLATE <collation>;
+CREATE DATABASE school CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 etc/apache2
 cd /Library/WebServer/Documents
@@ -59,3 +61,6 @@ brew services stop mariadb
 
 MariaDB [(none)]> grant all privileges on wordpress61.* to wpuser@localhost identified by '<password>';
 MariaDB [(none)]> grant all privileges on drupal948.* to drupaluser@localhost identified by '<password>';
+
+
+brew services restart mysql
