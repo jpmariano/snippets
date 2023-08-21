@@ -1,3 +1,4 @@
+#Step 8 to define action links on a route
 announcement.add:
   route_name: entity.announcement.add_form
   title: 'Add announcement'

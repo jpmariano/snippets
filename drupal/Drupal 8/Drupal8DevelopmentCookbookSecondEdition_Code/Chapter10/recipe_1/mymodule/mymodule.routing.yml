@@ -1,0 +1,17 @@
+#Step 5 mymodule.routing.yml in your module's root directory to manually provide a route to add a Site-announcement entity
+#_entity_form property to tell Drupal to look up the class defined in our handlers from /Chapter10/recipe_1/mymodule/src/Entity/SiteAnnouncement.php points to SiteAnnouncementForm
+#_entity_list key will tell the route to use our list_builder handler to build the page /Chapter10/recipe_1/mymodule/src/Entity/SiteAnnouncement.php points to SiteAnnouncementListBuilder.php
+entity.announcement.add_form:
+  path: '/admin/config/system/site-announcements/add'
+  defaults:
+    _entity_form: 'announcement.add'
+    _title: 'Add announcement'
+  requirements:
+    _permission: 'administer content'
+entity.announcement.collection:
+  path: '/admin/config/system/site-announcements'
+  defaults:
+    _entity_list: 'announcement'
+    _title: 'Site Announcements'
+  requirements:
+    _permission: 'administer content

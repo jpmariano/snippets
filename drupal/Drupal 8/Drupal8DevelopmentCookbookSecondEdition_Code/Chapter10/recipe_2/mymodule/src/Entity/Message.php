@@ -6,6 +6,17 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
+# Entities use annotation documentation blocks. We will start our annotation block by providing the entity's ID, label, configuration prefix, and configuration export key names
+#id is the internal machine name identifier for the entity type
+#label is the human-readable version
+#entity_keys tells Drupal which attributes represent our identifier and label
+#base_table defines the database table in which the entity will be stored
+#fieldable allows custom fields to be configured through the Field UI module.
+#handlers to our entity. We will define the class that will display the available entity entries and the forms to work with our entity:
+  #list_builder class will be created to show you a table of our entities.
+  #form array provides classes for forms to be used when creating, editing, or deleting our configuration entity
+#route_provider, to dynamically generate our canonical (view), edit, and delete routes:
+#links routes for our delete, edit, and collection (list) pages
 /**
  * Defines the message entity class.
  *
@@ -42,11 +53,13 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   },
  * )
  */
+#ContentEntityBase  needs to return an array of BaseFieldDefinitions for typed data definitions. This includes the keys provided in the entity_keys value in our entity's annotation along with any specific fields for our implementation.
 class Message extends ContentEntityBase implements MessageInterface {
 
   /**
    * {@inheritdoc}
    */
+  #provides a wrapper around the defined base field's value and returns it.
   public function getMessage() {
     return $this->get('content')->value;
   }
@@ -54,6 +67,7 @@ class Message extends ContentEntityBase implements MessageInterface {
   /**
    * {@inheritdoc}
    */
+  #will provide our field definitions to the entity's base table
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -73,7 +87,7 @@ class Message extends ContentEntityBase implements MessageInterface {
         'weight' => -5,
       ))
       ->setDisplayConfigurable('form', TRUE);
-
+    #hold the actual text for the message
     $fields['content'] = BaseFieldDefinition::create('text_long')
       ->setLabel(t('Content'))
       ->setDescription(t('Content of the message'))
