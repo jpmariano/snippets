@@ -1,0 +1,31 @@
+Installing apache - https://ubuntu.com/tutorials/install-and-configure-apache#1-overview
+sudo apt-get update
+sudo apt-get install apache2
+sudo stystemctl status apache2
+
+create a folder under /var/www/<foldername>
+sudo chmod -R 755 /var/www
+cd /etc/apache2/sites-available/
+sudo cp 000-default.conf <sitename>.conf 
+    - Change the ServerAdmin, DocumentRoot, and log files
+sudo a2ensite <sitename>.conf  -enable the site
+sudo systemctl restart apache2
+------------------------------
+sudo a2dissite <sitename>.conf  -disable the site (you can disable the default conf)
+sudo ufw status - check firewall status
+sudo ufw enable - enable firewall
+sudo ufw allow in ssh
+sudo ufw allow <port_number>
+
+sudo ufw status
+Status: active
+
+Sample:
+To                         Action      From
+--                         ------      ----
+OpenSSH                    LIMIT       <ipaddress>/8                
+Hbss                       LIMIT       <ipaddress>              
+nginx                      LIMIT       Anywhere                   
+Icinga                     LIMIT       <ipaddress>           
+Nessus                     LIMIT       <ipaddress>               
+Splunk                     LIMIT       <ipaddress>              
