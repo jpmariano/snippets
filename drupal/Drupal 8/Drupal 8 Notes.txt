@@ -751,7 +751,7 @@ Module Update
 
 https://www.drupal.org/forum/support/post-installation/2016-09-22/file-and-directory-permissions-lets-finally-get-this
 To start:
-(site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \;
+(site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \; //chmod -R 775  /var/www/opss/sites/default/files 
 (site-wide all files) 644 |sudo find sites -type f -exec chmod 664 {} \;
 Then:
 chmod 444 sites/default/settings.php;
@@ -858,3 +858,6 @@ apachectl -t -D DUMP_INCLUDES
     https://<siteurl>dev.wpengine.com
     http://localhost
     
+
+[Nginx defined in conf.d port 80 → 443 → proxy_pass http://127.0.0.1:8080 varnish port] →
+[Varnishd defined in /etc/varnishd/<yourcustomvclname>.vcl  localhost:9080 to apache]  →  [apache defined port <apacheport> →  fcgi://127.0.0.1:<fcgiport>] →  [php-fpm port <php-fpmport>- 1000x defined in /etc/php/8.<minorversion>/fpm/pool.d/*  ]
