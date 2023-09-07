@@ -202,11 +202,16 @@ Microservice Communication
             - Apache Kafka 
                 - Distributed 
                 - horizontal scallable
+            - Akka
+            - Debezium
             - RabbitMQ
             - Celery
             - Nsq
             - Redisson
             - https://stackshare.io/search/q=AMQP
+    - APIs/contrats 
+        - Each microservice exposes their own API
+        - It also publish contracts (WSDL, Swagger, IDL) so that other microservice or developer may know how to interact with your microservice
 
 https://geekflare.com/api-gateway/
 - Kong Gateway
@@ -227,6 +232,9 @@ https://geekflare.com/api-gateway/
 - Azure
 - Google Cloud Endpoints
 - Serverless - NPM
+- Zuul
+- Netty
+- Finagle
 
 
 
@@ -246,3 +254,21 @@ https://geekflare.com/api-gateway/
 - NACOS
 - Vyne
 - zetcd
+
+Circuit Breaker 
+Hystrix
+Jrugged
+
+Microservice Authentication and Authorization
+- kerberos, OpenID, Oauth 2.0, SMAL
+- Okta, Keycloak, shiro 
+
+Deployment
+- Jenkins
+- Asgard
+- Aminator
+
+Environment
+Dev, Stage, production
+
+Versioning

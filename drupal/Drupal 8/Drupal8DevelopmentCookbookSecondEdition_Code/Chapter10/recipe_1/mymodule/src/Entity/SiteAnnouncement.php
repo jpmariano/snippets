@@ -3,7 +3,18 @@
 namespace Drupal\mymodule\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-
+#Step 4
+# Entities use annotation documentation blocks. We will start our annotation block by providing the entity's ID, label, configuration prefix, and configuration export key names
+#id is the internal machine name identifier for the entity type
+#label is the human-readable version
+#config_prefix matches with how we defined our schema with mymodule.announcement in Chapter10/recipe_1/mymodule/config/schema/mymodule.schema.yml
+#entity keys definition tells Drupal which attributes represent our identifiers and labels Chapter10/recipe_1/mymodule/config/schema/mymodule.schema.yml
+#config_export, we are telling the configuration management system what properties are to be exportable when exporting our entity
+#handlers to our entity. We will define the class that will display the available entity entries and the forms to work with our entity:
+  #list_builder class will be created to show you a table of our entities.
+  #form array provides classes for forms to be used when creating, editing, or deleting our configuration entity
+#links routes for our delete, edit, and collection (list) pages
+#Read more page 236
 /**
  * @ConfigEntityType(
  *   id ="announcement",
@@ -34,6 +45,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   }
  * )
  */
+#Step 3
 class SiteAnnouncement extends ConfigEntityBase implements SiteAnnouncementInterface {
 
   /**

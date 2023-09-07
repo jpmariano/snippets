@@ -1,0 +1,189 @@
+User Registration
+https://areatype.com/blog/register-user-drupal-8-rest-api
+/admin/config/services/rest
+/admin/people/permissions
+ /admin/config/people/accounts
+
+curl --location 'http://localhost:8081/user/register?_format=json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": {"value":"<username>"},
+    "mail": {"value":"<email>"}
+}'
+
+/admin/people/permissions
+
+------------------------------------------------------------------
+To Auto Assign when user register: 
+Install: https://www.drupal.org/project/registration_role
+/admin/people/registration-role
+
+curl --location 'http://localhost:8081/user/register?_format=json' \
+--header 'X-CRSF-Token: Spet_q5QbWJ1jSxXWxJpLcNrATprhGtvUeYkY_v3mFw' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+
+    "name":[{"value":"<username>"}],
+    "mail":[{"value":"<email>"}],
+    "pass":[{"value":"<password>"}]
+}'
+
+------------------------------------------------------------------
+rest_register_verify_email - Preffered way for Decoupled + /admin/people/registration-role if you want to add role
+/admin/config/services/rest
+    - Enable "Create account"
+        * Select Method -> POST, format -> json, and Auth -> Na 
+    - Enable "Activate user Via Temp token"
+        * Select Method -> POST, format -> json, and Auth -> Na 
+-/admin/config/people/accounts
+    - Who can register accounts?
+        * Visitors - no admin approval needed
+        * no email validation required - we’ll handle in this module
+
+    - Emails -> Rest Verify Email Token
+        * Modify Email as needed
+
+1. Post "mail" and "pass" to endpoint. optionally add "lang" for language of email.
+/rest_register_verify_email/README.txt
+ENDPOINT: Register New User and Send Verification Email
+Method: POST
+
+SITE + /rest/create-account?_format=json
+{
+  "mail": "your@yoursite.email",
+  "pass": "password"
+}
+optionally add "lang" for language of email
+
+
+2. The User will get an email (from Admin/Configuration/REST/Account settings) with the temp_token.
+
+3. Post this "temp_token" (with "name") to this endpoint to activate the user account.
+
+ENDPOINT: Verify User With Token and Activate
+Method: POST
+SITE + /rest/verify-account?_format=json
+{
+  "name": "your@yoursite.email",
+  "temp_token":"TOKEN_SENT_IN_EMAIL"
+}
+
+
+4. User is ready for login
+------------------------------------------------------------------
+Client Credentials
+Enable: Simple OAuth & OpenID Connect, 
+/admin/config/people/simple_oauth: ../config/<public.key>, ../config/<private.key>
+Readme: /web/modules/contrib/simple_oauth/README.md
+Post Request:
+curl --location 'http://localhost:8081/oauth/token' \
+--form 'grant_type="client_credentials"' \
+--form 'client_id="<client_id>"' \
+--form 'client_secret="<client_secret>"' \
+--form 'scope="client"'
+
+Response:
+{"token_type":"Bearer","expires_in":300,"access_token":"<token>"}
+
+Get Request:
+curl --location --globoff 'http://localhost:8081/jsonapi/node/article?page[limit]=1' \
+--header 'Authorization: Bearer {token - From post request above}
+
+Get Request:
+curl --location 'http://localhost:8081/jsonapi/node/article/2003f5d9-5a97-4770-af5d-aa1bf06b7a26' \
+--header 'Authorization: Bearer {token - From post request above}
+--------------------------------------------------------
+Password Credentials
+Enable: Simple OAuth & OpenID Connect, simple_oauth_password_grant
+/admin/config/people/simple_oauth: ../config/<public.key>, ../config/<private.key>
+Readme: /web/modules/contrib/simple_oauth/README.md, /web/modules/contrib/simple_oauth_password_grant/README.md
+Enable Grant: /admin/config/services/consumer - Enable Password, Refresh Token,
+Enable Scopes: /admin/config/people/simple_oauth/oauth2_scope/dynamic - Enable Password, Refresh Token,
+
+
+Getting Tokens:
+curl --location 'http://localhost:8081/oauth/token' \
+--form 'grant_type="password"' \
+--form 'client_id="<client_id>"' \
+--form 'username="<username>"' \
+--form 'password="<password>"' \
+--form 'client_secret="<client_secret>"' \
+--form 'scope="client"'
+
+    response: 
+    {
+        "token_type": "Bearer",
+        "expires_in": 300,
+        "access_token": "<access_token>",
+        "refresh_token": "<refresh_token>"
+    }
+
+
+Getting Refresh Token:
+curl --location 'http://localhost:8081/oauth/token' \
+--form 'grant_type="refresh_token"' \
+--form 'client_id="<client_id>"' \
+--form 'client_secret="<client_secret>"' \
+--form 'scope="client"' \
+--form 'refresh_token="<refresh_token from previous request>"'
+
+Requesting Content:
+http://localhost:8081/jsonapi/node/article?page[limit]=1
+curl --location --globoff 'http://localhost:8081/jsonapi/node/article?page[limit]=1' \
+--header 'Authorization: Bearer <access_token>'
+
+Getting User Details:
+curl --location 'http://localhost:8081/user/1?_format=json' \
+--header 'Authorization: Bearer <access_token>'
+
+Getting User ID:
+curl --location 'http://localhost:8081/oauth/userinfo?_format=json' \
+--header 'Authorization: Bearer <access_token>'
+
+Get User Roles and Permissions:
+curl --location 'http://localhost:8081/oauth/debug?_format=json' \
+--header 'Authorization: Bearer <access_token>'
+
+--------------------------------------
+
+Implicit Grant or authorization_code (for third party app)
+Get Request:
+curl --location 'http://localhost:8081/oauth/authorize?response_type=code&client_id=<client_id>&scope=<scope>&state=<scope generated by frontend>' \
+Response: http://localhost:8081/?code=<response_code>
+
+Post Request:
+curl --location 'http://localhost:8081/oauth/token' \
+--form 'grant_type="authorization_code"' \
+--form 'client_id="<client_id>"' \
+--form 'client_secret="<client_secret>"' \
+--form 'code="<response_code from above>"' \
+--form 'scope="client"'
+Reponse Sample:
+{
+    "token_type": "Bearer",
+    "expires_in": 300,
+    "access_token": "<access_token>",
+    "refresh_token": "<refresh_token>"
+}
+--------------------------------------
+Basic Authentication
+Enable: HTTP Basic Authentication, REST UI, RESTful Web Services
+- In Rest UI, enable the user
+
+curl --location 'http://localhost:8081/session/token'
+
+curl --location 'http://localhost:8081/user/login?_format=json' \
+--header 'Content-Type: application/ecmascript' \
+--header 'X-CRSF-Token: <use token from above>' \
+--data '{
+    "name": "<username>",
+    "pass": "<password>"
+}'
+
+Requesting Content Using basic_auth:
+curl --location 'http://localhost:8081/node/1?_format=json' \
+--header 'Authorization: Basic <Base64-encoded username and password, seprated by a colon>' - https://www.debugbear.com/basic-auth-header-generator
+
+Requesting Content Using cookie:
+curl --location 'http://localhost:8081/node/1?_format=json' \
+--header 'Cookie: <SESS123>'

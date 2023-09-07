@@ -1,7 +1,10 @@
+# Step 1
+#config_entity creates a table if config_object it creates a structure of serialized data for the config table
+#list of data types drupal/core/config/schema/core.data_types.schema.yml
 mymodule.message_type.*:
   type: config_entity
   label: 'Message type settings'
-  mapping:
+  mapping: #attributes that make up our entity and the data that will be stored
     id:
       type: string
       label: 'Machine-readable name'

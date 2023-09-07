@@ -1,0 +1,14 @@
+entity.message.add_form:
+  path: '/messages/add'
+  defaults:
+    _entity_form: 'message.add' #ContentEntityType from Message.php points to "add" = "Drupal\Core\Entity\EntityForm",
+    _title: 'Add message'
+  requirements:
+    _entity_create_access: 'message'
+entity.message.collection:
+  path: '/admin/content/messages'
+  defaults:
+    _entity_list: 'message' #tells list_builder from Message.php to build the page
+    _title: 'Messages'
+  requirements:
+    _permission: 'administer messages'

@@ -861,3 +861,25 @@ apachectl -t -D DUMP_INCLUDES
 
 [Nginx defined in conf.d port 80 → 443 → proxy_pass http://127.0.0.1:8080 varnish port] →
 [Varnishd defined in /etc/varnishd/<yourcustomvclname>.vcl  localhost:9080 to apache]  →  [apache defined port <apacheport> →  fcgi://127.0.0.1:<fcgiport>] →  [php-fpm port <php-fpmport>- 1000x defined in /etc/php/8.<minorversion>/fpm/pool.d/*  ]
+chmod u-w default
+chmod 444 services.pantheon.production.yml
+
+Rest API
+Enable Json API
+https://www.drupal.org/project/decoupled_router
+Make sure View published content - /admin/people/permissions
+
+http://localhost:8081/router/translate-path?path=</path>
+http://localhost:8081/jsonapi/<type | node | taxonomy_term>/<bundle>/<UUID>
+
+[node:field_subject_of_lesson:entity:parents]/[node:field_subject_of_lesson]/[node:title]
+
+/admin/config/services/rest
+
+Taxonomy Pages
+http://localhost:8081/jsonapi/taxonomy_term/subject/<uuid> - where you can get the drupal_internal__tid
+  Example: http://localhost:8081/jsonapi/taxonomy_term/subject/575a0cc9-c5f7-474a-aaad-eddcc413c884 - where you can get the drupal_internal__tid
+http://localhost:8081/jsonapi/node/lesson?filter[<field_name.drilledproperites.drilledpropteries>]=<value>
+  Example: http://localhost:8081/jsonapi/node/lesson?filter[field_subject_of_lesson.meta.drupal_internal__target_id]=7
+http://localhost:8081/jsonapi/node/lesson?filter[<nameofyourfilterasyoulike>][condition][path]=<field_name.drilledproperites.drilledpropteries>&filter[<nameofyourfilterasyoulike>][condition][value]=<value>
+  Examplehttp://localhost:8081/jsonapi/node/lesson?filter[taxonomy-term-subject][condition][path]=field_subject_of_lesson.meta.drupal_internal__target_id&filter[taxonomy-term-subject][condition][value]=7

@@ -1,7 +1,9 @@
 # Schema for the configuration files of the Site Announcement.
-
+# Step 1
+#config_entity creates a table if config_object it creates a structure of serialized data for the config table
+#list of data types drupal/core/config/schema/core.data_types.schema.yml
 mymodule.announcement.*:
-  type: config_entity
+  type: config_entity 
   label: 'Site announcement'
   mapping:
     id:
