@@ -16,6 +16,7 @@ https://pantheon.io/docs/terminus/commands/multidev-create
 
 terminus drush <sitename>.<environment> <some drush operation>
 terminus drush mysite.dev cr
+terminus drush webuppsschool.dev cr
 terminus drush mysite.dev -- config-import
 terminus env:clear-cache mysite.dev
 terminus backup:get mysite.dev --element=db 

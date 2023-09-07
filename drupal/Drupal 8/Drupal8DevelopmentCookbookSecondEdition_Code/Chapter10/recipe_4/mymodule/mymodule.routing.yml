@@ -1,0 +1,14 @@
+entity.message_type.add_form:
+  path: '/admin/structure/message-types/add'
+  defaults:
+    _entity_form: 'message_type.add' #tell Drupal to look up the class defined in our handlers
+    _title: 'Add message type'
+  requirements:
+    _entity_create_access: 'message_type'
+entity.message_type.collection:
+  path: '/admin/structure/message-types'
+  defaults:
+    _entity_list: 'message_type' #tell the route to use our list_builder handler from MessageType.php which points to MessageTypeListBuilder.php to build the page
+    _title: 'Message types'
+  requirements:
+    _permission: 'administer message types'

@@ -95,6 +95,13 @@ class Message extends ContentEntityBase implements MessageInterface {
         'weight' => 0,
       ))
       ->setDisplayConfigurable('form', TRUE);
+    $fields['type'] = BaseFieldDefinition::create('entity_
+      reference')
+      ->setLabel(t('Message type'))
+      ->setDescription(t('The message type.'))
+      ->setSetting('target_type', 'message_type')
+      ->setSetting('max_length', EntityTypeInterface::BUNDLE_MAX_
+      LENGTH);
 
     return $fields;
   }

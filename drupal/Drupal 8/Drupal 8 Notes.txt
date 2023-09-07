@@ -859,6 +859,9 @@ apachectl -t -D DUMP_INCLUDES
     http://localhost
     
 
+chmod u-w default
+chmod 444 services.pantheon.production.yml
+
 Rest API
 Enable Json API
 https://www.drupal.org/project/decoupled_router
