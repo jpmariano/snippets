@@ -1,0 +1,25 @@
+ECS Objects 
+    - Task Definitions - A task definition is a blueprint for your application. It is a text file in JSON format that describes the parameters and one or more containers that form your application.
+        - It can be a multiple container definitions if theres more than one container image in a task
+    - cluster - An Amazon ECS cluster is a logical grouping of tasks or services. https://docs.aws.amazon.com/AmazonECS/latest/developerguide/clusters.html
+        - Region specific
+    - Service - service allows you to run and  maintain a specified number (the "desired count") of simoultaneous instance of a task definition in an ECS cluster
+    - Task 
+        - A task is an instation of task definition within a cluster
+        - you can run task directly or through a service
+        - each task that uses AWS Fargate launch type has its own isolation boundery and does not share the underlying kernel, cpu resources, memory resources, or elastic network interface with another task
+
+
+Fargate Cluster 
+    - The infastracture in a fargate cluster is a fully manage by AWS. The containers run without the need for managing and configuring EC2 instances
+
+Cluster 
+    - Service
+        - Task Definition 
+            - Container Definition - image name, port, environment variables 
+ECS Cluster Types
+    - Fargate(Serverless)
+    - EC2 + Linux
+    - EC2 + windows
+
+https://github.com/stacksimplify/aws-fargate-ecs-masterclass
