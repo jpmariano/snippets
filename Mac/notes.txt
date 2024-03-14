@@ -1,1 +1,3 @@
 brew tap --repair
+
+https://phoenixnap.com/kb/change-zsh-to-bash-mac
