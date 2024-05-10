@@ -4,7 +4,9 @@ https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-
 https://support.atlassian.com/bitbucket-cloud/docs/set-up-an-ssh-key/
 New way*
 $ ssh-keygen -t ed25519 -C "your_email@example.com" 
-$ ssh-keygen -t ed25519 -C "name.lastname@example.com" -f "<username>"
+$ ssh-keygen -t ed25519 -C "name.lastname@example.com" -f "<name_your_filename>"
+
+
 
 Old way*
 $ ssh-keygen -t rsa -b 4096 -C "firstname.lastname@company.net"
@@ -59,6 +61,11 @@ git@<SSH Host>:<git@github.com/etc...>.git
 git clone git@git.wpengine.com:production/<sitename>dev.git 
 git clone git@bitbucket.org:production/<sitename>dev.git 
 git@github-j*******o:C****T/<whatever>.git
+git@<host>:<gitpath/companyname>/Apollo-graphql.git
+  - cat ~/.ssh/config - to get the host git user
+
+https://github.com/webupps/bootcampfront.git
+
 
 //Bitbucket
 git clone git@server_username:<companyname>/<repo>.git

@@ -17,6 +17,9 @@ nano ~/.zsh_profile
 
 vi ~/.zshrc - to edit
 
+echo $PATH and copy it's value
+export PATH=""
+export PATH="/usr/local/opt/openjdk@17/bin:/usr/local/sbin:/Users/macbookproi932/.asdf/shims:/usr/local/opt/asdf/libexec/bin:/Users/macbookproi932/.asdf/bin:/usr/local/opt/php@8.2/sbin:/usr/local/opt/php@8.2/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/usr/local/opt/openjdk@17/bin:/usr/local/sbin:/Users/macbookproi932/.asdf/bin"
 brew services start php@7.2
 brew services restart php@7.2
 brew services stop php@8.0
@@ -54,13 +57,42 @@ apachectl -t -D DUMP_INCLUDES
     <Directory "/usr/local/var/www">
     /usr/local/bin/httpd
 
-mysql.server start
+
+-----------------------------------------------
+brew uninstall <packagename>
+brew install mariadb
+mysql.server start or mysqld_safe
+
+If you are installing MariaDB 10.4.6 or later:
+Run mariadb-secure-installation.
+If you are installing an earlier version of MariaDB:
+Run mysql_secure_installation.
+
 
 brew services start mariadb
 brew services stop mariadb
 
 MariaDB [(none)]> grant all privileges on wordpress61.* to wpuser@localhost identified by '<password>';
 MariaDB [(none)]> grant all privileges on drupal948.* to drupaluser@localhost identified by '<password>';
+grant all privileges on <dbname> to wpuser@localhost identified by '<password>';
+
+https://mariadb.com/resources/blog/installing-mariadb-10-1-16-on-mac-os-x-with-homebrew/
+https://github.com/orgs/Homebrew/discussions/3410
+https://mariadb.com/kb/en/installing-mariadb-on-macos-using-homebrew/
+https://gist.github.com/brandonsimpson/5204ce8a46f7a20071b5
+
+CREATE DATABASE <dbname> CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
-brew services restart mysql
+-----------------------------------------------
+php -S localhost:8084 .ht.router.php
+
+https://nektony.com/how-to/uninstall-mysql-on-mac
+
+https://gist.github.com/brandonsimpson/5204ce8a46f7a20071b5
+ /usr/local/etc/my.cnf
+
+ brew uninstall mariadb
+ rm /usr/local/etc/my.cnf
+
+ https://stackoverflow.com/questions/17461170/how-do-i-start-mariadb-on-boot-on-mac-os-x

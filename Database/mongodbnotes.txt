@@ -1,9 +1,11 @@
-SQL Terms  | Mongo DB Terms
-Database     Database
-Table        Collection
-Row          JSON/BSON Document
-Column       Field
-Index        Index
+Relational DB Terms  | MongoDB Terms
+Database                Database
+Table                   Collection/table
+Row                     BSON Document
+Column                  Field
+Index                   Index
+
+
 
 mongod --version
 brew services start mongodb-community
@@ -23,3 +25,27 @@ use nestjs //use is to use or create database
 db.createCollection("title")
 show dbs
 db.dropDatabase()
+
+mongosh
+
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "abc123",
+    roles: [ { role: "readWrite", db: "demo" } ]
+  }
+);
+
+https://www.mongodb.com/docs/manual/reference/method/db.createUser/
+
+Object.keys(db.recipes.findOne());
+
+var onerecipe = db.recipes.findOne();
+for (var key in onerecipe) { print (key, typeof(onerecipe[key])); }
+
+mongodump --db example --collection somecollection --out - | gzip > collectiondump.gz
+mongodump --db example --out - | gzip > /Users/macbookproi932/Documents/jmarianogithub/snippets/Database/collectiondump.gz
+mongodump -d example -o /Users/macbookproi932/Documents/jmarianogithub/snippets/Database/dump
+mongorestore -d <databasename> </path/dumpdirectory>

@@ -75,7 +75,7 @@ Packaging a Springboot application
         - Remove tomcat if you use war
 
 https://en.wikipedia.org/wiki/Twelve-Factor_App_methodology
-
+brew install openjdk@17   
 Running a Springboot application
 - java -jar
 - java -jar app.jar  --file.upload-dir=<folderpath>

@@ -177,7 +177,7 @@ Chapter 2: Data Modeling with MongoDB 15
 						}
 					],
 					tags: ["mongodb", "modeling", "nosql"]
-				 }
+				}
 		• Working with references 25
 			• The way we have to "normalize" our model
 				- This reference will describe the relationship between documents
@@ -275,6 +275,95 @@ Chapter 2: Data Modeling with MongoDB 15
 		- If the many side should be displayed with its parents, then we should choose to embed the data; 
 		  otherwise, we can use references on the parents
 		  customer using references
+		    db.justaddress.insertOne({
+				"street": 'Address 3, 333',
+				"city": 'City Three',
+				"state": 'State Three',
+				"type": 'shipping'
+			});
+		    db.user.insertOne({
+				"username" : "John Clay",
+				"email": "johnclay@crgv.com",
+				"password": "bf383e8469e98b44895d61b821748ae1",
+				"details_id": ObjectId('65f1072d18def7c215811b91')
+			});
+			db.details.insertOne({
+				"firstName": "John",
+				"lastName": "Clay",
+				"gender": "male",
+				"age": 25
+			});
+			db.userrefaddress.updateOne(
+				{"_id": ObjectId('65f277470cd5fec60fea3ea4')},
+				{$set : {"address" : ObjectId('65f273b40cd5fec60fea3ea0')}}
+			);
+			db.userrefaddress.insertOne({
+				"username" : "John Clay",
+				"email": "johnclay@crgv.com",
+				"password": "bf383e8469e98b44895d61b821748ae1",
+				"details": {
+					"firstName": "John",
+					"lastName": "Clay",
+					"gender": "male",
+					"age": 25
+				},
+				address: [
+				]
+			});
+			db.userrefaddress.insertOne({
+				"username" : "John Clay",
+				"email": "johnclay@crgv.com",
+				"password": "bf383e8469e98b44895d61b821748ae1",
+				"details": {
+					"firstName": "John",
+					"lastName": "Clay",
+					"gender": "male",
+					"age": 25
+				},
+				address: [
+					{
+						"address_id": ObjectId('65f273b40cd5fec60fea3ea0')
+					},
+					{
+						"address_id": ObjectId('65f273e20cd5fec60fea3ea1')
+					},
+					{
+						"address_id": ObjectId('65f2740d0cd5fec60fea3ea2')
+					}
+				]
+			});
+			db.userwithaddress.insertOne({
+				"username" : "John Clay",
+				"email": "johnclay@crgv.com",
+				"password": "bf383e8469e98b44895d61b821748ae1",
+				"details": {
+					"firstName": "John",
+					"lastName": "Clay",
+					"gender": "male",
+					"age": 25
+				},
+				address: [
+					{
+						"street": "Address 1, 111",
+						"city": "City One",
+						"state": "State One",
+						"type": "billing"
+					},
+					{
+						"street": "Address 2, 222",
+						"city": "City Two",
+						"state": "State Two",
+						"type": "shipping"
+					},
+					{
+						"street": "Address 3, 333",
+						"city": "City Three",
+						"state": "State Three",
+						"type": "shipping"
+					}
+				]
+			});
+		  
 			{
 				_id: 1
 				"username" : "John Clay",
@@ -288,6 +377,13 @@ Chapter 2: Data Modeling with MongoDB 15
 				}
 			}
 			address
+			db.address.insertOne({
+				"street": "Address 3, 333",
+				"city": "City Three",
+				"state": "State Three",
+				"type": "shipping",
+				"customer_id": ObjectId('65f0985918def7c215811b89')
+			});
 			{
 				_id: 1,
 				"street": "Address 1, 111",
@@ -1523,3 +1619,120 @@ Chapter 8: Logging and Real-time Analytics with MongoDB 145
 		TTL indexes 166
 		Sharding 167
 		Querying for reports 168
+
+
+db.recipes.aggregate([ {$lookup:
+        {from:"components_ingredient_ingredients",
+        localField:"Ingredient.ref",
+        foreignField:"_id",
+        as: "Ingredient"}
+    }]);
+
+	db.users.aggregate([ {$lookup:
+        {from:"address",
+        localField:"address.address_id",
+        foreignField:"_id",
+        as: "address"}
+    }]);
+
+	db.userrefaddress.aggregate([ {$lookup:
+        {from:"justaddress",
+        localField:"address.address_id",
+        foreignField:"_id",
+        as: "address"}
+    }]);
+
+	db.address.aggregate([ {$lookup:
+        {from:"users",
+        localField:"customer_id",
+        foreignField:"_id",
+        as: "user"}
+    }]);
+
+
+	db.createCollection( <name>,
+    {
+      capped: <boolean>,
+      timeseries: {                  // Added in MongoDB 5.0
+         timeField: <string>,        // required for time series collections
+         metaField: <string>,
+         granularity: <string>,
+         bucketMaxSpanSeconds: <number>,  // Added in MongoDB 6.3
+         bucketRoundingSeconds: <number>  // Added in MongoDB 6.3
+      },
+      expireAfterSeconds: <number>,
+      clusteredIndex: <document>,  // Added in MongoDB 5.3
+      changeStreamPreAndPostImages: <document>,  // Added in MongoDB 6.0
+      size: <number>,
+      max: <number>,
+      storageEngine: <document>,
+      validator: <document>,
+      validationLevel: <string>,
+      validationAction: <string>,
+      indexOptionDefaults: <document>,
+      viewOn: <string>,
+      pipeline: <pipeline>,
+      collation: <document>,
+      writeConcern: <document>
+    }
+  )
+
+  db.runCommand({
+    "collMod": "peaks",
+    "validator": {
+        $jsonSchema: {
+            "bsonType": "object",
+            "description": "Document describing a mountain peak",
+            "required": ["name", "height"],
+            "properties": {
+                "name": {
+                    "bsonType": "string",
+                    "description": "Name must be a string and is required"
+                },
+                "height": {
+                    "bsonType": "number",
+                    "description": "Height must be a number and is required"
+                }
+            },
+        }
+    }
+})
+
+db.createCollection(
+    <collectionname>, {
+	<customfield>:<customvalue>
+	capped: <boolean>,
+	size: <number>,
+	timeseries: {          
+		timeField: <string>,  
+		metaField: <string>,
+		granularity: <string>,
+		bucketMaxSpanSeconds: <number>,  
+		bucketRoundingSeconds: <number>  
+	},
+	expireAfterSeconds: <number>,
+	clusteredIndex: <document>,  
+	changeStreamPreAndPostImages: <document>,  
+	max: <number>,
+	storageEngine: <document>,
+	validator: {
+		$jsonSchema: {
+			"bsonType": "object",
+			"description": "<descriptionm>,
+			"required": ["<fieldname>"],
+			"properties": {
+				"<fieldname>": {
+					"bsonType": "string",
+					"description": "Name must be a string and is required"
+				}
+			},
+		}
+	},
+	validationLevel: <"off"|"strict"|"moderate">,
+	validationAction: <"error"|"warn">,,
+	indexOptionDefaults: <document>,
+	viewOn: <string>,
+	pipeline: <pipeline>,
+	collation: <document>,
+	writeConcern: <document>
+})

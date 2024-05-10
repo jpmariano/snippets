@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "recipes",
+  "info": {
+    "name": "Recipe"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Instructions": {
+      "type": "richtext"
+    },
+    "Ingredient": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ingredient.ingredient"
+    }
+  }
+}

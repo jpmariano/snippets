@@ -7,18 +7,26 @@ Token ID Token  -  is from OPEN ID, and it is in JWT format. It is meant for Aut
             "typ": "JWT"
         }, 
         "Payload": {
-            "name": <User>,
+            "name": <User's full name>,
             "sub": <UserID>,
             "aud": <ApplicationID - The Intended Recepient APP>,
             "iss": <ApplicationID - Who Created the token https://<TENANT-DOMAIN>.eu.auth0.com/>,
             "iat": <The time (in milliseconds since epoch) the JWT was created>,
             "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
-           
+            "nonce": <A random nonce value used to mitigate replay attacks>,
+            "acr": <The URI that represents authentication context class reference, indicating the level of authentication assurance.> ,
+            "auth_time": <The time at which the user was authenticated, represented as a Unix timestamp>,
+            "email": <user's email>,
+            "given_name": <user's firstname>,
+            "family_name": <user's lastname>,
+            "picture": "https://api.service-provider.com/pictures/user123.jpg",
+            "email_verified": true
         },
         "Signature": HMACSHA256(
             base64UrlEncode(header) + "." +
             base64UrlEncode(payload),
             secret)
+
 code Token/Access Token - Is from OAUTH 2. To allow client to access resources. 
     - Can be in any format. No current standard. Can use JWT
     - It is meant for Authorization: This token is intended to be sent to resource server to allow access. 
@@ -35,16 +43,15 @@ code Token/Access Token - Is from OAUTH 2. To allow client to access resources.
             "iss": <ApplicationID - Who Created the token https://issuer.example.com>,
             "iat": <The time (in milliseconds since epoch) the JWT was created>,
             "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
-            "hd": <domain example.com>,
+            "hd": <hosted domain associated with the user's account - example.com>,
             "azp": <Authorized party - the party to which the ID Token was issued. value is a case sensitive string containing a StringOrURI value.,
-            "scope": "email profile phone address updatethis createthis",
+            "scope": "openid, profile, email, address, phone, offline_access, <custom scopes>",
             "grant_type": <authorization_code | password | client_credentials | refresh_token | URI token endpoint> - https://fusionauth.io/articles/oauth/complete-list-oauth-grants
             "permissions": ["permission"],
-            "roles": ["Admin", "SuperUser"],
+            "roles": ["Admin", "SuperUser"] <The user's roles or permissions within the system.>,
             "client_id":"Client Identifier s6BhdRkqt3" - https://www.rfc-editor.org/rfc/rfc8693.html,
             "state": <used to protect against XSRF, Store it in the browser session for later validation>, - https://developers.google.com/identity/openid-connect/openid-connect?hl=en#createxsrftoken server sends this to the client (browser). In the form, a hidden field, add the csrf token. Include, this token in the payload. https://terasolunaorg.github.io/guideline/5.1.0.RELEASE/en/Security/CSRF.html
             "nonce": <Can be used by the client application to prevent replay attacks, to use by the authorization server. If to check the request is valid, maybe a unix timestamp. If the timestamp is longer than it should, it no longer valid>, - https://www.youtube.com/watch?v=ZeuWpL-7EwY
-            "hd": <domain example.com>,
         },
         "Signature": HMACSHA256(
             base64UrlEncode(header) + "." +
@@ -124,3 +131,31 @@ https://openid.net/specs/openid-connect-core-1_0.html#HybridAccessToken2
 Endpoint       | Authorization Code | code Token | Token ID Token
 /authorization        x                     x         x
 
+https://oauth.net/core/1.0/
+https://developer.constantcontact.com/api_guide/client_flow.html
+
+
+Content-Type: application/x-www-form-urlencoded
+code=AUTHORIZATION_CODE
+&client_id=CLIENT_ID
+&redirect_uri=REDIRECT_URI
+&grant_type=authorization_code
+&code_verifier=CODE_VERIFIER
+
+        "Header": {
+            "alg": "HS246",
+            "typ": "JWT"
+        }, 
+        "Payload": {
+            "name": <User>,
+            "sub": <UserID>,
+            "aud": <ApplicationID - The Intended Recepient APP>,
+            "iss": <ApplicationID - Who Created the token https://<TENANT-DOMAIN>.eu.auth0.com/>,
+            "iat": <The time (in milliseconds since epoch) the JWT was created>,
+            "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
+           
+        },
+        "Signature": HMACSHA256(
+            base64UrlEncode(header) + "." +
+            base64UrlEncode(payload),
+            secret)
