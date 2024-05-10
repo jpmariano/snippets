@@ -1,0 +1,14 @@
+#create a drush file and paste the contents below. Place the file inside a bin directory. 
+#add bin to path: export PATH="/opt/homebrew/opt/php@8.2/bin:/opt/homebrew/opt/php@8.2/sbin:$HOME/scripts/bin:$PATH"
+
+#!/bin/bash
+BASENAME=`basename "$PWD"`
+VENDOR_PATH="$HOME/<yourpath>/$BASENAME/vendor";
+DRUSH_PATH="$HOME/<yourpath>/$BASENAME/vendor/bin/drush";
+
+if  [ -d $VENDOR_PATH ]
+then
+   eval  "$HOME/<yourpath>/$BASENAME/vendor/bin/drush"  "$@";
+else
+    echo  "This can only work if it is inside root directory of drupal";
+fi
