@@ -21,10 +21,9 @@ if (file_exists(__DIR__ . '/settings.local.php')) {
 
 inside settings.php 
   $settings['trusted_host_patterns'] = array(
-
     '^localhost$',
-    
     '^localhost\.*',
+    '^localhost\:8083',
     '^website-test.dd$'
     );
 
@@ -883,3 +882,6 @@ http://localhost:8081/jsonapi/node/lesson?filter[<field_name.drilledproperites.d
   Example: http://localhost:8081/jsonapi/node/lesson?filter[field_subject_of_lesson.meta.drupal_internal__target_id]=7
 http://localhost:8081/jsonapi/node/lesson?filter[<nameofyourfilterasyoulike>][condition][path]=<field_name.drilledproperites.drilledpropteries>&filter[<nameofyourfilterasyoulike>][condition][value]=<value>
   Examplehttp://localhost:8081/jsonapi/node/lesson?filter[taxonomy-term-subject][condition][path]=field_subject_of_lesson.meta.drupal_internal__target_id&filter[taxonomy-term-subject][condition][value]=7
+
+
+Create Database hprc_dup CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
