@@ -653,9 +653,9 @@ UPDATE users SET id = 20 WHERE id = 2;
 create keyspace test
 
 
+CREATE DATABASE <databasename> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE DATABASE springboilerplate CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
+mysql -u root -p <databasename>  < /databasefilepath.sql
 
 
 CREATE TABLE users (
@@ -665,3 +665,12 @@ CREATE TABLE users (
     password varchar(255) NOT NULL,
     PRIMARY KEY (ID)
 );
+
+INSERT INTO users(name, username, password)
+VALUES ("John Doe", 'jdoe@xyz.com', "password"), ("jane Doe", 'jndoe@xyz.com', "password");
+
+SELECT users.id, users.name, user_logins.login_date
+FROM users 
+INNER JOIN user_logins
+ON users.id = user_logins.user_id;
+

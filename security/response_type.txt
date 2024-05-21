@@ -142,20 +142,31 @@ code=AUTHORIZATION_CODE
 &grant_type=authorization_code
 &code_verifier=CODE_VERIFIER
 
-        "Header": {
+       "Header": {
             "alg": "HS246",
             "typ": "JWT"
         }, 
         "Payload": {
-            "name": <User>,
             "sub": <UserID>,
-            "aud": <ApplicationID - The Intended Recepient APP>,
-            "iss": <ApplicationID - Who Created the token https://<TENANT-DOMAIN>.eu.auth0.com/>,
+            "aud": <ApplicationID - The Intended Recepient APP string containing a StringOrURI value https://consumer.example.com>,
+            "iss": <ApplicationID - Who Created the token https://issuer.example.com>,
             "iat": <The time (in milliseconds since epoch) the JWT was created>,
             "exp": <The time (in milliseconds since epoch) the JWT was will expired>,
-           
+            "hd": <hosted domain associated with the user's account - example.com>,
+            "azp": <Authorized party - the party to which the ID Token was issued. value is a case sensitive string containing a StringOrURI value.,
+            "scope": "openid, profile, email, address, phone, offline_access, <custom scopes>",
+            "grant_type": <authorization_code | password | client_credentials | refresh_token | URI token endpoint>,
+            "permissions": ["permission"],
+            "roles": ["Admin", "SuperUser"] <The user's roles or permissions within the system.>,
+            "client_id":"Client Identifier s6BhdRkqt3" - https://www.rfc-editor.org/rfc/rfc8693.html,
+            "state": <used to protect against XSRF, Store it in the browser session for later validation>,
+            "nonce": <Can be used by the client application to prevent replay attacks, to use by the authorization server.>, 
         },
         "Signature": HMACSHA256(
             base64UrlEncode(header) + "." +
             base64UrlEncode(payload),
             secret)
+
+            
+
+             

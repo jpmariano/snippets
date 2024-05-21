@@ -54,4 +54,28 @@ To update a single vendor package -  run: php composer.phar update symfony/files
 - For more information: https://getcomposer.org/doc/
 
 
+composer install 
+#talk about versioning
+composer r <php framework/modulename:version>
+composer rm <php framework/modulename:version>
 
+https://getcomposer.org/doc/03-cli.md
+
+https://getcomposer.org/doc/04-schema.md
+composer require cweagans/composer-patches
+"extra": {
+    "patches": {
+            "drupal/core": {
+                "Patch title": "patch link url"
+            }
+        },
+}
+
+composer validate
+composer update --lock
+
+ "patches": {
+            "drupal/core": {
+                "OutOfBoundsException when configuring Style plugin for CKEditor": "https://www.drupal.org/files/issues/2024-03-06/3309036-14.patch"
+            }
+        },

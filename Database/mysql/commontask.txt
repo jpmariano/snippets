@@ -6,5 +6,5 @@ $mysql -u root -p
 mysql> DROP DATABASE <DBNAME>
 mysql> CREATE DATABASE <DBNAME>
 mysql -u root -p <dbname> <  <path>/<filename.sql> 
-
+mysql -u root -p crudnodejs < 
 
