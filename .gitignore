@@ -16,6 +16,9 @@ Docker/phpmyadminmariadb/app/*
 Docker/phpmyadminmariadb/data/*
 Docker/phpmyadminmariadbnode/app/*
 Docker/phpmyadminmariadbnode/data/*
+Docker/drupal10maria/drupal/*
+Docker/drupal10maria/dev/*
+Docker/drupal10maria/data/*
 Docker/phpmysql/app/*
 Docker/phpmysql/data/*
 Docker/phppostgressstrapi/app/*

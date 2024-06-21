@@ -38,6 +38,8 @@ Elements - All HTML documents consist of nested HTML elements. Each tag normally
             Most elements in html can be categorized into 2 groups. The block elements and the inline elements. 
             Block elements have default block displays. It can be overriden by css. 
 
+            Block elements have default block displays. 
+
             <address>   <div>       <h1>-<h6>    <form>       
             <article>   <aside>     <blockquote> <canvas> 
             <header>    <hr>        <li>         <dd>
@@ -49,6 +51,8 @@ Elements - All HTML documents consist of nested HTML elements. Each tag normally
 
 
             Inline elements have default inline displays. It can also be overriden by css. 
+
+            Inline elements have default inline displays.
             <a>     <abbr>      <acronym>   <b>
             <bdo>   <big>       <br>        <button>
             <cite>  <code>      <dfn>       <em>

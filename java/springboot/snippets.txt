@@ -169,6 +169,8 @@ Creating Bean Configuration
         @Resource(name="animals")
         public List<String> list;
     }
+    springboilerplate
+    
     ******************************************************************************
     Creating Bean Configuration through XML
     ******************************************************************************
