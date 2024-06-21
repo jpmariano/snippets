@@ -750,7 +750,7 @@ Module Update
 
 https://www.drupal.org/forum/support/post-installation/2016-09-22/file-and-directory-permissions-lets-finally-get-this
 To start:
-(site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \; //chmod -R 775  /var/www/opss/sites/default/files 
+(site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \; //chmod -R 775  /var/www/sitename/sites/default/files 
 (site-wide all files) 644 |sudo find sites -type f -exec chmod 664 {} \;
 Then:
 chmod 444 sites/default/settings.php;
@@ -762,6 +762,14 @@ chmod 444 sites/default/settings.php;
 /sites/default/files (files) - 664 | sudo find /var/www/html/sites/default -type f -exec chmod 664 {} \;
 
 sudo chmod /sites/default/files 755 -R
+
+https://www.mobilefish.com/tutorials/mac/mac_quickguide_groups.html
+$ ps aux | egrep '(apache|httpd)' - find out what user is apache running
+$ groups <username>
+$ groups www-data
+
+$test = exec('whoami');
+dump($test);
 
 
 Drupal 7 File And Folder Structure 
@@ -884,4 +892,6 @@ http://localhost:8081/jsonapi/node/lesson?filter[<nameofyourfilterasyoulike>][co
   Examplehttp://localhost:8081/jsonapi/node/lesson?filter[taxonomy-term-subject][condition][path]=field_subject_of_lesson.meta.drupal_internal__target_id&filter[taxonomy-term-subject][condition][value]=7
 
 
-Create Database hprc_dup CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+Create Database <dbname> CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+sudo -u staff -s
