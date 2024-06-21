@@ -72,7 +72,11 @@ git clone git@server_username:<companyname>/<repo>.git
 
 //AWS codecommit
 git clone git@server_username:ssh://git-codecommit.us-east-<number>.amazonaws.com/v1/repos/<reponame>
-
+GIT_SSH_COMMAND="ssh -i ~/.ssh/<IdentityFile>" git pull origin master
+git config --local core.sshCommand "ssh -i ~/.ssh/<IdentityFile>" 
+or ssh-add ~/.ssh/id_rsa
+https://superuser.com/questions/232373/how-to-tell-git-which-private-key-to-use
+https://www.youtube.com/watch?v=RVia18FNHYo
 
 Step 4:
 ls ~/.ssh/*.pub 
@@ -80,6 +84,7 @@ ls ~/.ssh/config
 cat ~/.ssh/id_rsa.pub
 pbcopy < ~/.ssh/id_rsa.pub
 paste the token to github
+
 
 
 

@@ -1,0 +1,274 @@
+Complete Guide to AI and Data Science for SQL Developers: From Beginner to Advanced
+
+Data Scientist
+    Responsibilities:
+
+    Develops machine learning models and algorithms to analyze and interpret complex data sets.
+    Uses statistical methods to identify patterns, trends, and relationships in data.
+    Works on predictive modeling, recommendation systems, and other advanced analytics tasks.
+    Communicates findings and insights to stakeholders to drive strategic decisions.
+
+    Skills:
+
+    Proficiency in programming languages such as Python or R.
+    Strong knowledge of statistics and machine learning algorithms.
+    Experience with data visualization tools (e.g., Tableau, Matplotlib).
+    Understanding of big data technologies (e.g., Hadoop, Spark).
+
+Data Analyst
+    Responsibilities:
+
+    Collects, processes, and performs statistical analyses on large datasets.
+    Translates data into actionable insights through reports, charts, and dashboards.
+    Helps businesses make data-driven decisions by identifying trends and patterns.
+    Ensures data quality and integrity.
+
+    Skills:
+
+    Proficiency in SQL and other querying languages.
+    Strong analytical and problem-solving skills.
+    Experience with data visualization tools (e.g., Power BI, Excel).
+    Basic knowledge of statistics.
+
+Data Engineer
+    Responsibilities:
+
+    Designs, builds, and maintains the infrastructure and architecture for data generation, collection, and storage.
+    Develops and manages data pipelines to ensure reliable data flow.
+    Works with data warehousing solutions (e.g., Redshift, BigQuery).
+    Ensures data is accessible, scalable, and optimized for analysis.
+
+    Skills:
+
+    Proficiency in programming languages such as Python, Java, or Scala.
+    Experience with ETL (Extract, Transform, Load) processes.
+    Knowledge of database management systems (e.g., MySQL, PostgreSQL).
+    Familiarity with cloud platforms (e.g., AWS, Azure, Google Cloud).
+
+    Key Differences
+    Focus: Data scientists focus on developing models and interpreting data, data analysts focus on analyzing and reporting data, and data engineers focus on building and maintaining data infrastructure.
+    Skill Set: Data scientists need strong statistical and machine learning skills, data analysts need strong analytical and visualization skills, and data engineers need strong programming and data pipeline skills.
+    Outcome: Data scientists create predictive models and insights, data analysts provide actionable reports and dashboards, and data engineers ensure data is properly collected, stored, and made accessible for analysis.
+    These roles often work closely together, with data engineers ensuring the data infrastructure is in place, data analysts providing initial insights and visualizations, and data scientists performing more complex analyses and building predictive models.
+
+
+Machine Learning
+    Definition:
+    The science of getting computers to learn and act like humans do, improving their learning over time in an autonomous fashion by feeding them data and information in the form of observations and real-world interactions.
+
+    Types:
+    Supervised Learning
+    Unsupervised Learning
+    Reinforcement Learning 
+
+Supervised Learning
+
+    Definition: A type of machine learning where the model is trained on a labeled dataset, which means that each training example is paired with an output label.
+    Data Requirement:  requires labeled data (input-output pairs).
+    Process:
+        Training: The model learns from a training dataset containing input-output pairs.
+        Prediction: The model predicts the output for new, unseen data based on the learned relationships.
+    Examples:
+        Classification: Identifying the category of an object (e.g., spam detection in emails, image recognition).
+        Regression: Predicting a continuous value (e.g., house prices, stock prices).
+    Key Characteristics:
+        Requires a large amount of labeled data.
+        The goal is to learn a mapping from inputs to outputs.
+    Goal: aims to learn a function that maps inputs to outputs.
+    Applications: commonly used in applications where the output is known and can be used to train the model, such as spam detection, medical diagnosis, and predictive analytics.
+
+Unsupervised Learning
+    Definition: A type of machine learning where the model is trained on data without labeled responses. The system tries to learn patterns and the structure from the data.
+    Data Requirement:  does not require labeled data; it works with unlabeled data.
+    Process:
+        Training: The model analyzes the input data to identify patterns, structures, or relationships without any pre-existing labels.
+        Prediction: The model can categorize or segment data based on the identified patterns.
+    Examples:
+        Clustering: Grouping similar data points together (e.g., customer segmentation, market research).
+        Association: Discovering rules that describe large portions of the data (e.g., market basket analysis).
+    Key Characteristics:
+        Does not require labeled data.
+        The goal is to understand the underlying structure of the data.
+    Goal: aims to find hidden patterns or intrinsic structures in the input data.
+    Applications: used in exploratory data analysis, clustering, and association tasks where labeling is not feasible or available, such as customer segmentation, anomaly detection, and genetic data analysis.
+
+Reinforcement Learning
+    Definition: A type of machine learning where an agent learns to make decisions by performing actions in an environment to maximize some notion of cumulative reward.
+    Data Requirement:  does not require a labeled dataset but needs a way to interact with the environment to receive feedback.
+    Process:
+        Agent: The learner or decision maker.
+        Environment: Everything the agent interacts with.
+        Actions: The set of all possible moves the agent can make.
+        States: The different situations the agent can be in.
+        Rewards: The feedback received after each action, which can be positive or negative.
+    Examples:
+        Game Playing: Training models to play games like Chess, Go, and video games.
+        Robotics: Teaching robots to perform tasks, such as walking or manipulating objects.
+        Self-driving Cars: Learning to navigate and drive autonomously.
+    Key Characteristics:
+        Focuses on learning from interaction with an environment.
+        The goal is to maximize the cumulative reward.
+        Often involves exploration (trying new actions) and exploitation (using known actions that yield high rewards).
+        Uses techniques such as Q-learning, deep Q-networks (DQNs), and policy gradients.
+    Goal: aims to learn a policy that maximizes cumulative reward by interacting with the environment.
+    Applications: used in applications requiring sequential decision-making and optimization over time, such as game playing, robotics, and autonomous systems.
+
+
+Model Prediction
+    Definition: Model prediction refers to the process of using a trained machine learning model to make inferences or decisions based on new, unseen data. The model uses patterns learned from the training data to generate outputs for the input data.
+    Process:
+        Training Phase: The model is trained on a dataset where the input features and corresponding outputs (labels) are known. The model learns the relationship between inputs and outputs.
+        Prediction Phase: The trained model is then used to predict outputs for new inputs. These predictions can be in the form of classifications (discrete labels) or regressions (continuous values).
+    Examples:
+        Classification: Predicting whether an email is spam or not based on its content.
+        Regression: Predicting the price of a house based on its features like size, location, and number of rooms.
+    Key Points:
+        The accuracy of predictions depends on the quality of the training data and the model's ability to generalize from this data.
+        Model evaluation metrics (e.g., accuracy, precision, recall, RMSE) are used to assess the performance of predictions.
+
+Deep Learning
+    Definition: Deep learning is a subset of machine learning that involves neural networks with many layers (hence "deep") that can learn complex patterns in large amounts of data. Deep learning models, often called deep neural networks, are inspired by the structure and function of the human brain.
+Key Characteristics:
+    Neural Networks: Deep learning models consist of multiple layers of interconnected nodes (neurons). Each layer transforms the input data into more abstract and composite representations.
+    Feature Learning: Unlike traditional machine learning, where features are manually engineered, deep learning models automatically learn hierarchical feature representations from raw data.
+    Scalability: Deep learning models excel at handling large datasets and complex tasks, such as image and speech recognition.
+Common Architectures:
+    Convolutional Neural Networks (CNNs): Used primarily for image and video recognition tasks. They consist of convolutional layers that capture spatial hierarchies in data.
+    Recurrent Neural Networks (RNNs): Designed for sequential data, such as time series and natural language. Variants include Long Short-Term Memory (LSTM) and Gated Recurrent Unit (GRU) networks.
+    Transformers: Advanced architectures for sequence-to-sequence tasks, widely used in natural language processing (NLP) applications like language translation and text generation.
+Examples:
+    Image Recognition: Identifying objects or people in images (e.g., facial recognition systems).
+    Natural Language Processing: Understanding and generating human language (e.g., chatbots, language translation services).
+    Speech Recognition: Converting spoken language into text (e.g., virtual assistants like Siri and Alexa).
+Key Points:
+    Deep learning requires substantial computational resources and large amounts of data to train effectively.
+    It leverages specialized hardware, such as GPUs and TPUs, to accelerate training and inference.
+    Deep learning models are highly flexible and can be adapted to a wide range of applications across different domains.
+
+Machine Learning Advancements
+- 1950 first nueral networks
+- 1980s Machine learning
+- 2010s Deep Learning
+- 2020s AI Renaissance
+
+Hypothesis Testing:
+    Purpose: Hypothesis testing is used to make inferences or draw conclusions about a population based on sample data. It tests an assumption (hypothesis) about a population parameter.
+    Types: Common tests include t-tests, chi-square tests, ANOVA, and z-tests.
+    Goal: Test a hypothesis about a population parameter.
+    Data Type: Can be both categorical and continuous.
+    Outcome: Reject or fail to reject the null hypothesis.
+    Example: Testing whether a new drug is more effective than an existing one.
+    Process:
+        Formulate null (H0) and alternative (H1) hypotheses.
+        Select a significance level (alpha, usually 0.05).
+        Compute the test statistic from the sample data.
+        Determine the p-value and compare it to the significance level.
+        Reject or fail to reject the null hypothesis based on the p-value.
+
+Clustering:
+    Purpose: Clustering is an unsupervised learning technique used to group similar data points together based on their features. It identifies natural groupings in the data.
+    Types: Common algorithms include K-means, Hierarchical Clustering, DBSCAN, and Gaussian Mixture Models.
+    Goal: Group similar data points without predefined labels.
+    Data Type: Typically continuous, but can handle categorical with appropriate methods.
+    Outcome: Cluster assignments for data points.
+    Example: Grouping customers based on purchasing behavior for targeted marketing.
+    Process:
+        Select the number of clusters (for algorithms like K-means).
+        Initialize cluster centroids (if applicable).
+        Assign data points to the nearest cluster.
+        Update cluster centroids based on assigned points.
+        Repeat the assignment and update steps until convergence.
+
+
+Regression:
+    Purpose: Regression is a supervised learning technique used to predict a continuous outcome variable based on one or more input features. It models the relationship between the input and output variables.
+    Types: Linear Regression, Polynomial Regression, Ridge Regression, Lasso Regression, and Multiple Regression.
+    Goal: Predict continuous outcomes.
+    Data Type: Continuous output variable.
+    Outcome: Predicted values.
+    Example: Predicting house prices based on features like size, location, and number of bedrooms.
+    Process:
+        Define the model (e.g., linear equation for Linear Regression).
+        Fit the model to the training data by minimizing the error (e.g., using least squares for Linear Regression).
+        Evaluate the model using metrics like Mean Squared Error (MSE), R-squared, etc.
+        Make predictions on new data.
+
+Classification:
+    Purpose: Classification is a supervised learning technique used to predict a discrete class label for new observations based on past observations. It assigns data points to predefined categories.
+    Types: Logistic Regression, Decision Trees, Random Forests, Support Vector Machines (SVM), Neural Networks, Naive Bayes.
+    Goal: Predict discrete class labels.
+    Data Type: Categorical output variable.
+    Outcome: Class labels.
+    Example: Classifying emails as spam or not spam.
+    Process:
+        Define the model and choose appropriate features.
+        Train the model on labeled data.
+        Evaluate the model using metrics like accuracy, precision, recall, F1 score, ROC-AUC.
+        Make predictions on new data.
+    
+Statistical Thinking
+- Gather Data
+- Summarize Data
+- Explore Data
+- Test your idea
+- Make educated guesses
+
+Regression:
+    Needed Variables:
+        Dependent Variables: What are you aiming to predict. This is the outcome. 
+        Independent Variables: What you think influence the outcome. The value changes without being influenced by other factors.
+    Linear Regression:
+        Y = B + mX
+        Y is the dependent variable (the variable we are trying to predict or explain).
+        X is the independent variable (the predictor variable).
+        m is the slope of the line (the change in  for a one-unit change in X).
+        B is the intercept (the value of Y when  X is zero).
+    Example
+        Let's say we want to predict a student's exam score ( Y) based on the number of hours they studied (X). 
+        Suppose we have collected data and performed a simple linear regression analysis, resulting in the following estimated equation:
+        Y=50+5x
+        B(50) - This is the intercept, meaning that if a student studies 0 hours, the predicted exam score is 50.
+        M(5) - This is the slope, indicating that for each additional hour studied, the exam score is predicted to increase by 5 points.
+        So, if a student studies for 4 hours, the predicted exam score would be:
+        Y=50+5(4)=50+20=70 
+
+    Multiple Regression:
+        extends the simple linear regression model to include multiple independent variables. The general form of the multiple regression equation is:
+       Y = B + mX + E or Y = B + mX + m1X1 + m2+X2 .... 
+       E (m1X1 + m2+X2 .... ) - are other factors affecting the results
+    Example: Let's say we want to predict a house's price ( Y) based on its size in square feet ( X ), the number of bedrooms (X1), and the age of the house in years (X2).
+    Suppose we have collected data and performed a multiple regression analysis, resulting in the following estimated equation:
+    Y=50000+200X+10000X1−3000X2
+    Y=50000+400000+30000−30000
+    Y=450000
+    This equation allows us to predict the house price based on its size, the number of bedrooms, and its age.
+
+​Confounding Variables - unexpected variables
+
+Start with linear, then transition to non linear models
+How to find the sweet spot: 
+    Problem
+        - Underfitting (making models too simple) - Bias leads to underfitting
+        - Overfitting (making models too complicated) - Over sensitivity to varriance leads to overfitting
+    solutions
+        - Feature selection - find what matters the most
+        - Regularization -  helps to simplify the model and improve its generalization capabilities by adding a penalty to the model's complexity.
+            - L1 Regularization (Lasso Regression):
+            - L2 Regularization (Ridge Regression):
+            - Elastic Net Regularization:
+            - Dropout (specific to neural networks):
+            - Early Stopping:
+        - Cross validation - gives a reality check
+            K-Fold Cross Validation: Good balance of efficiency and reliability. Split data into k parts, train/test k times, average results.
+            Leave-One-Out Cross Validation (LOOCV): Uses almost all data for training each time but is very computationally intensive. Train/test as many times as there are data points.
+            Stratified Cross Validation: Ensures class balance in each fold, useful for imbalanced datasets. Similar to k-fold but with class proportion maintained.
+            Best Practice for cross validation:
+                - Randomization
+                - Repeatability
+                - Stratification
+                - Model Comparison
+        - Bootstrapping - to understand variablity 
+            - Sample with replacement
+            - Recalculate statistic
+            - Repeat for consistency
+            - Check the statbility
