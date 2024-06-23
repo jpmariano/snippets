@@ -29,7 +29,7 @@ curl --location 'http://localhost:8081/user/register?_format=json' \
 }'
 
 ------------------------------------------------------------------
-rest_register_verify_email - Preffered way for Decoupled + /admin/people/registration-role if you want to add role
+rest_register_verify_email - Preffered way for Decoupled + /admin/people/registration-role if you want to add role + smtp module + mailsystem module
 /admin/config/services/rest
     - Enable "Create account"
         * Select Method -> POST, format -> json, and Auth -> Na 
