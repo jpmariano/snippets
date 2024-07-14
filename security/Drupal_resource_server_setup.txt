@@ -1,0 +1,148 @@
+
+/*********** */
+/*Building Resource server
+Step 1: Register the Client to the Authorization server
+https://auth.domainname.com/admin/config/services/consumer/
+- Register via client_credentials 
+- You should get a client id,  public key, and route where to get jwks (http://auhtorizationserver.com/oauth/jwks)
+
+
+Step 1: Install the following modules in the resource server
+simple_oauth, key, jwt, restui , consumers
+  "require": {
+          "codercat/jwk-to-pem": "^1.1",
+          "drupal/jwt": "^2.1",
+          "drupal/key": "^1.19",
+          "drupal/restui": "^1.21",
+          "drupal/simple_oauth": "^6.0@beta",
+          "firebase/php-jwt": "^6.10",
+          "guzzlehttp/guzzle": "^7.8",
+          "symfony/http-kernel": "^6.4",
+      },
+
+Step 2: Setup Key module
+https://resource1.domainname.com/admin/config/system/keys/manage/kty
+key name: <key_name>
+key Description: <key description>
+Type Settings: 
+  key type: <JWT RSA KEY>
+  key type: <RS256>
+Key Provider: Configuration
+Key Value: <Authorization Server Public Key>
+
+Step 3: https://resource1.domainname.com/admin/config/system/jwt
+JWT Key: <key_name_from_step_2>
+
+
+Step 4: Updating the Key
+  Step A: Resource Server Request access token from the authorization server
+    var form = new FormData();
+    form.append("grant_type", "<client_credentials>");
+    form.append("client_id", "<client_id>");
+    form.append("client_secret", "<client_secret>");
+
+    var settings = {
+      "url": "http://auth.domainname.com/oauth/token",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+    //Response Access Token
+    {
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "access_token": "<access_token>"
+    }
+  Step B: Resource server Get JWKS from Authorization server
+    var settings = {
+      "url": "http://auth.domainname.com/oauth/jwks",
+      "method": "GET",
+      "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer <access_token>"
+      },
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+    //Response jwks 
+    {
+      "keys": [
+          {
+              "kty": "RSA",
+              "n": "<randomstring>",
+              "e": "<randomstring>"
+          }
+      ]
+    }
+  Step C: Resource server Convert JWKS to PEM and update the public key
+    //use CoderCat\JWKToPEM\JWKConverter;
+    // PHP example Code in Resouce Server
+    $jwks_decoded = custom_jwks_get_jwks($access_token);
+    $key_storage = \Drupal::entityTypeManager()->getStorage('key');
+    $existing_key = $key_storage->load('kty');
+    if(!empty($existing_key)){
+      $jwkConverter = new JWKConverter();
+      $PEM = $jwkConverter->toPEM($jwks_decoded['keys'][0]);
+      $existing_key->setKeyValue($PEM);
+      // Save the key entity.
+      $existing_key->save();
+    }
+
+
+  //Step D: Update Public Key Periodically
+    // Drupal Cron Code  
+    function custom_jwks_cron() {
+      custom_jwks_update_keys();
+    }
+
+Step 5: Create a Middleware or RouteSubscriberBase and listen to incoming Request
+  Step A: Resource Server should be able to validate the access_token
+    protected function validateToken($access_token): bool {
+        $public_keys = \Drupal::service('key.repository')->getKey('kty')->getKeyValue();
+        try {
+            $decoded_token = JWT::decode($access_token, new Key($public_keys, 'RS256'));
+            return AccessResult::allowed();
+        }
+        catch (\Exception $e) {
+            return AccessResult::forbidden();
+        }
+      }
+  Step B: https://resource1.domainname.com/admin/config/services/rest
+    - Enable a rest resouce
+    - Set Authentication Provider: jwt_auth
+  Step C: Check route has jwt_auth
+    //Example Drupal PHP Code
+    class CustomRouteSubscriber extends RouteSubscriberBase {
+
+      protected function alterRoutes(RouteCollection $collection) {
+          // Finding Routes: 
+          //Look for routing.yml core/modules/node/node.routing.yml 
+          //drush ev '\Drupal::service("router.route_provider")->getAllRoutes();' 
+
+            // Iterate through all routes in the collection.
+          foreach ($collection->all() as $route_name => $route) {
+            $path = $route->getPath();
+            // Check if the route path starts with /api or /node.
+            if (strpos($path, '/api') === 0 || strpos($path, '/node') === 0) {
+              $auth = $route->getOption('_auth');
+              if (is_array($auth) && in_array('jwt_auth', $auth)) {
+                // Add a custom access check requirement.
+                $route->setRequirement('_custom_access', '\Drupal\custom_jwks\Controller\CustomAccessCheck::access');
+                // Verify the requirement is set.
+              }
+            }
+          }
+        }
+    }
+/*********** End Building Resource server */
