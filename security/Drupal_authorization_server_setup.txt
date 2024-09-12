@@ -1,0 +1,113 @@
+/*********** 
+Building Authorization server 
+Step 1: Install Necessary Modules
+"require": {
+        "cweagans/composer-patches": "^1.7",
+        "drush/drush": "^11 || ^12",
+        "drupal/simple_oauth": "^6.0@beta", //Lets you add and register clients via /admin/config/services/consumer
+        "drupal/restui": "^1.21",
+        "drupal/registration_role": "^2.0", //Allows you to auto_enable give user roles via /admin/people/registration-role
+        "drupal/rest_register_verify_email": "^1.12", // Create user Account and Verify Via Email
+        "drupal/pathauto": "^1.11",
+        "drupal/shs": "^2.0@RC",
+        "drupal/draggableviews": "^2.1",
+        "drupal/decoupled_router": "^2.0", //Checks path and returns Path Rest API Information
+        "drupal/admin_toolbar": "^3.4",
+        "drupal/paragraphs": "^1.17",
+        "drupal/mailsystem": "^4.4",
+        "drupal/smtp": "^1.2",
+        "drupal/simple_oauth_password_grant": "^1.0@RC", //Oauth 2 Password Credentials
+        "drupal/rest_password": "^8.1"  //Password Reset user/lost-password 
+    },
+Step 2: Create Public and Private Key
+Generate a pair of keys to encrypt the tokens. And store them outside of your document root for security reasons.
+openssl genrsa -out private.key 2048
+openssl rsa -in private.key -pubout > public.key
+
+Step 3: Set Autorization Public and Private key
+http://auth.domainname.com/admin/config/people/simple_oauth 
+
+Step 4: Create Scope
+http://auth.domainname.com/admin/config/people/simple_oauth/oauth2_scope/dynamic
+- Set Scope related to Roles
+
+Step 5: Register Client
+http://auth.domainname.com/admin/config/services/consumer/
+Client ID:
+Grant Types: Refresh Token, Password, Auhorization Code, Client Credentials
+Client Credentials settings: Set scope 
+Authorization Code settings: Use PKCE if it is a third party
+Redirect URIs
+
+Step 6: Open ID services.yml
+parameters:
+  simple_oauth.openid.claims:
+    - sub
+    - name
+    - preferred_username
+    - email
+    - email_verified
+    - locale
+    - profile
+    - updated_at
+    - zoneinfo
+    - roles (This is optional field )
+
+Step 7: Go to `/admin/people/permissions` and allow the permission `View published content` only for authenticated user.
+
+
+Step 8: Configure Route
+
+Configure JSON:API  
+  /admin/config/services/jsonapi 
+Configure Rest UI: 
+  /admin/config/services/rest
+  - Enable routes and set
+  Accepted request formats
+  Methods
+  Authentication providers
+    - basic_auth
+    - oauth2 (most secure)
+    - cookie
+
+Step 9: Configure Email SMTP
+  - admin/config/system/smtp
+  SMTP Server: smtp.domain.com
+  SMTP port: 465
+  Use encrypted protocol: Use SSL
+  Enable TLS encryption automatically: off
+  Timeout: 30
+
+Step 10: Configure Mailsystem
+  - /admin/config/system/mailsystem
+  Formatter: SMTP Mailer
+  Sender: SMTP Mailer
+  Theme to render the emails: Current
+  Add Module-specific configuration
+    - REST Register User with Email Verification
+      - SMTP Mailer, SMTP Mailer
+
+Step 11: /admin/people/registration-role
+  Select Default Role when user register
+Step 12: Configure rest_register_verify_email
+  - Configure Rest Module
+    /admin/people/permissions/module/rest 
+    - Allow anonymous user to Access POST on User registration resource
+  Read the Readme from rest_register_verify_email
+  - test the routes
+  SITE + /rest/create-account?_format=json
+  {
+    "mail": "your@yoursite.email",
+    "pass": "password"
+  }
+
+  ENDPOINT: Verify User With Token and Activate
+  Method: POST
+  SITE + /rest/verify-account?_format=json
+  {
+    "name": "your@yoursite.email",
+    "temp_token":"TOKEN_SENT_IN_EMAIL"
+  }
+
+//End Building Authorization server 
+*/
