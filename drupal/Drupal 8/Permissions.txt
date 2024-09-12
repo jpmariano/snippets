@@ -19,7 +19,7 @@ drwxr-xr-x@ 52 <user>  <group>  1664 Jun  6 03:25 core
 drwxr-xr-x@  5 <user>  <group>   160 Jun  5 12:26 modules
 drwxr-xr-x@  4 <user>  <group>   128 Jun  5 12:26 profiles
 -rw-r--r--@  1 <user>  <group>  2027 Jun  5 12:26 robots.txt
-drwxr-xr-x@  8 <user>  <group>   256 Jun  5 12:26 sites
+drwxr-xr-x@  8 <user>  <group>   256 Jun  5 12:26 sites 
 drwxr-xr-x@  4 <user>  <group>   128 Jun  5 12:26 themes
 -rw-r--r--@  1 <user>  <group>   804 Mar 30 21:52 update.php
 -rw-r--r--@  1 <user>  <group>  4039 Mar 30 21:52 web.config
@@ -57,3 +57,16 @@ drwxr-xr-x@ 14 <user>  <group>  448 Jun  6 09:35 ..
 drwxrwxr-x@  6 <user>  <group>  192 Jun 17 21:26 2024-06
 drwxrwxr-x@  3 <user>  <group>   96 Jun 16 16:49 pictures
 drwxrwxr-x@  3 <user>  <group>   96 Jun  6 09:36 styles
+
+
+To start:
+(site-wide all directories) 755 | sudo find sites -type d -exec chmod 775 {} \; //chmod -R 775  /var/www/sitename/sites/default/files 
+(site-wide all files) 644 |sudo find sites -type f -exec chmod 644 {} \;
+Then:
+chmod 444 sites/default/settings.php;
+
+/.htaccess- 444 - (chosing something more restrictive and Drupal seems to work OK) (needs read public or site will get 403) Why are user write permissions needed at all?
+/sites/default (directory) - 555 - why are execute permissions needed?
+/sites/default/settings.php - 400 - (chosing something more restrictive and Drupal seems to work OK) Why are group and public read permissions needed?
+/sites/default/files (directories) - 775 | sudo find /var/www/html/sites/default/files -type d -exec chmod 775 {} \;
+/sites/default/files (files) - 664 | sudo find /var/www/html/sites/default -type f -exec chmod 664 {} \;
