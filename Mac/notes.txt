@@ -16,3 +16,11 @@ jwt encode \
   --secret <@private.pem>
 
   //https://www.iana.org/assignments/jwt/jwt.xhtml
+
+  //Get Resources
+curl -X POST "<resource_url>" \
+-H "Authorization: bearer <token>" \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "Developer"
+}'
