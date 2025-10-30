@@ -1,3 +1,18 @@
 brew tap --repair
 
 https://phoenixnap.com/kb/change-zsh-to-bash-mac
+
+brew install jwt-cli
+
+jwt encode \
+  -P iss="<https://{Auth0_Domain}.us.auth0.com>" \
+  -P scope="<read:user" \
+  -P sub="<Subject>" \
+  -P aud="<https://example.com/token | Audience>" \
+  -P exp=<12345678910> \
+  -P iat=<12345678910>  \
+  --alg RS256 \
+  --kid <"abcdef1234567890 | Key Identifier"> \
+  --secret <@private.pem>
+
+  //https://www.iana.org/assignments/jwt/jwt.xhtml
