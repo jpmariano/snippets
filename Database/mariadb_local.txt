@@ -5,5 +5,12 @@ mysql.server start
 
 brew services start mariadb
 brew services stop mariadb
+brew services start mariadb@11.2.2-MariaDB
 
 wordpress61;    
+
+When Error:
+mv /usr/local/var/mysql/tc.log /usr/local/var/mysql/tc.log.bak.$(date +%s)
+brew services stop mariadb
+brew services start mariadb
+brew services list | grep mariadb

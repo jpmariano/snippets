@@ -137,7 +137,7 @@ curl --location 'http://localhost:8081/user/1?_format=json' \
 --header 'Authorization: Bearer <access_token>'
 
 Getting User ID:
-curl --location 'http://localhost:8081/oauth/userinfo?_format=json' \
+curl --location 'http://localhost:8084/oauth/userinfo?_format=json' \
 --header 'Authorization: Bearer <access_token>'
 
 Get User Roles and Permissions:

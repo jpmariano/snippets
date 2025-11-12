@@ -63,3 +63,5 @@ terminus drush fwv.live -- pm-enable jsonapi_search_api
 
 fwv/web/sites/default
 terminus rsync fwv.dev:files .
+
+terminus drush sitename.dev cim
