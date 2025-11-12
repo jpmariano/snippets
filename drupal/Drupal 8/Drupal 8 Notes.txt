@@ -895,3 +895,32 @@ http://localhost:8081/jsonapi/node/lesson?filter[<nameofyourfilterasyoulike>][co
 Create Database <dbname> CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 sudo -u staff -s
+
+
+-------------------
+//Log duplicate ID in chrome dev tools
+const dupes = Object.entries(
+    [...document.querySelectorAll("[id]")]
+      .map((x) => x.id) /* get all ids */
+      .reduce(
+        (acc, id) => ({ ...acc, [id]: (acc[id] || 0) + 1 }),
+        {}
+      ) /*count them*/
+  ).filter(([_key, val]) => val > 1); /* find the ones repeating more than once */
+  
+console.warn(dupes);
+
+
+
+//Log duplicate Class in chrome dev tools
+const dupes = Object.entries(
+    [...document.querySelectorAll("[id]")]
+      .map((x) => x.id) /* get all ids */
+      .reduce(
+        (acc, id) => ({ ...acc, [id]: (acc[id] || 0) + 1 }),
+        {}
+      ) /*count them*/
+  ).filter(([_key, val]) => val > 1); /* find the ones repeating more than once */
+  
+console.warn(dupes);
+----------------------
