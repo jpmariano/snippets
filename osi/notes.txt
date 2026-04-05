@@ -17,11 +17,37 @@
 - End to End Connections
 - TCP, UDP
 - PDU: Segments
+- Encode Data to Segments and Decode Segments into Data
 - https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:the-internet/xcae6f4a7ff015e7d:transporting-packets/a/transmission-control-protocol--tcp
 - https://www.javatpoint.com/osi-model  
+- TCp 3 way handshake
+
+
 3. Network 
-- PDU: Packets
+- PDU: Encoding Frames to Packets and Decoding Frames to Packets
 - IP, ICMP, IPSec, IGMP
+- Connectionsless
+- Host Addressing
+- Message Forwarding
+- IPV4 Header - https://www.geeksforgeeks.org/computer-networks/introduction-and-ipv4-datagram-header/
+
+Multicast address is a one-to-many address used to send a single packet to a group of interfaces, known as a multicast group. Typically used devices that has OSPF.
+IPv4 
+239-224
+IPV6
+ff02::1: All nodes on the local link.
+ff02::2: All routers on the local link.
+
+NAT - Network Address Translation
+Helps devices with private IP get into Public Internet via NAT Table
+
+Traceroute
+Mac - Traceroute www.example.com
+Windows - tracert www.example.com
+IPV6 - Traceroute6 www.example.com
+Kali - Traceroute -t www.example.com
+
+
 2. Data Link
 - PDU: Frames
 - Ethernet, PPP, Switch, Bridge
@@ -30,16 +56,39 @@
 - responsible for error control and flow to ensure successful transmission
 - Framing 
     - adds the header(IP address) and trailer  (Error control is achieved by adding a calculated value CRC (Cyclic Redundancy Check)) to the bits (data) from physical layer
+- Encoding Bits to Frames and Decoding Frames back to Bits
+- IP Routing
+    - Logical Link control
+    - Media Access control
+    - Hardware Addressing
+    - Error Detection
+    - Handling and Defining Physical Layer Standards
+- IP address:
+    - MAC address Layer
+    - LLC Layer
 - http://www.highteck.net/EN/DataLink/Data_Link_Layer.html
 - Typical frame header fields include:
     Start Frame field - Indicates the beginning of the frame
-    Source and Destination address fields - Indicates the source and destination nodes on the media
+    Source and Destination address fields - Indicates the source and destination nodes (MAC Address) on the media
     Priority/Quality of Service field - Indicates a particular type of communication service for processing
     Type field - Indicates the upper layer service contained in the frame
     Logical connection control field - Used to establish a logical connection between nodes
     Physical link control field - Used to establish the media link
     Flow control field - Used to start and stop traffic over the media
 Congestion control field - Indicates congestion in the media
+- List of protocols: ARP, ATM, Cisco Discovery Protocol, Control Area Network, ,
+Fiber Distributed Data Interface (FDDI), Frame Relay, High Data Link Control (HDLC),
+IEEE 802.1 (wireless lan), IEEE 802.2 (MAC), IEEE 802.3 (Ethernet), Link Access Procedures, D Channel (LAPD),
+Multi Protocl Label Switching (MLPS), Nortel Discovery Protocol (NDP), Split Multi-link Trunking (SMT),
+Point to Point Protocol (PPP), Serial Line Internet Protocol (SLIP) (Obsolete), Spanning Tree Protocol,
+StarLan, Token Ring, Unidirectional Link Detection (ULD)
+
+ARP - Address Resolution Protocol
+    - Helps Computer find the Mac address of the computer with matching IP address
+    - $ man arp 
+    - $ arp -an 
+
+
 1. Pysical
 - Physical Structure
 - Coax, Fiber, Wireless, Hubs, Repeaters
