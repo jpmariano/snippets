@@ -1,0 +1,249 @@
+- parameter
+- run file
+
+LLM  - brain - text generation reasoning 
+RAG - brain + books  
+AI Agent - brain + hands
+MCP - Nervous System connects to everything 
+
+LLM (brain) - text generation reasoning 
+   ↓
+RAG (memory) brain + books 
+   ↓
+Agents (decision-making + actions)
+   ↓
+MCP / Tools (interfaces to the real world)
+
+
+https://www.hostinger.com/ph/vps-hosting
+https://huggingface.co/Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled
+https://ollama.com/library/qwen3-coder
+https://openclaw.ai/ - ai assistant
+
+https://github.com/anthropics/claude-code
+
+https://agency.symph.co/
+
+https://digitalrenegades.com/
+
+https://github.com/yvgude/lean-ctx
+
+telegram bot father
+
+https://clawhub.ai/skills?sort=downloads&nonSuspicious=true
+
+open claw + LLM 
+
+open claw + obsidian (RAG)
+
+https://tailscale.com/
+
+Pre Training
+Fine Tuning
+Re-Enforcement Training
+
+Nueral Nets - Tokens (numbers)
+https://platform.openai.com/tokenizer
+What can I eat today? = 6 tokens [4827, 665, 357, 11237, 4044, 30]
+
+Compare LLM
+
+pytorch tensorflow
+
+quantization - from 32 bit floating point to 8 to 4 bit integer
+
+llva - llma with vision (Vision adapter + Mode File)
+x tuner
+
+https://www.hostinger.com/
+
+
+[ROLE] 
+[CONTEXT] the data or information the model should use
+[TASK] is a function - what you want the model to do with that information
+[CONSTRAINTS]
+[OUTPUT FORMAT]
+
+[ROLE] 
+You are an expert economist...
+You are a senior PHP developer...
+You are a strict code reviewer...
+//Summarization
+Context:
+Drupal is a modular CMS written in PHP. It uses a hook system and supports custom content types, fields, and views.
+Task:
+Summarize this in one sentence.
+//Example 2 — Q&A (RAG-style)
+Context:
+Drupal 10 uses Symfony components and requires PHP 8.1+. It supports modern APIs and improved performance.
+Task:
+Question: What PHP version is required?
+Answer using only the context.
+//Example 3 — Transformation
+Context:
+Node entities in Drupal represent content items such as articles or pages.
+Task:
+Rewrite this explanation for a non-technical audience.
+//Example 4 — Extraction (very important for apps)
+Context:
+John Doe, a senior developer at Acme Corp, worked on Drupal migration projects in 2023.
+Task:
+Extract the following fields as JSON:
+- name
+- company
+- role
+- year
+//Example 5 — Code Generation
+Context:
+We need a Drupal module that creates a custom content type called "Event" with fields for date and location.
+Task:
+Generate the module file structure and code.
+//Real Production Pattern (You’ll Use This)
+Context:
+Retrieved documents from vector DB
+Task:
+Answer the user's question using ONLY the context.
+If not found, say "I don't know."
+
+
+//Example 1 — RAG with Constraints
+Context:
+Drupal 10 requires PHP 8.1+ and uses Symfony components.
+
+Task:
+Answer the question: What PHP version is required?
+
+Constraints:
+- Use ONLY the provided context
+- Do NOT add external knowledge
+- If the answer is not in the context, say "I don't know"
+- Keep the answer under 20 words
+
+//Example 2 — Content Generation with Constraints
+Context:
+Drupal is a modular CMS used for enterprise websites.
+
+Task:
+Write a short description for marketing.
+
+Constraints:
+- Maximum 50 words
+- Use simple language (grade 6 level)
+- Do not use technical jargon
+- Tone: friendly and professional
+
+//Example 3 — Code Generation Constraints
+Context:
+Create a Drupal module for a custom content type.
+
+Task:
+Generate the code.
+
+Constraints:
+- Follow Drupal 10 best practices
+- Use PSR-12 coding standards
+- Include comments
+- Do not include deprecated APIs
+
+//Example 1 — JSON Output
+Context:
+John Doe works at Acme Corp as a developer.
+
+Task:
+Extract structured data.
+
+Output Format:
+Return JSON:
+{
+  "name": string,
+  "company": string,
+  "role": string
+}
+
+//Example 2 — Strict JSON (Production-level)
+Context:
+Drupal requires PHP 8.1+
+
+Task:
+Extract requirement.
+
+Constraints:
+- Output must be valid JSON
+- No extra text
+
+Output Format:
+{
+  "requirement": string
+}
+
+//Example 3 — Markdown Format
+Context:
+Drupal features include modular architecture and scalability.
+
+Task:
+Summarize features.
+
+Output Format:
+- Use bullet points
+- Each point max 10 words
+- Markdown format
+
+//Example 4 — Table Output
+Context:
+Drupal vs WordPress comparison data.
+
+Task:
+Compare both.
+
+Output Format:
+| Feature | Drupal | WordPress |
+|--------|--------|-----------|
+| ...    | ...    | ...       |
+
+//Example 5 — Multi-field Structured Output
+Context:
+Drupal is used for enterprise CMS and supports custom workflows.
+
+Task:
+Analyze the system.
+
+Output Format:
+{
+  "summary": string,
+  "use_cases": string[],
+  "advantages": string[],
+  "complexity_level": "low" | "medium" | "high"
+}
+
+//Real World Example
+
+
+/? 
+/set
+/load <model_name>
+
+/show
+
+//saving sessions and models
+
+Step: 1 
+Start a chat 
+Step 2: 
+/save <model-name>
+Step 3: 
+/load <model-name>
+
+Step: 1 
+/set system <text>
+Step 2: 
+/save <model-name>
+Step 3: 
+/load <model-name>
+
+ollama
+ollama ps 
+ollama list
+
+ollama run <model-name>
+ollama rm <model-name>
+ollama create <model-name> -f <./Modelfile>

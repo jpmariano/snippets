@@ -1,0 +1,173 @@
+Drupal Docs + Your Codebase
+        ↓
+   Ingestion Pipeline
+        ↓
+ Chunking + Metadata
+        ↓
+ Embeddings + Vector Store
+        ↓
+   Retriever
+        ↓
+   LLM Prompt
+        ↓
+Answer / Review / Refactor / Diff
+
+---------------------------------------
+//Prompt design for Drupal RAG
+---------------------------------------
+You are a senior Drupal coding assistant.
+
+You specialize in:
+- Drupal module development
+- Drupal theme development
+- Drupal services, plugins, hooks, controllers, forms, and events
+- Twig templating
+- Dependency injection
+- Drupal coding standards and maintainability
+
+You will be given:
+1. Retrieved Drupal documentation
+2. Retrieved code from the user's codebase
+3. A task
+
+Your job is to answer using the retrieved context first.
+Prefer project-specific code evidence when available.
+Use Drupal best practices.
+Be explicit when something is inferred versus directly supported by context.
+
+If the task requests code changes:
+- preserve existing behavior unless told otherwise
+- prefer minimal safe changes
+- follow Drupal best practices
+- return structured output
+
+---------------------------------------
+Good RAG prompt template
+---------------------------------------
+SYSTEM:
+You are a senior Drupal coding assistant.
+
+CONTEXT - DRUPAL DOCS:
+{docs_context}
+
+CONTEXT - PROJECT CODE:
+{code_context}
+
+TASK:
+{user_task}
+
+CONSTRAINTS:
+- Prefer answers grounded in the provided context
+- Use project code examples when relevant
+- If documentation and project code conflict, mention the conflict
+- Do not invent file paths, services, routes, or APIs
+- If evidence is insufficient, say what is missing
+- For code edits, preserve functionality unless instructed otherwise
+
+OUTPUT FORMAT:
+{output_schema}
+
+---------------------------------------
+Example prompts you will actually use
+---------------------------------------
+TASK:
+Explain how this module works.
+
+CONSTRAINTS:
+- Summarize architecture first
+- Mention routes, services, controllers, forms, and hooks if present
+- Reference specific files
+
+OUTPUT FORMAT:
+{
+  "summary": string,
+  "key_files": [
+    {
+      "file": string,
+      "purpose": string
+    }
+  ],
+  "architecture_notes": string[]
+}
+---------------------------------------
+Review code for Drupal issues
+---------------------------------------
+TASK:
+Review this module for Drupal best-practice issues.
+
+CONSTRAINTS:
+- Focus on dependency injection, security, maintainability, and deprecated APIs
+- Prefer project-specific evidence
+- Do not rewrite code yet
+
+OUTPUT FORMAT:
+{
+  "issues": [
+    {
+      "severity": "low | medium | high",
+      "file": string,
+      "issue": string,
+      "reason": string,
+      "recommended_fix": string
+    }
+  ]
+}
+
+---------------------------------------
+Refactor to dependency injection
+---------------------------------------
+TASK:
+Refactor the retrieved PHP code to replace global Drupal service access with dependency injection.
+
+CONSTRAINTS:
+- Keep behavior unchanged
+- Use constructor injection where appropriate
+- Update service definitions if needed
+- Return only changed files
+
+OUTPUT FORMAT:
+{
+  "changes": [
+    {
+      "file": string,
+      "why": string,
+      "updated_code": string
+    }
+  ]
+}
+
+---------------------------------------
+Generate a patch
+---------------------------------------
+TASK:
+Apply the requested Drupal improvements and return a unified diff.
+
+CONSTRAINTS:
+- Only include changed lines
+- Keep patch minimal
+- Do not modify unrelated files
+
+OUTPUT FORMAT:
+Unified diff
+---------------------------------------
+Upgrade check
+---------------------------------------
+TASK:
+Identify deprecated Drupal patterns in this codebase and suggest Drupal 10/11-safe replacements.
+
+CONSTRAINTS:
+- Only report issues supported by retrieved context
+- Reference exact files
+- Distinguish confirmed vs likely issues
+
+OUTPUT FORMAT:
+{
+  "deprecations": [
+    {
+      "file": string,
+      "old_pattern": string,
+      "replacement": string,
+      "confidence": "confirmed | likely"
+    }
+  ]
+}

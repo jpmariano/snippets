@@ -1,0 +1,166 @@
+What is a System Prompt?
+
+A system prompt is a special instruction given to an AI model that defines:
+
+its behavior
+its personality
+its rules
+its role
+
+It’s like setting the “operating mode” of the AI before the user even speaks.
+
+system prompt = the script + personality + rules
+
+🔧 What can a system prompt control?
+
+1. Behavior
+[ { "role": "system", "content": "You are a strict math teacher. Only give concise answers."}]
+2. Personality
+[ { "role": "system", "content": "You are a funny, sarcastic assistant."}]
+3. Expertise
+[ { "role": "system", "content": "You are an expert in cybersecurity and reverse engineering."}]
+4. Output format
+[ { "role": "system", "content": "Always respond in JSON."}]
+5. Rules / constraints
+[ { "role": "system", "content": "Never explain, only give final answers."}]
+
+
+⚙️ Real Example (LM Studio / API)
+
+From your file, this is how it’s used:
+
+curl http://localhost:1234/v1/chat/completions \
+-d '{
+  "messages": [
+    { "role": "system", "content": "You are a helpful coding assistant." },
+    { "role": "user", "content": "How do I init a git repo?" }
+  ]
+}'
+//Another Example using tool
+[
+  { "role": "user", "content": "What's the weather?" },
+  { "role": "assistant", "tool_calls": [...] },
+  { "role": "tool", "content": "{ \"temp\": 72 }" }
+]
+- tool allows
+API calls
+database queries
+code execution
+
+
+👉 Change the system prompt → completely changes the AI behavior.
+
+🧪 Examples of different system prompts
+🧑‍💻 Coding assistant
+You are a senior software engineer. Provide clean, production-ready code.
+📚 Teacher
+Explain concepts step-by-step like I'm a beginner.
+🧾 API generator
+Only output valid JSON. No explanations.
+🧠 Chain-of-thought style
+Think step by step before answering.
+
+
+Example: First request
+[
+  { "role": "system", "content": "You are helpful." },
+  { "role": "user", "content": "What is 2+2?" }
+]
+
+Model responds:
+{ "role": "assistant", "content": "4" }
+
+Now you MUST include the assistant message:
+[
+  { "role": "system", "content": "You are helpful." },
+  { "role": "user", "content": "What is 2+2?" },
+  { "role": "assistant", "content": "4" },
+  { "role": "user", "content": "Multiply that by 3" }
+]
+---------------------------------------------------
+Make Sure to store the full message history in an array LLMs are stateless
+const messages = [
+  { role: "system", content: "You are a helpful assistant." }
+];
+
+messages.push({
+  role: "user",
+  content: "What is 2 + 2?"
+});
+
+//Send request
+const response = await fetch("http://localhost:1234/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    messages,
+    temperature: 0.7
+  })
+});
+
+const data = await response.json();
+
+const assistantMessage = data.choices[0].message;
+
+messages.push(assistantMessage);
+---------------------------------------------------
+
+Full Loop Example
+
+const messages = [
+  { role: "system", content: "You are a helpful assistant." }
+];
+
+async function chat(userInput) {
+  // Add user message
+  messages.push({ role: "user", content: userInput });
+
+  // Send to LM Studio
+  const res = await fetch("http://localhost:1234/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages })
+  });
+
+  const data = await res.json();
+
+  // Get assistant reply
+  const reply = data.choices[0].message.content;
+
+  // Store assistant reply
+  messages.push({ role: "assistant", content: reply });
+
+  return reply;
+}
+
+// Usage
+console.log(await chat("What is 2 + 2?"));
+console.log(await chat("Multiply that by 3"));
+
+//What the array looks like over time
+[
+  { role: "system", content: "You are a helpful assistant." },
+  { role: "user", content: "What is 2 + 2?" },
+  { role: "assistant", content: "4" },
+  { role: "user", content: "Multiply that by 3" },
+  { role: "assistant", content: "12" }
+]
+
+//Trim history when it gets large
+if (messages.length > 20) {
+  messages.splice(1, 2); // remove oldest (keep system)
+}
+
+Keep system message at index 0
+Never remove this: messages[0]
+
+nebius
+jsonl
+
+semantic
+system prompt
+modifier(blog post | social media post) + topic + other modifiers (target audience)
+
+anythingllm and llm studio
