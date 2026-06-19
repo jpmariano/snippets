@@ -14,3 +14,6 @@ mv /usr/local/var/mysql/tc.log /usr/local/var/mysql/tc.log.bak.$(date +%s)
 brew services stop mariadb
 brew services start mariadb
 brew services list | grep mariadb
+
+
+GRANT ALL PRIVILEGES ON drupal.* TO 'drupal'@'%';

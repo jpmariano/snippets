@@ -1,0 +1,43 @@
+{
+  "role": "You are a helpful AI assistant specialized in software architecture.",
+  
+  "goal": "Design a simple microservice architecture for a small ecommerce application.",
+  
+  "context": [
+    "The application will support 10k daily users.",
+    "The backend will use Node.js and PostgreSQL.",
+    "The deployment target is Docker on a VPS."
+  ],
+  
+  "constraints": [
+    "Keep the architecture beginner friendly.",
+    "Avoid Kubernetes.",
+    "Minimize operational complexity.",
+    "Use open-source tools only."
+  ],
+  
+  "output_format": {
+    "format": "markdown",
+    "sections": [
+      "Architecture Overview",
+      "Recommended Services",
+      "Database Design",
+      "Deployment Plan",
+      "Risks and Tradeoffs"
+    ]
+  },
+  
+  "examples": [
+    {
+      "input": "Small ecommerce app",
+      "output": "Use API Gateway + Auth Service + Product Service + PostgreSQL."
+    }
+  ],
+  
+  "iteration_instructions": [
+    "Think step-by-step before answering.",
+    "Ask clarifying questions if requirements are ambiguous.",
+    "Provide concise explanations.",
+    "After the main answer, suggest 2 possible improvements."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "Role": "Senior Python Engineer",
+  "Goal": "Build a REST API with FastAPI",
+  "Context": [
+    "Project is for internal tools",
+    "SQLite is acceptable"
+  ],
+  "Constraints": [
+    "Keep code simple",
+    "Use type hints",
+    "Avoid unnecessary abstractions"
+  ],
+  "Output Format": {
+    "type": "text",
+    "sections": [
+        "Explanation",
+        "Project Structure",
+        "Code",
+        "Next Steps"
+    ]
+  },
+  "Examples": [
+    "Use FastAPI dependency injection for database access"
+  ],
+  "Iteration Instructions": [
+    "Reason step-by-step",
+    "Improve readability",
+    "Refactor if simpler solution exists"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "role": "You are a helpful AI assistant specialized in software architecture.",
+  
+  "goal": "Design a simple microservice architecture for a small ecommerce application.",
+  
+  "context": [
+    "The application will support 10k daily users.",
+    "The backend will use Node.js and PostgreSQL.",
+    "The deployment target is Docker on a VPS."
+  ],
+  
+  "constraints": [
+    "Keep the architecture beginner friendly.",
+    "Avoid Kubernetes.",
+    "Minimize operational complexity.",
+    "Use open-source tools only."
+  ],
+  
+  "output_format": {
+    "type": "json_array",
+    
+    "schema": [
+      {
+        "id": "string",
+        "section": "string",
+        "title": "string",
+        "content": "string",
+        "priority": "low | medium | high",
+        "confidence": "0.0 - 1.0",
+        "metadata": {
+          "tags": ["string"],
+          "estimated_effort": "string",
+          "dependencies": ["string"]
+        }
+      }
+    ],
+    
+    "example": [
+      {
+        "id": "svc-001",
+        "section": "overview",
+        "title": "Architecture Overview",
+        "content": "Use an API gateway with separate auth, product, and order services.",
+        "priority": "high",
+        "confidence": 0.96,
+        "metadata": {
+          "tags": ["microservices", "api-gateway", "backend"],
+          "estimated_effort": "medium",
+          "dependencies": [
+            "Docker",
+            "PostgreSQL",
+            "Node.js"
+          ]
+        }
+      },
+      {
+        "id": "deploy-001",
+        "section": "deployment",
+        "title": "Deployment Plan",
+        "content": "Deploy using Docker Compose on a VPS with Nginx as reverse proxy.",
+        "priority": "medium",
+        "confidence": 0.91,
+        "metadata": {
+          "tags": ["deployment", "docker", "nginx"],
+          "estimated_effort": "low",
+          "dependencies": [
+            "Ubuntu Server",
+            "Docker Compose"
+          ]
+        }
+      }
+    ]
+  },
+  
+  "examples": [
+    {
+      "input": "Small ecommerce app",
+      
+      "output": [
+        {
+          "id": "db-001",
+          "section": "database",
+          "title": "Database Design",
+          "content": "Use PostgreSQL with separate schemas for users, products, and orders.",
+          "priority": "high",
+          "confidence": 0.94,
+          "metadata": {
+            "tags": ["database", "postgresql"],
+            "estimated_effort": "medium",
+            "dependencies": [
+              "PostgreSQL"
+            ]
+          }
+        },
+        {
+          "id": "svc-002",
+          "section": "services",
+          "title": "Recommended Services",
+          "content": "Implement Auth Service, Product Service, and Order Service.",
+          "priority": "high",
+          "confidence": 0.97,
+          "metadata": {
+            "tags": ["services", "architecture"],
+            "estimated_effort": "high",
+            "dependencies": [
+              "REST API",
+              "JWT Authentication"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  
+  "iteration_instructions": [
+    "Think step-by-step before answering.",
+    "Return valid JSON only.",
+    "Do not include markdown formatting.",
+    "Ensure all objects match the schema exactly.",
+    "Use confidence scores between 0.0 and 1.0.",
+    "Assign realistic priority values.",
+    "Populate metadata whenever possible.",
+    "After generating the response, validate JSON syntax internally before replying."
+  ]
+}

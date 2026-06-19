@@ -35,5 +35,7 @@ asdf global <name> <version> [<version>...]
 asdf shell <name> <version> [<version>...]
 asdf local <name> <version> [<version>...]
 
+asdf set --home <name> <version>
+
 https://timnash.co.uk/installing-php-and-other-languages-with-asdf-on-macos-catalina/
 

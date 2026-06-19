@@ -1,0 +1,25 @@
+text
+markdown
+html
+xml
+json_object
+json_array
+json_schema
+nested_json
+yaml
+
+code
+{
+  "output_format": {
+    "type": "code",
+    "language": "python"
+  }
+}
+
+function_call
+{
+  "function": "create_user",
+  "arguments": {
+    "name": "John"
+  }
+}

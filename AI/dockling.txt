@@ -1,0 +1,15 @@
+// Installation
+brew install xz\n
+asdf install python 3.12.2
+asdf set --home python 3.12.2
+pip install docling
+docling https://arxiv.org/pdf/2206.01062
+asdf reshim python
+dockling --version
+
+from docling.document_converter import DocumentConverter
+
+source = "https://arxiv.org/pdf/2408.09869"
+converter = DocumentConverter()
+doc = converter.convert(source).document
+print(doc.export_to_markdown())

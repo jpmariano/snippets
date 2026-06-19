@@ -1,0 +1,62 @@
+{
+  "role": "You are a helpful AI assistant specialized in software architecture.",
+  
+  "goal": "Design a simple microservice architecture for a small ecommerce application.",
+  
+  "context": [
+    "The application will support 10k daily users.",
+    "The backend will use Node.js and PostgreSQL.",
+    "The deployment target is Docker on a VPS."
+  ],
+  
+  "constraints": [
+    "Keep the architecture beginner friendly.",
+    "Avoid Kubernetes.",
+    "Minimize operational complexity.",
+    "Use open-source tools only."
+  ],
+  
+  "output_format": {
+    "type": "json_array",
+    "schema": [
+      {
+        "section": "string",
+        "title": "string",
+        "content": "string"
+      }
+    ],
+    "example": [
+      {
+        "section": "overview",
+        "title": "Architecture Overview",
+        "content": "Use a lightweight API gateway with separate auth, product, and order services."
+      },
+      {
+        "section": "deployment",
+        "title": "Deployment Plan",
+        "content": "Deploy services with Docker Compose on a VPS."
+      }
+    ]
+  },
+  
+  "examples": [
+    {
+      "input": "Small ecommerce app",
+      "output": [
+        {
+          "section": "services",
+          "title": "Recommended Services",
+          "content": "Auth Service, Product Service, Order Service"
+        }
+      ]
+    }
+  ],
+  
+  "iteration_instructions": [
+    "Think step-by-step before answering.",
+    "Return valid JSON only.",
+    "Do not include markdown formatting.",
+    "Ensure the response matches the schema exactly.",
+    "After generating the response, validate JSON syntax internally before replying."
+  ]
+}

@@ -164,3 +164,17 @@ system prompt
 modifier(blog post | social media post) + topic + other modifiers (target audience)
 
 anythingllm and llm studio
+------------------------
+Role, context, contraints, Few-Shot Prompting, Chain-of-Thought Prompting, Output Formatting, Task Decomposition,
+Iterative Prompting, Delimiter Prompting, Persona + Audience Pairing, Self-Consistency Prompting, Reflection Prompting
+
+[ROLE]
++ [GOAL]
++ [CONTEXT]
++ [CONSTRAINTS]
++ [OUTPUT FORMAT]
++ [EXAMPLES]
++ [ITERATION INSTRUCTIONS]
+
+
+Can you write me a simple json request to lmstudio using Role, Goal, Context, Constraints, Output Format, Examples, and iteration instructiions? 

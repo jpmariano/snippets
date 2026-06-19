@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-drupal
+spec:
+  replicas: {{ .Values.drupal.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-drupal
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-drupal
+    spec:
+      containers:
+        - name: drupal
+          image: {{ .Values.drupal.image }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: DRUPAL_DB_HOST
+              value: {{ .Release.Name }}-mariadb
+            - name: DRUPAL_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-db-secret
+                  key: MYSQL_DATABASE
+            - name: DRUPAL_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-db-secret
+                  key: MYSQL_USER
+            - name: DRUPAL_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-db-secret
+                  key: MYSQL_PASSWORD
+          volumeMounts:
+            - name: drupal-files
+              mountPath: /var/www/html/sites/default/files
+      volumes:
+        - name: drupal-files
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-drupal-files-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-drupal
+spec:
+  type: {{ .Values.drupal.service.type }}
+  selector:
+    app: {{ .Release.Name }}-drupal
+  ports:
+    - port: {{ .Values.drupal.service.port }}
+      targetPort: 80

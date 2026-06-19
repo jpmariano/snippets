@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mariadb
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: {{ .Values.mariadb.image }}
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-db-secret
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mariadb-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mariadb-storage
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-mariadb-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mariadb
+spec:
+  selector:
+    app: {{ .Release.Name }}-mariadb
+  ports:
+    - port: 3306
+      targetPort: 3306

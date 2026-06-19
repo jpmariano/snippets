@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drupal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drupal
+  template:
+    metadata:
+      labels:
+        app: drupal
+    spec:
+      containers:
+        - name: drupal
+          image: drupal:10-apache
+          ports:
+            - containerPort: 80
+          env:
+            - name: DRUPAL_DB_HOST
+              value: mariadb
+          volumeMounts:
+            - name: drupal-files
+              mountPath: /var/www/html/sites/default/files
+      volumes:
+        - name: drupal-files
+          persistentVolumeClaim:
+            claimName: drupal-files-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drupal
+spec:
+  type: ClusterIP
+  selector:
+    app: drupal
+  ports:
+    - port: 80
+      targetPort: 80

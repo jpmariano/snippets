@@ -1,0 +1,19 @@
+drupal:
+  image: drupal:10-apache
+  replicas: 1
+  service:
+    type: LoadBalancer
+    port: 80
+  storage:
+    size: 5Gi
+
+mariadb:
+  image: mariadb:11
+  storage:
+    size: 10Gi
+
+database:
+  name: drupal
+  user: drupal
+  password: drupalpassword
+  rootPassword: rootpassword

@@ -1,0 +1,21 @@
+{
+    "Role": "Senior Python Engineer",
+    "Goal": "Build a REST API with FastAPI",
+    "Context": [
+        "Project is for internal tools",
+        "SQLite is acceptable"
+    ],
+    "Constraints": [
+        "Keep code simple",
+        "Use type hints",
+        "Avoid unnecessary abstractions"
+    ],
+    "Output Format": {
+        "type": "reasoning_steps",
+        "steps": [
+            "Analyze requirements",
+            "Choose architecture",
+            "Generate solution"
+        ]
+    }
+}
